@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" group="android" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="android/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/931491618/flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/.idea/modules/931491618/flutter_plugin_android_lifecycle.iml" group="android/flutter_plugin_android_lifecycle" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1214121613/local_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/-1214121613/local_auth.iml" group="android/local_auth" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-73571877/path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/-73571877/path_provider.iml" group="android/path_provider" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1917010876/shared_preferences.iml" filepath="$PROJECT_DIR$/.idea/modules/-1917010876/shared_preferences.iml" group="android/shared_preferences" />
+    </modules>
+  </component>
+</project>
