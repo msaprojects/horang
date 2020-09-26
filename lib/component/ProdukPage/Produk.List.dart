@@ -25,6 +25,7 @@ class _ProdukList extends State<ProdukList> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+    print("Atas : "+access_token+" - "+refresh_token);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
@@ -34,6 +35,8 @@ class _ProdukList extends State<ProdukList> {
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
+
+            print("Tengah : "+access_token+" - "+refresh_token);
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService

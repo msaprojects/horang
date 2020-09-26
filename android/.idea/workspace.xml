@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56d39c42-b33b-4b62-a35e-4a8205b55f29" name="Default Changelist" comment="" />
+    <list default="true" id="56d39c42-b33b-4b62-a35e-4a8205b55f29" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/main.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="R" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="9585865a" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -20,7 +24,11 @@
       </state>
     </system>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1hOSWYXe9tJyKLp1dSmCX7lBLpU" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -117,9 +125,9 @@
       <screen x="1440" y="0" width="1440" height="900" />
     </state>
     <state x="1760" y="115" key="#Project_Structure/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1599882013717" />
-    <state x="1809" y="282" key="com.intellij.ide.util.TipDialog" timestamp="1599881856562">
+    <state x="1809" y="282" key="com.intellij.ide.util.TipDialog" timestamp="1600247226799">
       <screen x="1440" y="0" width="1440" height="900" />
     </state>
-    <state x="1809" y="282" key="com.intellij.ide.util.TipDialog/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1599881856562" />
+    <state x="1809" y="282" key="com.intellij.ide.util.TipDialog/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1600247226799" />
   </component>
 </project>

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 
 void main() => runApp(MyApp());
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('token: $token');
+    debugPrint('tokenff: $token');
     return MaterialApp(
       title: 'Gudang',
       theme: ThemeData(
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         scaffoldBackgroundColor: Colors.grey[100],
       ),
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home: LoginPage(),
     );
   }
 
