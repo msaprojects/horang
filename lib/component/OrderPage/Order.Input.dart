@@ -51,7 +51,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (picked != null && picked != _date) {
       setState(() {
         _date = picked;
-        if(_date.isAfter(_date2)) _date2 = _date.add(new Duration(days:3));
+        if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 3));
         pilihtanggal = new DateFormat("yyyy-MM-dd 00:00:00").format(_date);
         jumlah_sewas = DateTime.parse(pilihtanggal2)
             .difference(DateTime.parse(pilihtanggal))
@@ -72,7 +72,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (picked != null && picked != _date2) {
       setState(() {
         _date2 = picked;
-        if(_date2.isBefore(_date)) _date2 = _date.add(new Duration(days:3));
+        if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 3));
         pilihtanggal2 = new DateFormat("yyyy-MM-dd 00:00:00").format(_date2);
         jumlah_sewas = DateTime.parse(pilihtanggal2)
             .difference(DateTime.parse(pilihtanggal))
@@ -103,7 +103,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       hasilperhitungan = hitungall(
           harga.toString(),
           jumlah_sewas.toString(),
-          nomasuransi.toString());//      print(json.decode(response.body)[0]['nilai']);
+          nomasuransi
+              .toString()); //      print(json.decode(response.body)[0]['nilai']);
 //    print (nomasuransi.toString());
 //      _dataAsuransi = listdata;
     });
@@ -119,8 +120,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
       idlokasi = 0;
 
   String hitungall(String harga, String durasi, String asuransi) {
-  print (((double.parse(harga) * double.parse(durasi)) * (1 + (double.parse(asuransi)/100))).toString());
-    return ((double.parse(harga) * double.parse(durasi)) * (1 + (double.parse(asuransi)/100))).toString();
+    print(((double.parse(harga) * double.parse(durasi)) *
+            (1 + (double.parse(asuransi) / 100)))
+        .toString());
+    return ((double.parse(harga) * double.parse(durasi)) *
+            (1 + (double.parse(asuransi) / 100)))
+        .toString();
   }
 
   cekToken() async {
@@ -170,7 +175,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     dtAwal = DateTime.now();
     dtAkhir = DateTime.now();
     _date = DateTime.now();
-    _date2 = DateTime.now().add(new Duration(days:1));
+    _date2 = DateTime.now().add(new Duration(days: 1));
     nomasuransi = 50000;
     asuransie = 0;
     jumlah_sewas = 1;
@@ -296,30 +301,30 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   ),
                                 ),
                               ),
-                                  TanggalSet(
-                                    labelText: tglAwal,
-                                    valueText:
+                              TanggalSet(
+                                labelText: tglAwal,
+                                valueText:
                                     new DateFormat('dd/MM/yyyy').format(_date),
-                                    valueStyle: valueTglAwal,
-                                    onPressed: () {
-                                      _selectionDate(context);
-                                      dtAwal = _date;
-                                    },
-                                  ),
-                                  TanggalSet(
-                                    labelText: tglAkhir,
-                                    valueText:
-                                    new DateFormat('dd/MM/yyyy').format(_date2),
-                                    valueStyle: valueTglAkhir,
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectionDate2(context);
-                                        dtAkhir = _date2;
-                                      });
-                                    },
-                                  ),
-                                ],
+                                valueStyle: valueTglAwal,
+                                onPressed: () {
+                                  _selectionDate(context);
+                                  dtAwal = _date;
+                                },
                               ),
+                              TanggalSet(
+                                labelText: tglAkhir,
+                                valueText:
+                                    new DateFormat('dd/MM/yyyy').format(_date2),
+                                valueStyle: valueTglAkhir,
+                                onPressed: () {
+                                  setState(() {
+                                    _selectionDate2(context);
+                                    dtAkhir = _date2;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
 //                            ],
 //                          ),
                         ),
@@ -370,6 +375,27 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   ),
                   Divider(),
                   Container(
+                    padding: EdgeInsets.only(left: 30),
+                    child: Row(
+                      children: <Widget>[
+                        Checkbox(
+                          value: true,
+                          onChanged: (bool depositt){
+                            setState(() {
+
+                            });
+                          },
+                        ),
+                        SizedBox(width: 8,),
+                        Text("Deposit terpakai "+rupiah(harga,
+                            separator: ',',
+                            trailing: '.00')
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Container(
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -378,7 +404,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             children: <Widget>[
                               Container(
                                 padding: const EdgeInsets.only(
-                                    bottom: 8, left: 36, top: 8),
+                                    bottom: 3, left: 36, top: 8),
                                 child: Text(
                                   "Addon Sewa",
                                   style: TextStyle(
@@ -397,15 +423,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         setState(() {
                                           asuransi = asuransii;
                                           if (asuransi == true) {
-//                                            asuransie = 1;
+                                           asuransie = 1;
 
-                                            getAsuransi();
-//                                            hasilperhitungan = hitungall(
-//                                                harga.toString(),
-//                                                jumlah_sewas.toString(),
-//                                                nomasuransi.toString());
+                                            // getAsuransi();
+                                           hasilperhitungan = hitungall(
+                                               harga.toString(),
+                                               jumlah_sewas.toString(),
+                                               nomasuransi.toString());
                                           } else {
-//                                            asuransie = 0;
+                                           asuransie = 0;
                                             nomasuransi = 0;
                                             hasilperhitungan = hitungall(
                                                 harga.toString(),
@@ -415,7 +441,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         });
                                       },
                                     ),
-                                    SizedBox(width: 12.0),
+                                    SizedBox(width: 8.0),
                                     Text("Asuransi (Rp. 50.000)"),
                                   ],
                                 ),
@@ -483,29 +509,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: Text("Cek Voucher"),
                                   onPressed: () {
                                     setState(() {
-                                      print("YUU"+valasuransi+" - "+harga+" - "+jumlah_sewas.toString());
+                                      print("YUU" +
+                                          valasuransi +
+                                          " - " +
+                                          harga +
+                                          " - " +
+                                          jumlah_sewas.toString());
 //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
 //                                      print("BISA YOK BISA! :"+perhitungan.toString());
                                     });
                                   },
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 30, right: 30, top: 5),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Tambahkan Note (Optional)',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  controller: _note,
-                                  onChanged: (value) {
-                                    bool isFieldValid = value.trim().isNotEmpty;
-                                    if (isFieldValid != _fieldNote) {
-                                      setState(() => _fieldNote = isFieldValid);
-                                    }
-                                  },
-                                  keyboardType: TextInputType.text,
                                 ),
                               ),
                             ],
@@ -532,12 +545,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     height: 60,
                     margin: EdgeInsets.only(top: 3),
                     child: RaisedButton(
-                      color: Colors.blue[300],
+                      color: Colors.green,
                       onPressed: () {
                         orderConfirmation(context);
                       },
                       child: Text(
-                        "Bayar " + hasilperhitungan,
+                        "Lanjutkan Pembayaran",
 //                            rupiah(
 //                              hasilperhitungan,
 //                            ),
@@ -590,25 +603,24 @@ class _FormDetailOrder extends State<FormInputOrder> {
         setState(() => isLoading = true);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return FormInputPembayaran(
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            harga: harga,
-            keterangan: ket,
-            jumlah_sewa: jumlah_sewas,
-            flagasuransi: asuransie,
-            flagvoucher: 0,
-            idasuransi: 1,
-            nomor_polis: "XX",
-            tanggal_berakhir_polis: "DATE(NOW())",
-            idvoucher: 0,
-            kapasitas: kapasitas,
-            alamat: alamat,
-            tanggal_mulai: pilihtanggal,
-            tanggal_akhir: pilihtanggal2,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            total_harga: hasilperhitungan.toString()
-          );
+              idlokasi: idlokasi,
+              idjenis_produk: idjenis_produk,
+              harga: harga,
+              keterangan: ket,
+              jumlah_sewa: jumlah_sewas,
+              flagasuransi: asuransie,
+              flagvoucher: 0,
+              idasuransi: 1,
+              nomor_polis: "XX",
+              tanggal_berakhir_polis: "DATE(NOW())",
+              idvoucher: 0,
+              kapasitas: kapasitas,
+              alamat: alamat,
+              tanggal_mulai: pilihtanggal,
+              tanggal_akhir: pilihtanggal2,
+              keterangan_barang: _keteranganbarang.text.toString(),
+              nominal_barang: _nominalbarang.text.toString(),
+              total_harga: hasilperhitungan.toString());
         }));
         _durasiorder.clear();
         _note.clear();

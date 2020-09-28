@@ -1,63 +1,53 @@
 import 'dart:convert';
 
 class OrderProduk{
-  int idjenis_produk, idlokasi, jumlah_sewa, idasuransi, idvoucher, flagvoucher, flagasuransi, idpayment_gateway, flag_selesai;
-  double total_harga, harga, nominal_barang, deposit_tambah, deposit_pakai, nominal_deposit;
-  String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang, tanggal_order, keterangan_deposit;
-
+  int idjenis_produk, idlokasi, idcustomer, jumlah_sewa, idasuransi, idvoucher, flagvoucher, flagasuransi, idpayment_gateway;
+  double total_harga, harga, nominal_barang;
+  String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang;
 
   OrderProduk({
-    this.idjenis_produk,
-    this.idlokasi,
-    this.jumlah_sewa,
-    this.idasuransi,
-    this.idvoucher,
-    this.flagvoucher,
-    this.flagasuransi,
-    this.idpayment_gateway,
-    this.flag_selesai,
-    this.total_harga,
-    this.harga,
-    this.nominal_barang,
-    this.deposit_tambah,
-    this.deposit_pakai,
-    this.nominal_deposit,
+    this.idjenis_produk = 0,
+    this.idlokasi = 0,
+    this.idcustomer = 0,
+    this.jumlah_sewa = 0,
+    this.idasuransi = 0,
+    this.idvoucher = 0,
+    this.flagvoucher = 0,
+    this.flagasuransi = 0,
+    this.total_harga = 0,
+    this.harga = 0,
+    this.idpayment_gateway=0,
     this.token,
     this.keterangan,
     this.nomor_polis,
     this.tanggal_berakhir_polis,
     this.tanggal_mulai,
     this.tanggal_akhir,
-    this.keterangan_barang,
-    this.tanggal_order,
-    this.keterangan_deposit
+    this.nominal_barang,
+    this.keterangan_barang
   });
 
   factory OrderProduk.fromJson(Map<String, dynamic> map){
     return OrderProduk(
       idjenis_produk: map["idjenis_produk"],
       idlokasi: map["idlokasi"],
+      idcustomer: map["idcustomer"],
       jumlah_sewa: map["jumlah_sewa"],
       idasuransi: map["idasuransi"],
       idvoucher: map["idvoucher"],
       flagvoucher: map["flagvoucher"],
       flagasuransi: map["flagasuransi"],
-      idpayment_gateway: map["idpayment_gateway"],
-      flag_selesai: map["flag_selesai"],
       total_harga: map["total_harga"],
       harga: map["harga"],
-      nominal_barang: map["nominal_barang"],
-      deposit_pakai: map["deposit_pakai"],
-      deposit_tambah: map["deposit_tambah"],
       token: map["token"],
       keterangan: map["keterangan"],
       nomor_polis: map["nomor_polis"],
       tanggal_berakhir_polis: map["tanggal_berakhir_polis"],
+      idpayment_gateway: map["idpayment_gateway"],
       tanggal_mulai: map["tanggal_mulai"],
       tanggal_akhir: map["tanggal_akhir"],
+      nominal_barang: map["nominal_barang"],
       keterangan_barang: map["keterangan_barang"],
-      tanggal_order: map["tanggal_order"],
-      keterangan_deposit: map["keterangan_deposit"],
     );
   }
 
@@ -65,33 +55,30 @@ class OrderProduk{
     return {
       "idjenis_produk": idjenis_produk,
       "idlokasi": idlokasi,
+      "idcustomer": idcustomer,
       "jumlah_sewa": jumlah_sewa,
       "idasuransi": idasuransi,
       "idvoucher": idvoucher,
       "flagvoucher": flagvoucher,
       "flagasuransi": flagasuransi,
-      "idpayment_gateway": idpayment_gateway,
-      "flag_selesai": flag_selesai,
       "total_harga": total_harga,
       "harga": harga,
-      "nominal_barang": nominal_barang,
-      "deposit_pakai": deposit_pakai,
-      "deposit_tambah": deposit_tambah,
       "token": token,
       "keterangan": keterangan,
       "nomor_polis": nomor_polis,
       "tanggal_berakhir_polis": tanggal_berakhir_polis,
+      "idpayment_gateway": idpayment_gateway,
       "tanggal_mulai": tanggal_mulai,
       "tanggal_akhir": tanggal_akhir,
+      "nominal_barang": nominal_barang,
       "keterangan_barang": keterangan_barang,
-      "tanggal_order": tanggal_order,
-      "keterangan_deposit": keterangan_deposit,
     };
   }
 
   @override
   String toString(){
     return 'OrderProduk{'
+        'idcustomer: $idcustomer,'
         'idjenis_produk: $idjenis_produk,'
         'idlokasi: $idlokasi,'
         'jumlah_sewa: $jumlah_sewa,'
@@ -99,22 +86,17 @@ class OrderProduk{
         'idvoucher: $idvoucher,'
         'flagvoucher: $flagvoucher,'
         'flagasuransi: $flagasuransi,'
-        'idpayment_gateway: $idpayment_gateway,'
-        'flag_selesai: $flag_selesai,'
         'total_harga: $total_harga,'
         'harga: $harga,'
-        'nominal_barang: $nominal_barang,'
-        'deposit_pakai: $deposit_pakai,'
-        'deposit_tambah: $deposit_tambah,'
         'token: $token,'
         'keterangan: $keterangan,'
         'nomor_polis: $nomor_polis,'
         'tanggal_berakhir_polis: $tanggal_berakhir_polis,'
+        'idpayment_gateway: $idpayment_gateway,'
         'tanggal_mulai: $tanggal_mulai,'
         'tanggal_akhir: $tanggal_akhir,'
+        'nominal_barang: $nominal_barang,'
         'keterangan_barang: $keterangan_barang,'
-        'tanggal_order: $tanggal_order,'
-        'keterangan_deposit: $keterangan_deposit,'
         '}';
   }
 

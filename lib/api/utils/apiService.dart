@@ -23,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.243:9992/api/";
- final String baseUrl = "http://server.horang.id:9992/api/";
+ final String baseUrl = "http://192.168.1.243:9992/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();

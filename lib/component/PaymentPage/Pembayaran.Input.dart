@@ -4,6 +4,7 @@ import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -84,7 +85,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       snominal_barang,
       stotal_harga,
       stanggal_mulai,
-      stanggal_akhir;
+      stanggal_akhir,
+      totallharga;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -154,6 +156,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
     return Container(
       height: 200,
+      padding: EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
           Expanded(
@@ -214,6 +217,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     } else {
       asuransitxt = "Tidak";
     }
+    totallharga = double.parse(stotal_harga) +
+        50000.00 +
+        double.parse(sharga.toString()) -
+        double.parse(sharga.toString());
     var media = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -250,6 +257,83 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           padding: const EdgeInsets.only(
                               bottom: 8, left: 36, top: 8),
                         ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 50, bottom: 15),
+                          child: Row(
+                            children: <Widget>[
+                              Text("Detail Pesanan",
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 50),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("Durasi Sewa :"),
+                                  Text("Tanggal Mulai :"),
+                                  Text("Tanggal Berakhir :"),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    jumlah_sewa.toString() + " Hari",
+                                  ),
+                                  Text(
+                                    stanggal_mulai,
+                                  ),
+                                  Text(
+                                    stanggal_akhir,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 50),
+                              child: Row(
+                                children: <Widget>[Text("Nominal Barang :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                rupiah(snominal_barang,
+                                    separator: ',', trailing: '.00'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Divider(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 50, bottom: 15),
+                          child: Row(
+                            children: <Widget>[
+                              Text("Detail Pembayaran",
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -263,7 +347,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                sharga.toString(),
+                                rupiah(sharga,
+                                    separator: ',', trailing: '.00' + "/hari"),
                               ),
                             ),
                           ],
@@ -274,24 +359,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 50),
                               child: Row(
-                                children: <Widget>[Text("Durasi Sewa :")],
+                                children: <Widget>[Text("Subtotal :")],
                               ),
                             ),
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    stanggal_mulai,
-                                  ),
-                                  Text(
-                                    stanggal_akhir,
-                                  ),
-                                  Text(
-                                    jumlah_sewa.toString(),
-                                  ),
-                                ],
+                              child: Text(
+                                "+" +
+                                    rupiah(stotal_harga,
+                                        separator: ',', trailing: '.00'),
                               ),
                             ),
                           ],
@@ -320,14 +397,54 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 50),
                               child: Row(
-                                children: <Widget>[Text("Nominal Barang :")],
+                                children: <Widget>[Text("Nominal Asuransi :")],
                               ),
                             ),
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                snominal_barang.toString(),
+                                "+Rp. 50000.00",
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 50),
+                              child: Row(
+                                children: <Widget>[Text("Deposit :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                "+" +
+                                    rupiah(sharga,
+                                        separator: ',', trailing: '.00'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 50),
+                              child: Row(
+                                children: <Widget>[Text("Deposit Terpakai :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                "-" +
+                                    rupiah(sharga,
+                                        separator: ',', trailing: '.00'),
                               ),
                             ),
                           ],
@@ -344,38 +461,21 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 50),
                               child: Row(
-                                children: <Widget>[Text("Note Anda :")],
+                                children: <Widget>[
+                                  Text("Total :",
+                                      style: (TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)))
+                                ],
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.only(right: 60),
                               child: Text(
-                                keterangan,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Divider(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 50),
-                              child: Row(
-                                children: <Widget>[Text("Total :")],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(right: 60),
-                              child: Text(
-                                stotal_harga.toString(),
+                                rupiah(totallharga,
+                                    separator: ',', trailing: '.00'),
                                 style: (TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
                             ),
                           ],
@@ -398,7 +498,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   padding: const EdgeInsets.only(
                                       bottom: 8, left: 36, top: 8),
                                   child: Text(
-                                    "Pilih Metode Pembayaran ${rgValue}",
+                                    "Pilih Metode Pembayaran : ",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -453,22 +553,27 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             token: access_token,
                             idlokasi: idlokasi,
                             idjenis_produk: idjenis_produk,
+                            jumlah_sewa: jumlah_sewa,
+                            idasuransi: 1,
+                            idvoucher: idvoucher,
+                            flagasuransi: flagasuransi,
+                            flagvoucher: flagvoucher,
+                            idpayment_gateway: rgID,
+                            flag_selesai: 0,
                             harga: double.parse(sharga.toString()),
                             total_harga: double.parse(stotal_harga.toString()),
-                            idcustomer: idcustomer,
+                            deposit_tambah: double.parse(sharga.toString()),
+                            deposit_pakai: double.parse(sharga.toString()),
                             keterangan: keterangan.toString(),
-                            jumlah_sewa: jumlah_sewa,
-                            flagasuransi: 0,
-                            flagvoucher: 0,
-                            idasuransi: idasuransi,
                             nomor_polis: nomor_polis,
                             tanggal_berakhir_polis: tanggal_berakhir_polis,
-                            idpayment_gateway: rgID,
-                            idvoucher: idvoucher,
                             tanggal_mulai: stanggal_mulai,
-                            nominal_barang: double.parse(snominal_barang.toString()),
+                            tanggal_akhir: stanggal_akhir,
+                            nominal_barang:
+                                double.parse("0.0"),
                             keterangan_barang: sketerangan_barang,
-                            tanggal_akhir: stanggal_akhir);
+                        tanggal_order: "DATE(NOW())",
+                        keterangan_deposit: "-");
                         print("JSONVAL_:" + orderProduk.toString());
                         _apiService
                             .tambahOrderProduk(orderProduk)
