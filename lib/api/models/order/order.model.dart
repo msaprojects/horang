@@ -49,6 +49,7 @@ class OrderProduk{
       nominal_barang: map["nominal_barang"],
       deposit_pakai: map["deposit_pakai"],
       deposit_tambah: map["deposit_tambah"],
+      nominal_deposit: map["nominal_deposit"],
       token: map["token"],
       keterangan: map["keterangan"],
       nomor_polis: map["nomor_polis"],
@@ -77,6 +78,7 @@ class OrderProduk{
       "nominal_barang": nominal_barang,
       "deposit_pakai": deposit_pakai,
       "deposit_tambah": deposit_tambah,
+      "nominal_deposit": nominal_deposit,
       "token": token,
       "keterangan": keterangan,
       "nomor_polis": nomor_polis,
@@ -106,6 +108,7 @@ class OrderProduk{
         'nominal_barang: $nominal_barang,'
         'deposit_pakai: $deposit_pakai,'
         'deposit_tambah: $deposit_tambah,'
+        'nominal_deposit: $nominal_deposit,'
         'token: $token,'
         'keterangan: $keterangan,'
         'nomor_polis: $nomor_polis,'

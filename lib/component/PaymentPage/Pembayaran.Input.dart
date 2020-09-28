@@ -561,7 +561,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             idpayment_gateway: rgID,
                             flag_selesai: 0,
                             harga: double.parse(sharga.toString()),
-                            total_harga: double.parse(stotal_harga.toString()),
+                            total_harga: double.parse(totallharga.toString()),
                             deposit_tambah: double.parse(sharga.toString()),
                             deposit_pakai: double.parse(sharga.toString()),
                             keterangan: keterangan.toString(),
@@ -569,11 +569,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             tanggal_berakhir_polis: tanggal_berakhir_polis,
                             tanggal_mulai: stanggal_mulai,
                             tanggal_akhir: stanggal_akhir,
-                            nominal_barang:
-                                double.parse("0.0"),
+                            nominal_barang: double.parse("0.0"),
                             keterangan_barang: sketerangan_barang,
-                        tanggal_order: "DATE(NOW())",
-                        keterangan_deposit: "-");
+                            tanggal_order: "DATE(NOW())",
+                            nominal_deposit: double.parse(sharga.toString()),
+                            keterangan_deposit: "-");
                         print("JSONVAL_:" + orderProduk.toString());
                         _apiService
                             .tambahOrderProduk(orderProduk)
