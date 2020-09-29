@@ -15,6 +15,35 @@ class BodyWelcomePage extends StatefulWidget {
 }
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
+  bool _showbutton = false;
+  cekToken() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var access_token = sp.getString("access_token");
+    print("MASUK CEK TOKEN $access_token");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    if (access_token == null) {
+      setState(() {
+        _showbutton = true;
+        Timer(
+            Duration(seconds: 4),
+            () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginPage())));
+      });
+    } else {
+      _showbutton = false;
+      Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Pin2(),
+            ));
+    }
+  }
+
+  @override
+  void initState() {
+    cekToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

@@ -5,26 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api/models/mystorage/mystorageModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/models/mystorage/mystorageModel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api/utils/apiService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/utils/apiService.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/DashboardPage/LatestOrder.Dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/DashboardPage/LatestOrder.Dashboard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/DashboardPage/Voucher.Dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/DashboardPage/Voucher.Dashboard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/ProdukPage/Produk.List.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/ProdukPage/Produk.List.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive2.List.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/tambah_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/tambah_profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/ubah_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/ubah_profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/cvdtc/horang/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/kotlin/com/cvdtc/horang/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/horang_android.iml" beforeDir="false" afterPath="$PROJECT_DIR$/android/horang_android.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="R" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="TXUFG18801001163" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -44,8 +42,8 @@
   <component name="PropertiesComponent">
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/api/models/order" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../flutter/bin/cache/dart-sdk" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -71,10 +69,18 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="618" y="305" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1601367841652">
+      <screen x="0" y="0" width="1536" height="832" />
+    </state>
+    <state x="618" y="305" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.832@0.0.1536.832" timestamp="1601367841652" />
     <state x="1791" y="190" key="#main.dart" timestamp="1600248355424">
       <screen x="1440" y="0" width="1440" height="900" />
     </state>
     <state x="1791" y="190" key="#main.dart/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1600248355424" />
+    <state x="743" y="218" key="FileChooserDialogImpl" timestamp="1601367474996">
+      <screen x="0" y="0" width="1536" height="832" />
+    </state>
+    <state x="743" y="218" key="FileChooserDialogImpl/0.0.1536.832@0.0.1536.832" timestamp="1601367474996" />
     <state width="1398" height="243" key="GridCell.Tab.0.bottom" timestamp="1601365591625">
       <screen x="1440" y="0" width="1440" height="900" />
     </state>
@@ -111,9 +117,10 @@
     <state width="1398" height="243" key="GridCell.Tab.0.right/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601365591623" />
     <state width="699" height="243" key="GridCell.Tab.0.right/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601286187635" />
     <state width="973" height="230" key="GridCell.Tab.0.right/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593679" />
-    <state x="1661" y="89" key="SettingsEditor" timestamp="1601362636346">
-      <screen x="1440" y="0" width="1440" height="900" />
+    <state x="236" y="82" key="SettingsEditor" timestamp="1601367480654">
+      <screen x="0" y="0" width="1536" height="832" />
     </state>
+    <state x="236" y="82" key="SettingsEditor/0.0.1536.832@0.0.1536.832" timestamp="1601367480654" />
     <state x="1661" y="89" key="SettingsEditor/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601362636346" />
     <state x="1540" y="120" width="1240" height="683" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1601097401140">
       <screen x="1440" y="23" width="1440" height="877" />

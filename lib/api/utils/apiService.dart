@@ -1,13 +1,19 @@
 import 'dart:convert';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
+import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
+import 'package:horang/api/models/log/Log.dart';
+import 'package:horang/api/models/log/listlog.model.dart';
+import 'package:horang/api/models/log/openLog.dart';
+import 'package:horang/api/models/log/selesaiLog.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
+import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
@@ -246,6 +252,23 @@ class ApiService {
     }
   }
 
+  Future<bool> CekPin(Pin_Model_Cek data) async {
+    // print("cek masuk APISERVICE $PinToJson(data)");
+    final response = await client.post(
+      "$baseUrl/pin",
+      headers: {"Content-type": "application/json"},
+      body: PinCekToJson(data),
+    );
+    print("cusTOjson" + PinCekToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> UbahPassword(Password data) async {
     print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
@@ -259,6 +282,120 @@ class ApiService {
       return false;
     }
   }
+
+  Future<bool> OpenLog(LogOpen data) async {
+    print("cek masuk APISERVICE $PinToJson(data)");
+    final response = await client.post(
+      "$baseUrl/open",
+      headers: {"Content-type": "application/json"},
+      body: LogOpenToJson(data),
+    );
+    print("cusTOjson" + LogOpenToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> SelesaiLog(selesaiLog data) async {
+    final response = await client.post(
+      "$baseUrl/selesai",
+      headers: {"Content-type": "application/json"},
+      body: selesaiLogToJson(data),
+    );
+    print("cusTOjson" + selesaiLogToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> Log_(Logs data) async {
+    final response = await client.post(
+      "$baseUrl/log",
+      headers: {"Content-type": "application/json"},
+      body: LogsToJson(data),
+    );
+    print("cusTOjson" + LogsToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<LogList>> listloggs(String token, iddetail_order) async {
+   final response = await client.post(
+      "$baseUrl/log",
+      headers: {"content-type": "application/json"},
+      body: jsonEncode({"token": "${token}", "iddetail_order":"${iddetail_order}"}),
+    );
+    // print("token ada nggk $token" + "detOrder $iddetail_order");
+    print("cek masuk log apa nggk ${response.body}");
+    if (response.statusCode == 200) {
+      return LoglistFromJson(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  ///////////////////// FORGET ///////////////////////
+  Future<bool> ForgetPass(Forgot_Password data) async {
+    final response = await client.post(
+      "$baseUrl/forgotpassword",
+      headers: {"Content-type": "application/json"},
+      body: ForgotPassToJson(data),
+    );
+    print("cusTOjson" + ForgotPassToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> ForgetPin(Forgot_Password data) async {
+    final response = await client.post(
+      "$baseUrl/forgotpin",
+      headers: {"Content-type": "application/json"},
+      body: ForgotPassToJson(data),
+    );
+    print("cusTOjson" + ForgotPassToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> ResendEmail(Forgot_Password data) async {
+    final response = await client.post(
+      "$baseUrl/resendemailaktivasi",
+      headers: {"Content-type": "application/json"},
+      body: ForgotPassToJson(data),
+    );
+    print("cusTOjson" + ForgotPassToJson(data));
+    // print("cekupdatecust :" + response.body);
+    print("responstatuskode: " + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   //////////////////////////////////////////////
 

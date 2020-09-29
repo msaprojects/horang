@@ -4,10 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/AccountChecker.dart';
+import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
@@ -113,15 +115,63 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  // SvgPicture.asset(
-                  //   "assets/svg/logo_gudang.svg",
-                  //   height: 150,
-                  //   width: 150,
-                  // ),
+                  SvgPicture.asset(
+                    "assets/svg/logo_gudang.svg",
+                    height: 150,
+                    width: 150,
+                  ),
                   _buildTextFieldEmail(), //textbox username (email / no hp)
                   _buildTextFieldPassword(), //textbox password
                   SizedBox(
                     height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 0, right: 0),
+                        child: Container(
+                            child: Row(
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Reset(
+                                          tipe: "ResendEmail",
+                                              // resendemail: Forgot_Password,
+                                            )));
+                              },
+                              child: new Text(
+                                "Resend Email",
+                                style: GoogleFonts.lato(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Reset(
+                                              // resetpass: Forgot_Password,
+                                              tipe: "ResetPassword",
+                                            )));
+                              },
+                              child: new Text(
+                                "Reset Password",
+                                style: GoogleFonts.lato(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        )),
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 5,
