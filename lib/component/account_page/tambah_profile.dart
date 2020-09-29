@@ -25,7 +25,7 @@ class _TambahProfileState extends State<TambahProfile> {
   String _nama,
       _alamat,
       _noKtp,
-      urlcomboKota = "http://192.168.1.243:9992/api/kota/",
+      urlcomboKota = "http://server.horang.id:9992/api/kota/",
       valKota;
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
@@ -228,10 +228,10 @@ class _TambahProfileState extends State<TambahProfile> {
       controller: _controllerAlamat,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Full name",
+        labelText: "Alamat",
         errorText: _isFieldAlamat == null || _isFieldAlamat
             ? null
-            : "Full name is required",
+            : "Alamat harus diisi",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;

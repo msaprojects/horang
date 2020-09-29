@@ -6,7 +6,6 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class LatestOrderDashboard extends StatefulWidget {
   @override
   _LatestOrderDashboardState createState() => _LatestOrderDashboardState();
@@ -95,8 +94,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                     "Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<MystorageModel> profiles =
-                  snapshot.data;
+              List<MystorageModel> profiles = snapshot.data;
               return _buildlistview(profiles);
             } else {
               return Center(
@@ -115,11 +113,8 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       margin: EdgeInsets.only(left: 16, right: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
+        itemCount: 6,
         itemBuilder: (context, index) {
-          if ( index == 0) {
-            print('masuk kosong');
-          } else {
           MystorageModel mystorageModel = dataIndex[index];
           return GestureDetector(
               onTap: () {
@@ -187,7 +182,6 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   ),
                 ),
               ));
-          }
         },
       ),
     );

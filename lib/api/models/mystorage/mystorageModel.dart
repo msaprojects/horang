@@ -19,7 +19,7 @@ class MystorageModel {
         nama_kota: map["nama_kota"],
         tanggal_order: map["tanggal_order"],
         hari: map["hari"],
-        aktif: map["aktif"]);
+        aktif: map["AKTIF"]);
   }
   Map<String, dynamic> toJson() {
     return {
@@ -28,7 +28,7 @@ class MystorageModel {
       "nama_kota": nama_kota,
       "tanggal_order": tanggal_order,
       "hari": hari,
-      "aktif": aktif
+      "AKTIF": aktif
     };
   }
 
@@ -39,7 +39,7 @@ class MystorageModel {
         'nama_kota: $nama_kota,'
         'tanggal_order: $tanggal_order,'
         'hari: $hari,'
-        'aktif: $aktif}';
+        'AKTIF: $aktif}';
   }
 }
 

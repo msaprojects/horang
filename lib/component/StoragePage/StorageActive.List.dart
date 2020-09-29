@@ -94,8 +94,8 @@ class _StorageActive extends State<StorageActive> {
                     "Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<MystorageModel> profiles = snapshot.data;
-              // .where((i) => i.aktif == "AKTIF").toList();
+              List<MystorageModel> profiles =
+                  snapshot.data.where((i) => i.aktif == "AKTIF").toList();
               return _buildListview(profiles);
             } else {
               return Center(
@@ -213,7 +213,8 @@ class _StorageActive extends State<StorageActive> {
                                             onPressed: () {
                                               setState(() => isLoading = true);
                                               if (idcustomer == "0") {
-                                                Scaffold.of(context).showSnackBar(SnackBar(
+                                                Scaffold.of(context)
+                                                    .showSnackBar(SnackBar(
                                                   content: Text(
                                                       'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
                                                   duration:
@@ -224,8 +225,8 @@ class _StorageActive extends State<StorageActive> {
                                                     MaterialPageRoute(
                                                         builder: (context) {
                                                   return KonfirmasiLog(
-                                                    kode_kontainer:
-                                                        myStorage.kode_kontainer,
+                                                    kode_kontainer: myStorage
+                                                        .kode_kontainer,
                                                     nama_kota: myStorage.nama,
                                                   );
                                                 }));

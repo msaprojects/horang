@@ -24,7 +24,7 @@ class _UbahProfileState extends State<UbahProfile> {
   String _nama,
       _alamat,
       _noKtp,
-      urlcomboKota = "http://35.229.217.130:9992/api/kota/",
+      urlcomboKota = "http://server.horang.id:9992/api/kota/",
       // urlcomboKota = "http://192.168.6.113:9992/api/kota/",
       valKota;
   bool _fieldNamaLengkap = false,
@@ -117,7 +117,8 @@ class _UbahProfileState extends State<UbahProfile> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            widget.customer == null ? "Tambah Data" : "Ubah Data",
+            // widget.customer == null ? "Tambah Data" : "Ubah Data",
+            "Ubah Profile",
             // "Edit Profil",
             style: TextStyle(color: Colors.black),
           ),

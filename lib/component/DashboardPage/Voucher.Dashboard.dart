@@ -7,7 +7,6 @@ import 'package:horang/screen/home_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class VoucherDashboard extends StatefulWidget {
   @override
   _VoucherDashboard createState() => _VoucherDashboard();
@@ -116,7 +115,6 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
               Voucher voucher = dataIndex[index];
-              print("HASIL URL GAMBAR" + voucher.toString());
               return Container(
                 decoration: BoxDecoration(
                   // borderRadius: BorderRadius.circular(8),

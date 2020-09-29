@@ -23,8 +23,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.243:9992/api/";
- // final String baseUrl = "http://104.199.147.100:9992/api/";
- final String baseUrl = "http://server.horang.id:9992/api/";
+  // final String baseUrl = "http://104.199.147.100:9992/api/";
+  final String baseUrl = "http://server.horang.id:9992/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
@@ -36,7 +36,7 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
-   print(token);
+    print(token);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -60,7 +60,6 @@ class ApiService {
   Future<List<Voucher>> listVoucher(String token) async {
     final response = await client
         .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
-    // print("Hasil"+response.body);
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
     } else {
@@ -72,8 +71,7 @@ class ApiService {
   Future<List<MystorageModel>> listMystorage(String token) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-     print(" ${response.body}");
-    // print("coba cek lagi : ${response.statusCode}");
+    print("My Storage : "+response.body);
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
     } else {
@@ -85,7 +83,6 @@ class ApiService {
   Future<List<PaymentGateway>> listPaymentGateway(String token) async {
     final response = await client.get("$baseUrl/paymentgateway",
         headers: {"Authorization": "BEARER ${token}"});
-    print(response.body);
     if (response.statusCode == 200) {
       return paymentgatewayFromJson(response.body);
     } else {
@@ -97,7 +94,6 @@ class ApiService {
   Future<List<Customer>> getCustomer(access_token) async {
     final response = await client.get("$baseUrl/customer",
         headers: {"Authorization": "BEARER ${access_token}"});
-    // print(response.body);
     if (response.statusCode == 200) {
       return customerFromJson(response.body);
     } else {
@@ -118,8 +114,8 @@ class ApiService {
 
   //LOAD ASURANSI LIST
   Future<List<AsuransiModel>> listAsuransi(String token) async {
-    final response = await client
-        .get("$baseUrl/asuransi", headers: {"Authorization": "BEARER ${token}"});
+    final response = await client.get("$baseUrl/asuransi",
+        headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return asuransiFromJson(response.body);
     } else {
@@ -140,7 +136,6 @@ class ApiService {
     );
     Map message = jsonDecode(response.body);
     responseCode = ResponseCode.fromJson(message);
-    print(response.statusCode);
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -180,9 +175,7 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
-    print("Hmm :" + response.body.split(" : ")[1]);
     if (response.statusCode == 200) {
-//      print(response.body);
       return int.parse(response.body.split(" : ")[1]);
     } else {
       return 0;
@@ -197,9 +190,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
-    print("cusTOjson" + customerToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -219,9 +209,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
-    print("cusTOjson" + customerToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -238,9 +225,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinToJson(data),
     );
-    print("cusTOjson" + PinToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -255,9 +239,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinToJson(data),
     );
-    print("cusTOjson" + PinToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -272,9 +253,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
-    print("cusTOjson" + PasswordToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {

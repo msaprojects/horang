@@ -40,7 +40,7 @@ dependencies:
   email_validator: any
   date_format: any
   flutter_spinkit: ^4.1.2
-  firebase_messaging: ^7.0.0
+  firebase_messaging: any
 
 dev_dependencies:
   flutter_test:
