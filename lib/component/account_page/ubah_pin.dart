@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
+import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,12 @@ class _UbahPinState extends State<UbahPin> {
       _isFieldPinBaru,
       _isFieldPinBaruRetype;
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token, idcustomer = "" , pin = 0;
+  var token = "",
+      newtoken = "",
+      access_token,
+      refresh_token,
+      idcustomer = "",
+      pin;
   TextEditingController _controllerPassLama = TextEditingController();
   TextEditingController _controllerPassBaru = TextEditingController();
   TextEditingController _controllerPassBaruRetype = TextEditingController();
@@ -33,7 +39,7 @@ class _UbahPinState extends State<UbahPin> {
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    // pin = sp.getString("pin");
+    pin = sp.getString("pin");
     print('CEKKKK PIN LAMA $pin');
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
@@ -77,13 +83,30 @@ class _UbahPinState extends State<UbahPin> {
 
   @override
   Widget build(BuildContext context) {
+    void Keluarr() async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      cekToken();
+      await preferences.clear();
+      if (preferences.getString("access_token") == null) {
+        print("SharePref berhasil di hapus");
+        showAlertDialog(context);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            (Route<dynamic> route) => false);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          "Ubah Pin",
+          pin != 0 ? "Tambah Pin" : "Ubah Pin",
           style: TextStyle(color: Colors.black),
         ),
+        // title: Text(
+        //   "Ubah Pin",
+        //   style: TextStyle(color: Colors.black),
+        // ),
         elevation: 0,
         leading: IconButton(
             icon: Icon(
@@ -105,39 +128,81 @@ class _UbahPinState extends State<UbahPin> {
               Padding(
                 padding: const EdgeInsets.only(top: 9),
                 child: RaisedButton(
-                  child: Text('Ubah'),
-                  onPressed: () {
-                    setState(() {
-                      Pin_Model pinubah = Pin_Model(
-                        // pin: _controllerPassLama.text.toString(),
-                        pinlama: _controllerPassLama.text.toString(),
-                        pinbaru: _controllerPassBaru.text.toString(),
-                        token: access_token
-                      );
-                      if (widget.ubahPin == null) {
-                        _apiService.UbahPin(pinubah).then((isSuccess){
-                          setState(()=> _isLoading = false);
-                          if (isSuccess) {
-                            Navigator.pop(_scaffoldState.currentState.context);
-                          } else {
-                            _scaffoldState.currentState.showSnackBar(SnackBar(
-                              content: Text("Submit data salah"),
-                            ));
+                    child: Text('Simpan'),
+                    onPressed: () {
+                      setState(() {
+                        if (pin != 0) {
+                          print("cek Tambah pin");
+                          print(_controllerPassBaru.text.toString());
+                          print(access_token);
+                          TambahPin_model pintambah = TambahPin_model(
+                              pin: _controllerPassBaru.text.toString(),
+                              token: access_token);
+                          if (widget.ubahPin == null) {
+                            _apiService.TambahPin(pintambah).then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                Keluarr();
+                              } else {
+                                _scaffoldState.currentState
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Submit data salah"),
+                                ));
+                              }
+                            });
                           }
-                        });
-                      }
-                    });
-                  }
-                ),
+                        } else if (pin == null) {
+                          print("cek pin ubah");
+                          Pin_Model pinubah = Pin_Model(
+                              pinlama: _controllerPassLama.text.toString(),
+                              pinbaru: _controllerPassBaru.text.toString(),
+                              token: access_token);
+                          if (widget.ubahPin == null) {
+                            _apiService.UbahPin(pinubah).then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                Navigator.pop(
+                                    _scaffoldState.currentState.context);
+                              } else {
+                                _scaffoldState.currentState
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Submit data salah"),
+                                ));
+                              }
+                            });
+                          }
+                        }
+                      });
+                    }),
               )
-              
             ],
           )),
     );
   }
 
+  void seleksitambahubah() {
+    if (pin == null) {
+      Container(
+        child: Column(
+          children: [_buildTextFieldPinBaru(), _buildTextFieldPinBaruRetype()],
+        ),
+      );
+    } else {
+      Container(
+        child: Column(
+          children: [
+            _buildTextFieldPinLama(),
+            _buildTextFieldPinBaru(),
+            _buildTextFieldPinBaruRetype()
+          ],
+        ),
+      );
+    }
+  }
+
   Widget _buildTextFieldPinLama() {
     return TextFormField(
+      maxLength: 4,
       controller: _controllerPassLama,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
@@ -157,6 +222,7 @@ class _UbahPinState extends State<UbahPin> {
 
   Widget _buildTextFieldPinBaru() {
     return TextFormField(
+      maxLength: 4,
       controller: _controllerPassBaru,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
@@ -176,6 +242,7 @@ class _UbahPinState extends State<UbahPin> {
 
   Widget _buildTextFieldPinBaruRetype() {
     return TextFormField(
+      maxLength: 4,
       controller: _controllerPassBaruRetype,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
@@ -185,8 +252,8 @@ class _UbahPinState extends State<UbahPin> {
             : "Retype Pin baru harus di isi",
       ),
       // obscureText: true,
-      validator: (confirmation){
-        if (confirmation != passKey.currentState.value){
+      validator: (confirmation) {
+        if (confirmation != passKey.currentState.value) {
           return 'Password tidak sama';
         } else {
           return null;

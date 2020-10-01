@@ -16,6 +16,7 @@ import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
+import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
@@ -219,11 +220,11 @@ class ApiService {
 
   ////////////////////// PIN ///////////////////////
 
-  Future<bool> TambahPin(Pin_Model data) async {
+  Future<bool> TambahPin(TambahPin_model data) async {
     final response = await client.post(
       "$baseUrl/ipin",
       headers: {"Content-type": "application/json"},
-      body: PinToJson(data),
+      body: TambahPinToJson(data),
     );
     if (response.statusCode == 200) {
       return true;

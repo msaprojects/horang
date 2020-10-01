@@ -2,6 +2,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
 import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
+import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/reset.dart';
@@ -253,7 +254,7 @@ class _Pin2State extends State<Pin2> {
                             this.thisText = controller.text;
                             print("Gassskaaan ========> $thisText");
                             print("Cek pinModel: $access_token");
-                            Pin_Model pin = Pin_Model(
+                            TambahPin_model pin = TambahPin_model(
                               // pin: thisText,
                               token: access_token,
                             );
