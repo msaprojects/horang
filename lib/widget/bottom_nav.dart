@@ -22,13 +22,14 @@ class _HomeState extends State<Home> {
   ApiService _apiService = ApiService();
   bool isSuccess = false;
 
-  var access_token, refresh_token, idcustomer, email, nama_customer;
+  var access_token, refresh_token, idcustomer, pin, nama_customer;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    email = sp.getString("email");
+    pin = sp.getString("pin");
+    idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {

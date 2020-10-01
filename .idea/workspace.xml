@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api/models/token/token.model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/models/token/token.model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/api/utils/apiService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/utils/apiService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/account_page/account.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/account.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

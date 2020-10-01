@@ -20,7 +20,13 @@ class _AccountState extends State<Account> {
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   // ignore: non_constant_identifier_names
-  var access_token, refresh_token, idcustomer, email, nama_customer, idpengguna, routing;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      pin,
+      nama_customer,
+      idpengguna,
+      routing;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -28,7 +34,7 @@ class _AccountState extends State<Account> {
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
-    email = sp.getString("email");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
@@ -78,6 +84,7 @@ class _AccountState extends State<Account> {
         print("SharePref berhasil di hapus");
       }
     }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -123,11 +130,6 @@ class _AccountState extends State<Account> {
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "$email")
                             ],
                           )),
                     ],
@@ -135,17 +137,16 @@ class _AccountState extends State<Account> {
                 ),
               ),
             ),
-            
             ListTile(
               leading: Icon(Icons.person),
               title: Text("Lengkapi Profile"),
               trailing: Icon(Icons.keyboard_arrow_right),
               //onTap: () {routing();}),
-              onTap:(){
-                if(nama_customer == "0"){
+              onTap: () {
+                if (idcustomer == 0) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TambahProfile()));
-                }else{
+                } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => UbahProfile()));
                 }
@@ -156,13 +157,13 @@ class _AccountState extends State<Account> {
               title: Text("Ubah Pin"),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
-                Navigator.push(context,
+                Navigator.push(
+                    context,
                     // MaterialPageRoute(builder: (context) => Pin2()));
                     MaterialPageRoute(builder: (context) => UbahPin()));
                 // UbahProfile();
               },
             ),
-
             ListTile(
               leading: Icon(Icons.phonelink_lock),
               title: Text("Ubah Password"),

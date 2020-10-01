@@ -164,6 +164,7 @@ class ApiService {
       sp.setString("refresh_token", "${token.refresh_token}");
       sp.setString("idcustomer", "${token.idcustomer}");
       sp.setString("nama_customer", "${token.nama_customer}");
+      sp.setString("pin", "${token.pin}");
       return true;
     } else {
       return false;
