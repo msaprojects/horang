@@ -103,21 +103,10 @@ class _UbahProfileState extends State<UbahProfile> {
 
   @override
   Widget build(BuildContext context) {
-    // Container(
-    //   child: FutureBuilder(
-    //     future: _apiService.getCustomer(access_token),
-    //     builder:
-    //         (BuildContext context, AsyncSnapshot<List<Customer>> snapshot) {
-    //       print("hmm : ${snapshot.connectionState}");
-    //     },
-    //   ),
-    // );
-    // _apiService.getCustomer(sp.get(access_token)).then((value) => print("value get: $value"));
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            // widget.customer == null ? "Tambah Data" : "Ubah Data",
             "Ubah Profile",
             // "Edit Profil",
             style: TextStyle(color: Colors.black),
@@ -148,12 +137,6 @@ class _UbahProfileState extends State<UbahProfile> {
                 // _simpan()
               } else {
                 return Text("");
-                // Container(
-                //   color: Colors.grey[300],
-                //   child: Center(
-                //     child: Loading(indicator: BallPulseIndicator(), size: 50,),
-                //   )
-                // );
               }
             },
           ),
