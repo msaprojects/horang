@@ -42,7 +42,6 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
-    print(token);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -54,7 +53,6 @@ class ApiService {
   Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
     final response = await client.get("$baseUrl/orderdet/$idorder",
         headers: {"Authorization": "BEARER ${token}"});
-    print(response.body);
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
     } else {
@@ -77,7 +75,6 @@ class ApiService {
   Future<List<MystorageModel>> listMystorage(String token) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("My Storage : "+response.body);
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
     } else {
@@ -166,7 +163,6 @@ class ApiService {
       sp.setString("access_token", "${token.access_token}");
       sp.setString("refresh_token", "${token.refresh_token}");
       sp.setString("idcustomer", "${token.idcustomer}");
-      sp.setString("email", "${token.email}");
       sp.setString("nama_customer", "${token.nama_customer}");
       return true;
     } else {
@@ -190,7 +186,6 @@ class ApiService {
 
   //Tambah Customer
   Future<bool> TambahCustomer(Customer data) async {
-    // print("DAtaku"+ data.toString());
     final response = await client.post(
       "$baseUrl/customer",
       headers: {"Content-type": "application/json"},
@@ -209,7 +204,6 @@ class ApiService {
 
 //  UBAH CUSTOMER
   Future<bool> UpdateCustomer(Customer data) async {
-    // print("DAtaku"+ data.toString());
     final response = await client.post(
       "$baseUrl/ecustomer",
       headers: {"Content-type": "application/json"},
@@ -225,7 +219,6 @@ class ApiService {
   ////////////////////// PIN ///////////////////////
 
   Future<bool> TambahPin(Pin_Model data) async {
-    print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
       "$baseUrl/ipin",
       headers: {"Content-type": "application/json"},
@@ -239,7 +232,6 @@ class ApiService {
   }
 
   Future<bool> UbahPin(Pin_Model data) async {
-    print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
       "$baseUrl/epin",
       headers: {"Content-type": "application/json"},
@@ -253,15 +245,11 @@ class ApiService {
   }
 
   Future<bool> CekPin(Pin_Model_Cek data) async {
-    // print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
       "$baseUrl/pin",
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
-    print("cusTOjson" + PinCekToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -270,7 +258,6 @@ class ApiService {
   }
 
   Future<bool> UbahPassword(Password data) async {
-    print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
       "$baseUrl/epassword",
       headers: {"Content-type": "application/json"},
@@ -284,15 +271,11 @@ class ApiService {
   }
 
   Future<bool> OpenLog(LogOpen data) async {
-    print("cek masuk APISERVICE $PinToJson(data)");
     final response = await client.post(
       "$baseUrl/open",
       headers: {"Content-type": "application/json"},
       body: LogOpenToJson(data),
     );
-    print("cusTOjson" + LogOpenToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -306,9 +289,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: selesaiLogToJson(data),
     );
-    print("cusTOjson" + selesaiLogToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -322,9 +302,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: LogsToJson(data),
     );
-    print("cusTOjson" + LogsToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -338,8 +315,6 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: jsonEncode({"token": "${token}", "iddetail_order":"${iddetail_order}"}),
     );
-    // print("token ada nggk $token" + "detOrder $iddetail_order");
-    print("cek masuk log apa nggk ${response.body}");
     if (response.statusCode == 200) {
       return LoglistFromJson(response.body);
     } else {
@@ -354,9 +329,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    print("cusTOjson" + ForgotPassToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -370,9 +342,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    print("cusTOjson" + ForgotPassToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -386,9 +355,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    print("cusTOjson" + ForgotPassToJson(data));
-    // print("cekupdatecust :" + response.body);
-    print("responstatuskode: " + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {
