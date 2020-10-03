@@ -1,13 +1,15 @@
 # This is a generated file; do not edit or check into version control.
 firebase_core=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.0/
 firebase_core_web=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.0/
-firebase_messaging=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.0/
-flutter_plugin_android_lifecycle=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.8/
-local_auth=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/local_auth-0.6.3+1/
-path_provider=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.14/
+firebase_messaging=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.2/
+flutter_plugin_android_lifecycle=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/
+local_auth=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/local_auth-0.6.3+2/
+path_provider=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.18/
 path_provider_linux=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/
-path_provider_macos=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+3/
-shared_preferences=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.10/
+path_provider_macos=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+4/
+path_provider_windows=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-0.0.4+1/
+shared_preferences=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12/
 shared_preferences_linux=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-0.0.2+2/
 shared_preferences_macos=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-0.0.1+10/
 shared_preferences_web=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+7/
+shared_preferences_windows=/Users/cvdtc/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-0.0.1+1/
