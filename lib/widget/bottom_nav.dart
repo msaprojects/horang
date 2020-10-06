@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
           (Route<dynamic> route) => false);
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          // showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -217,6 +217,7 @@ class _HomeState extends State<Home> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
+        print("ini bottom nav");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

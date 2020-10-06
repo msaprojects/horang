@@ -2,31 +2,31 @@ import 'dart:convert';
 
 class selesaiLog{
 
-  int idorder;
+  int idtransaksi;
   String token;
 
   selesaiLog({
-    this.idorder = 0,
+    this.idtransaksi = 0,
     this.token,
   });
 
   factory selesaiLog.fromJson(Map<String, dynamic> map){
     return selesaiLog(
-      idorder: map["idorder"],
+      idtransaksi: map["idtransaksi"],
       token: map["token"]
     );
   }
 
   Map<String, dynamic> toJson(){
     return{
-      "idorder": idorder,
+      "idtransaksi": idtransaksi,
       "token": token
     };
   }
 
   @override
   String toString(){
-    return 'log{idorder: $idorder, token: $token}';
+    return 'log{idorder: $idtransaksi, token: $token}';
   }
 
 }

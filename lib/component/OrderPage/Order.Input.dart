@@ -576,6 +576,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
+        print("ini order input");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

@@ -100,7 +100,7 @@ class _UbahPinState extends State<UbahPin> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          pin != 0 ? "Tambah Pin" : "Ubah Pin",
+          pin == "0" ? "Tambah Pin" : "Ubah Pin",
           style: TextStyle(color: Colors.black),
         ),
         // title: Text(
@@ -127,14 +127,13 @@ class _UbahPinState extends State<UbahPin> {
               _buildTextFieldPinBaruRetype(),
               Padding(
                 padding: const EdgeInsets.only(top: 9),
+                
                 child: RaisedButton(
                     child: Text('Simpan'),
                     onPressed: () {
                       setState(() {
-                        if (pin != 0) {
+                        if (pin == "0") {
                           print("cek Tambah pin");
-                          print(_controllerPassBaru.text.toString());
-                          print(access_token);
                           TambahPin_model pintambah = TambahPin_model(
                               pin: _controllerPassBaru.text.toString(),
                               token: access_token);
@@ -151,8 +150,8 @@ class _UbahPinState extends State<UbahPin> {
                               }
                             });
                           }
-                        } else if (pin == null) {
-                          print("cek pin ubah");
+                        } else {
+                          print("cek pin ubah" + pin);
                           Pin_Model pinubah = Pin_Model(
                               pinlama: _controllerPassLama.text.toString(),
                               pinbaru: _controllerPassBaru.text.toString(),

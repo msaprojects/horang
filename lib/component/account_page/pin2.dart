@@ -187,10 +187,6 @@ class _Pin2State extends State<Pin2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: _scaffoldState,
-      // appBar: AppBar(
-      //   title: Text("Pin Code Text Field Example"),
-      // ),
       body: Container(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(top: 100),
@@ -221,6 +217,73 @@ class _Pin2State extends State<Pin2> {
                 },
                 onDone: (text) {
                   print("DONE $text");
+                  //  onPressed: () {
+                  if (access_token == null) {
+                    setState(() {
+                      this.thisText = controller.text;
+                      print("Gassskaaan ========> $thisText");
+                      print("Cek pinModel: $access_token");
+                      TambahPin_model pin = TambahPin_model(
+                        // pin: thisText,
+                        token: access_token,
+                      );
+                      print("Cek PIN: $pin");
+                      _apiService.TambahPin(pin).then((isSuccess) {
+                        setState(() {
+                          if (isSuccess) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => Home()),
+                                (Route<dynamic> route) => true);
+                          } else {
+                            // Text('Data gagal disimpan');
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text('Submit data failed'),
+                            ));
+                          }
+                        });
+                      });
+                    });
+                  } else {
+                    setState(() {
+                      this.thisText = controller.text;
+                      // print("Gassskaaan ========> $thisText");
+                      // print("Cek pinModel: $access_token");
+                      Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
+                        pin_cek: thisText,
+                        token_cek: access_token,
+                      );
+                      print("Cek PIN masuk maskuh: $pin_cek1");
+                      _apiService.CekPin(pin_cek1).then((isSuccess) {
+                        setState(() {
+                          if (isSuccess) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Home(),
+                                ));
+                            // Navigator.pop(
+                            //     _scaffoldState.currentState.context);
+                            // Text("data berhasil disimpam");
+                          } else {
+                            print('Pin salah masku, iling iling maneh');
+
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((timeStamp) {
+                              Flushbar(
+                                message: "Pin salah masku, iling iling maneh",
+                                flushbarPosition: FlushbarPosition.BOTTOM,
+                                icon: Icon(Icons.ac_unit),
+                                flushbarStyle: FlushbarStyle.GROUNDED,
+                                duration: Duration(seconds: 5),
+                              )..show(_scaffoldState.currentState.context);
+                            });
+                          }
+                        });
+                      });
+                    });
+                  }
+                  // };
                 },
                 // pinCodeTextFieldLayoutType: PinCodeTextFieldLayoutType.AUTO_ADJUST_WIDTH,
                 keyboardType: TextInputType.number,
@@ -243,108 +306,49 @@ class _Pin2State extends State<Pin2> {
                 padding: const EdgeInsets.only(top: 32.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    MaterialButton(
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      child: Text("SIMPAN"),
-                      onPressed: () {
-                        if (access_token == null) {
-                          setState(() {
-                            this.thisText = controller.text;
-                            print("Gassskaaan ========> $thisText");
-                            print("Cek pinModel: $access_token");
-                            TambahPin_model pin = TambahPin_model(
-                              // pin: thisText,
-                              token: access_token,
-                            );
-                            print("Cek PIN: $pin");
-                            _apiService.TambahPin(pin).then((isSuccess) {
-                              setState(() {
-                                if (isSuccess) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Home()),
-                                      (Route<dynamic> route) => true);
-                                } else {
-                                  // Text('Data gagal disimpan');
-                                  _scaffoldState.currentState
-                                      .showSnackBar(SnackBar(
-                                    content: Text('Submit data failed'),
-                                  ));
-                                }
-                              });
-                            });
-                          });
-                        } else {
-                          setState(() {
-                            this.thisText = controller.text;
-                            // print("Gassskaaan ========> $thisText");
-                            // print("Cek pinModel: $access_token");
-                            Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
-                              pin_cek: thisText,
-                              token_cek: access_token,
-                            );
-                            print("Cek PIN masuk maskuh: $pin_cek1");
-                            _apiService.CekPin(pin_cek1).then((isSuccess) {
-                              setState(() {
-                                if (isSuccess) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Home(),
-                                      ));
-                                  // Navigator.pop(
-                                  //     _scaffoldState.currentState.context);
-                                  // Text("data berhasil disimpam");
-                                } else {
-                                  print('Pin salah masku, iling iling maneh');
-                                  // Text('Data gagal disimpan');
-                                  // _scaffoldState.currentState
-                                  //     .showSnackBar(SnackBar(
-                                  //   content: Text('${_apiService.responseCode}'),
-                                  // ));
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    Flushbar(
-                                      message:
-                                          "Pin salah masku, iling iling maneh",
-                                      flushbarPosition: FlushbarPosition.BOTTOM,
-                                      icon: Icon(Icons.ac_unit),
-                                      flushbarStyle: FlushbarStyle.GROUNDED,
-                                      duration: Duration(seconds: 5),
-                                    )..show(
-                                        _scaffoldState.currentState.context);
-                                  });
-                                }
-                              });
-                            });
-                          });
-                        }
-                      },
-                    ),
-                   
-                  ],
+                  children: <Widget>[],
                 ),
               ),
-              InkWell(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Lupa Pin ? ", style: TextStyle(fontSize: 16),),
+                  InkWell(
                     onTap: () {
-                      // return Reset(
-                      //   resetpass: Forgot_Password,
-                      // );
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Reset(
-                            // resetpass: Forgot_Password,
-                            tipe: "ResetPin",
-                          )));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Reset(
+                                    tipe: "ResetPin",
+                                  )));
                     },
                     child: new Text(
-                      "Reset Pin",
-                      style:
-                          TextStyle(fontSize: 16,),
+                      " Reset Pin",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
+                ],
+              ),
+              // InkWell(
+              //   onTap: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => Reset(
+              //                   tipe: "ResetPin",
+              //                 )));
+              //   },
+              //   child: new Text(
+              //     "Reset Pin",
+              //     style: TextStyle(
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

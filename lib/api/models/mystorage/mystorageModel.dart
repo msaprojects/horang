@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 class MystorageModel {
-  int hari;
+  int hari, idtransaksi_detail, idtransaksi;
   String kode_kontainer, nama, nama_kota, tanggal_order, aktif;
 
   MystorageModel(
       {this.kode_kontainer,
+      this.idtransaksi_detail,
+      this.idtransaksi,
       this.nama,
       this.nama_kota,
       this.tanggal_order,
@@ -15,6 +17,8 @@ class MystorageModel {
   factory MystorageModel.fromJson(Map<String, dynamic> map) {
     return MystorageModel(
         kode_kontainer: map["kode_kontainer"],
+        idtransaksi_detail: map["idtransaksi_detail"],
+        idtransaksi: map["idtransaksi"],
         nama: map["nama"],
         nama_kota: map["nama_kota"],
         tanggal_order: map["tanggal_order"],
@@ -25,6 +29,8 @@ class MystorageModel {
     return {
       "kode_kontainer": kode_kontainer,
       "nama": nama,
+      "idtransaksi_detail": idtransaksi_detail,
+      "idtransaksi": idtransaksi,
       "nama_kota": nama_kota,
       "tanggal_order": tanggal_order,
       "hari": hari,
@@ -36,6 +42,8 @@ class MystorageModel {
   String toString() {
     return 'Mystorage{kode_kontainer: $kode_kontainer,'
         'nama: $nama,'
+        'idtransaksi_detail: $idtransaksi_detail,'
+        'idtransaksi: $idtransaksi,'
         'nama_kota: $nama_kota,'
         'tanggal_order: $tanggal_order,'
         'hari: $hari,'

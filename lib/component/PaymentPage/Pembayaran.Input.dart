@@ -620,6 +620,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
+        print("ini pembayaran input");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

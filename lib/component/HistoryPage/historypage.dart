@@ -289,6 +289,7 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
+        print("ini history page");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

@@ -167,14 +167,15 @@ class _HomePageState extends State<HomePage> {
       },
     );
     firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true),
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: true),
     );
     firebaseMessaging.onIosSettingsRegistered.listen((settings) {
       debugPrint('Settings registered: $settings');
     });
     firebaseMessaging.getToken().then((token) => setState(() {
-      this.token = token;
-    }));
+          this.token = token;
+        }));
     super.initState();
     cekToken();
   }
@@ -256,28 +257,51 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
+  Future showAlertDialog(BuildContext context) {
+    return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return alert;
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            content: Text(
+                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                color: Colors.red,
+                  onPressed: () {
+                    // print("skanlah1");
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
         });
   }
+  // showAlertDialog(BuildContext context) {
+  //   Widget okButton = FlatButton(
+  //     child: Text("OK"),
+  //     onPressed: () {
+  //       print("cek 11");
+  //       Navigator.pop(context);
+  //       // Navigator.of(context).pop();
+  //       // Navigator.push(
+  //       //     context, MaterialPageRoute(builder: (context) => LoginPage()));
+  //     },
+  //   );
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("Sesi Anda Berakhir!"),
+  //     content: Text(
+  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return alert;
+  //       });
+  // }
 
   void getDataFcm(Map<String, dynamic> message) {
     String name = '';
@@ -298,5 +322,4 @@ class _HomePageState extends State<HomePage> {
     }
     debugPrint('getDataFcm: name: $name & age: $age');
   }
-
 }

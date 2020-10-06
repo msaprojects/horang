@@ -36,7 +36,7 @@ class _AccountState extends State<Account> {
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
     // print("cek ada pin gak ya ? "+pin);
-    print("cek ada namacus gak ya ? "+nama_customer);
+    print("cek ada namacus gak ya ? " + nama_customer);
     // print("cek ada id gak ya ? "+idcustomer);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
@@ -85,6 +85,11 @@ class _AccountState extends State<Account> {
       await preferences.clear();
       if (preferences.getString("access_token") == null) {
         print("SharePref berhasil di hapus");
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false);
       }
     }
 
@@ -157,7 +162,7 @@ class _AccountState extends State<Account> {
             ),
             ListTile(
               leading: Icon(Icons.edit),
-              title: Text("Ubah Pin"),
+              title: Text("Pin"),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () {
                 Navigator.push(
@@ -199,6 +204,7 @@ class _AccountState extends State<Account> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
+        print("ini account");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

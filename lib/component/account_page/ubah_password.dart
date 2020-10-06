@@ -24,7 +24,7 @@ class _UbahPassState extends State<UbahPass> {
 
   TextEditingController _controllerPasslama = TextEditingController();
   TextEditingController _controllerPassbaru = TextEditingController();
-  //TextEditingController _controllerPassretype = TextEditingController();
+  TextEditingController _controllerPassretype = TextEditingController();
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -106,38 +106,39 @@ class _UbahPassState extends State<UbahPass> {
               children: <Widget>[
                 _buildTextFieldPassLama(),
                 _buildTextFieldPassBaru(),
+                _buildTextFieldRetypePassBaru(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: RaisedButton(
                     child: Text("simpan"),
                     onPressed: () {
-                      if (_isFieldpassLama == null ||
-                          _isFieldpassBaru == null ||
-                          !_isFieldpassLama ||
-                          !_isFieldpassBaru) {
-                        _scaffoldState.currentState.showSnackBar(SnackBar(
-                          content: Text("Please Fill all field"),
-                        ));
-                        return;
-                      }
-                      setState(() => _isLoading = true);
+                      // if (_isFieldpassLama == null ||
+                      //     _isFieldpassBaru == null ||
+                      //     !_isFieldpassLama ||
+                      //     !_isFieldpassBaru) {
+                      //   _scaffoldState.currentState.showSnackBar(SnackBar(
+                      //     content: Text("Please Fill all field"),
+                      //   ));
+                      //   return;
+                      // }
+                      // setState(() => _isLoading = true);
 
-                      Password password = Password(
-                          passwordlama: _controllerPasslama.text.toString(),
-                          passwordbaru: _controllerPassbaru.text.toString(),
-                          token: access_token);
-                      if (widget.password == null) {
-                        _apiService.UbahPassword(password).then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          if (isSuccess) {
-                            Navigator.pop(_scaffoldState.currentState.context);
-                          } else {
-                            _scaffoldState.currentState.showSnackBar(SnackBar(
-                              content: Text("Update password failed"),
-                            ));
-                          }
-                        });
-                      }
+                      // Password password = Password(
+                      //     passwordlama: _controllerPasslama.text.toString(),
+                      //     passwordbaru: _controllerPassbaru.text.toString(),
+                      //     token: access_token);
+                      // if (widget.password == null) {
+                      //   _apiService.UbahPassword(password).then((isSuccess) {
+                      //     setState(() => _isLoading = false);
+                      //     if (isSuccess) {
+                      //       Navigator.pop(_scaffoldState.currentState.context);
+                      //     } else {
+                      //       _scaffoldState.currentState.showSnackBar(SnackBar(
+                      //         content: Text("Update password failed"),
+                      //       ));
+                      //     }
+                      //   });
+                      // }
                     },
                   ),
                 )
@@ -184,6 +185,40 @@ class _UbahPassState extends State<UbahPass> {
           setState(() => _isFieldpassBaru = isFieldValid);
         }
       },
+    );
+  }
+
+  Widget _buildTextFieldRetypePassBaru() {
+    return TextFormField(
+      controller: _controllerPassretype,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Retype Password",
+        errorText: _isFieldpassRetype == null || _isFieldpassRetype
+            ? null
+            : "Retype Password is required",
+      ),
+      onChanged: (value) {
+        // bool isFieldValid = value.trim().isNotEmpty;
+        if (value != _controllerPassbaru.text) {
+          print("Password tidak sama");
+          // setState(() => _isFieldpassRetype = isFieldValid);
+        } else {
+          print("bener mas");
+        }
+      },
+    );
+  }
+
+  void showDefaultSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Hello from the default snackbar'),
+        action: SnackBarAction(
+          label: 'Click Me',
+          onPressed: () {},
+        ),
+      ),
     );
   }
 

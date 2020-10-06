@@ -175,7 +175,7 @@ class _StorageActive extends State<StorageActive> {
                                     ),
                                     RichText(
                                       text: TextSpan(
-                                          text: 'Berakhir ',
+                                          text: 'Lama Sewa ',
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.blue[300],
@@ -226,46 +226,49 @@ class _StorageActive extends State<StorageActive> {
                                                   return KonfirmasiLog(
                                                     kode_kontainer: myStorage
                                                         .kode_kontainer,
-                                                    nama_kota: myStorage.nama,
+                                                    nama_kota: myStorage.nama_kota,
+                                                    idtransaksi_detail: myStorage.idtransaksi_detail,
+                                                    idtransaksi: myStorage.idtransaksi,
+                                                    nama: myStorage.nama,
                                                   );
                                                 }));
                                               }
                                             },
-                                            child: Text("Log"),
+                                            child: Text("Cek Details..."),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        ButtonTheme(
-                                          minWidth: 50,
-                                          height: 30,
-                                          child: RaisedButton(
-                                            color: Colors.transparent,
-                                            onPressed: () {},
-                                            child: Text(
-                                              "Open",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        ButtonTheme(
-                                          minWidth: 50,
-                                          height: 30,
-                                          child: RaisedButton(
-                                            color: Colors.green,
-                                            onPressed: () {},
-                                            child: Text(
-                                              "Selesai",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
+                                        // SizedBox(
+                                        //   width: 10,
+                                        // ),
+                                        // ButtonTheme(
+                                        //   minWidth: 50,
+                                        //   height: 30,
+                                        //   child: RaisedButton(
+                                        //     color: Colors.transparent,
+                                        //     onPressed: () {},
+                                        //     child: Text(
+                                        //       "Open",
+                                        //       style: TextStyle(
+                                        //           color: Colors.white),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // SizedBox(
+                                        //   width: 10,
+                                        // ),
+                                        // ButtonTheme(
+                                        //   minWidth: 50,
+                                        //   height: 30,
+                                        //   child: RaisedButton(
+                                        //     color: Colors.green,
+                                        //     onPressed: () {},
+                                        //     child: Text(
+                                        //       "Selesai",
+                                        //       style: TextStyle(
+                                        //           color: Colors.white),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     )
                                   ],
