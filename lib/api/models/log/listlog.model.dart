@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class LogList{
-  String token, timestamp, status, iddetail_order;
+  String token, timestamp, status, idtransaksi_detail;
 
   LogList({
     this.timestamp,
     this.status,
     // this.token,
-    // this.iddetail_order
+    // this.idtransaksi_detail
   });
 
   factory LogList.fromJson(Map<String, dynamic> map){
@@ -15,7 +15,7 @@ class LogList{
       timestamp: map["timestamp"],
       status: map["status"],
       // token: map["token"],
-      // iddetail_order: map["iddetail_order"]
+      // idtransaksi_detail: map["idtransaksi_detail"]
     );
   }
 
@@ -24,13 +24,13 @@ class LogList{
       "timestamp": timestamp,
       "status": status,
       // "token": token,
-      // "iddetail_order": iddetail_order
+      // "idtransaksi_detail": idtransaksi_detail
     };
   }
 
   @override
   String toString(){
-    // return 'log{timestamp: $timestamp, status: $status, token: $token, iddetail_order: $iddetail_order}';
+    // return 'log{timestamp: $timestamp, status: $status, token: $token, idtransaksi_detail: $idtransaksi_detail}';
     return 'log{timestamp: $timestamp, status: $status}';
   }
 

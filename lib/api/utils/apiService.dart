@@ -311,11 +311,11 @@ class ApiService {
     }
   }
 
-  Future<List<LogList>> listloggs(String token, iddetail_order) async {
+  Future<List<LogList>> listloggs(String token, idtransaksi_detail) async {
    final response = await client.post(
       "$baseUrl/log",
       headers: {"content-type": "application/json"},
-      body: jsonEncode({"token": "${token}", "iddetail_order":"${iddetail_order}"}),
+      body: jsonEncode({"token": "${token}", "idtransaksi_detail":"${idtransaksi_detail}"}),
     );
     if (response.statusCode == 200) {
       return LoglistFromJson(response.body);

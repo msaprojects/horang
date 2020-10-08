@@ -216,12 +216,17 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                   Widget okbutton = FlatButton(
                                     child: Text("Ok"),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()));
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (BuildContext context) => Home()),
+                                        ModalRoute.withName('/Home'),
+                                      );
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) => Home()));
                                       // Navigator.pop(context);
-                                    },
+                                    }
                                   );
                                   AlertDialog alert = AlertDialog(
                                     title: Text("Peringatan"),

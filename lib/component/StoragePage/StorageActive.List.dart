@@ -175,7 +175,7 @@ class _StorageActive extends State<StorageActive> {
                                     ),
                                     RichText(
                                       text: TextSpan(
-                                          text: 'Lama Sewa ',
+                                          text: 'Berakhir ',
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.blue[300],
@@ -189,7 +189,7 @@ class _StorageActive extends State<StorageActive> {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             TextSpan(
-                                              text: ' Hari',
+                                              text: ' Hari Lagi',
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.blue[300],
