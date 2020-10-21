@@ -207,6 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                               status: 0,
                               notification_token: token,
                               token_mail: "0");
+                          _apiService.xenditUrl();
                           _apiService.loginIn(pengguna).then((isSuccess) {
                             setState(() => _isLoading = false);
                             if (isSuccess) {

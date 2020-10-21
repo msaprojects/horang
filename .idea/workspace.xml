@@ -5,45 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/api/models/xendit.model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api/models/jenisproduk/jenisproduk.model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/models/jenisproduk/jenisproduk.model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/DashboardPage/Produk.Dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/DashboardPage/Produk.Dashboard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/HistoryPage/historypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/HistoryPage/historypage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/OrderPage/KonfirmasiLog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/OrderPage/KonfirmasiLog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/OrderPage/ListLog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/OrderPage/ListLog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/tambah_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/tambah_profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/ubah_password.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/ubah_password.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/ubah_pin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/ubah_pin.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/account_page/ubah_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/account_page/ubah_profile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api/utils/apiService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/utils/apiService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/LoginPage/Login.Validation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/LoginPage/Login.Validation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="TXUFG18801001163" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="$PROJECT_DIR$/.idea" />
-      </set>
-    </option>
   </component>
   <component name="ProjectId" id="1hMGRfA0wi6JcEegxLmvKAlbT8P" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/flutter/bin/cache/dart-sdk" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
@@ -129,10 +124,11 @@
     <state width="1398" height="365" key="GridCell.Tab.0.right/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042679" />
     <state width="1398" height="365" key="GridCell.Tab.0.right/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414980" />
     <state width="973" height="230" key="GridCell.Tab.0.right/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593679" />
-    <state x="236" y="82" key="SettingsEditor" timestamp="1602224762105">
-      <screen x="0" y="0" width="1536" height="832" />
+    <state x="221" y="89" key="SettingsEditor" timestamp="1603264459542">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="236" y="82" key="SettingsEditor/0.0.1536.832@0.0.1536.832" timestamp="1602224762105" />
+    <state x="221" y="89" key="SettingsEditor/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1603264459542" />
     <state x="1661" y="89" key="SettingsEditor/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601362636346" />
     <state x="1540" y="120" width="1240" height="683" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1601097401140">
       <screen x="1440" y="23" width="1440" height="877" />

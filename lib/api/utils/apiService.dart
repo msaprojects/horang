@@ -20,6 +20,7 @@ import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
+import 'package:horang/api/models/xendit.model.dart';
 import 'package:http/http.dart' show Client;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +39,22 @@ class ApiService {
   var vall;
 
   /////////////////////// LIST /////////////////////////
+
+  Future<List<xenditmodel>> xenditUrl() async {
+    String username = 'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
+    String password = '';
+    String basicAuth = 'Basic '+base64Encode(utf8.encode('$username:$password'));
+    final response = await client.get("https://api.xendit.co/balance",
+        headers: {
+          "content-type": "application/json",
+          "Authorization": basicAuth});
+    print("XENDIT RESULT : "+response.body);
+    // if (response.statusCode == 200) {
+    //   return jenisprodukFromJson(response.body);
+    // } else {
+    //   return null;
+    // }
+  }
 
   //LOAD JENIS PRODUK
   Future<List<JenisProduk>> listJenisProduk(String token) async {
