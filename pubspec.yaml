@@ -42,6 +42,7 @@ dependencies:
   flutter_spinkit: ^4.1.2
   firebase_messaging: any
   timeline_tile: ^1.0.0
+  connectivity: ^0.4.9+5
 
 dev_dependencies:
   flutter_test:

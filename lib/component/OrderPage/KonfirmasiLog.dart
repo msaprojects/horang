@@ -201,7 +201,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         onPressed: () {
                           setState(() {
                             _isLoading = true;
-                            print('cekmasuk');
+                            // print('cekmasuk');
                             LogOpen logopen = LogOpen(
                               idtransaksi_detail: idtransaksi_det,
                               token: access_token,
@@ -209,10 +209,10 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                             if (widget.kode_kontainer != null ||
                                 widget.nama_kota != null) {
                               _apiService.OpenLog(logopen).then((isSuccess) {
-                                print('cekmasuk2');
+                                // print('cekmasuk2');
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  print('cekmasuk3');
+                                  // print('cekmasuk3');
                                   Widget okbutton = FlatButton(
                                     child: Text("Ok"),
                                     onPressed: () {
@@ -242,7 +242,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                     },
                                   );
                                 } else {
-                                  print('cekmasuk4');
+                                  // print('cekmasuk4');
                                   _scaffoldState.currentState.showSnackBar(
                                       SnackBar(
                                           content: Text("Submit data failed")));

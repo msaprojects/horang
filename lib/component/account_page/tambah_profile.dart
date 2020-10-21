@@ -107,16 +107,27 @@ class _TambahProfileState extends State<TambahProfile> {
     return Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.transparent,
         title: Text(
-          "Masukkan data diri anda",
-          style: TextStyle(color: Colors.white),
+          "Tambah Profile",
+          // "Edit Profil",
+          style: TextStyle(color: Colors.black),
         ),
+        elevation: 0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
       ),
       body: Stack(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(16.0),
+            // padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -135,47 +146,51 @@ class _TambahProfileState extends State<TambahProfile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: RaisedButton(
-                    child: Text(
-                      "Simpan",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      if (_isFieldNamaLengkap == null ||
-                          _isFieldAlamat == null ||
-                          _isFieldNoKtp == null ||
-                          !_isFieldNamaLengkap ||
-                          !_isFieldAlamat ||
-                          !_isFieldNoKtp) {
-                        _scaffoldState.currentState.showSnackBar(
-                          SnackBar(
-                            content: Text("Kolom Tidak Boleh Kosong"),
-                          ),
-                        );
-                        return;
-                      }
-                      setState(() => _isLoading = true);
-                      Customer customer = Customer(
-                        nama_customer: _controllerNamaLengkap.text.toString(),
-                        noktp: _controllerNoKtp.text.toString(),
-                        alamat: _controllerAlamat.text.toString(),
-                        token: access_token,
-                        blacklist: "0",
-                        idkota: int.parse(valKota),
-                      );
-                      _apiService.TambahCustomer(customer).then((isSuccess) {
-                        setState(() => _isLoading = false);
-                        if (isSuccess) {
-                          Keluarr();
-                        } else {
-                          _scaffoldState.currentState.showSnackBar(SnackBar(
-                            content: Text("Data Gagal Disimpan"),
-                          ));
+                  child:Container(
+                    width: 500,
+                    height: 50,
+                    child: FlatButton(
+                      child: Text(
+                        "Simpan",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        if (_isFieldNamaLengkap == null ||
+                            _isFieldAlamat == null ||
+                            _isFieldNoKtp == null ||
+                            !_isFieldNamaLengkap ||
+                            !_isFieldAlamat ||
+                            !_isFieldNoKtp) {
+                          _scaffoldState.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text("Kolom Tidak Boleh Kosong"),
+                            ),
+                          );
+                          return;
                         }
-                      });
-                    },
-                    color: Colors.orange[600],
-                  ),
+                        setState(() => _isLoading = true);
+                        Customer customer = Customer(
+                          nama_customer: _controllerNamaLengkap.text.toString(),
+                          noktp: _controllerNoKtp.text.toString(),
+                          alamat: _controllerAlamat.text.toString(),
+                          token: access_token,
+                          blacklist: "0",
+                          idkota: int.parse(valKota),
+                        );
+                        _apiService.TambahCustomer(customer).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            Keluarr();
+                          } else {
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Data Gagal Disimpan"),
+                            ));
+                          }
+                        });
+                      },
+                      color: Colors.blue,
+                    ),
+                  )
                 )
               ],
             ),
@@ -186,10 +201,11 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   Widget _buildTextFieldName() {
-    return TextField(
+    return TextFormField(
       controller: _controllerNamaLengkap,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
         labelText: "Nama Lengkap",
         errorText: _isFieldNamaLengkap == null || _isFieldNamaLengkap
             ? null
@@ -205,10 +221,11 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   Widget _buildTextFieldKtp() {
-    return TextField(
+    return TextFormField(
       controller: _controllerNoKtp,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
         labelText: "No. Ktp",
         errorText: _isFieldNoKtp == null || _isFieldNoKtp
             ? null
@@ -224,10 +241,11 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   Widget _buildTextFieldAlamat() {
-    return TextField(
+    return TextFormField(
       controller: _controllerAlamat,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
         labelText: "Alamat",
         errorText: _isFieldAlamat == null || _isFieldAlamat
             ? null
@@ -273,7 +291,7 @@ class _TambahProfileState extends State<TambahProfile> {
 
     AlertDialog alert = AlertDialog(
       title: Text("Data Berhasil Disimpan"),
-      content: Text("dalskdlasd"),
+      content: Text("Peringatan"),
       actions: [
         okButton,
       ],

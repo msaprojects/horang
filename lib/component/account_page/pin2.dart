@@ -6,6 +6,7 @@ import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/reset.dart';
+import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -235,6 +236,20 @@ class _Pin2State extends State<Pin2> {
                                 MaterialPageRoute(
                                     builder: (BuildContext context) => Home()),
                                 (Route<dynamic> route) => true);
+                          } else if (pin == null) {
+                            // Text('Data gagal disimpan');
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text('Anda belum memiliki pin'),
+                              action: SnackBarAction(
+                                label: "Set Pin",
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UbahPin()));
+                                },
+                              ),
+                            ));
                           } else {
                             // Text('Data gagal disimpan');
                             _scaffoldState.currentState.showSnackBar(SnackBar(
@@ -313,7 +328,10 @@ class _Pin2State extends State<Pin2> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Lupa Pin ? ", style: TextStyle(fontSize: 16),),
+                  Text(
+                    "Lupa Pin ? ",
+                    style: TextStyle(fontSize: 16),
+                  ),
                   InkWell(
                     onTap: () {
                       Navigator.push(
@@ -325,10 +343,8 @@ class _Pin2State extends State<Pin2> {
                     },
                     child: new Text(
                       " Reset Pin",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      ),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

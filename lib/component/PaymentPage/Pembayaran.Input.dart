@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -61,7 +62,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   int grup = 1;
   var rgIndex = 1;
   int rgID = 1;
-  String rgValue = "OVO";
+  int _currentIndex = 1;
+  String rgValue = "";
 
   SharedPreferences sp;
   bool isSuccess = false;
@@ -86,6 +88,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       stotal_harga,
       stanggal_mulai,
       stanggal_akhir,
+      selectedValue,
       totallharga;
 
   cekToken() async {
@@ -153,61 +156,62 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     cekToken();
   }
 
-  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
-    return Container(
-      height: 200,
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                PaymentGateway payment = dataIndex[index];
-                return Card(
-                  child: Expanded(
-                    child: InkWell(
-                      highlightColor: Colors.lightGreen,
-                      onTap: () {
-                        rgValue = payment.nama_provider;
-                        rgID = payment.idpayment_gateway;
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            payment.nama_provider,
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                "Biaya Layanan : ",
-                                style:
-                                    TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                              Text(
-                                "Rp. " + payment.nominal_biaya.toString(),
-                                style:
-                                    TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              itemCount: dataIndex.length,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+  //   print("da $dataIndex");
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height * 0.3,
+  //     padding: EdgeInsets.all(10.0),
+  //     child: Column(
+  //       children: <Widget>[
+  //         Container(
+  //           child: ListView.builder(
+  //             itemBuilder: (context, index) {
+  //               PaymentGateway payment = dataIndex[index];
+  //               return Card(
+  //                 child: Container(
+  //                   child: InkWell(
+  //                     highlightColor: Colors.lightGreen,
+  //                     onTap: () {
+  //                       rgValue = payment.nama_provider;
+  //                       rgID = payment.idpayment_gateway;
+  //                     },
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: <Widget>[
+  //                         Text(
+  //                           payment.nama_provider,
+  //                           style: TextStyle(
+  //                               fontSize: 22,
+  //                               color: Colors.blueAccent,
+  //                               fontWeight: FontWeight.bold),
+  //                         ),
+  //                         Row(
+  //                           children: <Widget>[
+  //                             Text(
+  //                               "Biaya Layanan : ",
+  //                               style:
+  //                                   TextStyle(fontSize: 14, color: Colors.grey),
+  //                             ),
+  //                             Text(
+  //                               "Rp. " + payment.nominal_biaya.toString(),
+  //                               style:
+  //                                   TextStyle(fontSize: 14, color: Colors.grey),
+  //                             ),
+  //                           ],
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //             itemCount: 1,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -503,6 +507,36 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                ),
+                                SafeArea(
+                                  child: FutureBuilder(
+                                      future: _apiService
+                                          .listPaymentGateway(access_token),
+                                      builder: (context,
+                                          AsyncSnapshot<List<PaymentGateway>>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          print(snapshot.error.toString());
+                                          return Center(
+                                            child: Text(
+                                                "Something wrong with message: ${snapshot.error.toString()}"),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          List<PaymentGateway> payment =
+                                              snapshot.data;
+                                          return _listPaymentGateway(payment);
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                      }),
                                 )
                               ],
                             ),
@@ -511,35 +545,36 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       ),
                     ),
                   ),
+
                   //FOR LISTVIEW PEMBAYARAN
-                  SafeArea(
-                    child: FutureBuilder(
-                      future: _apiService.listPaymentGateway(access_token),
-                      builder: (context,
-                          AsyncSnapshot<List<PaymentGateway>> snapshot) {
-                        if (snapshot.hasError) {
-                          print(snapshot.error.toString());
-                          return Center(
-                            child: Text(
-                                "Something wrong with message: ${snapshot.error.toString()}"),
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.done) {
-                          List<PaymentGateway> payment = snapshot.data;
-                          return _listPaymentGateway(payment);
-                        } else {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
-                  ),
+                  // SafeArea(
+                  //   child: FutureBuilder(
+                  //     future: _apiService.listPaymentGateway(access_token),
+                  //     builder: (context,
+                  //         AsyncSnapshot<List<PaymentGateway>> snapshot) {
+                  //       if (snapshot.hasError) {
+                  //         print(snapshot.error.toString());
+                  //         return Center(
+                  //           child: Text(
+                  //               "Something wrong with message: ${snapshot.error.toString()}"),
+                  //         );
+                  //       } else if (snapshot.connectionState ==
+                  //           ConnectionState.waiting) {
+                  //         return Center(
+                  //           child: CircularProgressIndicator(),
+                  //         );
+                  //       } else if (snapshot.connectionState ==
+                  //           ConnectionState.done) {
+                  //         List<PaymentGateway> payment = snapshot.data;
+                  //         return _listPaymentGateway(payment);
+                  //       } else {
+                  //         return Center(
+                  //           child: CircularProgressIndicator(),
+                  //         );
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                   //END LISTVIEW PEMBAYARAN
                   Container(
                     width: MediaQuery.of(context).size.width / 1,
@@ -611,6 +646,63 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.35,
+      child: Column(
+        children: [
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                PaymentGateway pymentgtwy = dataIndex[index];
+                return Card(
+                  child: InkWell(
+                    onTap: () => (dataIndex),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          selected: true,
+                          title: Text(
+                            pymentgtwy.nama_provider,
+                            style: GoogleFonts.inter(fontSize: 15, color: Colors.black26),
+                          ),
+                          subtitle: Row(
+                                children: <Widget>[
+                                  Text(
+                                    "Biaya Layanan : ",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 12, color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "Rp. " +
+                                        pymentgtwy.nominal_biaya.toString(),
+                                    style: GoogleFonts.inter(
+                                        fontSize: 13, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+              itemCount: dataIndex.length,
+            ),
+          )),
+          Text("Kamu memilih Pembayaran menggunakan : $rgValue")
         ],
       ),
     );

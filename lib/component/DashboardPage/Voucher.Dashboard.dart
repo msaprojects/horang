@@ -3,6 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/VoucherPage/voucher.detail.dart';
 import 'package:horang/screen/home_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,12 +117,26 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             itemBuilder: (BuildContext context, index) {
               Voucher voucher = dataIndex[index];
               return Container(
-                decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                      image: NetworkImage(voucher.gambar), fit: BoxFit.cover),
-                ),
-              );
+                  child: Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return VoucherDetail(
+                            nominal: voucher.nominal,
+                            gambar: voucher.gambar,
+                          );
+                        }));
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                      // borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                          image: NetworkImage(voucher.gambar),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                );
             },
             itemCount: dataIndex.length,
           ),

@@ -151,23 +151,23 @@ class _UbahProfileState extends State<UbahProfile> {
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/image/container1.png'),
-                ),
-                SelectableText(
-                  "Ubah Foto Profile",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  onTap: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => OrderPage()));
-                  },
-                )
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: <Widget>[
+            //     CircleAvatar(
+            //       radius: 50,
+            //       backgroundImage: AssetImage('assets/image/container1.png'),
+            //     ),
+            //     SelectableText(
+            //       "Ubah Foto Profile",
+            //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //       onTap: () {
+            //         // Navigator.push(context,
+            //         //     MaterialPageRoute(builder: (context) => OrderPage()));
+            //       },
+            //     )
+            //   ],
+            // ),
             SizedBox(height: 15),
             SingleChildScrollView(
               child: new Column(
@@ -184,7 +184,7 @@ class _UbahProfileState extends State<UbahProfile> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         _buildKomboKota(customer[0].idkota.toString()),
-                        Text("kamu memilih kota $valKota"),
+                        // Text("kamu memilih kota $valKota"),
                       ],
                     ),
                   ),
@@ -426,7 +426,7 @@ class _UbahProfileState extends State<UbahProfile> {
 
     AlertDialog alert = AlertDialog(
       title: Text("Data Berhasil Disimpan"),
-      content: Text("dalskdlasd"),
+      content: Text("Peringatan"),
       actions: [
         okButton,
       ],

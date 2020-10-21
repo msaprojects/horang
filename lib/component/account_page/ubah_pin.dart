@@ -100,7 +100,7 @@ class _UbahPinState extends State<UbahPin> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          pin == "0" ? "Tambah Pin" : "Ubah Pin",
+          pin != "0" ? "Ubah Pin" : "Tambah Pin",
           style: TextStyle(color: Colors.black),
         ),
         // title: Text(
@@ -122,18 +122,15 @@ class _UbahPinState extends State<UbahPin> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              _buildTextFieldPinLama(),
-              _buildTextFieldPinBaru(),
-              _buildTextFieldPinBaruRetype(),
+              seleksi(),
               Padding(
                 padding: const EdgeInsets.only(top: 9),
-                
                 child: RaisedButton(
                     child: Text('Simpan'),
                     onPressed: () {
                       setState(() {
                         if (pin == "0") {
-                          print("cek Tambah pin");
+                          // print("cek Tambah pin");
                           TambahPin_model pintambah = TambahPin_model(
                               pin: _controllerPassBaru.text.toString(),
                               token: access_token);
@@ -151,7 +148,7 @@ class _UbahPinState extends State<UbahPin> {
                             });
                           }
                         } else {
-                          print("cek pin ubah" + pin);
+                          // print("cek pin ubah" + pin);
                           Pin_Model pinubah = Pin_Model(
                               pinlama: _controllerPassLama.text.toString(),
                               pinbaru: _controllerPassBaru.text.toString(),
@@ -179,15 +176,15 @@ class _UbahPinState extends State<UbahPin> {
     );
   }
 
-  void seleksitambahubah() {
-    if (pin == null) {
-      Container(
+  Widget seleksi() {
+    if (pin != "0") {
+      return Container(
         child: Column(
           children: [_buildTextFieldPinBaru(), _buildTextFieldPinBaruRetype()],
         ),
       );
     } else {
-      Container(
+      return Container(
         child: Column(
           children: [
             _buildTextFieldPinLama(),
@@ -250,29 +247,46 @@ class _UbahPinState extends State<UbahPin> {
             ? null
             : "Retype Pin baru harus di isi",
       ),
-      // obscureText: true,
+      obscureText: true,
       validator: (confirmation) {
-        if (confirmation != passKey.currentState.value) {
-          return 'Password tidak sama';
-        } else {
-          return null;
+        return confirmation.isEmpty
+            ? 'Konfirmasi password harus di isi'
+            : validasiEquals(confirmation, _controllerPassBaru.text)
+                ? null
+                : 'Password tidak sama';
+      },
+      // validator: (confirmation) {
+      //   if (confirmation != passKey.currentState.value) {
+      //     return 'Password tidak sama';
+      //   } else {
+      //     return null;
+      //   }
+      // },
+      onChanged: (value) {
+        // Validator:
+        // (String value) {
+        //   if (_isFieldPinBaruRetype != _isFieldPinBaru) {
+        //     _scaffoldState.currentState.showSnackBar(SnackBar(
+        //       content: Text('Pin Tidak sesuai'),
+        //     ));
+        //   }
+        // };
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldPinBaru) {
+          setState(() => _isFieldPinBaru = isFieldValid);
+        } else if (value.length < 4){
+          return 'Password kurang dari 4';
         }
       },
-      onChanged: (value) {
-        Validator:
-        (String value) {
-          if (_isFieldPinBaruRetype != _isFieldPinBaru) {
-            _scaffoldState.currentState.showSnackBar(SnackBar(
-              content: Text('Pin Tidak sesuai'),
-            ));
-          }
-        };
-        // bool isFieldValid = value.trim().isNotEmpty;
-        // if (isFieldValid != _isFieldPinBaru) {
-        //   setState(() => _isFieldPinBaru = isFieldValid);
-        // }
-      },
     );
+  }
+
+  bool validasiEquals(String currentValue, String cekValue) {
+    if (currentValue == cekValue) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   showAlertDialog(BuildContext context) {

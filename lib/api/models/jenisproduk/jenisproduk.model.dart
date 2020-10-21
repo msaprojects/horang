@@ -12,7 +12,8 @@ class JenisProduk{
     this.kapasitas,
     this.keterangan,
     this.nama_kota,
-    this.nama_lokasi
+    this.nama_lokasi,
+    this.gambar
   });
 
   factory JenisProduk.fromJson(Map<String, dynamic> map){
@@ -23,7 +24,8 @@ class JenisProduk{
       kapasitas: map["kapasitas"],
       keterangan: map["keterangan"],
       nama_kota: map["nama_kota"],
-      nama_lokasi: map["nama_lokasi"]
+      nama_lokasi: map["nama_lokasi"],
+      gambar: map["gambar"]
     );
   }
 
@@ -35,13 +37,14 @@ class JenisProduk{
       "kapasitas": kapasitas,
       "keterangan": keterangan,
       "nama_kota": nama_kota,
-      "nama_lokasi": nama_lokasi
+      "nama_lokasi": nama_lokasi,
+      "gambar": gambar
     };
   }
 
   @override
   String toString(){
-    return 'JenisProduk{idlokasi: $idlokasi, idjenis_produk: $idjenis_produk, harga: $harga, kapasitas: $kapasitas, keterangan: $keterangan, nama_lokasi: $nama_lokasi, nama_kota: $nama_kota}';
+    return 'JenisProduk{idlokasi: $idlokasi, idjenis_produk: $idjenis_produk, harga: $harga, kapasitas: $kapasitas, keterangan: $keterangan, nama_lokasi: $nama_lokasi, nama_kota: $nama_kota}, gambar: $gambar}';
   }
 
 }

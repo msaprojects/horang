@@ -226,9 +226,13 @@ class _StorageActive extends State<StorageActive> {
                                                   return KonfirmasiLog(
                                                     kode_kontainer: myStorage
                                                         .kode_kontainer,
-                                                    nama_kota: myStorage.nama_kota,
-                                                    idtransaksi_detail: myStorage.idtransaksi_detail,
-                                                    idtransaksi: myStorage.idtransaksi,
+                                                    nama_kota:
+                                                        myStorage.nama_kota,
+                                                    idtransaksi_detail:
+                                                        myStorage
+                                                            .idtransaksi_detail,
+                                                    idtransaksi:
+                                                        myStorage.idtransaksi,
                                                     nama: myStorage.nama,
                                                   );
                                                 }));
@@ -286,6 +290,9 @@ class _StorageActive extends State<StorageActive> {
                         SizedBox(
                           height: 10,
                         ),
+                        Divider(
+                          height: 10,
+                        )
                       ],
                     );
                   },

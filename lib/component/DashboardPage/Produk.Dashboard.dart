@@ -8,7 +8,6 @@ import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class ProdukDashboard extends StatefulWidget {
   @override
   _ProdukDashboard createState() => _ProdukDashboard();
@@ -18,7 +17,13 @@ class _ProdukDashboard extends State<ProdukDashboard> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      gambar;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -127,35 +132,51 @@ class _ProdukDashboard extends State<ProdukDashboard> {
                 padding: const EdgeInsets.all(8.0),
                 margin: EdgeInsets.all(8),
                 height: 64,
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.8,
                 decoration: BoxDecoration(
                   color: mFillColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: mBorderColor, width: 1),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        jenisProduk.kapasitas,
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: mTitleColor),
-                      ),
-                      Text(
-                        jenisProduk.nama_kota,
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
-                            color: mSubtitleColor),
-                      ),
-                    ],
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                jenisProduk.kapasitas,
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: mTitleColor),
+                              ),
+                              Text(
+                                jenisProduk.nama_kota,
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 13,
+                                    color: mSubtitleColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(jenisProduk.gambar))),
+                            )
+                          ],
+                        )
+                      ],
+                    )),
               ));
         },
       ),

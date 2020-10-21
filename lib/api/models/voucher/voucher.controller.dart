@@ -10,7 +10,7 @@ class Voucher{
     this.jumlah_voucher = 0,
     this.persentase = 0,
     this.nominal = 0,
-    this.keterangan="",
+    this.keterangan,
     this.gambar=""
   });
 

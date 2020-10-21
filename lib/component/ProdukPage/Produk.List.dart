@@ -1,5 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:ui';
+import 'package:connectivity/connectivity.dart';
+import 'package:horang/component/VoucherPage/voucher.detail.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -13,10 +20,65 @@ class ProdukList extends StatefulWidget {
 }
 
 class _ProdukList extends State<ProdukList> {
+  // StreamSubscription<DataConnectionStatus> listener;
+  // var _InternetStatus = "Unknown";
+  // var _ContentMessage = "Unknown";
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
+  String urlcomboKota = "http://server.horang.id:9992/api/lokasi/", valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  TextEditingController _controlleridkota;
+
+  List<dynamic> _dataKota = List();
+  void getcomboProduk() async {
+    final response = await http.get(urlcomboKota,
+        headers: {"Authorization": "BEARER ${access_token}"});
+    var listdata = json.decode(response.body);
+    setState(() {
+      _dataKota = listdata;
+    });
+  }
+
+  StreamSubscription connectivityStream;
+  ConnectivityResult olders;
+
+  void _cekKoneksi() async {
+    connectivityStream = await Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult resnow) {
+      if (resnow == ConnectivityResult.none) {
+        print("No Connection");
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: new Text("Peringatan"),
+                content: new Text(
+                    "Jaringan anda bermasalah, periksa koneksi anda lagi!"),
+                actions: <Widget>[
+                  new FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: new Text("Tutup"))
+                ],
+              );
+            });
+      } else if (olders == ConnectivityResult.none) {
+        print("Tersambung");
+        RefreshIndicator(
+          onRefresh: () async {
+            this.cekToken().reset();
+            await Future.value({});
+          },
+          child: null,
+        );
+        setState(() {});
+      }
+      olders = resnow;
+    });
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -55,13 +117,21 @@ class _ProdukList extends State<ProdukList> {
                       }));
             }
           }));
+      getcomboProduk();
     }
   }
 
   @override
   void initState() {
     super.initState();
+    _cekKoneksi();
     cekToken();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivityStream.cancel();
   }
 
   @override
@@ -83,7 +153,11 @@ class _ProdukList extends State<ProdukList> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List<JenisProduk> profiles = snapshot.data;
+            // List<JenisProduk> profiles = snapshot.data;
+            List<JenisProduk> profiles = snapshot.data
+                .where((element) => element.nama_lokasi == valKota)
+                .toList();
+            // print("ada gk ya ? "+_controlleridkota.toString());
             return _buildListView(profiles);
           } else {
             return Center(
@@ -96,7 +170,7 @@ class _ProdukList extends State<ProdukList> {
   }
 
   Widget _buildListView(List<JenisProduk> dataIndex) {
-    print("FILTER : "+nama_customer);
+    print("FILTER : " + nama_customer);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -110,7 +184,10 @@ class _ProdukList extends State<ProdukList> {
               Icons.arrow_back,
               color: Colors.white,
             ),
-            onPressed: () {}),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => VoucherDetail()));
+            }),
       ),
       body: Column(
         children: <Widget>[
@@ -132,6 +209,16 @@ class _ProdukList extends State<ProdukList> {
                   focusColor: Colors.blue),
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 16, right: 16),
+            child: _buildKomboProduk(valKota.toString()),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
               child: Container(
             padding: EdgeInsets.only(
@@ -143,11 +230,11 @@ class _ProdukList extends State<ProdukList> {
               itemBuilder: (context, index) {
                 JenisProduk jenisProduk = dataIndex[index];
                 return Card(
-                  // child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
                   child: InkWell(
                     onTap: () {
-                      if (nama_customer == "" || nama_customer == null || nama_customer == "0") {
+                      if (nama_customer == "" ||
+                          nama_customer == null ||
+                          nama_customer == "0") {
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Text(
                               'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
@@ -166,31 +253,30 @@ class _ProdukList extends State<ProdukList> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(
-                          height: 15,
-                        ),
                         Row(
                           children: <Widget>[
-                            IconButton(
-                              icon: Icon(
-                                Icons.favorite,
-                                color: index % 3 == 0
-                                    ? Colors.grey[400]
-                                    : Colors.redAccent,
+                            Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Container(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          fit: BoxFit.contain,
+                                          image: NetworkImage(
+                                              jenisProduk.gambar))),
+                                ),
                               ),
-                              onPressed: () {},
                             ),
-                            SizedBox(
-                              width: 14,
-                            ),
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Column(
                               children: <Widget>[
                                 Text(
                                   jenisProduk.kapasitas,
-                                  style: TextStyle(
-                                      fontSize: 22,
+                                  style: GoogleFonts.inter(
+                                      fontSize: 14,
                                       color: Colors.grey[800],
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -199,34 +285,30 @@ class _ProdukList extends State<ProdukList> {
                                 ),
                                 Text(
                                   jenisProduk.nama_kota,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
                                     color: Colors.grey[500],
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 8,
+                                  height: 5,
                                 ),
                                 Text(
                                   rupiah(jenisProduk.harga.toString(),
                                       separator: ',', trailing: '.00'),
                                   // jenisProduk.harga.toString(),
-                                  style: TextStyle(
-                                      fontSize: 20,
+                                  style: GoogleFonts.inter(
+                                      fontSize: 15,
                                       color: Colors.green,
                                       fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.fade,
                                 ),
                               ],
-                            )),
-                            IconButton(
-                              icon: Icon(Icons.navigation),
-                              onPressed: () {},
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 16, right: 16),
@@ -302,6 +384,89 @@ class _ProdukList extends State<ProdukList> {
       ),
     );
   }
+
+  Widget _buildKomboProduk(String kotaaaa) {
+    _controlleridkota = TextEditingController(text: kotaaaa);
+    return DropdownButtonFormField(
+      // hint: Text("Pilih Kota", style: GoogleFonts.inter(color: Colors.blueGrey)),
+      hint: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Text("Pilih Kota",
+            style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+      ),
+      value: valKota,
+      decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          border: const OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+              borderSide:
+                  const BorderSide(color: Colors.transparent, width: 0.0),
+              borderRadius: BorderRadius.circular(5.0)),
+          isDense: true,
+          contentPadding:
+              const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
+      items: _dataKota.map((item) {
+        return DropdownMenuItem(
+          // child: Text(item['nama_kota']),
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              "${item['nama_kota']}, ${item['nama_lokasi']}",
+              style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+            ),
+          ),
+          value: item['nama_lokasi'].toString(),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          // print("cek bos");
+          valKota = value;
+          // print("datakotassssssss $_dataKota");
+          // valKota = value.toString();
+          // print("damn" + value.toString());
+        });
+      },
+    );
+  }
+
+  // void _showDialog(String title, content, BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: new Text("Peringatan"),
+  //           content:
+  //               new Text("Koneksi anda buruk, paketane sampean ntek ta mas ?"),
+  //           actions: <Widget>[
+  //             new FlatButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: new Text("Tutup"))
+  //           ],
+  //         );
+  //       });
+  // }
+
+  // cekConnection(BuildContext context) async {
+  //   listener = DataConnectionChecker().onStatusChange.listen((status) {
+  //     switch (status) {
+  //       case DataConnectionStatus.connected:
+  //         _InternetStatus = "Terkoneksi ke internet";
+  //         _ContentMessage = "----------------------";
+  //         _showDialog(_InternetStatus, _ContentMessage, context);
+  //         break;
+  //       case DataConnectionStatus.disconnected:
+  //         _InternetStatus = "Koneksi anda bermasalah";
+  //         _ContentMessage = "----------------------";
+  //         _showDialog(_InternetStatus, _ContentMessage, context);
+  //         break;
+  //     }
+  //   });
+  //   return await DataConnectionChecker().connectionStatus;
+  // }
 
   showAlertDialog(BuildContext context) {
     Widget okButton = FlatButton(

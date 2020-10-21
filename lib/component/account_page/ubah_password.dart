@@ -5,6 +5,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+RegExp regx = RegExp(r"^[a-z0-9_]*$", caseSensitive: false);
 
 class UbahPass extends StatefulWidget {
   Password password;
@@ -16,7 +17,7 @@ class UbahPass extends StatefulWidget {
 
 class _UbahPassState extends State<UbahPass> {
   SharedPreferences sp;
-  bool _isLoading = false;
+  bool _isLoading = false, _obsecureText = true, _obsecureText1 = true;
   ApiService _apiService = ApiService();
   var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
   bool _isFieldpassLama, _isFieldpassBaru, _isFieldpassRetype, isSuccess = true;
@@ -76,6 +77,13 @@ class _UbahPassState extends State<UbahPass> {
     }
     super.initState();
     cekToken();
+  }
+
+  void _toggle() {
+    setState(() {
+      _obsecureText = !_obsecureText;
+      _obsecureText1 = !_obsecureText1;
+    });
   }
 
   @override
@@ -154,7 +162,13 @@ class _UbahPassState extends State<UbahPass> {
     return TextField(
       controller: _controllerPasslama,
       keyboardType: TextInputType.text,
+      obscureText: _obsecureText,
       decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: _toggle,
+          icon: new Icon(
+              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+        ),
         labelText: "Password lama",
         errorText: _isFieldpassLama == null || _isFieldpassLama
             ? null
@@ -170,15 +184,30 @@ class _UbahPassState extends State<UbahPass> {
   }
 
   Widget _buildTextFieldPassBaru() {
-    return TextField(
+    return TextFormField(
       controller: _controllerPassbaru,
+      obscureText: _obsecureText,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Passwor baru",
-        errorText: _isFieldpassBaru == null || _isFieldpassBaru
-            ? null
-            : "Password is required",
+        suffixIcon: IconButton(
+          onPressed: _toggle,
+          icon: new Icon(
+              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+        ),
+      labelText: "Password baru",
+      errorText: _isFieldpassBaru == null || _isFieldpassBaru
+          ? null
+          : "Password is required"
       ),
+      // validator: (String value) {
+      //   if (value.isEmpty) {
+      //     return 'password harus di isi';
+      //   } else if (!(regx.hasMatch(value))) {
+      //     print("jangan gunakan spesial");
+      //     return 'Jangan gunakan spesial karakter';
+      //   }
+      //   return null;
+      // },
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
         if (isFieldValid != _isFieldpassBaru) {
@@ -192,7 +221,13 @@ class _UbahPassState extends State<UbahPass> {
     return TextFormField(
       controller: _controllerPassretype,
       keyboardType: TextInputType.text,
+      obscureText: _obsecureText,
       decoration: InputDecoration(
+        suffixIcon: IconButton(
+          onPressed: _toggle,
+          icon: new Icon(
+              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+        ),
         labelText: "Retype Password",
         errorText: _isFieldpassRetype == null || _isFieldpassRetype
             ? null
@@ -202,9 +237,9 @@ class _UbahPassState extends State<UbahPass> {
         // bool isFieldValid = value.trim().isNotEmpty;
         if (value != _controllerPassbaru.text) {
           print("Password tidak sama");
+          _scaffoldState.currentState
+              .showSnackBar(SnackBar(content: Text("Password tidak sama")));
           // setState(() => _isFieldpassRetype = isFieldValid);
-        } else {
-          print("bener mas");
         }
       },
     );

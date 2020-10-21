@@ -173,83 +173,66 @@ class _StorageExpired extends State<StorageExpired> {
                               // ),
                               RichText(
                                 text: TextSpan(
-                                    text: 'Berakhir ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.blue[300],
-                                        fontWeight: FontWeight.bold),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: myStorage.hari.toString(),
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.blue[300],
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      TextSpan(
-                                        text: ' Hari',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.blue[300],
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ]),
+                                  text: 'Pesanan Expired',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                               Text(
-                                myStorage.tanggal_order,
+                                "Terakhir diorder pada " +
+                                    myStorage.tanggal_order,
                                 style: TextStyle(
                                   color: Colors.grey[800],
                                 ),
                               ),
-                              Row(
-                                children: <Widget>[
-                                  ButtonTheme(
-                                    minWidth: 100,
-                                    height: 30,
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  StorageHandler()),
-                                        );
-                                      },
-                                      child: Text("Log"),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  // ButtonTheme(
-                                  //   minWidth: 100,
-                                  //   height: 30,
-                                  //   child: RaisedButton(
-                                  //     color: Colors.transparent,
-                                  //     onPressed: () {},
-                                  //     child: Text(
-                                  //       "Open",
-                                  //       style: TextStyle(color: Colors.white),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
-                              )
+                              // Row(
+                              //   children: <Widget>[
+                              //     ButtonTheme(
+                              //       minWidth: 100,
+                              //       height: 30,
+                              //       child: RaisedButton(
+                              //         onPressed: () {
+                              //           Navigator.push(
+                              //             context,
+                              //             MaterialPageRoute(
+                              //                 builder: (context) =>
+                              //                     StorageHandler()),
+                              //           );
+                              //         },
+                              //         child: Text("Log"),
+                              //       ),
+                              //     ),
+                              //     SizedBox(
+                              //       width: 10,
+                              //     ),
+                              // ButtonTheme(
+                              //   minWidth: 100,
+                              //   height: 30,
+                              //   child: RaisedButton(
+                              //     color: Colors.transparent,
+                              //     onPressed: () {},
+                              //     child: Text(
+                              //       "Open",
+                              //       style: TextStyle(color: Colors.white),
+                              //     ),
+                              //   ),
+                              // ),
+                              //   ],
+                              // )
                             ],
                           ),
-                          // );
-                          //   },
-                          // ),
                         ),
                       ),
-                      // IconButton(
-                      //   icon: Icon(Icons.hourglass_empty, color: Colors.green, size: 30,),
-                      // ),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
+                  Divider(
+                    height: 10,
+                  )
                 ],
               );
             },
