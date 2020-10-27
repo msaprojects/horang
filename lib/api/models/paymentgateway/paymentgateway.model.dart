@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class PaymentGateway{
   int idpayment_gateway, status;
-  int nominal_biaya;
+  String password;
   String nama_provider, token_provider;
 
   PaymentGateway({
@@ -10,7 +10,7 @@ class PaymentGateway{
     this.status =0,
     this.nama_provider,
     this.token_provider,
-    this.nominal_biaya
+    this.password
   });
 
   factory PaymentGateway.fromJson(Map<String, dynamic> map){
@@ -19,7 +19,7 @@ class PaymentGateway{
       nama_provider: map["nama_provider"],
       token_provider: map["token_provider"],
       status: map["status"],
-      nominal_biaya: map["nominal_biaya"]
+      password: map["password"]
     );
   }
 
@@ -29,13 +29,13 @@ class PaymentGateway{
       "nama_provider": nama_provider,
       "token_provider": token_provider,
       "status": status,
-      "nominal_biaya": nominal_biaya
+      "password": password
     };
   }
 
   @override
   String toString() {
-    return 'PaymentGateway{idpayment_gateway: $idpayment_gateway, status: $status, nominal_biaya: $nominal_biaya, nama_provider: $nama_provider, token_provider: $token_provider}';
+    return 'PaymentGateway{idpayment_gateway: $idpayment_gateway, status: $status, password: $password, nama_provider: $nama_provider, token_provider: $token_provider}';
   }
 }
 

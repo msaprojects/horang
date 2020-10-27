@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Produk.Dashboard.dart';
+import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
@@ -188,10 +190,82 @@ class _HomePageState extends State<HomePage> {
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
-          VoucherDashboard(),
+          Container(
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(40),
+                      constraints: BoxConstraints.expand(height: 225),
+                      decoration: BoxDecoration(
+                        gradient: new LinearGradient(
+                            colors: [Colors.lightBlue, Colors.lightGreen],
+                            begin: const FractionalOffset(1.0, 1.0),
+                            end: const FractionalOffset(0.2, 0.2),
+                            stops: [0.0, 1.0],
+                            tileMode: TileMode.clamp),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Find Your New Job', style: GoogleFonts.lato())
+                          ],
+                        ),
+                      ),
+                    ),
+                    VoucherDashboard(),
+                    Container(
+                      padding: EdgeInsets.only(left: 50, right: 50),
+                      margin: EdgeInsets.only(top: 190),
+                      height: 100,
+                      width: 500,
+                      child: Card(
+                        child: Column(
+                          children: [Text("data")],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+
+          // VoucherDashboard(),
           SizedBox(
             height: 18,
           ),
+
+          Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
+                  child: Text(
+                    'Kontainer Aktif',
+                    style: mTitleStyle,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+                  child: SelectableText(
+                    "See All...",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProdukList()));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          StorageActive(),
 
           ////////////////// SESI PRODUK ////////////////////////
           Container(
@@ -267,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                 "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
             actions: [
               FlatButton(
-                color: Colors.red,
+                  color: Colors.red,
                   onPressed: () {
                     // print("skanlah1");
                     Navigator.of(context).pop();

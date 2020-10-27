@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -80,57 +81,118 @@ class _VoucherDetailState extends State<VoucherDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              height: 250,
-              decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(gambar1),
-                        fit: BoxFit.cover
-                      )
-                    )
-            ),
-            Positioned(
-              top: 225,
-              left: 50,
-
-              child: Container(
-                height: 80,
-                width: 250,
-                color: Colors.grey,
+    return Scaffold(
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(gambar1), fit: BoxFit.cover),
+                ),
+              ),
+              Container(
                 child: Center(
                   child: Container(
+                    height: 140,
                     child: Card(
-                      shadowColor: Colors.black,
-
+                      margin: EdgeInsets.all(18),
+                      elevation: 7.0,
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(kode_voucher1.toString(),
+                                style: GoogleFonts.inter(fontSize: 14)),
+                            Divider(),
+                            Text(nominal1.toString(),
+                                style: GoogleFonts.inter(fontSize: 12))
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ))
-          ],
-        ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Container(
+                  color: Colors.grey[300],
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20),
+                    alignment: Alignment.centerLeft,
+                    child: Text("Syarat dan Ketentuan",
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold, fontSize: 13)),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.only(left: 20),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    style: GoogleFonts.inter(fontSize: 12)),
+              )
+            ],
+          ),
+          // Center(
+          //   child: Container(
+          //     height: 140,
+          //     child: Card(
+          //       margin: EdgeInsets.all(18),
+          //       elevation: 7.0,
+          //       child: Center(
+          //         child: Text("Text in a Card"),
+          //       ),
+          //     ),
+          //   ),
+          // )
+        ],
       ),
+      // body: Container(
+      //   child: Column(
+      //     children: [
+      //       Container(
+      //         height: 200,
+      //         decoration: BoxDecoration(
+      //           image: DecorationImage(
+      //               image: NetworkImage(gambar1), fit: BoxFit.cover),
+      //         ),
+      //       ),
+      //       SizedBox(height: 20,),
+      //       Container(
+      //         padding: EdgeInsets.only(top: 200),
+      //         height: 100,
+      //         child: Card(
+      //           color: Colors.red,
+      //           borderOnForeground: true,
+      //         ),
+
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
-      //     child: CustomScrollView(
-      //   slivers: [
-      //     SliverPersistentHeader(
-      //       pinned: true,
-      //       floating: true,
-      //       delegate: CustomSliverDelegate(
-      //         expandedHeight: 120,
-      //       ),
-      //     ),
-      //     SliverFillRemaining(
-      //       child: Center(
-      //         child: Text(nominal1.toString()),
-      //       ),
-      //     )
-      //   ],
-      // )),
-    
+    //     child: CustomScrollView(
+    //   slivers: [
+    //     SliverPersistentHeader(
+    //       pinned: true,
+    //       floating: true,
+    //       delegate: CustomSliverDelegate(
+    //         expandedHeight: 120,
+    //       ),
+    //     ),
+    //     SliverFillRemaining(
+    //       child: Center(
+    //         child: Text(nominal1.toString()),
+    //       ),
+    //     )
+    //   ],
+    // )),
   }
 
   showAlertDialog(BuildContext context) {

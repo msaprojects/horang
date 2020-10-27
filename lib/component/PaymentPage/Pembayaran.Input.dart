@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
@@ -5,6 +7,7 @@ import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
+import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,6 +67,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   int rgID = 1;
   int _currentIndex = 1;
   String rgValue = "";
+  bool _sel = false, isEnabled = true;
 
   SharedPreferences sp;
   bool isSuccess = false;
@@ -90,6 +94,18 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       stanggal_akhir,
       selectedValue,
       totallharga;
+
+  enableButton() {
+    setState(() {
+      isEnabled = true;
+    });
+  }
+
+  disableButton() {
+    setState(() {
+      isEnabled = false;
+    });
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -665,34 +681,39 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 PaymentGateway pymentgtwy = dataIndex[index];
+                print("data index $dataIndex");
                 return Card(
                   child: InkWell(
-                    onTap: () => (dataIndex),
+                    onTap: () {
+                      _tripModalBottomSheet(context);
+                    },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         ListTile(
                           selected: true,
+                          leading: Text("gambar"),
                           title: Text(
                             pymentgtwy.nama_provider,
-                            style: GoogleFonts.inter(fontSize: 15, color: Colors.black26),
+                            style: GoogleFonts.inter(
+                                fontSize: 15, color: Colors.black26),
                           ),
-                          subtitle: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "Biaya Layanan : ",
-                                    style: GoogleFonts.inter(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    "Rp. " +
-                                        pymentgtwy.nominal_biaya.toString(),
-                                    style: GoogleFonts.inter(
-                                        fontSize: 13, color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                              trailing: Icon(Icons.keyboard_arrow_right),
+                          // subtitle: Row(
+                          //       children: <Widget>[
+                          //         Text(
+                          //           "Biaya Layanan : ",
+                          //           style: GoogleFonts.inter(
+                          //               fontSize: 12, color: Colors.grey),
+                          //         ),
+                          //         Text(
+                          //           "Rp. " +
+                          //               pymentgtwy.nominal_biaya.toString(),
+                          //           style: GoogleFonts.inter(
+                          //               fontSize: 13, color: Colors.grey),
+                          //         ),
+                          //       ],
+                          //     ),
+                          trailing: Icon(Icons.keyboard_arrow_right),
                         )
                       ],
                     ),
@@ -731,4 +752,145 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           return alert;
         });
   }
+
+  void _tripModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            height: MediaQuery.of(context).size.height * .70,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text("Konfirmasi",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(Icons.cancel_outlined),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Divider(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.approval,
+                          color: Colors.red,
+                          size: 100,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: Text(
+                              "Anda akan melakukan pembayaran menggunakan ...",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Text(
+                                "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku",
+                                textAlign: TextAlign.left,
+                                style: GoogleFonts.inter(
+                                    height: 1.5, fontSize: 14))),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Checkbox(
+                            //   value: _sel,
+                            //   onChanged: (bool value) {
+                            //     setState(() {
+                            //       _sel = value;
+                            //       print("bels $_sel");
+                            //     });
+                            //   },
+                            // ),
+                            RaisedButton(
+                                color: Colors.green,
+                                child: Text(
+                                  "Lanjutkan",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              KonfirmPayment()));
+                                })
+                            // Text("Setuju",
+                            //     style: GoogleFonts.inter(
+                            //       fontSize: 12,
+                            //     )),
+                            // Container(
+                            //   child: RaisedButton(
+                            //       disabledColor: Colors.grey,
+                            //       disabledTextColor: Colors.white,
+                            //       onPressed: _sel ? true : () {
+                            //         print("object");
+                            //       },
+                            //       color: Colors.grey,
+                            //       child: Text("Lanjutkan"),
+                            //       ),
+                            // )
+                          ],
+                        ),
+                        // _buttonDisable()
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // Widget _buttonDisable() {
+  //   if (_sel == true) {
+  //     RaisedButton(
+  //       onPressed: enableButton,
+  //       color: Colors.green,
+  //       textColor: Colors.white,
+  //       child: Text("Lanjutkan"),
+  //     );
+  //   } else {
+  //     RaisedButton(
+  //       onPressed: disableButton,
+  //       color: Colors.grey,
+  //       textColor: Colors.white,
+  //       child: Text("Lanjutkan"),
+  //     );
+  //   }
+  // }
 }

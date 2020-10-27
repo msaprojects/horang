@@ -125,6 +125,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                           return VoucherDetail(
                             nominal: voucher.nominal,
                             gambar: voucher.gambar,
+                            keterangan: voucher.keterangan,
                           );
                         }));
                       },
