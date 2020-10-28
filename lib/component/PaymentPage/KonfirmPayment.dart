@@ -68,30 +68,31 @@ class KonfirmPayment extends StatefulWidget {
 class _KonfirmPaymentState extends State<KonfirmPayment> {
   ApiService _apiService = ApiService();
   // String no_ovo;
+  SharedPreferences sp;
   var access_token, refresh_token, email, nama_customer;
-  var idlokasi,
-      idjenis_produk,
-      idcustomer,
-      keterangan,
-      jumlah_sewa,
-      flagasuransi,
-      flagvoucher,
-      idasuransi,
-      idpayment_gateway,
-      nomor_polis,
-      tanggal_berakhir_polis,
-      idvoucher,
-      skapasitas,
-      sharga,
-      salamat,
-      sp,
-      sketerangan_barang,
-      snominal_barang,
-      stotal_harga,
-      stanggal_mulai,
-      stanggal_akhir,
-      selectedValue,
-      totallharga;
+  var kidlokasi,
+      kidjenis_produk,
+      kidcustomer,
+      kketerangan,
+      kjumlah_sewa,
+      kflagasuransi,
+      kflagvoucher,
+      kidasuransi,
+      kidpayment_gateway,
+      knomor_polis,
+      ktanggal_berakhir_polis,
+      kidvoucher,
+      kskapasitas,
+      ksharga,
+      ksalamat,
+      ksp,
+      ksketerangan_barang,
+      ksnominal_barang,
+      kstotal_harga,
+      kstanggal_mulai,
+      kstanggal_akhir,
+      kselectedValue,
+      kstotallharga;
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
 
@@ -137,28 +138,25 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   @override
   void initState() {
 //    if(widget.orderProduk !=null){
-    idpayment_gateway = widget.idpayment_gateway;
-    idlokasi = widget.idlokasi;
-    idjenis_produk = widget.idjenis_produk;
-    keterangan = widget.keterangan;
-    jumlah_sewa = widget.jumlah_sewa;
-    sharga = widget.harga;
-    flagvoucher = widget.flagvoucher;
-    flagasuransi = widget.flagasuransi;
-    idasuransi = widget.idasuransi;
-    nomor_polis = widget.nomor_polis;
-    tanggal_berakhir_polis = widget.tanggal_berakhir_polis;
-    idvoucher = widget.idvoucher;
-    skapasitas = widget.kapasitas;
-    salamat = widget.alamat;
-    stanggal_mulai = widget.tanggal_mulai;
-    stanggal_akhir = widget.tanggal_akhir;
-    sketerangan_barang = widget.keterangan_barang;
-    snominal_barang = widget.nominal_barang;
-    stotal_harga = widget.total_harga;
-
-    print("Cek IDJENIS ${idjenis_produk}");
-    print("Cek IDpayment ${idpayment_gateway}");
+    kidpayment_gateway = widget.idpayment_gateway;
+    kidlokasi = widget.idlokasi;
+    kidjenis_produk = widget.idjenis_produk;
+    kketerangan = widget.keterangan;
+    kjumlah_sewa = widget.jumlah_sewa;
+    ksharga = widget.harga;
+    kflagvoucher = widget.flagvoucher;
+    kflagasuransi = widget.flagasuransi;
+    kidasuransi = widget.idasuransi;
+    knomor_polis = widget.nomor_polis;
+    ktanggal_berakhir_polis = widget.tanggal_berakhir_polis;
+    kidvoucher = widget.idvoucher;
+    kskapasitas = widget.kapasitas;
+    ksalamat = widget.alamat;
+    kstanggal_mulai = widget.tanggal_mulai;
+    kstanggal_akhir = widget.tanggal_akhir;
+    ksketerangan_barang = widget.keterangan_barang;
+    ksnominal_barang = widget.nominal_barang;
+    kstotal_harga = widget.total_harga;
 //    }
     cekToken();
     super.initState();
@@ -166,7 +164,6 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
 
   @override
   Widget build(BuildContext context) {
-    print("ZZZZ : "+stanggal_akhir.tostring);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -224,55 +221,51 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             FlatButton(
               color: Colors.green,
               child: Text(
-                "Bayar Sekarang"+idpayment_gateway,
+                "Bayar Sekarang" + kidpayment_gateway,
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
                 setState(() {
-                  print("damnit man");
-                  print("let it burn ${OrderProduk()}");
+                  print("Haduh : "+_noOvo.text.toString());
                   OrderProduk orderproduk = OrderProduk(
-                      idjenis_produk: idjenis_produk,
-                      idlokasi: idlokasi,
-                      jumlah_sewa: jumlah_sewa,
+                      idjenis_produk: kidjenis_produk,
+                      idlokasi: kidlokasi,
+                      jumlah_sewa: kjumlah_sewa,
                       idasuransi: 1,
-                      idvoucher: idvoucher,
-                      flagasuransi: flagasuransi,
-                      flagvoucher: flagvoucher,
-                      idpayment_gateway: idpayment_gateway,
+                      idvoucher: kidvoucher,
+                      flagasuransi: kflagasuransi,
+                      flagvoucher: kflagvoucher,
+                      idpayment_gateway: int.parse(kidpayment_gateway.toString()),
                       flag_selesai: 0,
-                      total_harga: double.parse(totallharga.toString()),
-                      harga: double.parse(sharga.toString()),
+                      total_harga: kstotal_harga,
+                      harga: ksharga,
                       nominal_barang: double.parse("0.0"),
-                      deposit_tambah: double.parse(sharga.toString()),
-                      deposit_pakai: double.parse(sharga.toString()),
+                      deposit_tambah: double.parse(ksharga.toString()),
+                      deposit_pakai: double.parse(ksharga.toString()),
                       token: access_token,
-                      keterangan: keterangan.toString(),
-                      nomor_polis: nomor_polis,
-                      tanggal_berakhir_polis: tanggal_berakhir_polis,
-                      tanggal_mulai: stanggal_mulai,
-                      tanggal_akhir: stanggal_akhir,
-                      keterangan_barang: sketerangan_barang,
+                      keterangan: kketerangan,
+                      nomor_polis: knomor_polis,
+                      tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                      tanggal_mulai: kstanggal_mulai,
+                      tanggal_akhir: kstanggal_akhir,
+                      keterangan_barang: ksketerangan_barang,
                       tanggal_order: "DATE(NOW())",
                       keterangan_deposit: "-",
-                      nominal_deposit: double.parse(sharga.toString()),
+                      nominal_deposit: double.parse(ksharga.toString()),
                       no_ovo: _noOvo.text.toString());
-                  print("but if you never try "+orderproduk.toString());
+                //   print("but if you never try " + orderproduk.toString());
                   _apiService.tambahOrderProduk(orderproduk).then((idorder) {
                     if (idorder != 0) {
-                      print("cek1");
-                      _scaffoldState.currentState.showSnackBar(SnackBar(
-                        content: Text("Berhasil"),
-                      ));
-                      print("cek2");
+                      // _scaffoldState.currentState.showSnackBar(SnackBar(
+                      //   content: Text("Berhasil"),
+                      // ));
+                      print("ID TIDAK ORDER KOSONG");
                       _apiService.listOrderSukses(access_token, idorder);
-                      print("cek3");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => KonfirmasiOrderDetail()));
                     } else {
-                      print("cek4");
                       print("gagal");
                     }
                   });

@@ -177,63 +177,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     cekToken();
   }
 
-  // Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
-  //   print("da $dataIndex");
-  //   return Container(
-  //     height: MediaQuery.of(context).size.height * 0.3,
-  //     padding: EdgeInsets.all(10.0),
-  //     child: Column(
-  //       children: <Widget>[
-  //         Container(
-  //           child: ListView.builder(
-  //             itemBuilder: (context, index) {
-  //               PaymentGateway payment = dataIndex[index];
-  //               return Card(
-  //                 child: Container(
-  //                   child: InkWell(
-  //                     highlightColor: Colors.lightGreen,
-  //                     onTap: () {
-  //                       rgValue = payment.nama_provider;
-  //                       rgID = payment.idpayment_gateway;
-  //                     },
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: <Widget>[
-  //                         Text(
-  //                           payment.nama_provider,
-  //                           style: TextStyle(
-  //                               fontSize: 22,
-  //                               color: Colors.blueAccent,
-  //                               fontWeight: FontWeight.bold),
-  //                         ),
-  //                         Row(
-  //                           children: <Widget>[
-  //                             Text(
-  //                               "Biaya Layanan : ",
-  //                               style:
-  //                                   TextStyle(fontSize: 14, color: Colors.grey),
-  //                             ),
-  //                             Text(
-  //                               "Rp. " + payment.nominal_biaya.toString(),
-  //                               style:
-  //                                   TextStyle(fontSize: 14, color: Colors.grey),
-  //                             ),
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //             itemCount: 1,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     var asuransitxt, vouchertxt;
@@ -566,100 +509,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       ),
                     ),
                   ),
-
-                  //FOR LISTVIEW PEMBAYARAN
-                  // SafeArea(
-                  //   child: FutureBuilder(
-                  //     future: _apiService.listPaymentGateway(access_token),
-                  //     builder: (context,
-                  //         AsyncSnapshot<List<PaymentGateway>> snapshot) {
-                  //       if (snapshot.hasError) {
-                  //         print(snapshot.error.toString());
-                  //         return Center(
-                  //           child: Text(
-                  //               "Something wrong with message: ${snapshot.error.toString()}"),
-                  //         );
-                  //       } else if (snapshot.connectionState ==
-                  //           ConnectionState.waiting) {
-                  //         return Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       } else if (snapshot.connectionState ==
-                  //           ConnectionState.done) {
-                  //         List<PaymentGateway> payment = snapshot.data;
-                  //         return _listPaymentGateway(payment);
-                  //       } else {
-                  //         return Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       }
-                  //     },
-                  //   ),
-                  // ),
-                  //END LISTVIEW PEMBAYARAN
-//                   Container(
-//                     width: MediaQuery.of(context).size.width / 1,
-//                     height: 60,
-//                     padding: EdgeInsets.only(left: 10, right: 10),
-//                     margin: EdgeInsets.only(top: 3),
-//                     child: RaisedButton(
-//                       color: Colors.blue[300],
-//                       onPressed: () {
-//                         OrderProduk orderProduk = OrderProduk(
-//                             token: access_token,
-//                             idlokasi: idlokasi,
-//                             idjenis_produk: idjenis_produk,
-//                             jumlah_sewa: jumlah_sewa,
-//                             idasuransi: 1,
-//                             idvoucher: idvoucher,
-//                             flagasuransi: flagasuransi,
-//                             flagvoucher: flagvoucher,
-//                             idpayment_gateway: rgID,
-//                             flag_selesai: 0,
-//                             harga: double.parse(sharga.toString()),
-//                             total_harga: double.parse(totallharga.toString()),
-//                             deposit_tambah: double.parse(sharga.toString()),
-//                             deposit_pakai: double.parse(sharga.toString()),
-//                             keterangan: keterangan.toString(),
-//                             nomor_polis: nomor_polis,
-//                             tanggal_berakhir_polis: tanggal_berakhir_polis,
-//                             tanggal_mulai: stanggal_mulai,
-//                             tanggal_akhir: stanggal_akhir,
-//                             nominal_barang: double.parse("0.0"),
-//                             keterangan_barang: sketerangan_barang,
-//                             tanggal_order: "DATE(NOW())",
-//                             nominal_deposit: double.parse(sharga.toString()),
-//                             keterangan_deposit: "-");
-//                         print("JSONVAL_:" + orderProduk.toString());
-//                         _apiService
-//                             .tambahOrderProduk(orderProduk)
-//                             .then((idorder) {
-//                           if (idorder != 0) {
-//                             print("body " + idorder.toString());
-// //                            print(orderProduk.toString());
-// //                            _scaffoldState.currentState.showSnackBar(SnackBar(
-// //                              content: Text("Berhasil"),
-// //                            ));
-// //                          _apiService.getOrderSukses();
-//                             Navigator.push(
-//                                 context,
-//                                 MaterialPageRoute(
-//                                     builder: (context) => KonfirmasiOrderDetail(
-//                                         idorder: idorder)));
-//                           } else {
-//                             print(orderProduk.toString());
-//                           }
-//                         });
-//                       },
-//                       child: Text(
-//                         "Pembayaran yang anda Pilih ${rgValue}",
-//                         style: (TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             fontSize: 16,
-//                             color: Colors.white)),
-//                       ),
-//                     ),
-//                   )
                 ],
               ),
             ),
@@ -683,11 +532,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 PaymentGateway pymentgtwy = dataIndex[index];
-                print("data index $dataIndex");
+                // print("data index $dataIndex");
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      _tripModalBottomSheet(context, pymentgtwy.idpayment_gateway);
+                      _tripModalBottomSheet(
+                          context, pymentgtwy.idpayment_gateway);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -732,14 +582,14 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text("Konfirmasi"+idpayment.toString(),
+                        child: Text("Konfirmasi" + idpayment.toString(),
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
                       Spacer(),
                       IconButton(
-                          icon: Icon(Icons.cancel_outlined),
+                          icon: Icon(Icons.cancel),
                           onPressed: () {
                             Navigator.of(context).pop();
                           })
@@ -757,7 +607,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.approval,
+                          Icons.payment,
                           color: Colors.red,
                           size: 100,
                         ),
@@ -789,71 +639,49 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // Checkbox(
-                            //   value: _sel,
-                            //   onChanged: (bool value) {
-                            //     setState(() {
-                            //       _sel = value;
-                            //       print("bels $_sel");
-                            //     });
-                            //   },
-                            // ),
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan"+idpayment.toString(),
+                                  "Lanjutkan" + idpayment.toString(),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return KonfirmPayment(
-                                      idlokasi: idlokasi,
-                                      idjenis_produk: idjenis_produk,
-                                      jumlah_sewa: jumlah_sewa,
-                                      idasuransi: 1,
-                                      idvoucher: idvoucher,
-                                      flagasuransi: flagasuransi,
-                                      flagvoucher: flagvoucher,
-                                      idpayment_gateway: idpayment,
-                                      flag_selesai: 0,
-                                      harga: double.parse(sharga.toString()),
-                                      total_harga:
-                                          double.parse(totallharga.toString()),
-                                      deposit_tambah:
-                                          double.parse(sharga.toString()),
-                                      deposit_pakai:
-                                          double.parse(sharga.toString()),
-                                      keterangan: keterangan.toString(),
-                                      nomor_polis: nomor_polis,
-                                      tanggal_berakhir_polis:
-                                          tanggal_berakhir_polis,
-                                      tanggal_mulai: stanggal_mulai,
-                                      tanggal_akhir: stanggal_akhir,
-                                      nominal_barang: double.parse("0.0"),
-                                      keterangan_barang: sketerangan_barang,
-                                      tanggal_order: "DATE(NOW())",
-                                      nominal_deposit:
-                                          double.parse(sharga.toString()),
-                                      keterangan_deposit: "-",
-                                    );
-                                  }));
+                                  setState(() {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return KonfirmPayment(
+                                            idjenis_produk: idjenis_produk,
+                                            idlokasi: idlokasi,
+                                            jumlah_sewa: jumlah_sewa,
+                                            idasuransi: 1,
+                                            idvoucher: idvoucher,
+                                            flagvoucher: flagvoucher,
+                                            flagasuransi: flagasuransi,
+                                            idpayment_gateway: idpayment.toString(),
+                                            flag_selesai: 0,
+                                            harga: double.parse(sharga.toString()),
+                                            total_harga:
+                                            double.parse(totallharga.toString()),
+                                            deposit_tambah:
+                                            double.parse(sharga.toString()),
+                                            deposit_pakai:
+                                            double.parse(sharga.toString()),
+                                            keterangan: keterangan.toString(),
+                                            nomor_polis: nomor_polis,
+                                            tanggal_berakhir_polis:
+                                            tanggal_berakhir_polis,
+                                            tanggal_mulai: stanggal_mulai,
+                                            tanggal_akhir: stanggal_akhir,
+                                            nominal_barang: double.parse("0.0"),
+                                            keterangan_barang: sketerangan_barang,
+                                            tanggal_order: "DATE(NOW())",
+                                            nominal_deposit:
+                                            double.parse(sharga.toString()),
+                                            keterangan_deposit: "-",
+                                          );
+                                        }));
+                                  });
                                 })
-                            // Text("Setuju",
-                            //     style: GoogleFonts.inter(
-                            //       fontSize: 12,
-                            //     )),
-                            // Container(
-                            //   child: RaisedButton(
-                            //       disabledColor: Colors.grey,
-                            //       disabledTextColor: Colors.white,
-                            //       onPressed: _sel ? true : () {
-                            //         print("object");
-                            //       },
-                            //       color: Colors.grey,
-                            //       child: Text("Lanjutkan"),
-                            //       ),
-                            // )
                           ],
                         ),
                         // _buttonDisable()
@@ -890,22 +718,4 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           return alert;
         });
   }
-
-  // Widget _buttonDisable() {
-  //   if (_sel == true) {
-  //     RaisedButton(
-  //       onPressed: enableButton,
-  //       color: Colors.green,
-  //       textColor: Colors.white,
-  //       child: Text("Lanjutkan"),
-  //     );
-  //   } else {
-  //     RaisedButton(
-  //       onPressed: disableButton,
-  //       color: Colors.grey,
-  //       textColor: Colors.white,
-  //       child: Text("Lanjutkan"),
-  //     );
-  //   }
-  // }
 }
