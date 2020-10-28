@@ -145,16 +145,16 @@ class _VoucherDashboard extends State<VoucherDashboard> {
         SizedBox(
           height: 12,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            //Lihat selengkapnya
-            Text(
-              'Lihat Selengkapnya...',
-              style: mMorediscountstyle,
-            )
-          ],
-        )
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: <Widget>[
+        //     //Lihat selengkapnya
+        //     Text(
+        //       'Lihat Selengkapnya...',
+        //       style: mMorediscountstyle,
+        //     )
+        //   ],
+        // )
       ],
     );
   }

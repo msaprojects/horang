@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
+import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
@@ -23,6 +24,7 @@ class FormInputPembayaran extends StatefulWidget {
       keterangan,
       jumlah_sewa,
       flagasuransi,
+      idpayment_gateway,
       flagvoucher,
       idasuransi,
       nomor_polis,
@@ -44,6 +46,7 @@ class FormInputPembayaran extends StatefulWidget {
       this.flagasuransi,
       this.flagvoucher,
       this.idasuransi,
+      this.idpayment_gateway,
       this.nomor_polis,
       this.tanggal_berakhir_polis,
       this.idvoucher,
@@ -81,6 +84,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       flagasuransi,
       flagvoucher,
       idasuransi,
+      idpayment_gateway,
       nomor_polis,
       tanggal_berakhir_polis,
       idvoucher,
@@ -149,6 +153,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   @override
   void initState() {
 //    if(widget.orderProduk !=null){
+    idpayment_gateway = widget.idpayment_gateway;
     idlokasi = widget.idlokasi;
     idjenis_produk = widget.idjenis_produk;
     keterangan = widget.keterangan;
@@ -592,72 +597,69 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                   //   ),
                   // ),
                   //END LISTVIEW PEMBAYARAN
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1,
-                    height: 60,
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    margin: EdgeInsets.only(top: 3),
-                    child: RaisedButton(
-                      color: Colors.blue[300],
-                      onPressed: () {
-                        OrderProduk orderProduk = OrderProduk(
-                            token: access_token,
-                            idlokasi: idlokasi,
-                            idjenis_produk: idjenis_produk,
-                            jumlah_sewa: jumlah_sewa,
-                            idasuransi: 1,
-                            idvoucher: idvoucher,
-                            flagasuransi: flagasuransi,
-                            flagvoucher: flagvoucher,
-                            idpayment_gateway: rgID,
-                            flag_selesai: 0,
-                            harga: double.parse(sharga.toString()),
-                            total_harga: double.parse(totallharga.toString()),
-                            deposit_tambah: double.parse(sharga.toString()),
-                            deposit_pakai: double.parse(sharga.toString()),
-                            keterangan: keterangan.toString(),
-                            nomor_polis: nomor_polis,
-                            tanggal_berakhir_polis: tanggal_berakhir_polis,
-                            tanggal_mulai: stanggal_mulai,
-                            tanggal_akhir: stanggal_akhir,
-                            nominal_barang: double.parse("0.0"),
-                            keterangan_barang: sketerangan_barang,
-                            tanggal_order: "DATE(NOW())",
-                            nominal_deposit: double.parse(sharga.toString()),
-                            keterangan_deposit: "-");
-                        print("JSONVAL_:" + orderProduk.toString());
-                        _apiService
-                            .tambahOrderProduk(orderProduk)
-                            .then((idorder) {
-                          if (idorder != 0) {
-                            print("body " + idorder.toString());
-//                            print(orderProduk.toString());
-//                            _scaffoldState.currentState.showSnackBar(SnackBar(
-//                              content: Text("Berhasil"),
-//                            ));
-//                          _apiService.getOrderSukses();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => KonfirmasiOrderDetail(
-                                        idorder: idorder)));
-                          } else {
-                            print(orderProduk.toString());
-//                            _scaffoldState.currentState.showSnackBar(SnackBar(
-//                              content: Text("GAGAL" + orderProduk.toString()),
-//                            ));
-                          }
-                        });
-                      },
-                      child: Text(
-                        "Pembayaran yang anda Pilih ${rgValue}",
-                        style: (TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.white)),
-                      ),
-                    ),
-                  )
+//                   Container(
+//                     width: MediaQuery.of(context).size.width / 1,
+//                     height: 60,
+//                     padding: EdgeInsets.only(left: 10, right: 10),
+//                     margin: EdgeInsets.only(top: 3),
+//                     child: RaisedButton(
+//                       color: Colors.blue[300],
+//                       onPressed: () {
+//                         OrderProduk orderProduk = OrderProduk(
+//                             token: access_token,
+//                             idlokasi: idlokasi,
+//                             idjenis_produk: idjenis_produk,
+//                             jumlah_sewa: jumlah_sewa,
+//                             idasuransi: 1,
+//                             idvoucher: idvoucher,
+//                             flagasuransi: flagasuransi,
+//                             flagvoucher: flagvoucher,
+//                             idpayment_gateway: rgID,
+//                             flag_selesai: 0,
+//                             harga: double.parse(sharga.toString()),
+//                             total_harga: double.parse(totallharga.toString()),
+//                             deposit_tambah: double.parse(sharga.toString()),
+//                             deposit_pakai: double.parse(sharga.toString()),
+//                             keterangan: keterangan.toString(),
+//                             nomor_polis: nomor_polis,
+//                             tanggal_berakhir_polis: tanggal_berakhir_polis,
+//                             tanggal_mulai: stanggal_mulai,
+//                             tanggal_akhir: stanggal_akhir,
+//                             nominal_barang: double.parse("0.0"),
+//                             keterangan_barang: sketerangan_barang,
+//                             tanggal_order: "DATE(NOW())",
+//                             nominal_deposit: double.parse(sharga.toString()),
+//                             keterangan_deposit: "-");
+//                         print("JSONVAL_:" + orderProduk.toString());
+//                         _apiService
+//                             .tambahOrderProduk(orderProduk)
+//                             .then((idorder) {
+//                           if (idorder != 0) {
+//                             print("body " + idorder.toString());
+// //                            print(orderProduk.toString());
+// //                            _scaffoldState.currentState.showSnackBar(SnackBar(
+// //                              content: Text("Berhasil"),
+// //                            ));
+// //                          _apiService.getOrderSukses();
+//                             Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                     builder: (context) => KonfirmasiOrderDetail(
+//                                         idorder: idorder)));
+//                           } else {
+//                             print(orderProduk.toString());
+//                           }
+//                         });
+//                       },
+//                       child: Text(
+//                         "Pembayaran yang anda Pilih ${rgValue}",
+//                         style: (TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             fontSize: 16,
+//                             color: Colors.white)),
+//                       ),
+//                     ),
+//                   )
                 ],
               ),
             ),
@@ -685,7 +687,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      _tripModalBottomSheet(context);
+                      _tripModalBottomSheet(context, pymentgtwy.idpayment_gateway);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -698,21 +700,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             style: GoogleFonts.inter(
                                 fontSize: 15, color: Colors.black26),
                           ),
-                          // subtitle: Row(
-                          //       children: <Widget>[
-                          //         Text(
-                          //           "Biaya Layanan : ",
-                          //           style: GoogleFonts.inter(
-                          //               fontSize: 12, color: Colors.grey),
-                          //         ),
-                          //         Text(
-                          //           "Rp. " +
-                          //               pymentgtwy.nominal_biaya.toString(),
-                          //           style: GoogleFonts.inter(
-                          //               fontSize: 13, color: Colors.grey),
-                          //         ),
-                          //       ],
-                          //     ),
                           trailing: Icon(Icons.keyboard_arrow_right),
                         )
                       ],
@@ -723,37 +710,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               itemCount: dataIndex.length,
             ),
           )),
-          Text("Kamu memilih Pembayaran menggunakan : $rgValue")
+          // Text("Kamu memilih Pembayaran menggunakan : $rgValue")
         ],
       ),
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        print("ini pembayaran input");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
-
-  void _tripModalBottomSheet(context) {
+  void _tripModalBottomSheet(context, int idpayment) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -769,7 +732,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text("Konfirmasi",
+                        child: Text("Konfirmasi"+idpayment.toString(),
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
@@ -838,15 +801,43 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan",
+                                  "Lanjutkan"+idpayment.toString(),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              KonfirmPayment()));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return KonfirmPayment(
+                                      idlokasi: idlokasi,
+                                      idjenis_produk: idjenis_produk,
+                                      jumlah_sewa: jumlah_sewa,
+                                      idasuransi: 1,
+                                      idvoucher: idvoucher,
+                                      flagasuransi: flagasuransi,
+                                      flagvoucher: flagvoucher,
+                                      idpayment_gateway: idpayment,
+                                      flag_selesai: 0,
+                                      harga: double.parse(sharga.toString()),
+                                      total_harga:
+                                          double.parse(totallharga.toString()),
+                                      deposit_tambah:
+                                          double.parse(sharga.toString()),
+                                      deposit_pakai:
+                                          double.parse(sharga.toString()),
+                                      keterangan: keterangan.toString(),
+                                      nomor_polis: nomor_polis,
+                                      tanggal_berakhir_polis:
+                                          tanggal_berakhir_polis,
+                                      tanggal_mulai: stanggal_mulai,
+                                      tanggal_akhir: stanggal_akhir,
+                                      nominal_barang: double.parse("0.0"),
+                                      keterangan_barang: sketerangan_barang,
+                                      tanggal_order: "DATE(NOW())",
+                                      nominal_deposit:
+                                          double.parse(sharga.toString()),
+                                      keterangan_deposit: "-",
+                                    );
+                                  }));
                                 })
                             // Text("Setuju",
                             //     style: GoogleFonts.inter(
@@ -873,6 +864,30 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               ),
             ),
           );
+        });
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        print("ini pembayaran input");
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Sesi Anda Berakhir!"),
+      content: Text(
+          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
         });
   }
 

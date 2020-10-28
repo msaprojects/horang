@@ -3,7 +3,7 @@ import 'dart:convert';
 class OrderProduk{
   int idjenis_produk, idlokasi, jumlah_sewa, idasuransi, idvoucher, flagvoucher, flagasuransi, idpayment_gateway, flag_selesai;
   double total_harga, harga, nominal_barang, deposit_tambah, deposit_pakai, nominal_deposit;
-  String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang, tanggal_order, keterangan_deposit;
+  String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang, tanggal_order, keterangan_deposit, no_ovo;
 
 
   OrderProduk({
@@ -30,7 +30,8 @@ class OrderProduk{
     this.tanggal_akhir,
     this.keterangan_barang,
     this.tanggal_order,
-    this.keterangan_deposit
+    this.keterangan_deposit,
+    this.no_ovo
   });
 
   factory OrderProduk.fromJson(Map<String, dynamic> map){
@@ -59,6 +60,7 @@ class OrderProduk{
       keterangan_barang: map["keterangan_barang"],
       tanggal_order: map["tanggal_order"],
       keterangan_deposit: map["keterangan_deposit"],
+      no_ovo: map["no_ovo"]
     );
   }
 
@@ -88,6 +90,7 @@ class OrderProduk{
       "keterangan_barang": keterangan_barang,
       "tanggal_order": tanggal_order,
       "keterangan_deposit": keterangan_deposit,
+      "no_ovo": no_ovo
     };
   }
 
@@ -118,6 +121,7 @@ class OrderProduk{
         'keterangan_barang: $keterangan_barang,'
         'tanggal_order: $tanggal_order,'
         'keterangan_deposit: $keterangan_deposit,'
+        'no_ovo: $no_ovo,'
         '}';
   }
 

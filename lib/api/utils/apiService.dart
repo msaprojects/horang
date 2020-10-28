@@ -30,9 +30,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  // final String baseUrl = "http://192.168.1.243:9992/api/";
+  final String baseUrl = "http://192.168.1.219:9992/api/";
   // final String baseUrl = "http://104.199.147.100:9992/api/";
-  final String baseUrl = "http://server.horang.id:9992/api/";
+  // final String baseUrl = "http://server.horang.id:9992/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
@@ -175,6 +175,7 @@ class ApiService {
     var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
     responseCode = ResponseCode.fromJson(message);
+    print(token.access_token);
     if (response.statusCode == 200) {
 //      Share Preference
       SharedPreferences sp = await SharedPreferences.getInstance();

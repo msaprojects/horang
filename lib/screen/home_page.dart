@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:ui';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -199,24 +199,77 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.all(40),
                       constraints: BoxConstraints.expand(height: 225),
                       decoration: BoxDecoration(
-                        gradient: new LinearGradient(
-                            colors: [Colors.lightBlue, Colors.lightGreen],
-                            begin: const FractionalOffset(1.0, 1.0),
-                            end: const FractionalOffset(0.2, 0.2),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
-                      ),
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [Colors.purple,Colors.blue],
+                          // tileMode: TileMode.repeated
+                        ),
+                        // color: Colors.blue[400]
+                        ),
                       child: Container(
                         padding: EdgeInsets.only(top: 50),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('Find Your New Job', style: GoogleFonts.lato())
+                            Text('SALDO CASH',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14, color: Colors.white)),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.account_balance_wallet,
+                                  size: 24,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "1280K",
+                                  style: GoogleFonts.inter(
+                                      color: Colors.black,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Spacer(),
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.refresh,
+                                          size: 24, color: Colors.white),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      RaisedButton(
+                                        color: Colors.green[300],
+                                        onPressed: (){},
+                                        child: Text("TOP UP", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                        )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              "SALDO POINT",
+                              style: GoogleFonts.inter(
+                                  color: Colors.white, fontSize: 14),
+                            )
                           ],
                         ),
                       ),
                     ),
-                    VoucherDashboard(),
+                    // Container(
+                    //   padding: EdgeInsets.only(top: 50),
+                    //   child: VoucherDashboard(),
+                    // ),
+                    // VoucherDashboard(),
                     Container(
                       padding: EdgeInsets.only(left: 50, right: 50),
                       margin: EdgeInsets.only(top: 190),
