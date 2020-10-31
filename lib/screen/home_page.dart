@@ -341,7 +341,7 @@ class _HomePageState extends State<HomePage> {
           ),
           StorageActive(),
           Container(
-            height: 20,
+            height: 10,
             color: Colors.grey[300],
           ),
           Container(
@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> {
             child: VoucherDashboard(),
           ),
           Container(
-            height: 20,
+            height: 10,
             color: Colors.grey[300],
           ),
           ////////////////// SESI PRODUK ////////////////////////
@@ -465,13 +465,13 @@ class _HomePageState extends State<HomePage> {
   String ucapan() {
     var jam = DateTime.now().hour;
     if (jam <= 12) {
-      return 'Pagi mas';
+      return 'Pagi kak';
     } else if ((jam > 12) && (jam <= 15)) {
-      return 'Siang mas';
+      return 'Siang kak';
     } else if ((jam > 15) && (jam < 20)) {
-      return 'Sore mas';
+      return 'Sore kak';
     } else {
-      return 'Malam mas';
+      return 'Malam kak';
     }
   }
 

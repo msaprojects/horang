@@ -107,11 +107,26 @@ class _VoucherDashboard extends State<VoucherDashboard> {
     return Column(
       children: <Widget>[
         Container(
+          child: Text("Promo", style: mTitleStyle,),
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+        Container(
           alignment: Alignment.centerLeft,
           // margin: EdgeInsets.only(left: 16, right: 16),
           width: MediaQuery.of(context).size.width,
           height: 200,
           child: Swiper(
+            // pagination: new SwiperPagination(),
+            pagination: new SwiperPagination(
+              alignment: Alignment.bottomCenter,
+              builder: new DotSwiperPaginationBuilder(
+                color: Colors.grey, activeColor: Colors.red),
+            ),
+            control: new SwiperControl(
+              color: Color(0xff38547C)
+            ),
+            loop: false,
             autoplay: true,
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
@@ -141,9 +156,6 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             },
             itemCount: dataIndex.length,
           ),
-        ),
-        SizedBox(
-          height: 12,
         ),
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.end,
