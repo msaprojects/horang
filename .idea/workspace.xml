@@ -8,14 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/horang.iml" beforeDir="false" afterPath="$PROJECT_DIR$/horang.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api/utils/apiService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/utils/apiService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/.last_build_id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/PaymentPage/KonfirmPayment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/PaymentPage/KonfirmPayment.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/component/PaymentPage/Pembayaran.Input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/PaymentPage/Pembayaran.Input.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +74,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#Notifications/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601694985039" />
+    <state x="112" y="109" key="#Plugins" timestamp="1604109527179">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="112" y="109" key="#Plugins/0.23.1440.877@0.23.1440.877" timestamp="1604109527179" />
     <state x="618" y="305" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1601367841652">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
@@ -90,37 +94,41 @@
       <screen x="0" y="0" width="1536" height="832" />
     </state>
     <state x="743" y="218" key="FileChooserDialogImpl/0.0.1536.832@0.0.1536.832" timestamp="1601367474996" />
-    <state width="1398" height="293" key="GridCell.Tab.0.bottom" timestamp="1603874564960">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="983" height="293" key="GridCell.Tab.0.bottom" timestamp="1604110386351">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="293" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1603874564960" />
+    <state width="983" height="293" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1604110386351" />
     <state width="1324" height="200" key="GridCell.Tab.0.bottom/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409395" />
     <state width="1398" height="157" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572695" />
     <state width="1398" height="365" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042680" />
     <state width="1398" height="365" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414982" />
     <state width="973" height="230" key="GridCell.Tab.0.bottom/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593680" />
-    <state width="1398" height="293" key="GridCell.Tab.0.center" timestamp="1603874564958">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="983" height="293" key="GridCell.Tab.0.center" timestamp="1604110386349">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="293" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1603874564958" />
+    <state width="983" height="293" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1604110386349" />
     <state width="1324" height="200" key="GridCell.Tab.0.center/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409392" />
     <state width="1398" height="157" key="GridCell.Tab.0.center/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572684" />
     <state width="1398" height="365" key="GridCell.Tab.0.center/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042675" />
     <state width="1398" height="365" key="GridCell.Tab.0.center/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414979" />
     <state width="973" height="230" key="GridCell.Tab.0.center/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593678" />
-    <state width="1398" height="293" key="GridCell.Tab.0.left" timestamp="1603874564957">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="983" height="293" key="GridCell.Tab.0.left" timestamp="1604110386348">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="293" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1603874564957" />
+    <state width="983" height="293" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1604110386348" />
     <state width="1324" height="200" key="GridCell.Tab.0.left/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409391" />
     <state width="1398" height="157" key="GridCell.Tab.0.left/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572683" />
     <state width="1398" height="365" key="GridCell.Tab.0.left/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042673" />
     <state width="1398" height="365" key="GridCell.Tab.0.left/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414977" />
     <state width="973" height="230" key="GridCell.Tab.0.left/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593677" />
-    <state width="1398" height="293" key="GridCell.Tab.0.right" timestamp="1603874564959">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="983" height="293" key="GridCell.Tab.0.right" timestamp="1604110386351">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1398" height="293" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1603874564959" />
+    <state width="983" height="293" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1604110386351" />
     <state width="1324" height="200" key="GridCell.Tab.0.right/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409394" />
     <state width="1398" height="157" key="GridCell.Tab.0.right/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572685" />
     <state width="1398" height="365" key="GridCell.Tab.0.right/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042679" />

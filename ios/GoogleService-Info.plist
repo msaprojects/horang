@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>13725637832-n2jkh2e7o825l742j91vr5mpmmg283jj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.13725637832-n2jkh2e7o825l742j91vr5mpmmg283jj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB0Opkci6O6q1LE-P-EHA-tJen89P32u1U</string>
+	<key>GCM_SENDER_ID</key>
+	<string>13725637832</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cvdtc.horang</string>
+	<key>PROJECT_ID</key>
+	<string>horang-2020</string>
+	<key>STORAGE_BUCKET</key>
+	<string>horang-2020.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:13725637832:ios:3c172126d589f73fce59fd</string>
+	<key>DATABASE_URL</key>
+	<string>https://horang-2020.firebaseio.com</string>
+</dict>
+</plist>

@@ -226,7 +226,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               ),
               onPressed: () {
                 setState(() {
-                  print("Haduh : "+_noOvo.text.toString());
+                  print("Haduh : " + _noOvo.text.toString());
                   OrderProduk orderproduk = OrderProduk(
                       idjenis_produk: kidjenis_produk,
                       idlokasi: kidlokasi,
@@ -235,7 +235,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       idvoucher: kidvoucher,
                       flagasuransi: kflagasuransi,
                       flagvoucher: kflagvoucher,
-                      idpayment_gateway: int.parse(kidpayment_gateway.toString()),
+                      idpayment_gateway:
+                          int.parse(kidpayment_gateway.toString()),
                       flag_selesai: 0,
                       total_harga: kstotal_harga,
                       harga: ksharga,

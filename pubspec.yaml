@@ -43,6 +43,7 @@ dependencies:
   firebase_messaging: any
   timeline_tile: ^1.0.0
   connectivity: ^0.4.9+5
+  firebase_core: ^0.5.1
 
 dev_dependencies:
   flutter_test:
