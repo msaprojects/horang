@@ -4,6 +4,7 @@ import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -97,6 +98,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   TextEditingController _noOvo = TextEditingController();
 
   cekToken() async {
+    print("masuk1");
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
@@ -104,24 +106,29 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
+      print("masuk2");
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
           (Route<dynamic> route) => false);
     } else {
+      print("masuk3");
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
+              print("masuk4");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
+                          print("masuk5");
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
+                          print("masuk6");
                           showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
@@ -260,14 +267,21 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       // _scaffoldState.currentState.showSnackBar(SnackBar(
                       //   content: Text("Berhasil"),
                       // ));
-                      print("ID TIDAK ORDER KOSONG");
+                      print("ID TIDAK ORDER KOSONG"+access_token);
                       _apiService.listOrderSukses(access_token, idorder);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => KonfirmasiOrderDetail()));
+                              builder: (context) => KonfirmasiOrderDetail(
+                                idorder: idorder,
+                              )));
                     } else {
-                      print("gagal");
+                      // print("gagal");
+                      if (_apiService.responseCode.sStatusCode == 204) {
+                        print("Container tidak tersedia");
+                      } else {
+                        print("Harap ulangi transaksi");
+                      }
                     }
                   });
                 });

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -380,17 +381,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       children: <Widget>[
                         Checkbox(
                           value: true,
-                          onChanged: (bool depositt){
-                            setState(() {
-
-                            });
+                          onChanged: (bool depositt) {
+                            setState(() {});
                           },
                         ),
-                        SizedBox(width: 8,),
-                        Text("Deposit terpakai "+rupiah(harga,
-                            separator: ',',
-                            trailing: '.00')
-                        )
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text("Deposit terpakai " +
+                            rupiah(harga, separator: ',', trailing: '.00'))
                       ],
                     ),
                   ),
@@ -423,15 +422,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         setState(() {
                                           asuransi = asuransii;
                                           if (asuransi == true) {
-                                           asuransie = 1;
+                                            asuransie = 1;
 
                                             // getAsuransi();
-                                           hasilperhitungan = hitungall(
-                                               harga.toString(),
-                                               jumlah_sewas.toString(),
-                                               nomasuransi.toString());
+                                            hasilperhitungan = hitungall(
+                                                harga.toString(),
+                                                jumlah_sewas.toString(),
+                                                nomasuransi.toString());
                                           } else {
-                                           asuransie = 0;
+                                            asuransie = 0;
                                             nomasuransi = 0;
                                             hasilperhitungan = hitungall(
                                                 harga.toString(),
@@ -535,35 +534,52 @@ class _FormDetailOrder extends State<FormInputOrder> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+            // padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+            padding: EdgeInsets.all(10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Expanded(
-                    child: SingleChildScrollView(
-                  child: Container(
-                    width: 320,
-                    height: 60,
-                    margin: EdgeInsets.only(top: 3),
-                    child: RaisedButton(
-                      color: Colors.green,
-                      onPressed: () {
-                        orderConfirmation(context);
-                      },
-                      child: Text(
-                        "Lanjutkan Pembayaran",
+                Container(
+                  child: Column(
+                    children: [
+                      Text("Total Bayar",
+                          style: GoogleFonts.lato(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(hasilperhitungan)
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 200,
+                  height: 60,
+                  // margin: EdgeInsets.only(top: 3),
+                  child: OutlineButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.red)
+                    ),
+                    color: Colors.green,
+                    onPressed: () {
+                      orderConfirmation(context);
+                    },
+                    child: Text(
+                      "Lanjutkan Pembayaran",
 //                            rupiah(
 //                              hasilperhitungan,
 //                            ),
 
-                        // "Bayar Rp. " + hasilperhitungan,
-                        style: (TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.white)),
-                      ),
+                      // "Bayar Rp. " + hasilperhitungan,
+                      style: (TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black)),
                     ),
                   ),
-                )),
+                ),
               ],
             ),
           )

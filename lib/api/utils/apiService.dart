@@ -30,9 +30,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  // final String baseUrl = "http://192.168.1.219:9992/api/";
+  final String baseUrl = "http://192.168.1.219:9992/api/";
   // final String baseUrl = "http://104.199.147.100:9992/api/";
-  final String baseUrl = "http://server.horang.id:9992/api/";
+  // final String baseUrl = "http://server.horang.id:9992/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
@@ -71,8 +71,12 @@ class ApiService {
   Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
     final response = await client.get("$baseUrl/orderdet/$idorder",
         headers: {"Authorization": "BEARER ${token}"});
+    print("cek stsscode ${response.statusCode}+ $token");
+    print("cek body" +response.body);
+    print("token"+ token);
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
+      
     } else {
       return null;
     }
@@ -395,6 +399,7 @@ class ApiService {
   Future<bool> checkingToken(String token) async {
     final response = await client.get("$baseUrl/ceklogin",
         headers: {"Authorization": "BEARER ${token}"});
+        print("cekkk123 ${token}+${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
     } else {

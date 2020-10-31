@@ -272,11 +272,11 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 IconButton(
-                                    icon: Icon(Icons.qr_code_scanner_rounded,
+                                    icon: Icon(Icons.refresh_rounded,
                                         size: 30),
                                     onPressed: () {}),
                                 Text(
-                                  "Scan",
+                                  "Refresh",
                                   style: GoogleFonts.inter(
                                       fontSize: 14, color: Colors.black),
                                 )
