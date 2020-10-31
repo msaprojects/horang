@@ -202,67 +202,56 @@ class _HomePageState extends State<HomePage> {
                         gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
-                          colors: [Colors.purple,Colors.blue],
+                          colors: [Colors.purple, Colors.blue],
                           // tileMode: TileMode.repeated
                         ),
                         // color: Colors.blue[400]
-                        ),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('SALDO CASH',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14, color: Colors.white)),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Row(
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Row(
                               children: [
-                                Icon(
-                                  Icons.account_balance_wallet,
-                                  size: 24,
-                                ),
+                                Text(
+                                  "${ucapan()}, $nama_customer",
+                                  // ucapan(),
+                                  style: GoogleFonts.inter(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('SALDO POINT',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14, color: Colors.white)),
                                 SizedBox(
-                                  width: 8,
+                                  height: 10,
                                 ),
                                 Text(
                                   "1280K",
                                   style: GoogleFonts.inter(
-                                      color: Colors.black,
-                                      fontSize: 24,
+                                      color: Colors.white,
+                                      fontSize: 35,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Spacer(),
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.refresh,
-                                          size: 24, color: Colors.white),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      RaisedButton(
-                                        color: Colors.green[300],
-                                        onPressed: (){},
-                                        child: Text("TOP UP", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                                        )
-                                    ],
-                                  ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  "SALDO TERPAKAI 2.879K",
+                                  style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize: 14),
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "SALDO POINT",
-                              style: GoogleFonts.inter(
-                                  color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     // Container(
@@ -276,8 +265,40 @@ class _HomePageState extends State<HomePage> {
                       height: 100,
                       width: 500,
                       child: Card(
-                        child: Column(
-                          children: [Text("data")],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                    icon: Icon(Icons.qr_code_scanner_rounded,
+                                        size: 30),
+                                    onPressed: () {}),
+                                Text(
+                                  "Scan",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 14, color: Colors.black),
+                                )
+                              ],
+                            ),
+                            VerticalDivider(
+                              color: Colors.black.withOpacity(0.3),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                    icon: Icon(Icons.history, size: 30),
+                                    onPressed: () {}),
+                                Text(
+                                  "Histori",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 14, color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     )
@@ -319,7 +340,18 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           StorageActive(),
-
+          Container(
+            height: 20,
+            color: Colors.grey[300],
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            child: VoucherDashboard(),
+          ),
+          Container(
+            height: 20,
+            color: Colors.grey[300],
+          ),
           ////////////////// SESI PRODUK ////////////////////////
           Container(
             child: Row(
@@ -429,6 +461,19 @@ class _HomePageState extends State<HomePage> {
   //         return alert;
   //       });
   // }
+
+  String ucapan() {
+    var jam = DateTime.now().hour;
+    if (jam <= 12) {
+      return 'Pagi mas';
+    } else if ((jam > 12) && (jam <= 15)) {
+      return 'Siang mas';
+    } else if ((jam > 15) && (jam < 20)) {
+      return 'Sore mas';
+    } else {
+      return 'Malam mas';
+    }
+  }
 
   void getDataFcm(Map<String, dynamic> message) {
     String name = '';
