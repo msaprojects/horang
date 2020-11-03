@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: size.height * 0.03,
                   ),
                   SvgPicture.asset(
-                    "assets/svg/logo_gudang.svg",
+                    "assets/image/logogudang.png",
                     height: 150,
                     width: 150,
                   ),

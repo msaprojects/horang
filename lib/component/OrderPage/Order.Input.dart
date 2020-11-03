@@ -558,10 +558,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   height: 60,
                   // margin: EdgeInsets.only(top: 3),
                   child: OutlineButton(
+                    focusColor: Colors.green,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.red)
-                    ),
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.red)),
                     color: Colors.green,
                     onPressed: () {
                       orderConfirmation(context);
@@ -639,13 +639,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
               nominal_barang: _nominalbarang.text.toString(),
               total_harga: hasilperhitungan.toString());
         }));
-        _durasiorder.clear();
-        _note.clear();
+        // _durasiorder.clear();
+        // _note.clear();
       },
     );
     Widget cancelButton = FlatButton(
       child: Text("Cek Dulu"),
-      onPressed: () => Navigator.pop(context, false),
+      onPressed: () => Navigator.pop(context),
     );
     AlertDialog alert = AlertDialog(
       title: Text("Konfirmasi Pesanan"),

@@ -4,6 +4,7 @@ import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -263,24 +264,66 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       no_ovo: _noOvo.text.toString());
                   print("but if you never try " + orderproduk.toString());
                   _apiService.tambahOrderProduk(orderproduk).then((idorder) {
-                    if (idorder != 0) {
+                    if (idorder > 0) {
                       // _scaffoldState.currentState.showSnackBar(SnackBar(
                       //   content: Text("Berhasil"),
                       // ));
-                      print("ID TIDAK ORDER KOSONG"+access_token);
+                      print("ID TIDAK ORDER KOSONG" + access_token);
                       _apiService.listOrderSukses(access_token, idorder);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => KonfirmasiOrderDetail(
-                                idorder: idorder,
-                              )));
+                                    idorder: idorder,
+                                  )));
                     } else {
                       // print("gagal");
-                      if (_apiService.responseCode.sStatusCode == 204) {
+                      if (idorder == -1) {
                         print("Container tidak tersedia");
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Sesi Anda Berakhir!"),
+                                content: Text("Kontainer tidak tersedia"),
+                                actions: [
+                                  FlatButton(
+                                      color: Colors.red,
+                                      onPressed: () {
+                                        // print("skanlah1");
+                                        // Navigator.of(context).pop();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProdukList()));
+                                      },
+                                      child: Text("Ok"))
+                                ],
+                              );
+                            });
                       } else {
-                        print("Harap ulangi transaksi");
+                        print("Transaksi gagal !!");
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Sesi Anda Berakhir!"),
+                                content: Text("Transaksi gagal !!"),
+                                actions: [
+                                  FlatButton(
+                                      color: Colors.red,
+                                      onPressed: () {
+                                        // print("skanlah1");
+                                        // Navigator.of(context).pop();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProdukList()));
+                                      },
+                                      child: Text("Ok"))
+                                ],
+                              );
+                            });
                       }
                     }
                   });

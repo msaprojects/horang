@@ -136,6 +136,7 @@ class _StorageActive extends State<StorageActive> {
                   itemCount: dataIndex == null ? 0 : dataIndex.length,
                   itemBuilder: (BuildContext context, int index) {
                     MystorageModel myStorage = dataIndex[index];
+                    print("dataindex $dataIndex");
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[

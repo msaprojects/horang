@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/dummy.dart';
 import 'package:horang/screen/welcome_page.dart';
 
 void main() => runApp(MyApp());
@@ -91,8 +92,9 @@ class _HomePageState extends State<HomePage> {
         scaffoldBackgroundColor: Colors.grey[100],
       ),
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      // home: WelcomePage(),
       // home: LoginPage(),
+      home: WelcomePage(),
     );
   }
 

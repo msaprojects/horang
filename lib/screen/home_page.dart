@@ -16,6 +16,8 @@ import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+
 class HomePage extends StatefulWidget {
   int _current = 0;
   @override
@@ -272,9 +274,19 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 IconButton(
-                                    icon: Icon(Icons.refresh_rounded,
-                                        size: 30),
-                                    onPressed: () {}),
+                                    icon: Icon(Icons.refresh_rounded, size: 30),
+                                    onPressed: () {
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "Fitur ini masih dalam proses pengembangan"),
+                                        duration: Duration(seconds: 5),
+                                      ));
+                                      // _scaffoldState.currentState.showSnackBar(
+                                      //     SnackBar(
+                                      //         content: Text(
+                                      //             "Fitur ini masih dalam proses pengembangan")));
+                                    }),
                                 Text(
                                   "Refresh",
                                   style: GoogleFonts.inter(
@@ -290,7 +302,18 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 IconButton(
                                     icon: Icon(Icons.history, size: 30),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      Scaffold.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            "Fitur ini masih dalam proses pengembangan"),
+                                        duration: Duration(seconds: 5),
+                                      ));
+                                      // _scaffoldState.currentState.showSnackBar(
+                                      //     SnackBar(
+                                      //         content: Text(
+                                      //             "Fitur ini masih dalam proses pengembangan")));
+                                    }),
                                 Text(
                                   "Histori",
                                   style: GoogleFonts.inter(
@@ -325,14 +348,14 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                  child: SelectableText(
-                    "See All...",
+                  child: SelectableText("",
+                    // "See All...",
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProdukList()));
+                              builder: (context) => StorageActive()));
                     },
                   ),
                 ),
@@ -340,6 +363,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           StorageActive(),
+          SizedBox(
+            height: 10,
+          ),
           Container(
             height: 10,
             color: Colors.grey[300],

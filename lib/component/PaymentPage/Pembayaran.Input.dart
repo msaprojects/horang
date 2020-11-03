@@ -18,6 +18,7 @@ class FormInputPembayaran extends StatefulWidget {
 //  OrderProduk orderProduk;
 //  BodyPembayaran({this.orderProduk});
   bool warna;
+
   var idlokasi,
       idjenis_produk,
       idcustomer,
@@ -71,6 +72,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   int _currentIndex = 1;
   String rgValue = "";
   bool _sel = false, isEnabled = true;
+  bool asuransi = false;
 
   SharedPreferences sp;
   bool isSuccess = false;
@@ -536,8 +538,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      _tripModalBottomSheet(
-                          context, pymentgtwy.idpayment_gateway);
+                      _tripModalBottomSheet(context, pymentgtwy.idpayment_gateway, pymentgtwy.nama_provider
+                          );
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -566,7 +568,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     );
   }
 
-  void _tripModalBottomSheet(context, int idpayment) {
+  void _tripModalBottomSheet(context, int idpayment, String namaprovider) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -582,7 +584,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     children: [
                       Container(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text("Konfirmasi" + idpayment.toString(),
+                        child: Text("Konfirmasi",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
@@ -616,7 +618,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         ),
                         Center(
                           child: Text(
-                              "Anda akan melakukan pembayaran menggunakan ...",
+                              "Anda akan melakukan pembayaran menggunakan $namaprovider",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.inter(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
@@ -637,12 +639,34 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
+
                           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            // Container(
+                            //   child: Row(
+                            //       children: <Widget>[
+                            //         Checkbox(
+                            //           value: asuransi,
+                            //           onChanged: (bool asuransii) {
+                            //             setState(() {
+                            //               asuransi = asuransii;
+                            //               if (asuransi == true) {
+                                           
+                            //               } else {
+                                           
+                            //               }
+                            //             });
+                            //           },
+                            //         ),
+                            //         SizedBox(width: 8.0),
+                            //         Text("Asuransi (Rp. 50.000)"),
+                            //       ],
+                            //     ),
+                            // ),
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan" + idpayment.toString(),
+                                  "Lanjutkan",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {

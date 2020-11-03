@@ -5,6 +5,7 @@ import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/OrderPage/KonfirmasiLog.dart';
 import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,32 +76,39 @@ class _StorageActive extends State<StorageActive> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _apiService.listMystorage(access_token),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<MystorageModel>> snapshot) {
-        print("hmm : ${snapshot.connectionState}");
-        if (snapshot.hasError) {
-          print(snapshot.error.toString());
-          return Center(
-            child: Text(
-                "Something wrong with message: ${snapshot.error.toString()}"),
-          );
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          List<MystorageModel> profiles = snapshot.data
-              .where((element) => element.aktif == "NONAKTIF")
-              .toList();
-          return _buildlistview(profiles);
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
+        future: _apiService.listMystorage(access_token),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<MystorageModel>> snapshot) {
+          print("hmm : ${snapshot.connectionState}");
+          if (snapshot.hasError) {
+            print(snapshot.error.toString());
+            return Center(
+              child: Text(
+                  "Something wrong with message: ${snapshot.error.toString()}"),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            print("snapsottttt ${snapshot.data == "AKTIF"}");
+            // if (snapshot.data == "AKTIF" && snapshot.data == false) {
+            //   print("sawadikap");
+            //   return Text("data kosong");
+            // } else {
+            List<MystorageModel> profiles = snapshot.data
+                .where((element) => element.aktif == "AKTIF")
+                .toList();
+            print("profile $profiles");
+            if (profiles.isNotEmpty) {
+              // print("masak air");
+              return _buildlistview(profiles);
+            } else {
+              print("gdmntit");
+              return Text("data kosong");
+            }
+          }
+        });
   }
 
   Widget _buildlistview(List<MystorageModel> dataIndex) {
@@ -111,7 +119,7 @@ class _StorageActive extends State<StorageActive> {
       margin: EdgeInsets.only(left: 16, right: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
+        itemCount: dataIndex.length,
         itemBuilder: (context, index) {
           MystorageModel kontainerActive = dataIndex[index];
           return GestureDetector(
@@ -125,9 +133,14 @@ class _StorageActive extends State<StorageActive> {
 //                        Navigator.pop(context, false);
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return FormInputOrder(
-                        // jenisProduk: jenisProduk,
-                        );
+                    return KonfirmasiLog(
+                      kode_kontainer: kontainerActive.kode_kontainer,
+                      nama_kota: kontainerActive.nama_kota,
+                      idtransaksi_detail: kontainerActive.idtransaksi_detail,
+                      idtransaksi: kontainerActive.idtransaksi,
+                      nama: kontainerActive.nama,
+                      // jenisProduk: jenisProduk,
+                    );
                   }));
                 }
               },

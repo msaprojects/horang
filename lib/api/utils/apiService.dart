@@ -30,9 +30,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  final String baseUrl = "http://192.168.1.219:9992/api/";
+  // final String baseUrl = "http://192.168.1.219:9992/api/";
   // final String baseUrl = "http://104.199.147.100:9992/api/";
-  // final String baseUrl = "http://server.horang.id:9992/api/";
+  final String baseUrl = "http://server.horang.id:9992/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
@@ -205,6 +205,8 @@ class ApiService {
     print(response.statusCode);
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
+    } else if (response.statusCode == 204) {
+      return -1;
     } else {
       return 0;
     }
@@ -259,7 +261,7 @@ class ApiService {
 
   Future<bool> UbahPin(Pin_Model data) async {
     final response = await client.post(
-      "$baseUrl/epin",
+      "$baseUrl/upin",
       headers: {"Content-type": "application/json"},
       body: PinToJson(data),
     );

@@ -1,11 +1,13 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/account_page/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+// final globalKey = GlobalKey<ScaffoldState>();
 var passKey = GlobalKey<FormFieldState>();
 
 class UbahPin extends StatefulWidget {
@@ -138,31 +140,65 @@ class _UbahPinState extends State<UbahPin> {
                             _apiService.TambahPin(pintambah).then((isSuccess) {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content:
+                                      Text("Data pin berhasil ditambahkan !"),
+                                  duration: Duration(seconds: 3),
+                                ));
                                 Keluarr();
                               } else {
-                                _scaffoldState.currentState
-                                    .showSnackBar(SnackBar(
-                                  content: Text("Submit data salah"),
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Tambah pin gagal dilakukan !"),
+                                  duration: Duration(seconds: 3),
                                 ));
                               }
                             });
                           }
                         } else {
-                          // print("cek pin ubah" + pin);
+                          print("cek pin ubah" + pin);
                           Pin_Model pinubah = Pin_Model(
                               pinlama: _controllerPassLama.text.toString(),
                               pinbaru: _controllerPassBaru.text.toString(),
                               token: access_token);
+                          print("cek pin ubah1" + pin);
                           if (widget.ubahPin == null) {
+                            print("cek pin ubah2" + pin);
                             _apiService.UbahPin(pinubah).then((isSuccess) {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
-                                Navigator.pop(
-                                    _scaffoldState.currentState.context);
+                                print("cek pin ubah3" + pin);
+                                // final snackbar = SnackBar(
+                                //     content: Text("data berhasil diubah"));
+                                // globalKey.currentState.showSnackBar(snackbar);
+                                Flushbar(
+                                  title: "Hey Ninja",
+                                  message:
+                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+                                  duration: Duration(seconds: 3),
+                                )..show(context);
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Data pin berhasil diubah"),
+                                  duration: Duration(seconds: 3),
+                                ));
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Account()),
+                                    (route) => false);
                               } else {
-                                _scaffoldState.currentState
-                                    .showSnackBar(SnackBar(
-                                  content: Text("Submit data salah"),
+                                print("cek pin ubah4" + pin);
+                                // final snackbar = SnackBar(
+                                //     content: Text("data gagal diubah"));
+                                // globalKey.currentState.showSnackBar(snackbar);
+                                // Flushbar(
+                                //   title: "Hey Ninja",
+                                //   message:
+                                //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+                                //   duration: Duration(seconds: 3),
+                                // )..show(context);
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Data pin gagal diubah !"),
+                                  duration: Duration(seconds: 3),
                                 ));
                               }
                             });
@@ -177,7 +213,7 @@ class _UbahPinState extends State<UbahPin> {
   }
 
   Widget seleksi() {
-    if (pin != "0") {
+    if (pin == "0") {
       return Container(
         child: Column(
           children: [_buildTextFieldPinBaru(), _buildTextFieldPinBaruRetype()],
@@ -274,7 +310,7 @@ class _UbahPinState extends State<UbahPin> {
         bool isFieldValid = value.trim().isNotEmpty;
         if (isFieldValid != _isFieldPinBaru) {
           setState(() => _isFieldPinBaru = isFieldValid);
-        } else if (value.length < 4){
+        } else if (value.length < 4) {
           return 'Password kurang dari 4';
         }
       },
