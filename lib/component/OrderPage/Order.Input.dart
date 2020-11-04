@@ -6,6 +6,7 @@ import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/widget/datePicker.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -647,19 +648,44 @@ class _FormDetailOrder extends State<FormInputOrder> {
       child: Text("Cek Dulu"),
       onPressed: () => Navigator.pop(context),
     );
-    AlertDialog alert = AlertDialog(
-      title: Text("Konfirmasi Pesanan"),
-      content:
-          Text("Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
-      actions: [
-        okButton,
-        cancelButton,
-      ],
-    );
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return alert;
+          return AlertDialog(
+            title: Text("Konfirmasi Pesanan"),
+            content: Text(
+                "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return FormInputPembayaran(
+                          idlokasi: idlokasi,
+                          idjenis_produk: idjenis_produk,
+                          harga: harga,
+                          keterangan: ket,
+                          jumlah_sewa: jumlah_sewas,
+                          flagasuransi: asuransie,
+                          flagvoucher: 0,
+                          idasuransi: 1,
+                          nomor_polis: "XX",
+                          tanggal_berakhir_polis: "DATE(NOW())",
+                          idvoucher: 0,
+                          kapasitas: kapasitas,
+                          alamat: alamat,
+                          tanggal_mulai: pilihtanggal,
+                          tanggal_akhir: pilihtanggal2,
+                          keterangan_barang: _keteranganbarang.text.toString(),
+                          nominal_barang: _nominalbarang.text.toString(),
+                          total_harga: hasilperhitungan.toString());
+                    }));
+                  },
+                  child: Text("Ok")),
+              cancelButton
+            ],
+          );
         });
   }
 

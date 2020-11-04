@@ -313,8 +313,6 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                                   FlatButton(
                                       color: Colors.red,
                                       onPressed: () {
-                                        // print("skanlah1");
-                                        // Navigator.of(context).pop();
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
