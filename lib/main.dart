@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
       debugShowCheckedModeBanner: false,
       // home: WelcomePage(),
       // home: LoginPage(),
-      home: WelcomePage(),
+      home: LoginPage(),
     );
   }
 

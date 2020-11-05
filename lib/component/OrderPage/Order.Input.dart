@@ -31,7 +31,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var hasilperhitungan = "0", tambahasuransi = "0";
   int jumlah_sewas;
   bool asuransi = false;
-  var asuransie = 0, nomasuransi = 50000;
+  var asuransie = 0;
+  double nomasuransi = 0.05;
+  var nomdeclarebarang = 0;
   var Value,
       title,
       valasuransi,
@@ -53,13 +55,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (picked != null && picked != _date) {
       setState(() {
         _date = picked;
-        if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 3));
+        if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 5));
         pilihtanggal = new DateFormat("yyyy-MM-dd 00:00:00").format(_date);
         jumlah_sewas = DateTime.parse(pilihtanggal2)
             .difference(DateTime.parse(pilihtanggal))
             .inDays;
         hasilperhitungan = hitungall(
-            harga.toString(), jumlah_sewas.toString(), nomasuransi.toString());
+            harga.toString(), jumlah_sewas.toString(), nomasuransi, _nominalbarang.text.toString());
       });
     } else {}
   }
@@ -74,13 +76,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (picked != null && picked != _date2) {
       setState(() {
         _date2 = picked;
-        if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 3));
+        if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 5));
         pilihtanggal2 = new DateFormat("yyyy-MM-dd 00:00:00").format(_date2);
         jumlah_sewas = DateTime.parse(pilihtanggal2)
             .difference(DateTime.parse(pilihtanggal))
             .inDays;
         hasilperhitungan = hitungall(
-            harga.toString(), jumlah_sewas.toString(), nomasuransi.toString());
+            harga.toString(), jumlah_sewas.toString(), nomasuransi, _nominalbarang.text.toString());
       });
     } else {}
   }
@@ -103,10 +105,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
     setState(() {
       nomasuransi = json.decode(response.body)[0]['nilai'];
       hasilperhitungan = hitungall(
-          harga.toString(),
-          jumlah_sewas.toString(),
-          nomasuransi
-              .toString()); //      print(json.decode(response.body)[0]['nilai']);
+          harga.toString(), jumlah_sewas.toString(), nomasuransi.toString(), _nominalbarang.text.toString());
+//      print(json.decode(response.body)[0]['nilai']);
 //    print (nomasuransi.toString());
 //      _dataAsuransi = listdata;
     });
@@ -121,12 +121,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
       nama_customer,
       idlokasi = 0;
 
-  String hitungall(String harga, String durasi, String asuransi) {
-    print(((double.parse(harga) * double.parse(durasi)) *
-            (1 + (double.parse(asuransi) / 100)))
+  String hitungall(String harga, String durasi, double asuransi, String nominalbaranginput) {
+    print("PRINT PERHITUNGAN : "+((double.parse(harga) * double.parse(durasi)) +
+        (asuransi / 100)) * double.parse(nominalbaranginput))
         .toString());
-    return ((double.parse(harga) * double.parse(durasi)) *
-            (1 + (double.parse(asuransi) / 100)))
+    return ((double.parse(harga) * double.parse(durasi)) +
+            (asuransi / 100) * double.parse(nominalbaranginput)))
         .toString();
   }
 
@@ -429,14 +429,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             hasilperhitungan = hitungall(
                                                 harga.toString(),
                                                 jumlah_sewas.toString(),
-                                                nomasuransi.toString());
+                                                nomasuransi.toString(), _nominalbarang.text.toString());
                                           } else {
                                             asuransie = 0;
                                             nomasuransi = 0;
                                             hasilperhitungan = hitungall(
                                                 harga.toString(),
                                                 jumlah_sewas.toString(),
-                                                nomasuransi.toString());
+                                                nomasuransi.toString(), _nominalbarang.text.toString());
                                           }
                                         });
                                       },
@@ -565,7 +565,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         side: BorderSide(color: Colors.red)),
                     color: Colors.green,
                     onPressed: () {
-                      orderConfirmation(context);
+                      setState(() {
+                        if (asuransi == true) {
+                          asuransie = 1;
+                          hasilperhitungan = hitungall(harga.toString(),
+                              jumlah_sewas.toString(), nomasuransi.toString(), _nominalbarang.text.toString());
+                        } else {
+                          asuransie = 0;
+                          nomasuransi = 0;
+                          hasilperhitungan = hitungall(harga.toString(),
+                              jumlah_sewas.toString(), nomasuransi.toString(), _nominalbarang.text.toString());
+                        }
+
+                        orderConfirmation(context);
+                      });
                     },
                     child: Text(
                       "Lanjutkan Pembayaran",
@@ -652,7 +665,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Konfirmasi Pesanan"),
+            title: Text("Konfirmasi Pesanan Rp. "+_nominalbarang.text.toString()),
             content: Text(
                 "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
             actions: [
