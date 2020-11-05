@@ -121,12 +121,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
       nama_customer,
       idlokasi = 0;
 
-  String hitungall(String harga, String durasi, double asuransi, String nominalbaranginput) {
+  String hitungall(String harga, String durasi, String asuransi, String nominalbaranginput) {
     print("PRINT PERHITUNGAN : "+((double.parse(harga) * double.parse(durasi)) +
-        (asuransi / 100)) * double.parse(nominalbaranginput))
+        ((double.parse(asuransi) / 100)) * double.parse(nominalbaranginput))
         .toString());
     return ((double.parse(harga) * double.parse(durasi)) +
-            (asuransi / 100) * double.parse(nominalbaranginput)))
+            ((double.parse(asuransi) / 100) * double.parse(nominalbaranginput)))
         .toString();
   }
 
