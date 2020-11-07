@@ -8,8 +8,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/component/OrderPage/Order.Input2.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api/utils/apiService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/utils/apiService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/DashboardPage/Produk.Dashboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/DashboardPage/Produk.Dashboard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/DashboardPage/Storage.Active.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/DashboardPage/Storage.Active.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/HistoryPage/historypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/HistoryPage/historypage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/OrderPage/Order.Input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/OrderPage/Order.Input.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,18 +44,18 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/flutter/bin/cache/dart-sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/component/OrderPage" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/component/OrderPage" />
       <recent name="$PROJECT_DIR$/lib/api/models/order" />
       <recent name="$PROJECT_DIR$/lib/component/WelcomeScreenPage" />
       <recent name="$PROJECT_DIR$/assets/svg" />
       <recent name="$PROJECT_DIR$/assets/image" />
-      <recent name="$PROJECT_DIR$/android/app" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -89,40 +97,40 @@
       <screen x="0" y="0" width="1536" height="832" />
     </state>
     <state x="743" y="218" key="FileChooserDialogImpl/0.0.1536.832@0.0.1536.832" timestamp="1601367474996" />
-    <state width="1398" height="311" key="GridCell.Tab.0.bottom" timestamp="1604566048371">
+    <state width="698" height="311" key="GridCell.Tab.0.bottom" timestamp="1604737870947">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="311" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1604566048371" />
+    <state width="698" height="311" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1604737870947" />
     <state width="983" height="293" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1604110386351" />
     <state width="1324" height="200" key="GridCell.Tab.0.bottom/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409395" />
     <state width="1398" height="157" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572695" />
     <state width="1398" height="365" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042680" />
     <state width="1398" height="365" key="GridCell.Tab.0.bottom/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414982" />
     <state width="973" height="230" key="GridCell.Tab.0.bottom/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593680" />
-    <state width="1398" height="311" key="GridCell.Tab.0.center" timestamp="1604566048369">
+    <state width="698" height="311" key="GridCell.Tab.0.center" timestamp="1604737870946">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="311" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1604566048369" />
+    <state width="698" height="311" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1604737870946" />
     <state width="983" height="293" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1604110386349" />
     <state width="1324" height="200" key="GridCell.Tab.0.center/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409392" />
     <state width="1398" height="157" key="GridCell.Tab.0.center/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572684" />
     <state width="1398" height="365" key="GridCell.Tab.0.center/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042675" />
     <state width="1398" height="365" key="GridCell.Tab.0.center/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414979" />
     <state width="973" height="230" key="GridCell.Tab.0.center/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593678" />
-    <state width="1398" height="311" key="GridCell.Tab.0.left" timestamp="1604566048369">
+    <state width="698" height="311" key="GridCell.Tab.0.left" timestamp="1604737870946">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="311" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1604566048369" />
+    <state width="698" height="311" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1604737870946" />
     <state width="983" height="293" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1604110386348" />
     <state width="1324" height="200" key="GridCell.Tab.0.left/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409391" />
     <state width="1398" height="157" key="GridCell.Tab.0.left/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572683" />
     <state width="1398" height="365" key="GridCell.Tab.0.left/1440.0.1440.900/0.0.1440.900@1440.0.1440.900" timestamp="1601530042673" />
     <state width="1398" height="365" key="GridCell.Tab.0.left/1440.0.1440.900/0.23.1440.877@1440.0.1440.900" timestamp="1601529414977" />
     <state width="973" height="230" key="GridCell.Tab.0.left/1440.23.1440.877/0.23.1440.877@1440.23.1440.877" timestamp="1601098593677" />
-    <state width="1398" height="311" key="GridCell.Tab.0.right" timestamp="1604566048370">
+    <state width="698" height="311" key="GridCell.Tab.0.right" timestamp="1604737870947">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="311" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1604566048370" />
+    <state width="698" height="311" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1604737870947" />
     <state width="983" height="293" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1604110386351" />
     <state width="1324" height="200" key="GridCell.Tab.0.right/1440.0.1366.768/0.0.1440.900@1440.0.1366.768" timestamp="1601252409394" />
     <state width="1398" height="157" key="GridCell.Tab.0.right/1440.0.1440.900/0.0.1440.900@0.0.1440.900" timestamp="1601712572685" />

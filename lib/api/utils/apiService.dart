@@ -97,6 +97,7 @@ class ApiService {
   Future<List<MystorageModel>> listMystorage(String token) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
+    print("JSON LIST STORAGE"+response.body);
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
     } else {

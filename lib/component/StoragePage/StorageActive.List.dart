@@ -239,41 +239,9 @@ class _StorageActive extends State<StorageActive> {
                                                 }));
                                               }
                                             },
-                                            child: Text("Cek Details..."),
+                                            child: Text("Cek Details..."+myStorage.idtransaksi_detail.toString()),
                                           ),
                                         ),
-                                        // SizedBox(
-                                        //   width: 10,
-                                        // ),
-                                        // ButtonTheme(
-                                        //   minWidth: 50,
-                                        //   height: 30,
-                                        //   child: RaisedButton(
-                                        //     color: Colors.transparent,
-                                        //     onPressed: () {},
-                                        //     child: Text(
-                                        //       "Open",
-                                        //       style: TextStyle(
-                                        //           color: Colors.white),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // SizedBox(
-                                        //   width: 10,
-                                        // ),
-                                        // ButtonTheme(
-                                        //   minWidth: 50,
-                                        //   height: 30,
-                                        //   child: RaisedButton(
-                                        //     color: Colors.green,
-                                        //     onPressed: () {},
-                                        //     child: Text(
-                                        //       "Selesai",
-                                        //       style: TextStyle(
-                                        //           color: Colors.white),
-                                        //     ),
-                                        //   ),
-                                        // ),
                                       ],
                                     )
                                   ],

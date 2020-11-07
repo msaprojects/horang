@@ -6,13 +6,15 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/dummy.dart';
 import 'package:horang/screen/welcome_page.dart';
 
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: HomePage(),
     );
   }
@@ -92,9 +94,9 @@ class _HomePageState extends State<HomePage> {
         scaffoldBackgroundColor: Colors.grey[100],
       ),
       debugShowCheckedModeBanner: false,
-      // home: WelcomePage(),
+      home: WelcomePage(),
       // home: LoginPage(),
-      home: LoginPage(),
+      // home: LoginPage(),
     );
   }
 
