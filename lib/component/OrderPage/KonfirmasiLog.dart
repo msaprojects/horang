@@ -110,8 +110,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
 
   @override
   Widget build(BuildContext context) {
-    // print(statussk.status);
-    // print('pymnt :'+statussk.nama_provider);
     print("NAMAAAAAA : ${nama_kota1}");
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
     return Scaffold(

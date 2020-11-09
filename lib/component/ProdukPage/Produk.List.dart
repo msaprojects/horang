@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:connectivity/connectivity.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
+import 'package:horang/widget/datePicker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class ProdukList extends StatefulWidget {
   @override
@@ -29,6 +31,10 @@ class _ProdukList extends State<ProdukList> {
   String urlcomboKota = "http://server.horang.id:9992/api/lokasi/", valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
+  DateTime dtAwal, dtAkhir, _date, _date2;
+  var tglAwal, tglAkhir, pilihtanggal, pilihtanggal2;
+  TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
+  TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
   List<dynamic> _dataKota = List();
   void getcomboProduk() async {
@@ -38,6 +44,36 @@ class _ProdukList extends State<ProdukList> {
     setState(() {
       _dataKota = listdata;
     });
+  }
+
+  Future<void> _selectionDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      helpText: 'Select Tanggal Order ',
+    );
+    if (picked != null && picked != _date) {
+      setState(() {
+        _date = picked;
+      });
+    } else {}
+  }
+
+  Future<void> _selectionDate2(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _date2,
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2030),
+        helpText: 'Select Tanggal Order '
+    );
+    if (picked != null && picked != _date2) {
+      setState(() {
+        _date2 = picked;
+      });
+    } else {}
   }
 
   StreamSubscription connectivityStream;
@@ -123,6 +159,10 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   void initState() {
+    dtAwal = DateTime.now();
+    dtAkhir = DateTime.now();
+    _date = DateTime.now();
+    _date2 = DateTime.now();
     super.initState();
     _cekKoneksi();
     cekToken();
@@ -170,7 +210,6 @@ class _ProdukList extends State<ProdukList> {
   }
 
   Widget _buildListView(List<JenisProduk> dataIndex) {
-    print("FILTER : " + nama_customer);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -191,6 +230,52 @@ class _ProdukList extends State<ProdukList> {
       ),
       body: Column(
         children: <Widget>[
+          Container(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(
+                            bottom: 8, left: 30, top: 8),
+                        child: Text(
+                          "Durasi Sewa",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TanggalSet(
+                        labelText: tglAwal,
+                        valueText:
+                        new DateFormat('dd/MM/yyyy').format(_date),
+                        valueStyle: valueTglAwal,
+                        onPressed: () {
+                          _selectionDate(context);
+                          dtAwal = _date;
+                        },
+                      ),
+                      TanggalSet(
+                        labelText: tglAkhir,
+                        valueText:
+                        new DateFormat('dd/MM/yyyy').format(_date2),
+                        valueStyle: valueTglAkhir,
+                        onPressed: () {
+                          _selectionDate2(context);
+                          dtAkhir = _date2;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Container(
             margin: EdgeInsets.only(left: 16, right: 16),
             child: TextField(

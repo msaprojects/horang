@@ -239,7 +239,9 @@ class _StorageActive extends State<StorageActive> {
                                                 }));
                                               }
                                             },
-                                            child: Text("Cek Details..."+myStorage.idtransaksi_detail.toString()),
+                                            child: Text("Cek Details..." +
+                                                myStorage.idtransaksi_detail
+                                                    .toString()),
                                           ),
                                         ),
                                       ],
