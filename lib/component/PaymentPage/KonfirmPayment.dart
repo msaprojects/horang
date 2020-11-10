@@ -5,6 +5,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -295,7 +296,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ProdukList()));
+                                                    Home()));
                                       },
                                       child: Text("Ok"))
                                 ],

@@ -44,6 +44,7 @@ dependencies:
   timeline_tile: ^1.0.0
   connectivity: ^0.4.9+5
   firebase_core: ^0.5.1
+  syncfusion_flutter_datepicker: ^18.3.47-beta
 
 dev_dependencies:
   flutter_test:

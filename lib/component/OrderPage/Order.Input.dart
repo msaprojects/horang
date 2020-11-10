@@ -717,8 +717,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idvoucher: 0,
                           kapasitas: kapasitas,
                           alamat: alamat,
-                          tanggal_mulai: _date,
-                          tanggal_akhir: pilihtanggal2,
+                          tanggal_mulai: _date.toString(),
+                          tanggal_akhir: _date2.toString(),
                           keterangan_barang: _keteranganbarang.text.toString(),
                           nominal_barang: _nominalbarang.text.toString(),
                           total_harga: hasilperhitungan.toString());

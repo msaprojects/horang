@@ -8,19 +8,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91d706f1-97c8-4ed7-9fe8-83b12eb0d2dd" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/OrderPage/KonfirmasiLog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/OrderPage/KonfirmasiLog.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/OrderPage/Order.Input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/OrderPage/Order.Input.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/ProdukPage/Produk.List.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/ProdukPage/Produk.List.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/component/StoragePage/StorageActive.List.dart" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< Updated upstream
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9585865a]" />
+=======
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Tab_Pixel_C]" />
+>>>>>>> Stashed changes
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -89,6 +97,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="463" y="313" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/1440.23.1440.877/0.0.1440.900@0.0.1440.900" timestamp="1601712735883" />
+    <state x="100" y="100" width="1240" height="660" key="AVDManager" timestamp="1604892011367">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="100" y="100" width="1240" height="660" key="AVDManager/0.0.1440.860@0.0.1440.860" timestamp="1604892011367" />
     <state x="743" y="218" key="FileChooserDialogImpl" timestamp="1601367474996">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
