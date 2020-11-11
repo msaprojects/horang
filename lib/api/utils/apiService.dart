@@ -196,7 +196,7 @@ class ApiService {
   }
 
 //  ORDER PRODUK
-  Future<int> tambahOrderProduk(OrderProduk data) async {
+  Future<int>tambahOrderProduk(OrderProduk data) async {
     final response = await client.post(
       "$baseUrl/order",
       headers: {"content-type": "application/json"},
@@ -288,10 +288,12 @@ class ApiService {
 
   Future<bool> UbahPassword(Password data) async {
     final response = await client.post(
-      "$baseUrl/epassword",
+      "$baseUrl/upassword",
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -403,6 +405,7 @@ class ApiService {
     final response = await client.get("$baseUrl/ceklogin",
         headers: {"Authorization": "BEARER ${token}"});
         print("cekkk123 ${token}+${response.statusCode}");
+        print(response.statusCode);
     if (response.statusCode == 200) {
       return true;
     } else {

@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
@@ -230,7 +231,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             FlatButton(
               color: Colors.green,
               child: Text(
-                "Bayar Sekarang" + kidpayment_gateway,
+                "Bayar Sekarang",
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
@@ -271,58 +272,31 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       // ));
                       print("ID TIDAK ORDER KOSONG" + access_token);
                       _apiService.listOrderSukses(access_token, idorder);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => KonfirmasiOrderDetail(
-                                    idorder: idorder,
-                                  )));
+                      successDialog(context,
+                          "Pembayaran Berhasil dilakukan, Klik 'Okey' untuk melihat detail pembayaran",
+                          showNeutralButton: false,
+                          positiveText: "Okey", positiveAction: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => KonfirmasiOrderDetail(
+                                      idorder: idorder,
+                                    )));
+                      });
                     } else {
                       // print("gagal");
                       if (idorder == -1) {
                         print("Container tidak tersedia");
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Sesi Anda Berakhir!"),
-                                content: Text("Kontainer tidak tersedia"),
-                                actions: [
-                                  FlatButton(
-                                      color: Colors.red,
-                                      onPressed: () {
-                                        // print("skanlah1");
-                                        // Navigator.of(context).pop();
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Home()));
-                                      },
-                                      child: Text("Ok"))
-                                ],
-                              );
-                            });
+                        errorDialog(
+                          context,
+                          "Kontainer tidak tersedia",
+                        );
                       } else {
                         print("Transaksi gagal !!");
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Sesi Anda Berakhir!"),
-                                content: Text("Transaksi gagal !!"),
-                                actions: [
-                                  FlatButton(
-                                      color: Colors.red,
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProdukList()));
-                                      },
-                                      child: Text("Ok"))
-                                ],
-                              );
-                            });
+                        errorDialog(
+                          context,
+                          "Transaksi gagal disimpan",
+                        );
                       }
                     }
                   });

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,41 +32,50 @@ class _FormDetailOrder extends State<FormInputOrder> {
   int jumlah_sewas;
   bool asuransi = true;
   int asuransie = 1;
-  int minimaldeposit=3; //query dari setting minimal hari deposit
-  double nomasuransi ;
+  int minimaldeposit = 3; //query dari setting minimal hari deposit
+  double nomasuransi;
   double nomdeclarebarang = 0.00;
 
   var Value,
       title,
       valasuransi,
-      urlcomboAsuransi = "http://server.horang.id:9992/api/asuransiaktif";
+      urlcomboAsuransi = "http://35.194.198.138:9992/api/asuransiaktif";
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
   DateTime dtAwal, dtAkhir, _date, _date2;
-
   var tglAwal, tglAkhir, pilihtanggal, pilihtanggal2;
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
-   Future<void> _selectionDate(BuildContext context) async {
+  Future<void> _selectionDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _date,
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        helpText: 'Select Tanggal Awal ',
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      helpText: 'Select Tanggal Awal ',
     );
     if (picked != null && picked != _date) {
       setState(() {
         _date = picked;
         if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 5));
         jumlah_sewas = diffInDays(_date2, _date);
-        if(_nominalbarang.text=="") _nominalbarang.text = "0";
-        if(!asuransi)
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, 0, _nominalbarang.text.toString());
+        if (_nominalbarang.text == "") _nominalbarang.text = "0";
+        if (!asuransi)
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              0,
+              _nominalbarang.text.toString());
         else
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, nomasuransi, _nominalbarang.text.toString());
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              nomasuransi,
+              _nominalbarang.text.toString());
       });
     } else {}
   }
@@ -76,25 +86,39 @@ class _FormDetailOrder extends State<FormInputOrder> {
         initialDate: _date2,
         firstDate: DateTime(2020),
         lastDate: DateTime(2030),
-        helpText: 'Select Tanggal Akhir '
-    );
+        helpText: 'Select Tanggal Akhir ');
     if (picked != null && picked != _date2) {
       setState(() {
         _date2 = picked;
         if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 5));
         // print(diffInDays(_date2, _date));
         jumlah_sewas = diffInDays(_date2, _date);
-        if(_nominalbarang.text=="") _nominalbarang.text = "0";
-        if(!asuransi)
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, 0, _nominalbarang.text.toString());
+        if (_nominalbarang.text == "") _nominalbarang.text = "0";
+        if (!asuransi)
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              0,
+              _nominalbarang.text.toString());
         else
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, nomasuransi, _nominalbarang.text.toString());
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              nomasuransi,
+              _nominalbarang.text.toString());
       });
     } else {}
   }
 
-  int diffInDays (DateTime date1, DateTime date2) {
-    return ((date1.difference(date2) - Duration(hours: date1.hour) + Duration(hours: date2.hour)).inHours / 24).round();
+  int diffInDays(DateTime date1, DateTime date2) {
+    return ((date1.difference(date2) -
+                    Duration(hours: date1.hour) +
+                    Duration(hours: date2.hour))
+                .inHours /
+            24)
+        .round();
   }
 
   TextEditingController _durasiorder = TextEditingController();
@@ -113,8 +137,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         headers: {"Authorization": "BEARER ${access_token}"});
     setState(() {
       nomasuransi = json.decode(response.body)[0]['nilai'];
-      hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),asuransie,
-          nomasuransi, _nominalbarang.text.toString());
+      hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
+          asuransie, nomasuransi, _nominalbarang.text.toString());
     });
   }
 
@@ -127,16 +151,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
       nama_customer,
       idlokasi = 0;
 
-  String hitungall(
-      String harga, String durasi, int boolasuransi, double asuransi, String nominalbaranginput) {
-      if (boolasuransi==0) asuransi = 0;
-        // print("PRINT PERHITUNGAN : " + asuransi.toString() + " -- " + nominalbaranginput +" -- " +
-        // ((double.parse(harga) * double.parse(durasi)) +
-        //         ((asuransi / 100)) * double.parse(nominalbaranginput))
-        //     .toStringAsFixed(2);
-      return ((double.parse(harga) * double.parse(durasi)) +
-              ((asuransi / 100) * double.parse(nominalbaranginput))+
-              minimaldeposit*double.parse(harga))
+  String hitungall(String harga, String durasi, int boolasuransi,
+      double asuransi, String nominalbaranginput) {
+    if (boolasuransi == 0) asuransi = 0;
+    // print("PRINT PERHITUNGAN : " + asuransi.toString() + " -- " + nominalbaranginput +" -- " +
+    // ((double.parse(harga) * double.parse(durasi)) +
+    //         ((asuransi / 100)) * double.parse(nominalbaranginput))
+    //     .toStringAsFixed(2);
+    return ((double.parse(harga) * double.parse(durasi)) +
+            ((asuransi / 100) * double.parse(nominalbaranginput)) +
+            minimaldeposit * double.parse(harga))
         .toStringAsFixed(2);
   }
 
@@ -147,6 +171,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+
     // print("CEKK IDCUSTOMER" + idcustomer);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
@@ -191,7 +216,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     nomasuransi = 0;
     asuransie = 1;
     jumlah_sewas = diffInDays(_date2, _date);
-    if(_nominalbarang.text=="") _nominalbarang.text = "0";
+    if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
     if (widget.jenisProduk != null) {
       idjenis_produk = widget.jenisProduk.idjenis_produk;
@@ -201,13 +226,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vKeterangan = widget.jenisProduk.keterangan;
       idlokasi = widget.jenisProduk.idlokasi;
     }
-    hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, nomasuransi, _nominalbarang.text.toString());
+    hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
+        asuransie, nomasuransi, _nominalbarang.text.toString());
     _nominalbarang.addListener(() {
       setState(() {
-        if(_nominalbarang.text=="")
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, nomasuransi, "0");
+        if (_nominalbarang.text == "")
+          hasilperhitungan = hitungall(harga.toString(),
+              jumlah_sewas.toString(), asuransie, nomasuransi, "0");
         else
-          hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(), asuransie, nomasuransi, _nominalbarang.text.toString());
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              nomasuransi,
+              _nominalbarang.text.toString());
       });
     });
     super.initState();
@@ -222,7 +254,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   Widget build(BuildContext context) {
     // print("idjenis_produk : ${idjenis_produk}");
-
     var media = MediaQuery.of(context);
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
     return Scaffold(
@@ -404,7 +435,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           width: 8,
                         ),
                         Text("Deposit Terpakai " +
-                            rupiah(harga*3, separator: ',', trailing: '.00'))
+                            rupiah(harga * 3, separator: ',', trailing: '.00'))
                       ],
                     ),
                   ),
@@ -458,7 +489,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       },
                                     ),
                                     SizedBox(width: 8.0),
-                                    Text("Asuransi ("+nomasuransi.toString()+"%)"),
+                                    Text("Asuransi (" +
+                                        nomasuransi.toString() +
+                                        "%)"),
                                   ],
                                 ),
                               ),
@@ -475,11 +508,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   onChanged: (value) {
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != _fieldketerangan) {
-                                      print ("----"+value);
+                                      print("----" + value);
                                       setState(() =>
                                           _fieldketerangan = isFieldValid);
-                                    }
-                                    else{
+                                    } else {
                                       print("valid or not");
                                     }
                                   },
@@ -498,7 +530,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != _fieldnominalbarang) {
                                       setState(() =>
-                                        _fieldnominalbarang = isFieldValid);
+                                          _fieldnominalbarang = isFieldValid);
                                     }
                                   },
                                 ),
@@ -565,7 +597,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     children: [
                       Text("Total (+ dpsit 3 hari)",
                           style: GoogleFonts.lato(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                              fontSize: 14, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 3,
                       ),
@@ -624,7 +656,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -656,35 +688,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   orderConfirmation(BuildContext context) {
     var ket = _note.text.toString();
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        setState(() => isLoading = true);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return FormInputPembayaran(
-              idlokasi: idlokasi,
-              idjenis_produk: idjenis_produk,
-              harga: harga,
-              keterangan: ket,
-              jumlah_sewa: jumlah_sewas,
-              flagasuransi: asuransie,
-              flagvoucher: 0,
-              idasuransi: 1,
-              nomor_polis: "XX",
-              tanggal_berakhir_polis: "DATE(NOW())",
-              idvoucher: 0,
-              kapasitas: kapasitas,
-              alamat: alamat,
-              tanggal_mulai: _date.toString(),
-              tanggal_akhir: _date2.toString(),
-              keterangan_barang: _keteranganbarang.text.toString(),
-              nominal_barang: _nominalbarang.text.toString(),
-              total_harga: hasilperhitungan.toString());
-        }));
-        // _durasiorder.clear();
-        // _note.clear();
-      },
-    );
     Widget cancelButton = FlatButton(
       child: Text("Cek Dulu"),
       onPressed: () => Navigator.pop(context),
@@ -693,16 +696,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
-                "Konfirmasi Pesanan Rp. " + _nominalbarang.text.toString()),
+            title: Text("Konfirmasi Pesanan Rp. " + hasilperhitungan),
             content: Text(
                 "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
             actions: [
               FlatButton(
                   color: Colors.red,
                   onPressed: () {
+                    print("cek tanggal1 $_date");
+                    print("cek tanggal2 $_date2");
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
+                        .pushReplacement(MaterialPageRoute(builder: (context) {
                       return FormInputPembayaran(
                           idlokasi: idlokasi,
                           idjenis_produk: idjenis_produk,

@@ -1,10 +1,9 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // final globalKey = GlobalKey<ScaffoldState>();
@@ -140,17 +139,15 @@ class _UbahPinState extends State<UbahPin> {
                             _apiService.TambahPin(pintambah).then((isSuccess) {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content:
-                                      Text("Data pin berhasil ditambahkan !"),
-                                  duration: Duration(seconds: 3),
-                                ));
-                                Keluarr();
+                                successDialog(context,
+                                    "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                    showNeutralButton: false,
+                                    positiveText: "Oke", positiveAction: () {
+                                  Keluarr();
+                                });
                               } else {
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text("Tambah pin gagal dilakukan !"),
-                                  duration: Duration(seconds: 3),
-                                ));
+                                errorDialog(context,
+                                    "Data gagal disimpan, silahkan dicek ulang");
                               }
                             });
                           }
@@ -167,39 +164,16 @@ class _UbahPinState extends State<UbahPin> {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
                                 print("cek pin ubah3" + pin);
-                                // final snackbar = SnackBar(
-                                //     content: Text("data berhasil diubah"));
-                                // globalKey.currentState.showSnackBar(snackbar);
-                                Flushbar(
-                                  title: "Hey Ninja",
-                                  message:
-                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-                                  duration: Duration(seconds: 3),
-                                )..show(context);
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text("Data pin berhasil diubah"),
-                                  duration: Duration(seconds: 3),
-                                ));
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Account()),
-                                    (route) => false);
+                                successDialog(context,
+                                    "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                    showNeutralButton: false,
+                                    positiveText: "Oke", positiveAction: () {
+                                  Keluarr();
+                                });
                               } else {
                                 print("cek pin ubah4" + pin);
-                                // final snackbar = SnackBar(
-                                //     content: Text("data gagal diubah"));
-                                // globalKey.currentState.showSnackBar(snackbar);
-                                // Flushbar(
-                                //   title: "Hey Ninja",
-                                //   message:
-                                //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-                                //   duration: Duration(seconds: 3),
-                                // )..show(context);
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text("Data pin gagal diubah !"),
-                                  duration: Duration(seconds: 3),
-                                ));
+                                errorDialog(context,
+                                    "Data pin gagal diubah, silahkan dicek ulang");
                               }
                             });
                           }

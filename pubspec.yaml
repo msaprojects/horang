@@ -30,7 +30,7 @@ dependencies:
   flushbar: any
   http: any
   shared_preferences: any
-  indonesia: any
+  indonesia: 1.0.1
   flutter_launcher_icons: any
   local_auth: any
   pin_code_text_field: any
@@ -44,6 +44,7 @@ dependencies:
   timeline_tile: ^1.0.0
   connectivity: ^0.4.9+5
   firebase_core: ^0.5.1
+  commons: ^0.7.8+3
   syncfusion_flutter_datepicker: ^18.3.47-beta
 
 dev_dependencies:

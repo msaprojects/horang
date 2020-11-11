@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
   final firebaseMessaging = FirebaseMessaging();
   final controllerTopic = TextEditingController();
+
   bool isSubscribed = false;
   String token = '';
   static String dataName = '';
@@ -187,7 +188,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     //print("idcustomernya adalah : " + idcustomer);
-
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
@@ -262,66 +262,73 @@ class _HomePageState extends State<HomePage> {
                     // ),
                     // VoucherDashboard(),
                     Container(
-                      padding: EdgeInsets.only(left: 50, right: 50),
-                      margin: EdgeInsets.only(top: 190),
+                      // padding: EdgeInsets.only(left: 50, right: 50),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 190, left: 20, right: 20),
                       height: 100,
-                      width: 500,
-                      child: Card(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                    icon: Icon(Icons.refresh_rounded, size: 30),
-                                    onPressed: () {
-                                      Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "Fitur ini masih dalam proses pengembangan"),
-                                        duration: Duration(seconds: 5),
-                                      ));
-                                      // _scaffoldState.currentState.showSnackBar(
-                                      //     SnackBar(
-                                      //         content: Text(
-                                      //             "Fitur ini masih dalam proses pengembangan")));
-                                    }),
-                                Text(
-                                  "Refresh",
-                                  style: GoogleFonts.inter(
-                                      fontSize: 14, color: Colors.black),
-                                )
-                              ],
-                            ),
-                            VerticalDivider(
-                              color: Colors.black.withOpacity(0.3),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                    icon: Icon(Icons.history, size: 30),
-                                    onPressed: () {
-                                      Scaffold.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "Fitur ini masih dalam proses pengembangan"),
-                                        duration: Duration(seconds: 5),
-                                      ));
-                                      // _scaffoldState.currentState.showSnackBar(
-                                      //     SnackBar(
-                                      //         content: Text(
-                                      //             "Fitur ini masih dalam proses pengembangan")));
-                                    }),
-                                Text(
-                                  "Histori",
-                                  style: GoogleFonts.inter(
-                                      fontSize: 14, color: Colors.black),
-                                )
-                              ],
-                            ),
-                          ],
+                      // width: MediaQuery.of(context).size.width * 2.0,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Center(
+                        child: Card(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      icon:
+                                          Icon(Icons.refresh_rounded, size: 30),
+                                      onPressed: () {
+                                        Scaffold.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Fitur ini masih dalam proses pengembangan"),
+                                          duration: Duration(seconds: 5),
+                                        ));
+                                        // _scaffoldState.currentState.showSnackBar(
+                                        //     SnackBar(
+                                        //         content: Text(
+                                        //             "Fitur ini masih dalam proses pengembangan")));
+                                      }),
+                                  Text(
+                                    "Refresh",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14, color: Colors.black),
+                                  )
+                                ],
+                              ),
+                              VerticalDivider(
+                                color: Colors.black.withOpacity(0.3),
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      icon: Icon(Icons.history, size: 30),
+                                      onPressed: () {
+                                        Scaffold.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Fitur ini masih dalam proses pengembangan"),
+                                          duration: Duration(seconds: 5),
+                                        ));
+                                        // _scaffoldState.currentState.showSnackBar(
+                                        //     SnackBar(
+                                        //         content: Text(
+                                        //             "Fitur ini masih dalam proses pengembangan")));
+                                      }),
+                                  Text(
+                                    "Histori",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14, color: Colors.black),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -348,7 +355,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                  child: SelectableText("",
+                  child: SelectableText(
+                    "",
                     // "See All...",
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     onTap: () {

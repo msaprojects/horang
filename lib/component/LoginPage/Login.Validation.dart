@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,17 +82,18 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true),
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: true),
     );
     firebaseMessaging.onIosSettingsRegistered.listen((settings) {
       debugPrint('Settings registered: $settings');
     });
     firebaseMessaging.getToken().then((token) => setState(() {
-      this.token = token;
-    }));
+          this.token = token;
+        }));
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Reset(
-                                          tipe: "ResendEmail",
+                                              tipe: "ResendEmail",
                                               // resendemail: Forgot_Password,
                                             )));
                               },
@@ -217,6 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                                       builder: (context) => Home()));
                             } else {
                               print("Login Gagal");
+                              errorDialog(context,
+                                  "Periksa kembali username dan password anda",
+                                  title: "Login Gagal");
 //                              _scaffoldState.currentState.showSnackBar(SnackBar(
 //                                content: Text("${_apiService.responseCode.mMessage}"),
 //                              ));
@@ -321,7 +325,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
   void getDataFcm(Map<String, dynamic> message) {
     String name = '';
     String age = '';
@@ -341,5 +344,4 @@ class _LoginPageState extends State<LoginPage> {
     }
     debugPrint('getDataFcm: name: $name & age: $age');
   }
-
 }

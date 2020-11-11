@@ -1,7 +1,9 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/account_page/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -120,33 +122,48 @@ class _UbahPassState extends State<UbahPass> {
                   child: RaisedButton(
                     child: Text("simpan"),
                     onPressed: () {
-                      // if (_isFieldpassLama == null ||
-                      //     _isFieldpassBaru == null ||
-                      //     !_isFieldpassLama ||
-                      //     !_isFieldpassBaru) {
-                      //   _scaffoldState.currentState.showSnackBar(SnackBar(
-                      //     content: Text("Please Fill all field"),
-                      //   ));
-                      //   return;
-                      // }
-                      // setState(() => _isLoading = true);
-
-                      // Password password = Password(
-                      //     passwordlama: _controllerPasslama.text.toString(),
-                      //     passwordbaru: _controllerPassbaru.text.toString(),
-                      //     token: access_token);
-                      // if (widget.password == null) {
-                      //   _apiService.UbahPassword(password).then((isSuccess) {
-                      //     setState(() => _isLoading = false);
-                      //     if (isSuccess) {
-                      //       Navigator.pop(_scaffoldState.currentState.context);
-                      //     } else {
-                      //       _scaffoldState.currentState.showSnackBar(SnackBar(
-                      //         content: Text("Update password failed"),
-                      //       ));
-                      //     }
-                      //   });
-                      // }
+                      if (_isFieldpassLama == null ||
+                          _isFieldpassBaru == null ||
+                          !_isFieldpassLama ||
+                          !_isFieldpassBaru) {
+                        _scaffoldState.currentState.showSnackBar(SnackBar(
+                          content: Text("Please Fill all field"),
+                        ));
+                        return;
+                      }
+                      setState(() => _isLoading = true);
+                      Password password = Password(
+                          passwordlama: _controllerPasslama.text.toString(),
+                          passwordbaru: _controllerPassbaru.text.toString(),
+                          token: access_token);
+                      if (widget.password == null) {
+                        print("masuk");
+                        _apiService.UbahPassword(password).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            print("sukses");
+                            successDialog(
+                                context, "Ubah password berhasil disimpan",
+                                showNeutralButton: false,
+                                positiveText: "Okeh", positiveAction: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Account()),
+                                  (Route<dynamic> route) => false);
+                            });
+                          } else {
+                            print("gagal");
+                            errorDialog(
+                                  context, 
+                                  "Ubah Password gagal disimpan, silahkan dicek ulang");
+                            // _scaffoldState.currentState.showSnackBar(SnackBar(
+                            //   content: Text("Update password failed"),
+                            // ));
+                          }
+                        });
+                      }
                     },
                   ),
                 )
@@ -189,16 +206,15 @@ class _UbahPassState extends State<UbahPass> {
       obscureText: _obsecureText,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        suffixIcon: IconButton(
-          onPressed: _toggle,
-          icon: new Icon(
-              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
-        ),
-      labelText: "Password baru",
-      errorText: _isFieldpassBaru == null || _isFieldpassBaru
-          ? null
-          : "Password is required"
-      ),
+          suffixIcon: IconButton(
+            onPressed: _toggle,
+            icon: new Icon(
+                _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+          ),
+          labelText: "Password baru",
+          errorText: _isFieldpassBaru == null || _isFieldpassBaru
+              ? null
+              : "Password is required"),
       // validator: (String value) {
       //   if (value.isEmpty) {
       //     return 'password harus di isi';

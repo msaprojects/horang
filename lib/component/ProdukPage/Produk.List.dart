@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
 import 'package:horang/widget/datePicker.dart';
@@ -190,8 +191,7 @@ class _ProdukList extends State<ProdukList> {
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
-            );
+              child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             // List<JenisProduk> profiles = snapshot.data;
             List<JenisProduk> profiles = snapshot.data
@@ -221,78 +221,18 @@ class _ProdukList extends State<ProdukList> {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.white,
+              color: Colors.transparent,
             ),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VoucherDetail()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => VoucherDetail()));
             }),
       ),
       body: Column(
         children: <Widget>[
           Container(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.only(
-                            bottom: 8, left: 30, top: 8),
-                        child: Text(
-                          "Durasi Sewa",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      TanggalSet(
-                        labelText: tglAwal,
-                        valueText:
-                        new DateFormat('dd/MM/yyyy').format(_date),
-                        valueStyle: valueTglAwal,
-                        onPressed: () {
-                          _selectionDate(context);
-                          dtAwal = _date;
-                        },
-                      ),
-                      TanggalSet(
-                        labelText: tglAkhir,
-                        valueText:
-                        new DateFormat('dd/MM/yyyy').format(_date2),
-                        valueStyle: valueTglAkhir,
-                        onPressed: () {
-                          _selectionDate2(context);
-                          dtAkhir = _date2;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16),
-            child: TextField(
-              decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[300])),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey[300],
-                  ),
-                  suffixIcon: Icon(
-                    Icons.filter_list,
-                    color: Colors.lightBlue,
-                  ),
-                  hintText: "Cari Item",
-                  focusColor: Colors.blue),
-            ),
+            alignment: Alignment.center,
+            // margin: EdgeInsets.only(left: 16, right: 16),
           ),
           SizedBox(
             height: 10,
@@ -506,11 +446,7 @@ class _ProdukList extends State<ProdukList> {
       }).toList(),
       onChanged: (value) {
         setState(() {
-          // print("cek bos");
           valKota = value;
-          // print("datakotassssssss $_dataKota");
-          // valKota = value.toString();
-          // print("damn" + value.toString());
         });
       },
     );

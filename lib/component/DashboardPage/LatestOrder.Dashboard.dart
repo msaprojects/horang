@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
@@ -96,7 +97,42 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<MystorageModel> profiles = snapshot.data;
-              return _buildlistview(profiles);
+              if (profiles.isNotEmpty) {
+                return _buildlistview(profiles);
+              } else {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Card(
+                    child: GestureDetector(
+                      onTap: () {
+                        infoDialog(context,
+                            "Data Kosong, Silahkan lakukan transaksi order terlebih dahulu !");
+                      },
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline_rounded,
+                            color: Colors.orange,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Latest Order kosong...",
+                            style: GoogleFonts.lato(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ),
+                );
+              }
             } else {
               return Center(
                 child: CircularProgressIndicator(),
@@ -186,27 +222,4 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       ),
     );
   }
-
-  // showAlertDialog(BuildContext context) {
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => LoginPage()));
-  //     },
-  //   );
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("Sesi Anda Berakhir!"),
-  //     content: Text(
-  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alert;
-  //       });
-  // }
 }

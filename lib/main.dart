@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/dummy.dart';
+import 'package:horang/component/dummy1.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/widget/bottom_nav.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -14,8 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
-      home: SyfusionDate(),
+      debugShowCheckedModeBanner: false,
+      // home: Dummy1(),
+      home: Home(),
     );
   }
 }

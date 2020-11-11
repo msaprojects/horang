@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
@@ -17,8 +17,9 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class FormInputPembayaran extends StatefulWidget {
 //  OrderProduk orderProduk;
 //  BodyPembayaran({this.orderProduk});
+  //     formatedate = DateFormat('dd-MM-yyyy').format(_date);
+  // formatedate2 = DateFormat('dd-MM-yyyy').format(_date2);
   bool warna;
-
   var idlokasi,
       idjenis_produk,
       idcustomer,
@@ -73,7 +74,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   String rgValue = "";
   bool _sel = false, isEnabled = true;
   bool asuransi = false;
-
+  String formatedate, formatedate2;
   SharedPreferences sp;
   bool isSuccess = false;
   int idorder = 0;
@@ -228,7 +229,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               bottom: 8, left: 36, top: 8),
                         ),
                         Container(
-                          padding: const EdgeInsets.only(left: 50, bottom: 15),
+                          padding: const EdgeInsets.only(left: 30, bottom: 15),
                           child: Row(
                             children: <Widget>[
                               Text("Detail Pesanan",
@@ -240,7 +241,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -261,10 +262,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   ),
                                   Text(
                                     stanggal_mulai,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text(
-                                    stanggal_akhir,
-                                  ),
+                                  Text(stanggal_akhir,
+                                      overflow: TextOverflow.ellipsis),
                                 ],
                               ),
                             ),
@@ -274,7 +275,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Nominal Barang :")],
                               ),
@@ -296,7 +297,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           height: 16,
                         ),
                         Container(
-                          padding: const EdgeInsets.only(left: 50, bottom: 15),
+                          padding: const EdgeInsets.only(left: 30, bottom: 15),
                           child: Row(
                             children: <Widget>[
                               Text("Detail Pembayaran",
@@ -308,7 +309,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Harga Sewa :")],
                               ),
@@ -327,7 +328,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Subtotal :")],
                               ),
@@ -347,7 +348,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Asuransi :")],
                               ),
@@ -365,7 +366,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Nominal Asuransi :")],
                               ),
@@ -383,7 +384,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Deposit :")],
                               ),
@@ -403,7 +404,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[Text("Deposit Terpakai :")],
                               ),
@@ -429,7 +430,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 50),
+                              padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[
                                   Text("Total :",
@@ -538,8 +539,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      _tripModalBottomSheet(context, pymentgtwy.idpayment_gateway, pymentgtwy.nama_provider
-                          );
+                      _tripModalBottomSheet(
+                          context,
+                          pymentgtwy.idpayment_gateway,
+                          pymentgtwy.nama_provider);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -651,9 +654,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             //             setState(() {
                             //               asuransi = asuransii;
                             //               if (asuransi == true) {
-                                           
+
                             //               } else {
-                                           
+
                             //               }
                             //             });
                             //           },
@@ -671,40 +674,82 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                          return KonfirmPayment(
-                                            idjenis_produk: idjenis_produk,
-                                            idlokasi: idlokasi,
-                                            jumlah_sewa: jumlah_sewa,
-                                            idasuransi: 1,
-                                            idvoucher: idvoucher,
-                                            flagvoucher: flagvoucher,
-                                            flagasuransi: flagasuransi,
-                                            idpayment_gateway: idpayment.toString(),
-                                            flag_selesai: 0,
-                                            harga: double.parse(sharga.toString()),
-                                            total_harga:
-                                            double.parse(totallharga.toString()),
-                                            deposit_tambah:
-                                            double.parse(sharga.toString()),
-                                            deposit_pakai:
-                                            double.parse(sharga.toString()),
-                                            keterangan: keterangan.toString(),
-                                            nomor_polis: nomor_polis,
-                                            tanggal_berakhir_polis:
-                                            tanggal_berakhir_polis,
-                                            tanggal_mulai: stanggal_mulai,
-                                            tanggal_akhir: stanggal_akhir,
-                                            nominal_barang: double.parse("0.0"),
-                                            keterangan_barang: sketerangan_barang,
-                                            tanggal_order: "DATE(NOW())",
-                                            nominal_deposit:
-                                            double.parse(sharga.toString()),
-                                            keterangan_deposit: "-",
-                                          );
-                                        }));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                KonfirmPayment(
+                                                  idjenis_produk:
+                                                      idjenis_produk,
+                                                  idlokasi: idlokasi,
+                                                  jumlah_sewa: jumlah_sewa,
+                                                  idasuransi: 1,
+                                                  idvoucher: idvoucher,
+                                                  flagvoucher: flagvoucher,
+                                                  flagasuransi: flagasuransi,
+                                                  idpayment_gateway:
+                                                      idpayment.toString(),
+                                                  flag_selesai: 0,
+                                                  harga: double.parse(
+                                                      sharga.toString()),
+                                                  total_harga: double.parse(
+                                                      totallharga.toString()),
+                                                  deposit_tambah: double.parse(
+                                                      sharga.toString()),
+                                                  deposit_pakai: double.parse(
+                                                      sharga.toString()),
+                                                  keterangan:
+                                                      keterangan.toString(),
+                                                  nomor_polis: nomor_polis,
+                                                  tanggal_berakhir_polis:
+                                                      tanggal_berakhir_polis,
+                                                  tanggal_mulai: stanggal_mulai,
+                                                  tanggal_akhir: stanggal_akhir,
+                                                  nominal_barang:
+                                                      double.parse("0.0"),
+                                                  keterangan_barang:
+                                                      sketerangan_barang,
+                                                  tanggal_order: "DATE(NOW())",
+                                                  nominal_deposit: double.parse(
+                                                      sharga.toString()),
+                                                  keterangan_deposit: "-",
+                                                )));
                                   });
+                                  // setState(() {
+                                  //   Navigator.push(context,
+                                  //       MaterialPageRoute(builder: (context) {
+                                  //         return KonfirmPayment(
+                                  //           idjenis_produk: idjenis_produk,
+                                  //           idlokasi: idlokasi,
+                                  //           jumlah_sewa: jumlah_sewa,
+                                  //           idasuransi: 1,
+                                  //           idvoucher: idvoucher,
+                                  //           flagvoucher: flagvoucher,
+                                  //           flagasuransi: flagasuransi,
+                                  //           idpayment_gateway: idpayment.toString(),
+                                  //           flag_selesai: 0,
+                                  //           harga: double.parse(sharga.toString()),
+                                  //           total_harga:
+                                  //           double.parse(totallharga.toString()),
+                                  //           deposit_tambah:
+                                  //           double.parse(sharga.toString()),
+                                  //           deposit_pakai:
+                                  //           double.parse(sharga.toString()),
+                                  //           keterangan: keterangan.toString(),
+                                  //           nomor_polis: nomor_polis,
+                                  //           tanggal_berakhir_polis:
+                                  //           tanggal_berakhir_polis,
+                                  //           tanggal_mulai: stanggal_mulai,
+                                  //           tanggal_akhir: stanggal_akhir,
+                                  //           nominal_barang: double.parse("0.0"),
+                                  //           keterangan_barang: sketerangan_barang,
+                                  //           tanggal_order: "DATE(NOW())",
+                                  //           nominal_deposit:
+                                  //           double.parse(sharga.toString()),
+                                  //           keterangan_deposit: "-",
+                                  //         );
+                                  //       }));
+                                  // });
                                 })
                           ],
                         ),
