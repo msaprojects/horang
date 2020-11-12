@@ -59,12 +59,14 @@ class OrderSukses{
 
   @override
   String  toString(){
+    print("order sukses1 $idtransaksi");
     return 'OrderSukses{idtransaksi: $idtransaksi, idpembayaran: $idpembayaran, idpayment_gateway: $idpayment_gateway, idproduk: $idproduk, jumlah_sewa: $jumlah_sewa, total_harga: $total_harga, nominal: $nominal, no_order: $no_order, keterangan: $keterangan, harga: $harga, kode_kontainer: $kode_kontainer, kode_refrensi: $kode_refrensi, nama_provider: $nama_provider}';
   }
 
 }
 //
 List<OrderSukses> ordersuksesFromJson(String jsonData){
+  print("order sukses 2");
   final data = json.decode(jsonData);
   return List<OrderSukses>.from(data.map((item)=> OrderSukses.fromJson(item)));
 }

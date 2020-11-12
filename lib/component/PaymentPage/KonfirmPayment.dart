@@ -271,18 +271,27 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       //   content: Text("Berhasil"),
                       // ));
                       print("ID TIDAK ORDER KOSONG" + access_token);
-                      _apiService.listOrderSukses(access_token, idorder);
-                      successDialog(context,
-                          "Pembayaran Berhasil dilakukan, Klik 'Okey' untuk melihat detail pembayaran",
-                          showNeutralButton: false,
-                          positiveText: "Okey", positiveAction: () {
-                        Navigator.push(
+                      // _apiService.listOrderSukses(access_token, idorder);
+                      print("masuk9");
+                      Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => KonfirmasiOrderDetail(
                                       idorder: idorder,
                                     )));
-                      });
+                                    print("masuk0");
+                      // _apiService.listOrderSukses(access_token, idorder);
+                      // successDialog(context,
+                      //     "Pembayaran Berhasil dilakukan, Klik 'Okey' untuk melihat detail pembayaran",
+                      //     showNeutralButton: false,
+                      //     positiveText: "Okey", positiveAction: () {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => KonfirmasiOrderDetail(
+                      //                 idorder: idorder,
+                      //               )));
+                      // });
                     } else {
                       // print("gagal");
                       if (idorder == -1) {
