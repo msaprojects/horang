@@ -397,7 +397,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       ),
       body: Column(
         children: <Widget>[
-          Text('HMMMM'),
           Expanded(
             child: Container(
               padding: EdgeInsets.only(
@@ -629,7 +628,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                     ),
                   );
                 },
-                // itemCount: dataIndex.length,
+                itemCount: dataIndex.length,
               ),
             ),
           ),

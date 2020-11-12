@@ -2,10 +2,13 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
+import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
+import 'package:horang/component/dummy.dart';
+import 'package:horang/component/dummy1.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +17,7 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmPayment extends StatefulWidget {
   var idlokasi,
+      namaprovider,
       idjenis_produk,
       idcustomer,
       keterangan,
@@ -41,6 +45,7 @@ class KonfirmPayment extends StatefulWidget {
       tanggal_akhir;
   KonfirmPayment(
       {this.idlokasi,
+      this.namaprovider,
       this.idjenis_produk,
       this.keterangan,
       this.jumlah_sewa,
@@ -96,6 +101,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kstanggal_mulai,
       kstanggal_akhir,
       kselectedValue,
+      knamaprovider,
       kstotallharga;
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -167,6 +173,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     ksketerangan_barang = widget.keterangan_barang;
     ksnominal_barang = widget.nominal_barang;
     kstotal_harga = widget.total_harga;
+    knamaprovider = widget.namaprovider;
 //    }
     cekToken();
     super.initState();
@@ -237,78 +244,143 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               onPressed: () {
                 setState(() {
                   print("Haduh : " + _noOvo.text.toString());
-                  OrderProduk orderproduk = OrderProduk(
-                      idjenis_produk: kidjenis_produk,
-                      idlokasi: kidlokasi,
-                      jumlah_sewa: kjumlah_sewa,
-                      idasuransi: 1,
-                      idvoucher: kidvoucher,
-                      flagasuransi: kflagasuransi,
-                      flagvoucher: kflagvoucher,
-                      idpayment_gateway:
-                          int.parse(kidpayment_gateway.toString()),
-                      flag_selesai: 0,
-                      total_harga: kstotal_harga,
-                      harga: ksharga,
-                      nominal_barang: double.parse("0.0"),
-                      deposit_tambah: double.parse(ksharga.toString()),
-                      deposit_pakai: double.parse(ksharga.toString()),
-                      token: access_token,
-                      keterangan: kketerangan,
-                      nomor_polis: knomor_polis,
-                      tanggal_berakhir_polis: ktanggal_berakhir_polis,
-                      tanggal_mulai: kstanggal_mulai,
-                      tanggal_akhir: kstanggal_akhir,
-                      keterangan_barang: ksketerangan_barang,
-                      tanggal_order: "DATE(NOW())",
-                      keterangan_deposit: "-",
-                      nominal_deposit: double.parse(ksharga.toString()),
-                      no_ovo: _noOvo.text.toString());
-                  print("but if you never try " + orderproduk.toString());
-                  _apiService.tambahOrderProduk(orderproduk).then((idorder) {
-                    if (idorder > 0) {
-                      // _scaffoldState.currentState.showSnackBar(SnackBar(
-                      //   content: Text("Berhasil"),
-                      // ));
-                      print("ID TIDAK ORDER KOSONG" + access_token);
-                      // _apiService.listOrderSukses(access_token, idorder);
-                      print("masuk9");
-                      Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => KonfirmasiOrderDetail(
-                                      idorder: idorder,
-                                    )));
-                                    print("masuk0");
-                      // _apiService.listOrderSukses(access_token, idorder);
-                      // successDialog(context,
-                      //     "Pembayaran Berhasil dilakukan, Klik 'Okey' untuk melihat detail pembayaran",
-                      //     showNeutralButton: false,
-                      //     positiveText: "Okey", positiveAction: () {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => KonfirmasiOrderDetail(
-                      //                 idorder: idorder,
-                      //               )));
-                      // });
-                    } else {
-                      // print("gagal");
-                      if (idorder == -1) {
-                        print("Container tidak tersedia");
-                        errorDialog(
-                          context,
-                          "Kontainer tidak tersedia",
-                        );
-                      } else {
-                        print("Transaksi gagal !!");
-                        errorDialog(
-                          context,
-                          "Transaksi gagal disimpan",
-                        );
-                      }
-                    }
-                  });
+                  // OrderProduk orderproduk = OrderProduk(
+                  //     idjenis_produk: kidjenis_produk,
+                  //     idlokasi: kidlokasi,
+                  //     jumlah_sewa: kjumlah_sewa,
+                  //     idasuransi: 1,
+                  //     idvoucher: kidvoucher,
+                  //     flagasuransi: kflagasuransi,
+                  //     flagvoucher: kflagvoucher,
+                  //     idpayment_gateway:
+                  //         int.parse(kidpayment_gateway.toString()),
+                  //     flag_selesai: 0,
+                  //     total_harga: kstotal_harga,
+                  //     harga: ksharga,
+                  //     nominal_barang: double.parse("0.0"),
+                  //     deposit_tambah: double.parse(ksharga.toString()),
+                  //     deposit_pakai: double.parse(ksharga.toString()),
+                  //     token: access_token,
+                  //     keterangan: kketerangan,
+                  //     nomor_polis: knomor_polis,
+                  //     tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                  //     tanggal_mulai: kstanggal_mulai,
+                  //     tanggal_akhir: kstanggal_akhir,
+                  //     keterangan_barang: ksketerangan_barang,
+                  //     tanggal_order: "DATE(NOW())",
+                  //     keterangan_deposit: "-",
+                  //     nominal_deposit: double.parse(ksharga.toString()),
+                  //     no_ovo: _noOvo.text.toString());
+                  // print("but if you never try " + orderproduk.toString());
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Dummy1(
+                            
+                              idjenis_produk: kidjenis_produk,
+                              idlokasi: kidlokasi,
+                              jumlah_sewa: kjumlah_sewa,
+                              idasuransi: 1,
+                              idvoucher: kidvoucher,
+                              flagasuransi: kflagasuransi,
+                              flagvoucher: kflagvoucher,
+                              idpayment_gateway:
+                                  int.parse(kidpayment_gateway.toString()),
+                              flag_selesai: 0,
+                              total_harga: kstotal_harga,
+                              harga: ksharga,
+                              nominal_barang: double.parse("0.0"),
+                              deposit_tambah: double.parse(ksharga.toString()),
+                              deposit_pakai: double.parse(ksharga.toString()),
+                              token: access_token,
+                              keterangan: kketerangan,
+                              nomor_polis: knomor_polis,
+                              tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                              tanggal_mulai: kstanggal_mulai,
+                              tanggal_akhir: kstanggal_akhir,
+                              keterangan_barang: ksketerangan_barang,
+                              tanggal_order: "DATE(NOW())",
+                              keterangan_deposit: "-",
+                              nominal_deposit: double.parse(ksharga.toString()),
+                              no_ovo: _noOvo.text.toString())));
+                  // _apiService.tambahOrderProduk(orderproduk).then((idorder) {
+                  //   if (idorder > 0) {
+                  //     // _scaffoldState.currentState.showSnackBar(SnackBar(
+                  //     //   content: Text("Berhasil"),
+                  //     // ));
+                  //     print("ID TIDAK ORDER KOSONG" + access_token);
+                  //     // _apiService.listOrderSukses(access_token, idorder);
+                  //     print("masuk9");
+                  //     Navigator.pushReplacement(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (BuildContext context) => Dummy1(
+                  //                 idjenis_produk: kidjenis_produk,
+                  //                 idlokasi: kidlokasi,
+                  //                 jumlah_sewa: kjumlah_sewa,
+                  //                 idasuransi: 1,
+                  //                 idvoucher: kidvoucher,
+                  //                 flagasuransi: kflagasuransi,
+                  //                 flagvoucher: kflagvoucher,
+                  //                 idpayment_gateway:
+                  //                     int.parse(kidpayment_gateway.toString()),
+                  //                 flag_selesai: 0,
+                  //                 total_harga: kstotal_harga,
+                  //                 harga: ksharga,
+                  //                 nominal_barang: double.parse("0.0"),
+                  //                 deposit_tambah:
+                  //                     double.parse(ksharga.toString()),
+                  //                 deposit_pakai:
+                  //                     double.parse(ksharga.toString()),
+                  //                 token: access_token,
+                  //                 keterangan: kketerangan,
+                  //                 nomor_polis: knomor_polis,
+                  //                 tanggal_berakhir_polis:
+                  //                     ktanggal_berakhir_polis,
+                  //                 tanggal_mulai: kstanggal_mulai,
+                  //                 tanggal_akhir: kstanggal_akhir,
+                  //                 keterangan_barang: ksketerangan_barang,
+                  //                 tanggal_order: "DATE(NOW())",
+                  //                 keterangan_deposit: "-",
+                  //                 nominal_deposit:
+                  //                     double.parse(ksharga.toString()),
+                  //                 no_ovo: _noOvo.text.toString())));
+                  //     // Navigator.push(
+                  //     //       context,
+                  //     //       MaterialPageRoute(
+                  //     //           builder: (context) => KonfirmasiOrderDetail(
+                  //     //                 idorder: idorder,
+                  //     //               )));
+                  //     // print("masuk0");
+                  //     // _apiService.listOrderSukses(access_token, idorder);
+                  //     // successDialog(context,
+                  //     //     "Pembayaran Berhasil dilakukan, Klik 'Okey' untuk melihat detail pembayaran",
+                  //     //     showNeutralButton: false,
+                  //     //     positiveText: "Okey", positiveAction: () {
+                  //     //   Navigator.push(
+                  //     //       context,
+                  //     //       MaterialPageRoute(
+                  //     //           builder: (context) => KonfirmasiOrderDetail(
+                  //     //                 idorder: idorder,
+                  //     //               )));
+                  //     // });
+                  //   } else {
+                  //     // print("gagal");
+                  //     if (idorder == -1) {
+                  //       print("Container tidak tersedia");
+                  //       errorDialog(
+                  //         context,
+                  //         "Kontainer tidak tersedia",
+                  //       );
+                  //     } else {
+                  //       print("Transaksi gagal !!");
+                  //       errorDialog(
+                  //         context,
+                  //         "Transaksi gagal disimpan",
+                  //       );
+                  //     }
+                  //   }
+                  // });
                 });
               },
             )

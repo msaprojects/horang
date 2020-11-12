@@ -40,10 +40,10 @@ dependencies:
   email_validator: any
   date_format: any
   flutter_spinkit: ^4.1.2
-  firebase_messaging: any
+  # firebase_messaging: any
   timeline_tile: ^1.0.0
   connectivity: ^0.4.9+5
-  firebase_core: ^0.5.1
+  # firebase_core: ^0.5.1
   commons: ^0.7.8+3
   syncfusion_flutter_datepicker: ^18.3.47-beta
 

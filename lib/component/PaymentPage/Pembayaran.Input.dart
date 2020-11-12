@@ -679,6 +679,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
                                                 KonfirmPayment(
+                                                  namaprovider: namaprovider,
                                                   idjenis_produk:
                                                       idjenis_produk,
                                                   idlokasi: idlokasi,
