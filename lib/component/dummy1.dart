@@ -146,7 +146,7 @@ class _Dummy1State extends State<Dummy1> {
     ktoken = widget.token;
     kno_ovo = widget.no_ovo;
     ktanggal_akhir = widget.tanggal_akhir;
-    print("object" + kdeposit_tambah.toString());
+    print("object" + knominal_deposit.toString());
 
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: kidjenis_produk,
@@ -160,7 +160,7 @@ class _Dummy1State extends State<Dummy1> {
         flag_selesai: 0,
         total_harga: ktotal_harga,
         harga: kharga,
-        nominal_barang: double.parse("0.0"),
+        nominal_barang: knominal_barang,
         deposit_tambah: kdeposit_tambah,
         deposit_pakai: kdeposit_pakai,
         token: ktoken,
@@ -172,7 +172,7 @@ class _Dummy1State extends State<Dummy1> {
         keterangan_barang: kketerangan_barang,
         tanggal_order: "DATE(NOW())",
         keterangan_deposit: "-",
-        nominal_deposit: ksharga,
+        nominal_deposit: knominal_deposit,
         no_ovo: kno_ovo.toString());
     print("MODELLLL : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
@@ -187,7 +187,6 @@ class _Dummy1State extends State<Dummy1> {
       } else {
         if (idorder == -1) {
           print("Container tidak tersedia");
-          // AsyncSnapshot.waiting().connectionState == ConnectionState.waiting;
           errorDialog(
             context,
             "Kontainer tidak tersedia",
