@@ -5,6 +5,8 @@ import 'package:horang/component/dummy1.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 
+import 'component/Dummy/syncfusion_datepicker.dart';
+
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 void main() => runApp(MyApp());
@@ -15,17 +17,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: Dummy1(),
-      home: Home(),
+      home: WelcomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+// class HomePage extends StatefulWidget {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
 
-class _HomePageState extends State<HomePage> {
+// class _HomePageState extends State<HomePage> {
 
   // final scaffoldState = GlobalKey<ScaffoldState>();
   // final firebaseMessaging = FirebaseMessaging();
@@ -55,8 +57,8 @@ class _HomePageState extends State<HomePage> {
   //   return null;
   // }
 
-  @override
-  void initState() {
+  // @override
+  // void initState() {
   //   firebaseMessaging.configure(
   //     onMessage: (Map<String, dynamic> message) async {
   //       debugPrint('onMessage: $message');
@@ -82,23 +84,20 @@ class _HomePageState extends State<HomePage> {
   //     this.token = token;
   //   }));
   //   super.initState();
-  }
+  // }
 
-  @override
-  Widget build(BuildContext context) {
-    // debugPrint('tokenff: $token');
-    return MaterialApp(
-      title: 'Gudang',
-      theme: ThemeData(
-//        primaryColor: Colors.black,
-        scaffoldBackgroundColor: Colors.grey[100],
-      ),
-      debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
-      // home: LoginPage(),
-      // home: LoginPage(),
-    );
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   // debugPrint('tokenff: $token');
+  //   return MaterialApp(
+  //     title: 'Gudang',
+  //     theme: ThemeData(
+  //       scaffoldBackgroundColor: Colors.grey[100],
+  //     ),
+  //     debugShowCheckedModeBanner: false,
+  //     home: WelcomePage(),
+  //   );
+  // }
 
   // void getDataFcm(Map<String, dynamic> message) {
   //   String name = '';
@@ -120,4 +119,4 @@ class _HomePageState extends State<HomePage> {
   //   debugPrint('getDataFcm: name: $name & age: $age');
   // }
 
-}
+// }

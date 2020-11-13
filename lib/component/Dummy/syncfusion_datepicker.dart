@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 
 /// My app class to display the date range picker
 class SyfusionDate extends StatefulWidget {
@@ -15,6 +15,7 @@ class SyfusionDates extends State<SyfusionDate> {
   String _dateCount;
   String _range;
   String _rangeCount;
+  String _tanggalAwal, _tanggalAkhir;
 
   @override
   void initState() {
@@ -22,6 +23,8 @@ class SyfusionDates extends State<SyfusionDate> {
     _dateCount = '';
     _range = '';
     _rangeCount = '';
+    _tanggalAwal = '';
+    _tanggalAkhir = '';
     super.initState();
   }
 
@@ -43,11 +46,16 @@ class SyfusionDates extends State<SyfusionDate> {
     setState(() {
       if (args.value is PickerDateRange) {
         _range =
-            DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
+            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString() +
                 ' - ' +
-                DateFormat('dd/MM/yyyy')
+                DateFormat('yyyy-MM-dd')
                     .format(args.value.endDate ?? args.value.startDate)
                     .toString();
+        _tanggalAwal =
+            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString();
+        _tanggalAkhir = DateFormat('yyyy-MM-dd')
+            .format(args.value.endDate ?? args.value.startDate)
+            .toString();
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
@@ -60,44 +68,59 @@ class SyfusionDates extends State<SyfusionDate> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('DatePicker demo'),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
             ),
-            body: Stack(
-              children: <Widget>[
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  height: 70,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Selected date: ' + _selectedDate),
-                      Text('Selected date count: ' + _dateCount),
-                      Text('Selected range: ' + _range),
-                      Text('Selected ranges count: ' + _rangeCount)
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  top: 80,
-                  right: 0,
-                  bottom: 0,
-                  child: SfDateRangePicker(
-                    onSelectionChanged: _onSelectionChanged,
-                    selectionMode: DateRangePickerSelectionMode.range,
-                    initialSelectedRange: PickerDateRange(
-                        DateTime.now().subtract(const Duration(days: 4)),
-                        DateTime.now().add(const Duration(days: 3))),
-                  ),
-                )
-              ],
-            )));
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(30),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: SfDateRangePicker(
+                onSelectionChanged: _onSelectionChanged,
+                selectionMode: DateRangePickerSelectionMode.range,
+                initialSelectedRange: PickerDateRange(
+                    DateTime.now().subtract(const Duration(days: 0)),
+                    DateTime.now().add(const Duration(days: 0))),
+              ),
+            ),
+            SizedBox(
+              height: 15
+            ),
+            Container(
+              child: Text('Note : Minimum Pesanan 5 Hari')
+            ),
+            SizedBox(
+              height: 8
+            ),
+            Container(
+              child: FlatButton(
+                color: Colors.green,
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+                    return ProdukList(
+                      tanggalAwal: _tanggalAwal,
+                      tanggalAkhir: _tanggalAkhir
+                    );
+                  }));  
+                  print("hmmm  :  " + _tanggalAwal + ' + ' + _tanggalAkhir);
+                },
+                child: Text('SET TANGGAL'),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
