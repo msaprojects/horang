@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/component/Dummy/syncfusion_datepicker.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
 import 'package:horang/widget/datePicker.dart';
@@ -26,9 +27,6 @@ class ProdukList extends StatefulWidget {
 }
 
 class _ProdukList extends State<ProdukList> {
-  // StreamSubscription<DataConnectionStatus> listener;
-  // var _InternetStatus = "Unknown";
-  // var _ContentMessage = "Unknown";
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -36,7 +34,11 @@ class _ProdukList extends State<ProdukList> {
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
   DateTime dtAwal, dtAkhir, _date, _date2;
-  var ttanggalAwal='Pilih tanggal', ttanggalAkhir='Pilih Tanggal', rtanggalAwal, rtanggalAkhir;
+  var ttanggalAwal = 'Pilih tanggal',
+      ttanggalAkhir = 'Pilih Tanggal',
+      rtanggalAwal,
+      rtanggalAkhir;
+  Future<List<JenisProduk>> url;
 
   List<dynamic> _dataKota = List();
   void getcomboProduk() async {
@@ -131,12 +133,18 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   void initState() {
-    super.initState();
+    cekToken();
     ttanggalAwal = widget.tanggalAwal;
     ttanggalAkhir = widget.tanggalAkhir;
-    print("YUhuu : "+ttanggalAwal+" - "+ttanggalAkhir);
+    print("HMMM : $access_token");
+    // PostProdukModel data = PostProdukModel(
+    //     token: access_token,
+    //     tanggalawal: ttanggalAwal,
+    //     tanggalakhir: ttanggalAkhir,
+    //     idlokasi: int.parse(valKota));
+    // url = _apiService.listProduk(data);
     _cekKoneksi();
-    cekToken();
+    // super.initState();
   }
 
   @override
@@ -147,13 +155,68 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   Widget build(BuildContext context) {
-    // print(ttanggalAwal+" - "+ttanggalAkhir);
+    // print(ttanggalAwal.toString()+" - "+ttanggalAkhir.toString());
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(5),
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                      color: Colors.red,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyfusionDate()));
+                      },
+                      child: Text('Pilih Tanggal')),
+                  Container(
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    child: _buildKomboProduk(valKota.toString()),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FlatButton(
+                color: Colors.blue,
+                onPressed: () {
+                  setState(() {
+                    _search(context);
+                  });
+                },
+                child: Text('Cari')),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _search(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(
-        future: _apiService.listJenisProduk(access_token),
+        future: url,
         builder:
             (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
-          print("hmm : ${snapshot.connectionState}");
           if (snapshot.hasError) {
             print(snapshot.error.toString());
             return Center(
@@ -200,37 +263,6 @@ class _ProdukList extends State<ProdukList> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FlatButton(
-                  color: Colors.red,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SyfusionDate()));
-                    },
-                    child: Text('Pilih Tanggal')),
-                Container(
-                  margin: EdgeInsets.only(left: 16, right: 16),
-                  child: _buildKomboProduk(valKota.toString()),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          FlatButton(
-            color: Colors.blue,
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SyfusionDate()));
-              },
-              child: Text('Cari'+ttanggalAwal)),
           Expanded(
               child: Container(
             padding: EdgeInsets.only(
@@ -400,7 +432,6 @@ class _ProdukList extends State<ProdukList> {
   Widget _buildKomboProduk(String kotaaaa) {
     _controlleridkota = TextEditingController(text: kotaaaa);
     return DropdownButtonFormField(
-      // hint: Text("Pilih Kota", style: GoogleFonts.inter(color: Colors.blueGrey)),
       hint: Padding(
         padding: EdgeInsets.only(left: 10),
         child: Text("Pilih Kota",
@@ -438,43 +469,6 @@ class _ProdukList extends State<ProdukList> {
       },
     );
   }
-
-  // void _showDialog(String title, content, BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: new Text("Peringatan"),
-  //           content:
-  //               new Text("Koneksi anda buruk, paketane sampean ntek ta mas ?"),
-  //           actions: <Widget>[
-  //             new FlatButton(
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: new Text("Tutup"))
-  //           ],
-  //         );
-  //       });
-  // }
-
-  // cekConnection(BuildContext context) async {
-  //   listener = DataConnectionChecker().onStatusChange.listen((status) {
-  //     switch (status) {
-  //       case DataConnectionStatus.connected:
-  //         _InternetStatus = "Terkoneksi ke internet";
-  //         _ContentMessage = "----------------------";
-  //         _showDialog(_InternetStatus, _ContentMessage, context);
-  //         break;
-  //       case DataConnectionStatus.disconnected:
-  //         _InternetStatus = "Koneksi anda bermasalah";
-  //         _ContentMessage = "----------------------";
-  //         _showDialog(_InternetStatus, _ContentMessage, context);
-  //         break;
-  //     }
-  //   });
-  //   return await DataConnectionChecker().connectionStatus;
-  // }
 
   showAlertDialog(BuildContext context) {
     Widget okButton = FlatButton(
