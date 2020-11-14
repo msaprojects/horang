@@ -28,21 +28,7 @@ class SyfusionDates extends State<SyfusionDate> {
     super.initState();
   }
 
-  /// The method for [DateRangePickerSelectionChanged] callback, which will be
-  /// called whenever a selection changed on the date picker widget.
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    /// The argument value will return the changed date as [DateTime] when the
-    /// widget [SfDateRangeSelectionMode] set as single.
-    ///
-    /// The argument value will return the changed dates as [List<DateTime>]
-    /// when the widget [SfDateRangeSelectionMode] set as multiple.
-    ///
-    /// The argument value will return the changed range as [PickerDateRange]
-    /// when the widget [SfDateRangeSelectionMode] set as range.
-    ///
-    /// The argument value will return the changed ranges as
-    /// [List<PickerDateRange] when the widget [SfDateRangeSelectionMode] set as
-    /// multi range.
     setState(() {
       if (args.value is PickerDateRange) {
         _range =
@@ -94,25 +80,18 @@ class SyfusionDates extends State<SyfusionDate> {
                     DateTime.now().add(const Duration(days: 0))),
               ),
             ),
-            SizedBox(
-              height: 15
-            ),
-            Container(
-              child: Text('Note : Minimum Pesanan 5 Hari')
-            ),
-            SizedBox(
-              height: 8
-            ),
+            SizedBox(height: 15),
+            Container(child: Text('Note : Minimum Pesanan 5 Hari')),
+            SizedBox(height: 8),
             Container(
               child: FlatButton(
                 color: Colors.green,
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
                     return ProdukList(
-                      tanggalAwal: _tanggalAwal,
-                      tanggalAkhir: _tanggalAkhir
-                    );
-                  }));  
+                        tanggalAwal: _tanggalAwal, tanggalAkhir: _tanggalAkhir);
+                  }));
                   print("hmmm  :  " + _tanggalAwal + ' + ' + _tanggalAkhir);
                 },
                 child: Text('SET TANGGAL'),

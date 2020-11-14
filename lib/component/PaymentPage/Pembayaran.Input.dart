@@ -444,7 +444,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding: const EdgeInsets.only(right: 60),
                               child: Text(
                                 rupiah(totallharga,
-                                    separator: ',', trailing: '.00'),
+                                    separator: ','),
                                 style: (TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                               ),

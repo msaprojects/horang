@@ -17,6 +17,7 @@ import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
+import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
@@ -60,6 +61,21 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
+    if (response.statusCode == 200) {
+      return jenisprodukFromJson(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  //LIST PRODUK
+  Future<List<JenisProduk>> listProduk(PostProdukModel data) async {
+    final response = await client.post(
+      "$baseUrl/jenisprodukavailable",
+      headers: {"content-type": "application/json"},
+      body: PostProdukModelToJson(data),
+    );
+    print("avail : "+response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
