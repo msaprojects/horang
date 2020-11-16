@@ -6,7 +6,6 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmasiOrderDetail extends StatefulWidget {
@@ -20,7 +19,12 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   ApiService _apiService = ApiService();
   SharedPreferences sp;
   bool isSuccess = false;
-  var access_token, refresh_token, email, nama_customer, idcustomer, idorders = 0;
+  var access_token,
+      refresh_token,
+      email,
+      nama_customer,
+      idcustomer,
+      idorders = 0;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -32,31 +36,31 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
-        isSuccess = value;
-        //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-        if (!isSuccess) {
-          _apiService
-              .refreshToken(refresh_token)
-              .then((value) => setState(() {
-            var newtoken = value;
-            //setting access_token dari refresh_token
-            if (newtoken != "") {
-              sp.setString("access_token", newtoken);
-              access_token = newtoken;
-            } else {
-              showAlertDialog(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          LoginPage()),
-                      (Route<dynamic> route) => false);
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LoginPage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
             }
           }));
-        }
-      }));
     }
   }
 
@@ -75,20 +79,20 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
           print("hmm : ${snapshot.connectionState}");
           if (snapshot.hasError) {
-            print("coba aja"+snapshot.error.toString());
+            print("coba aja" + snapshot.error.toString());
             return Center(
               child: Text(
                   "Something wrong with message: ${snapshot.error.toString()}"),
             );
-          } 
+          }
           // else if (snapshot.connectionState == ConnectionState.waiting) {
           //   print("koneksi waiting");
           //   // return Center(
           //   //   child: CircularProgressIndicator(),
           //   // );
-          // } 
+          // }
           else if (snapshot.connectionState == ConnectionState.done) {
-            print("snapssss"+snapshot.toString());
+            print("snapssss" + snapshot.toString());
             List<OrderSukses> orderstatuss = snapshot.data;
             print("iknow ${snapshot.data}");
             return _designForm(orderstatuss);
@@ -405,9 +409,9 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
               ),
               color: Colors.grey[100],
               child: ListView.builder(
-                itemBuilder: (context, index){
+                itemBuilder: (context, index) {
                   OrderSukses os = dataIndex[index];
-                  print("KOREF"+os.kode_refrensi);
+                  print("KOREF" + os.kode_refrensi);
                   return Card(
                     child: new Column(
                       children: <Widget>[
@@ -420,14 +424,22 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             Container(
                               padding: const EdgeInsets.only(left: 20),
                               child: Row(
-                                children: <Widget>[Text("No. Order :", style: TextStyle(fontWeight: FontWeight.bold),)],
+                                children: <Widget>[
+                                  Text(
+                                    "No. Order :",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
                               ),
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                os.no_order, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 8),
+                                os.no_order,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                             ),
                           ],
@@ -437,15 +449,18 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                           children: <Widget>[
                             Container(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Nomor Kontainer :")]
-                              ),
+                              child: Row(children: <Widget>[
+                                Text("Nomor Kontainer :")
+                              ]),
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                os.kode_kontainer, style: TextStyle(fontWeight: FontWeight.bold, fontSize:8 ),
+                                os.kode_kontainer,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],
@@ -461,9 +476,10 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                os.jumlah_sewa.toString(), style: TextStyle(fontWeight: FontWeight.bold),
+                                os.jumlah_sewa.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -479,7 +495,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
                                 'Ya, Rp. 50.000',
                               ),
@@ -497,13 +513,14 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
                                 'Tidak, Rp. 0',
                               ),
                             ),
                           ],
-                        ),Row(
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
@@ -514,7 +531,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
                                 os.harga.toString(),
                               ),
@@ -533,14 +550,22 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             Container(
                               padding: const EdgeInsets.only(left: 20),
                               child: Row(
-                                children: <Widget>[Text("No. Pembayaran :", style: TextStyle(fontWeight: FontWeight.bold),)],
+                                children: <Widget>[
+                                  Text(
+                                    "No. Pembayaran :",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
                               ),
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 20),
+                                  const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                os.kode_refrensi,style: TextStyle(fontWeight: FontWeight.bold),
+                                os.kode_refrensi,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12),
                               ),
                             ),
                           ],
@@ -662,41 +687,41 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   }
 }
 
-class TicketClipper extends CustomClipper<Path>{
+class TicketClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-      // TODO: implement getClip
-      Path path = Path();
+    // TODO: implement getClip
+    Path path = Path();
 
-      path.lineTo(0, size.height);
-      var radius = 10.0;
-      int jumlahreg = (size.width / (radius * 2)).toInt();
-      if (jumlahreg % 6 == 0) jumlahreg--;
-      path.lineTo((size.width -2 * radius * jumlahreg) /2, size.height);
-      for (int i = 0; i<jumlahreg; i++)
+    path.lineTo(0, size.height);
+    var radius = 10.0;
+    int jumlahreg = (size.width / (radius * 2)).toInt();
+    if (jumlahreg % 6 == 0) jumlahreg--;
+    path.lineTo((size.width - 2 * radius * jumlahreg) / 2, size.height);
+    for (int i = 0; i < jumlahreg; i++)
       if (i % 2 == 0) {
-        path.relativeArcToPoint(Offset(2.0 * radius*1.3, 0), radius: Radius.circular(radius), clockwise: true);
+        path.relativeArcToPoint(Offset(2.0 * radius * 1.3, 0),
+            radius: Radius.circular(radius), clockwise: true);
       } else {
-        path.relativeLineTo(2*radius*0.7, 0);
+        path.relativeLineTo(2 * radius * 0.7, 0);
       }
-      path.lineTo(size.width, size.height);
-      path.lineTo(size.width, 0);
-      path.close();
-      return path;  
-      // path.lineTo(size.width, size.height);
-      // path.lineTo(size.width, 0.0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+    // path.lineTo(size.width, size.height);
+    // path.lineTo(size.width, 0.0);
 
-      // path.addOval(Rect.fromCircle(
-      //   center: Offset(0.0, size.height / 2), radius: 20.0
-      // ));
-      // path.addOval(Rect.fromCircle(
-      //   center: Offset(size.width, size.height / 2), radius: 20.0
-      // ));
+    // path.addOval(Rect.fromCircle(
+    //   center: Offset(0.0, size.height / 2), radius: 20.0
+    // ));
+    // path.addOval(Rect.fromCircle(
+    //   center: Offset(size.width, size.height / 2), radius: 20.0
+    // ));
 
-      // return path;
-    }
-  
-    @override
-    bool shouldReclip(CustomClipper<Path> oldClipper)=> false;
+    // return path;
+  }
 
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

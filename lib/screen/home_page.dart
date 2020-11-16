@@ -213,13 +213,15 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Container(
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   "${ucapan()}, $nama_customer",
                                   // ucapan(),
                                   style: GoogleFonts.inter(
                                       color: Colors.white, fontSize: 14),
-                                )
+                                ),
+                                Icon(Icons.notification_important_rounded, color: Colors.white,)
                               ],
                             ),
                           ),
@@ -262,12 +264,12 @@ class _HomePageState extends State<HomePage> {
                     // ),
                     // VoucherDashboard(),
                     Container(
-                      // padding: EdgeInsets.only(left: 50, right: 50),
+                      padding: EdgeInsets.only(left: 50, right: 50),
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 190, left: 20, right: 20),
                       height: 100,
-                      // width: MediaQuery.of(context).size.width * 2.0,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 2.0,
+                      // width: MediaQuery.of(context).size.width * 0.8,
                       child: Center(
                         child: Card(
                           child: Row(

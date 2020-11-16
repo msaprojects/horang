@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/component/Dummy/syncfusion_datepicker.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
@@ -18,6 +19,7 @@ import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ProdukList extends StatefulWidget {
   var tanggalAwal, tanggalAkhir;
@@ -27,6 +29,8 @@ class ProdukList extends StatefulWidget {
 }
 
 class _ProdukList extends State<ProdukList> {
+  bool a = false;
+  String mText = "Pilih Tanggal";
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -38,6 +42,12 @@ class _ProdukList extends State<ProdukList> {
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
       rtanggalAkhir;
+  String _selectedDate;
+  String _dateCount;
+  String _range;
+  String _rangeCount;
+  String _tanggalAwal, _tanggalAkhir;
+  String _pTanggalAkhir = "";
   Future<List<JenisProduk>> url;
 
   List<dynamic> _dataKota = List();
@@ -87,6 +97,30 @@ class _ProdukList extends State<ProdukList> {
         setState(() {});
       }
       olders = resnow;
+    });
+  }
+
+  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+      if (args.value is PickerDateRange) {
+        _range =
+            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString() +
+                ' - ' +
+                DateFormat('yyyy-MM-dd')
+                    .format(args.value.endDate ?? args.value.startDate)
+                    .toString();
+        _tanggalAwal =
+            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString();
+        _tanggalAkhir = DateFormat('yyyy-MM-dd')
+            .format(args.value.endDate ?? args.value.startDate)
+            .toString();
+      } else if (args.value is DateTime) {        
+        _selectedDate = args.value;
+      } else if (args.value is List<DateTime>) {
+        _dateCount = args.value.length.toString();
+      } else {
+        _rangeCount = args.value.length.toString();
+      }
     });
   }
 
@@ -153,6 +187,18 @@ class _ProdukList extends State<ProdukList> {
     connectivityStream.cancel();
   }
 
+  void _visibilitymethod() {
+    setState(() {
+      if (a) {
+        a = false;
+        mText = "Pilih Tanggal "+ _tanggalAwal +" s/d "+ _tanggalAkhir;
+      } else {
+        a = true;
+        mText = "Set Tanggal";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // print(ttanggalAwal.toString()+" - "+ttanggalAkhir.toString());
@@ -178,15 +224,47 @@ class _ProdukList extends State<ProdukList> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton(
-                      color: Colors.red,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SyfusionDate()));
-                      },
-                      child: Text('Pilih Tanggal')),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    child: FlatButton(
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(5)),
+                      color: Colors.white,
+                      onPressed: _visibilitymethod,
+                      child: new Text(
+                        mText,
+                        style: GoogleFonts.inter(
+                          color: Colors.grey[800],
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ),
+                  a == true
+                      ? new Container(
+                          child: Column(
+                          children: [
+                            SfDateRangePicker(
+                              onSelectionChanged: _onSelectionChanged,
+                              selectionMode: DateRangePickerSelectionMode.range,
+                              initialSelectedRange: PickerDateRange(
+                                  DateTime.now()
+                                      .subtract(const Duration(days: 0)),
+                                  DateTime.now().add(const Duration(days: 0))),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(right: 16, left: 16, bottom: 16),
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                'Note : Minimum Pesanan 5 Hari', style: GoogleFonts.inter(fontSize: 12, fontStyle: FontStyle.italic),
+                                textAlign: TextAlign.end,
+                              ),
+                            )
+                          ],
+                        ))
+                      : new Container(),
                   Container(
                     margin: EdgeInsets.only(left: 16, right: 16),
                     child: _buildKomboProduk(valKota.toString()),

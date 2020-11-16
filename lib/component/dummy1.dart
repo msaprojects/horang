@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
+import 'package:horang/component/account_page/account.dart';
 
 import 'OrderPage/KonfirmasiOrder.Detail.dart';
 
@@ -187,16 +189,22 @@ class _Dummy1State extends State<Dummy1> {
       } else {
         if (idorder == -1) {
           print("Container tidak tersedia");
-          errorDialog(
-            context,
-            "Kontainer tidak tersedia",
-          );
+          errorDialog(context, "Kontainer tidak tersedia",
+              positiveText: "Ok", showNeutralButton: false, positiveAction: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => ProdukList()));
+          });
         } else {
           print("Transaksi gagal !!");
-          errorDialog(
-            context,
-            "Transaksi gagal disimpan",
-          );
+          errorDialog(context, "Transaksi gagal disimpan",
+              positiveText: "Ok", showNeutralButton: false, positiveAction: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => ProdukList()));
+          });
         }
       }
     });

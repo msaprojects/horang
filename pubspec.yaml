@@ -46,6 +46,7 @@ dependencies:
   # firebase_core: ^0.5.1
   commons: ^0.7.8+3
   syncfusion_flutter_datepicker: ^18.3.47-beta
+  flutter_ticket_widget: any
 
 dev_dependencies:
   flutter_test:
