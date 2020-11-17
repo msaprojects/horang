@@ -80,7 +80,7 @@ class _ListLogState extends State<ListLog> {
               print('MASUK KANG1');
               return Center(
                 child: Text(
-                    "Something wrong with message ${snapshot.error.toString()}"),
+                    "6Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
               print('MASUK KANG3');

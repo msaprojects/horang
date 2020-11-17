@@ -73,7 +73,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listHistory(access_token),
@@ -83,7 +82,7 @@ class _HistoryPageState extends State<HistoryPage> {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                  "Something wrong with message: ${snapshot.error.toString()}"),
+                  "4Something wrong with message: ${snapshot.error.toString()}"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -181,25 +180,20 @@ class _HistoryPageState extends State<HistoryPage> {
                           children: <Widget>[
                             Padding(padding: EdgeInsets.only(left: 20)),
                             Expanded(
-                              child: Column(
+                                child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
                                       "No. Order : " + History.no_order,
+                                      overflow: TextOverflow.visible,
                                       style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 12,
                                           color: Colors.grey[800],
                                           fontWeight: FontWeight.bold),
-                                    ),
-                                    Padding(padding: EdgeInsets.only(right: 20),
-                                    child: Text(
-                                      tanggal(date, shortMonth: true),
-                                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.visible,
-                                    ),
                                     ),
                                     // Text(
                                     //   tanggal(date, shortMonth: true),
@@ -217,12 +211,28 @@ class _HistoryPageState extends State<HistoryPage> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text(
-                                  "Customer : " + History.nama_customer,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black45,
-                                  ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Customer : " + History.nama_customer,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black45,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 20),
+                                      child: Text(
+                                        tanggal(date, shortMonth: true),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 8,
@@ -235,7 +245,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                     Text(
                                       "Sewa : " + History.jumlah_sewa + " Hari",
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 14,
                                           color: Colors.black45,
                                           fontWeight: FontWeight.bold),
                                       overflow: TextOverflow.fade,
@@ -244,7 +254,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                       rupiah(History.total_harga,
                                           separator: ',', trailing: '.00'),
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 14,
                                         color: Colors.green,
                                         fontWeight: FontWeight.bold,
                                       ),

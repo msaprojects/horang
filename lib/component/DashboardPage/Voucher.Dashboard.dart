@@ -77,7 +77,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
           print(snapshot.error.toString());
           return Center(
             child: Text(
-                "Something wrong with message: ${snapshot.error.toString()}"),
+                "4wrong with message: ${snapshot.error.toString()}"),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

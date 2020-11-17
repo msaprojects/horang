@@ -486,7 +486,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                           print(snapshot.error.toString());
                                           return Center(
                                             child: Text(
-                                                "Something wrong with message: ${snapshot.error.toString()}"),
+                                                "7Something wrong with message: ${snapshot.error.toString()}"),
                                           );
                                         } else if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
