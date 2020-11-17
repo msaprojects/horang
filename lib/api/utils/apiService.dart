@@ -250,7 +250,7 @@ class ApiService {
 //  UBAH CUSTOMER
   Future<bool> UpdateCustomer(Customer data) async {
     final response = await client.post(
-      "$baseUrl/ecustomer",
+      "$baseUrl/ucustomer",
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );

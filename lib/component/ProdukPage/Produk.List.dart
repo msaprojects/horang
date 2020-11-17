@@ -3,11 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
-import 'package:horang/component/Dummy/syncfusion_datepicker.dart';
-import 'package:horang/component/VoucherPage/voucher.detail.dart';
-import 'package:horang/widget/datePicker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +30,8 @@ class _ProdukList extends State<ProdukList> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  String urlcomboKota = "http://server.horang.id:9992/api/lokasi/", valKota;
+  String urlcomboKota = "http://server.horang.id:9992/api/lokasi/";
+  int valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
   DateTime dtAwal, dtAkhir, _date, _date2;
@@ -114,7 +111,7 @@ class _ProdukList extends State<ProdukList> {
         _tanggalAkhir = DateFormat('yyyy-MM-dd')
             .format(args.value.endDate ?? args.value.startDate)
             .toString();
-      } else if (args.value is DateTime) {        
+      } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
         _dateCount = args.value.length.toString();
@@ -171,14 +168,9 @@ class _ProdukList extends State<ProdukList> {
     ttanggalAwal = widget.tanggalAwal;
     ttanggalAkhir = widget.tanggalAkhir;
     print("HMMM : $access_token");
-    // PostProdukModel data = PostProdukModel(
-    //     token: access_token,
-    //     tanggalawal: ttanggalAwal,
-    //     tanggalakhir: ttanggalAkhir,
-    //     idlokasi: int.parse(valKota));
-    // url = _apiService.listProduk(data);
     _cekKoneksi();
-    // super.initState();
+    super.initState();
+    // print("Hasil Val Kota"+valKota);
   }
 
   @override
@@ -191,7 +183,8 @@ class _ProdukList extends State<ProdukList> {
     setState(() {
       if (a) {
         a = false;
-        mText = "Pilih Tanggal "+ _tanggalAwal +" s/d "+ _tanggalAkhir;
+        mText =
+            "Anda Memilih Tanggal " + _tanggalAwal + " s/d " + _tanggalAkhir;
       } else {
         a = true;
         mText = "Set Tanggal";
@@ -201,7 +194,6 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   Widget build(BuildContext context) {
-    // print(ttanggalAwal.toString()+" - "+ttanggalAkhir.toString());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -230,12 +222,12 @@ class _ProdukList extends State<ProdukList> {
                     child: FlatButton(
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5)),
-                      color: Colors.white,
+                      color: Colors.red,
                       onPressed: _visibilitymethod,
                       child: new Text(
                         mText,
                         style: GoogleFonts.inter(
-                          color: Colors.grey[800],
+                          color: Colors.white,
                           fontSize: 14,
                         ),
                         textAlign: TextAlign.start,
@@ -255,10 +247,13 @@ class _ProdukList extends State<ProdukList> {
                                   DateTime.now().add(const Duration(days: 0))),
                             ),
                             Container(
-                              padding: EdgeInsets.only(right: 16, left: 16, bottom: 16),
+                              padding: EdgeInsets.only(
+                                  right: 16, left: 16, bottom: 16),
                               alignment: Alignment.topRight,
                               child: Text(
-                                'Note : Minimum Pesanan 5 Hari', style: GoogleFonts.inter(fontSize: 12, fontStyle: FontStyle.italic),
+                                'Note : Minimum Pesanan 5 Hari',
+                                style: GoogleFonts.inter(
+                                    fontSize: 12, fontStyle: FontStyle.italic),
                                 textAlign: TextAlign.end,
                               ),
                             )
@@ -267,7 +262,7 @@ class _ProdukList extends State<ProdukList> {
                       : new Container(),
                   Container(
                     margin: EdgeInsets.only(left: 16, right: 16),
-                    child: _buildKomboProduk(valKota.toString()),
+                    child: _buildKomboProduk(valKota),
                   ),
                 ],
               ),
@@ -279,10 +274,12 @@ class _ProdukList extends State<ProdukList> {
                 color: Colors.blue,
                 onPressed: () {
                   setState(() {
+                    print("Val Kota$valKota");
                     _search(context);
                   });
                 },
                 child: Text('Cari')),
+            _search(context),
           ],
         ),
       ),
@@ -290,9 +287,15 @@ class _ProdukList extends State<ProdukList> {
   }
 
   Widget _search(BuildContext context) {
+    PostProdukModel data = PostProdukModel(
+        token: access_token,
+        tanggalawal: _tanggalAwal,
+        tanggalakhir: _tanggalAkhir,
+        idlokasi: valKota);
+    print("YUHUU "+data.toString());
     return SafeArea(
       child: FutureBuilder(
-        future: url,
+        future: _apiService.listProduk(data),
         builder:
             (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
           if (snapshot.hasError) {
@@ -304,10 +307,10 @@ class _ProdukList extends State<ProdukList> {
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
-            // List<JenisProduk> profiles = snapshot.data;
-            List<JenisProduk> profiles = snapshot.data
-                .where((element) => element.nama_lokasi == valKota)
-                .toList();
+            List<JenisProduk> profiles = snapshot.data;
+            // List<JenisProduk> profiles = snapshot.data
+            //     .where((element) => element.nama_lokasi == valKota)
+            //     .toList();
             // print("ada gk ya ? "+_controlleridkota.toString());
             return _buildListView(profiles);
           } else {
@@ -507,8 +510,7 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
-  Widget _buildKomboProduk(String kotaaaa) {
-    _controlleridkota = TextEditingController(text: kotaaaa);
+  Widget _buildKomboProduk(int kotaaaa) {
     return DropdownButtonFormField(
       hint: Padding(
         padding: EdgeInsets.only(left: 10),
@@ -537,7 +539,7 @@ class _ProdukList extends State<ProdukList> {
               style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
             ),
           ),
-          value: item['nama_lokasi'].toString(),
+          value: item['idlokasi'],
         );
       }).toList(),
       onChanged: (value) {

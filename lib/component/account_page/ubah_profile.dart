@@ -19,7 +19,7 @@ class UbahProfile extends StatefulWidget {
 class _UbahProfileState extends State<UbahProfile> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
+  var token = "", newtoken = "", access_token, refresh_token, idcustomer;
   bool _isLoading = true, _obsecureText = true;
   String _nama,
       _alamat,
@@ -145,29 +145,13 @@ class _UbahProfileState extends State<UbahProfile> {
 
   Widget _buildIsifield(List<Customer> customer) {
     // print(customer[0].idkota);
+    idcustomer = customer[0].idcustomer;
     return Container(
         child: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: Column(
           children: <Widget>[
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: <Widget>[
-            //     CircleAvatar(
-            //       radius: 50,
-            //       backgroundImage: AssetImage('assets/image/container1.png'),
-            //     ),
-            //     SelectableText(
-            //       "Ubah Foto Profile",
-            //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            //       onTap: () {
-            //         // Navigator.push(context,
-            //         //     MaterialPageRoute(builder: (context) => OrderPage()));
-            //       },
-            //     )
-            //   ],
-            // ),
             SizedBox(height: 15),
             SingleChildScrollView(
               child: new Column(
@@ -239,6 +223,7 @@ class _UbahProfileState extends State<UbahProfile> {
             setState(() => _isLoading = true);
             print("cek kota " + valKota.toString());
             Customer customer = Customer(
+idcustomer: idcustomer,
               nama_customer: _controllerNamaLengkap.text.toString(),
               alamat: _controllerAlamat.text.toString(),
               noktp: _controllerNoktp.text.toString(),
