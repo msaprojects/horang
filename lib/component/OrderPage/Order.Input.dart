@@ -41,12 +41,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var Value,
       title,
       valasuransi,
-      urlcomboAsuransi = "http://35.194.198.138:9992/api/asuransiaktif";
+      urlcomboAsuransi = "http://server.horang.id:9992/api/asuransiaktif";
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
   DateTime dtAwal, dtAkhir, _date, _date2;
-  var tglAwal, tglAkhir, pilihtanggal, pilihtanggal2;
+  var tglAwal,
+      tglAkhir,
+      total_asuransi,
+      totalhariharga,
+      totaldeposit,
+      idasuransi;
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
@@ -114,22 +119,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
   // }
 
   int diffInDays(tglAwal, tglAkhir) {
-    return ((tglAwal.difference(tglAkhir) -
+    return ((tglAkhir.difference(tglAwal) -
                     Duration(hours: tglAwal.hour) +
                     Duration(hours: tglAkhir.hour))
                 .inHours /
             24)
         .round();
   }
-
-  // int diffInDays(DateTime date1, DateTime date2) {
-  //   return ((date1.difference(date2) -
-  //                   Duration(hours: date1.hour) +
-  //                   Duration(hours: date2.hour))
-  //               .inHours /
-  //           24)
-  //       .round();
-  // }
 
   TextEditingController _durasiorder = TextEditingController();
   TextEditingController _note = TextEditingController();
@@ -147,6 +143,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         headers: {"Authorization": "BEARER ${access_token}"});
     setState(() {
       nomasuransi = json.decode(response.body)[0]['nilai'];
+      idasuransi = json.decode(response.body)[0]['idasuransi'];
       hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
           asuransie, nomasuransi, _nominalbarang.text.toString());
     });
@@ -164,10 +161,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
   String hitungall(String harga, String durasi, int boolasuransi,
       double asuransi, String nominalbaranginput) {
     if (boolasuransi == 0) asuransi = 0;
-    // print("PRINT PERHITUNGAN : " + asuransi.toString() + " -- " + nominalbaranginput +" -- " +
-    // ((double.parse(harga) * double.parse(durasi)) +
-    //         ((asuransi / 100)) * double.parse(nominalbaranginput))
-    //     .toStringAsFixed(2);
+    total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
+    totalhariharga = (double.parse(harga) * double.parse(durasi));
+    totaldeposit = minimaldeposit * double.parse(harga);
     return ((double.parse(harga) * double.parse(durasi)) +
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
             minimaldeposit * double.parse(harga))
@@ -219,16 +215,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   void initState() {
-    tglAwal = widget.tglawal12.toString();
-    tglAkhir = widget.tglakhir12.toString();
-    // dtAwal = DateTime.now();
-    // dtAkhir = DateTime.now();
-    // _date = DateTime.now();
-    // _date2 = DateTime.now().add(new Duration(days: 8));
     nomasuransi = 0;
     asuransie = 1;
-    // jumlah_sewas = diffInDays(_date2, _date);
-    jumlah_sewas = diffInDays(int.parse(tglAwal), int.parse(tglAkhir));
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
     if (widget.jenisProduk != null) {
@@ -239,6 +227,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vKeterangan = widget.jenisProduk.keterangan;
       idlokasi = widget.jenisProduk.idlokasi;
     }
+    tglAwal = widget.tglawal12.toString();
+    tglAkhir = widget.tglakhir12.toString();
+    jumlah_sewas =
+        diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
+    print("Jumlah Sewa" + jumlah_sewas.toString());
     hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
         asuransie, nomasuransi, _nominalbarang.text.toString());
     _nominalbarang.addListener(() {
@@ -266,7 +259,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   Widget build(BuildContext context) {
-    // print("idjenis_produk : ${idjenis_produk}");
     var media = MediaQuery.of(context);
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
     return Scaffold(
@@ -465,7 +457,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           width: 8,
                         ),
                         Text("Deposit Terpakai " +
-                            rupiah(harga * 3, separator: ',', trailing: '.00'))
+                            rupiah(harga * 3, separator: ','))
                       ],
                     ),
                   ),
@@ -499,7 +491,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           asuransi = asuransii;
                                           if (asuransi == true) {
                                             asuransie = 1;
-
                                             hasilperhitungan = hitungall(
                                                 harga.toString(),
                                                 jumlah_sewas.toString(),
@@ -631,19 +622,22 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       SizedBox(
                         height: 3,
                       ),
-                      Text(hasilperhitungan)
+                      Text(rupiah(hasilperhitungan),
+                          style: GoogleFonts.lato(
+                              fontSize: 18, fontWeight: FontWeight.bold))
                     ],
                   ),
                 ),
                 Container(
                   alignment: Alignment.center,
-                  width: 200,
-                  height: 60,
+                  width: 140,
+                  height: 100,
                   // margin: EdgeInsets.only(top: 3),
                   child: OutlineButton(
+                    highlightColor: Colors.red,
                     focusColor: Colors.green,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(12.0),
                         side: BorderSide(color: Colors.red)),
                     color: Colors.green,
                     onPressed: () {
@@ -666,17 +660,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               nomasuransi,
                               _nominalbarang.text.toString());
                         }
-
                         orderConfirmation(context);
                       });
                     },
                     child: Text(
                       "Lanjutkan Pembayaran",
-//                            rupiah(
-//                              hasilperhitungan,
-//                            ),
-
-                      // "Bayar Rp. " + hasilperhitungan,
                       style: (TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -726,7 +714,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Konfirmasi Pesanan Rp. " + hasilperhitungan),
+            title: Text("Konfirmasi Pesanan " + rupiah(hasilperhitungan)),
             content: Text(
                 "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
             actions: [
@@ -745,8 +733,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           jumlah_sewa: jumlah_sewas.toString(),
                           flagasuransi: asuransie,
                           flagvoucher: 0,
-                          idasuransi: 1,
-                          nomor_polis: "XX",
+                          idasuransi: idasuransi,
+                          nomor_polis: "Belum Diisi",
                           tanggal_berakhir_polis: "DATE(NOW())",
                           idvoucher: 0,
                           kapasitas: kapasitas,
@@ -757,7 +745,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           // tanggal_akhir: _date2.toString(),
                           keterangan_barang: _keteranganbarang.text.toString(),
                           nominal_barang: _nominalbarang.text.toString(),
-                          total_harga: hasilperhitungan.toString());
+                          total_harga: hasilperhitungan.toString(),
+                          total_asuransi: total_asuransi.toString(),
+                          totalharixharga: totalhariharga.toString(),
+                          totaldeposit: totaldeposit.toString());
                     }));
                   },
                   child: Text("Ok")),

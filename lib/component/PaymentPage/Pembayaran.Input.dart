@@ -39,7 +39,10 @@ class FormInputPembayaran extends StatefulWidget {
       keterangan_barang,
       nominal_barang,
       total_harga,
-      tanggal_akhir;
+      tanggal_akhir,
+      total_asuransi,
+      totalharixharga,
+      totaldeposit;
   FormInputPembayaran(
       {this.idlokasi,
       this.idjenis_produk,
@@ -59,7 +62,10 @@ class FormInputPembayaran extends StatefulWidget {
       this.keterangan_barang,
       this.nominal_barang,
       this.total_harga,
-      this.tanggal_akhir});
+      this.tanggal_akhir,
+      this.total_asuransi,
+      this.totalharixharga,
+      this.totaldeposit});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -100,7 +106,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       stanggal_mulai,
       stanggal_akhir,
       selectedValue,
-      totallharga;
+      totallharga,
+      stotal_asuransi,
+      stotalharixharga,
+  stotaldeposit;
 
   enableButton() {
     setState(() {
@@ -175,7 +184,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     sketerangan_barang = widget.keterangan_barang;
     snominal_barang = widget.nominal_barang;
     stotal_harga = widget.total_harga;
-    print("Cek IDJENIS ${idjenis_produk}");
+    stotal_asuransi = widget.total_asuransi;
+    stotalharixharga = widget.totalharixharga;
+    stotaldeposit = widget.totaldeposit;
 //    }
     cekToken();
   }
@@ -189,7 +200,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       asuransitxt = "Tidak";
     }
     totallharga = double.parse(stotal_harga) +
-        50000.00 +
+        double.parse(stotal_asuransi) +
         double.parse(sharga.toString()) -
         double.parse(sharga.toString());
     var media = MediaQuery.of(context);
@@ -284,8 +295,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                rupiah(snominal_barang,
-                                    separator: ',', trailing: '.00'),
+                                rupiah(snominal_barang,),
                               ),
                             ),
                           ],
@@ -319,7 +329,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 rupiah(sharga,
-                                    separator: ',', trailing: '.00' + "/hari"),
+                                    separator: ',', trailing: "/hari"),
                               ),
                             ),
                           ],
@@ -337,9 +347,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                "+" +
-                                    rupiah(stotal_harga,
-                                        separator: ',', trailing: '.00'),
+                                "+" + rupiah(stotalharixharga, separator: ','),
                               ),
                             ),
                           ],
@@ -374,8 +382,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                "+Rp. 50000.00",
+                              child: Text("+"+
+                                rupiah(stotal_asuransi),
                               ),
                             ),
                           ],
@@ -394,8 +402,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 "+" +
-                                    rupiah(sharga,
-                                        separator: ',', trailing: '.00'),
+                                    rupiah(stotaldeposit),
                               ),
                             ),
                           ],
@@ -414,8 +421,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 "-" +
-                                    rupiah(sharga,
-                                        separator: ',', trailing: '.00'),
+                                    rupiah(stotaldeposit),
                               ),
                             ),
                           ],
@@ -443,8 +449,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(right: 60),
                               child: Text(
-                                rupiah(totallharga,
-                                    separator: ','),
+                                rupiah(totallharga, separator: ','),
                                 style: (TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
@@ -486,7 +491,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                           print(snapshot.error.toString());
                                           return Center(
                                             child: Text(
-                                                "7Something wrong with message: ${snapshot.error.toString()}"),
+                                                "Something wrong with message: ${snapshot.error.toString()}"),
                                           );
                                         } else if (snapshot.connectionState ==
                                             ConnectionState.waiting) {

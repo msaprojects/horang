@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
@@ -23,10 +24,17 @@ class ProdukList extends StatefulWidget {
   @override
   _ProdukList createState() => _ProdukList();
 }
-
+class MyHttpOverride extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    // TODO: implement createHttpClient
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=>true;
+  }
+}
 class _ProdukList extends State<ProdukList> {
   bool a = false;
-  String mText = "Pilih Tanggal";
+  String mText = DateTime.now().toString();
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -187,7 +195,7 @@ class _ProdukList extends State<ProdukList> {
             "Anda Memilih Tanggal " + _tanggalAwal + " s/d " + _tanggalAkhir;
       } else {
         a = true;
-        mText = "Set Tanggal";
+        mText = DateTime.now().toString();
       }
     });
   }
@@ -311,7 +319,9 @@ class _ProdukList extends State<ProdukList> {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                  "8Something wrong with message: ${snapshot.error.toString()}"),
+                  // "8Something wrong with message: ${snapshot.error.toString()}"
+                  "Harap pilih tanggal dan kota yang ingin anda sewa"
+              ),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -443,23 +453,6 @@ class _ProdukList extends State<ProdukList> {
                                   Row(
                                     children: <Widget>[
                                       Icon(
-                                        Icons.remove_red_eye,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text("5 Viewer",
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 12),
-                                          overflow: TextOverflow.fade)
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
                                         Icons.widgets,
                                         size: 12,
                                         color: Colors.grey[600],
@@ -468,30 +461,48 @@ class _ProdukList extends State<ProdukList> {
                                         width: 4,
                                       ),
                                       Text(
-                                        "2 Tersedia",
+                                        "Tersedia "+jenisProduk.avail.toString()+" Unit",
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 12),
                                       )
                                     ],
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.local_grocery_store,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text("Disewa 3 Kali",
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 12),
-                                          overflow: TextOverflow.fade)
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: <Widget>[
+                                  //     Icon(
+                                  //       Icons.remove_red_eye,
+                                  //       size: 12,
+                                  //       color: Colors.grey[600],
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 4,
+                                  //     ),
+                                  //     Text("5 Viewer",
+                                  //         style: TextStyle(
+                                  //             color: Colors.grey[600],
+                                  //             fontSize: 12),
+                                  //         overflow: TextOverflow.fade)
+                                  //   ],
+                                  // ),
+                                  //
+                                  // Row(
+                                  //   children: <Widget>[
+                                  //     Icon(
+                                  //       Icons.local_grocery_store,
+                                  //       size: 12,
+                                  //       color: Colors.grey[600],
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 4,
+                                  //     ),
+                                  //     Text("Disewa 3 Kali",
+                                  //         style: TextStyle(
+                                  //             color: Colors.grey[600],
+                                  //             fontSize: 12),
+                                  //         overflow: TextOverflow.fade)
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ),
