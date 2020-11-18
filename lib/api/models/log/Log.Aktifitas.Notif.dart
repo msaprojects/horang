@@ -1,37 +1,41 @@
 import 'dart:convert';
 
-class LogAktifitasNotif{
+class logAktifitasNotif{
   String token;
+  String keterangan;
 
-  LogAktifitasNotif({
+  logAktifitasNotif({
     this.token,
+    this.keterangan,
   });
 
-  factory LogAktifitasNotif.fromJson(Map<String, dynamic> map){
-    return LogAktifitasNotif(
+  factory logAktifitasNotif.fromJson(Map<String, dynamic> map){
+    return logAktifitasNotif(
       token: map["token"],
+      keterangan: map["keterangan"]
     );
   }
 
   Map<String, dynamic> toJson(){
     return{
       "token": token,
+      "keterangan": keterangan,
     };
   }
 
   @override
   String toString(){
-    return 'logaktifitas{token: $token}';
+    return 'logaktifitas{token: $token, keterangan: $keterangan}';
   }
 
 }
 
-List<LogAktifitasNotif> LogAktifitasNotifFromJson(String jsonData){
+List<logAktifitasNotif> logAktifitasNotifFromJson(String jsonData){
   final data = json.decode(jsonData);
-  return List<LogAktifitasNotif>.from(data.map((item) => LogAktifitasNotif.fromJson(item)));
+  return List<logAktifitasNotif>.from(data.map((item) => logAktifitasNotif.fromJson(item)));
 }
 
-String LogAktifitasNotifToJson(LogAktifitasNotif data){
+String logAktifitasNotifToJson(logAktifitasNotif data){
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }

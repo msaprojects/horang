@@ -9,7 +9,20 @@ import 'component/Dummy/syncfusion_datepicker.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-void main() => runApp(MyApp());
+class MyHttpOverride extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    // TODO: implement createHttpClient
+    return super.createHttpClient(context)
+    ..badCertificateCallback = (X509Certificate cert, String host, int port)=>true;
+  }
+}
+
+// void main() => runApp(MyApp());
+void main(){
+  HttpOverrides.global = new MyHttpOverride();
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

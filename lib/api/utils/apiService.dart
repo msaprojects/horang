@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
@@ -34,7 +35,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   // final String baseUrl = "http://192.168.1.219:9992/api/";
   // final String baseUrl = "http://104.199.147.100:9992/api/";
-  final String baseUrl = "http://server.horang.id:9992/api/";
+  // final String baseUrl = "http://server.horang.id:9992/api/";
+  final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
@@ -358,16 +360,19 @@ class ApiService {
     }
   }
 
-  Future<bool> LogAktifitasNotif_(LogAktifitasNotif data) async {
+  Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
     final response = await client.post(
-      "$baseUrl/log",
+      "$baseUrl/logaktifitas",
       headers: {"Content-type": "application/json"},
-      body: LogAktifitasNotifToJson(data),
+      body: jsonEncode({"token": "${token}"}),
     );
+    print("cek body"+ response.body);
+    print("cek sttscode ${response.statusCode}");
+    response.body;
     if (response.statusCode == 200) {
-      return true;
+      return logAktifitasNotifFromJson(response.body);
     } else {
-      return false;
+      return null;
     }
   }
 

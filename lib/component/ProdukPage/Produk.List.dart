@@ -362,10 +362,13 @@ class _ProdukList extends State<ProdukList> {
                             ));
 //                        Navigator.pop(context, false);
                           } else {
+                            // print("tanggal awal adalah" + _tanggalAwal);
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                               return FormInputOrder(
                                 jenisProduk: jenisProduk,
+                                tglawal12: _tanggalAwal,
+                                tglakhir12: _tanggalAkhir,
                               );
                             }));
                           }

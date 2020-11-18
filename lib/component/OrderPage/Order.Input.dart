@@ -17,7 +17,9 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputOrder extends StatefulWidget {
   JenisProduk jenisProduk;
-  FormInputOrder({this.jenisProduk});
+  var tglawal12, tglakhir12;
+  FormInputOrder({this.jenisProduk, this.tglawal12, this.tglakhir12});
+  // FormInputOrder({this.jenisProduk});
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -48,78 +50,86 @@ class _FormDetailOrder extends State<FormInputOrder> {
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
-  Future<void> _selectionDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _date,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-      helpText: 'Select Tanggal Awal ',
-    );
-    if (picked != null && picked != _date) {
-      setState(() {
-        _date = picked;
-        if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 5));
-        jumlah_sewas = diffInDays(_date2, _date);
-        if (_nominalbarang.text == "") _nominalbarang.text = "0";
-        if (!asuransi)
-          hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              0,
-              _nominalbarang.text.toString());
-        else
-          hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              nomasuransi,
-              _nominalbarang.text.toString());
-      });
-    } else {}
-  }
+  // Future<void> _selectionDate(BuildContext context) async {
+  //   final DateTime picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: _date,
+  //     firstDate: DateTime(2020),
+  //     lastDate: DateTime(2030),
+  //     helpText: 'Select Tanggal Awal ',
+  //   );
+  //   if (picked != null && picked != _date) {
+  //     setState(() {
+  //       _date = picked;
+  //       if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 5));
+  //       jumlah_sewas = diffInDays(_date2, _date);
+  //       if (_nominalbarang.text == "") _nominalbarang.text = "0";
+  //       if (!asuransi)
+  //         hasilperhitungan = hitungall(
+  //             harga.toString(),
+  //             jumlah_sewas.toString(),
+  //             asuransie,
+  //             0,
+  //             _nominalbarang.text.toString());
+  //       else
+  //         hasilperhitungan = hitungall(
+  //             harga.toString(),
+  //             jumlah_sewas.toString(),
+  //             asuransie,
+  //             nomasuransi,
+  //             _nominalbarang.text.toString());
+  //     });
+  //   } else {}
+  // }
 
-  Future<void> _selectionDate2(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _date2,
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        helpText: 'Select Tanggal Akhir ');
-    if (picked != null && picked != _date2) {
-      setState(() {
-        _date2 = picked;
-        if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 5));
-        // print(diffInDays(_date2, _date));
-        jumlah_sewas = diffInDays(_date2, _date);
-        if (_nominalbarang.text == "") _nominalbarang.text = "0";
-        if (!asuransi)
-          hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              0,
-              _nominalbarang.text.toString());
-        else
-          hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              nomasuransi,
-              _nominalbarang.text.toString());
-      });
-    } else {}
-  }
+  // Future<void> _selectionDate2(BuildContext context) async {
+  //   final DateTime picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: _date2,
+  //       firstDate: DateTime(2020),
+  //       lastDate: DateTime(2030),
+  //       helpText: 'Select Tanggal Akhir ');
+  //   if (picked != null && picked != _date2) {
+  //     setState(() {
+  //       _date2 = picked;
+  //       if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 5));
+  //       print(diffInDays(_date2, _date));
+  //       if (_nominalbarang.text == "") _nominalbarang.text = "0";
+  //       if (!asuransi)
+  //         hasilperhitungan = hitungall(
+  //             harga.toString(),
+  //             jumlah_sewas.toString(),
+  //             asuransie,
+  //             0,
+  //             _nominalbarang.text.toString());
+  //       else
+  //         hasilperhitungan = hitungall(
+  //             harga.toString(),
+  //             jumlah_sewas.toString(),
+  //             asuransie,
+  //             nomasuransi,
+  //             _nominalbarang.text.toString());
+  //     });
+  //   } else {}
+  // }
 
-  int diffInDays(DateTime date1, DateTime date2) {
-    return ((date1.difference(date2) -
-                    Duration(hours: date1.hour) +
-                    Duration(hours: date2.hour))
+  int diffInDays(tglAwal, tglAkhir) {
+    return ((tglAwal.difference(tglAkhir) -
+                    Duration(hours: tglAwal.hour) +
+                    Duration(hours: tglAkhir.hour))
                 .inHours /
             24)
         .round();
   }
+
+  // int diffInDays(DateTime date1, DateTime date2) {
+  //   return ((date1.difference(date2) -
+  //                   Duration(hours: date1.hour) +
+  //                   Duration(hours: date2.hour))
+  //               .inHours /
+  //           24)
+  //       .round();
+  // }
 
   TextEditingController _durasiorder = TextEditingController();
   TextEditingController _note = TextEditingController();
@@ -209,13 +219,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   void initState() {
-    dtAwal = DateTime.now();
-    dtAkhir = DateTime.now();
-    _date = DateTime.now();
-    _date2 = DateTime.now().add(new Duration(days: 5));
+    tglAwal = widget.tglawal12.toString();
+    tglAkhir = widget.tglakhir12.toString();
+    // dtAwal = DateTime.now();
+    // dtAkhir = DateTime.now();
+    // _date = DateTime.now();
+    // _date2 = DateTime.now().add(new Duration(days: 8));
     nomasuransi = 0;
     asuransie = 1;
-    jumlah_sewas = diffInDays(_date2, _date);
+    // jumlah_sewas = diffInDays(_date2, _date);
+    jumlah_sewas = diffInDays(int.parse(tglAwal), int.parse(tglAkhir));
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
     if (widget.jenisProduk != null) {
@@ -352,26 +365,43 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   ),
                                 ),
                               ),
-                              TanggalSet(
-                                labelText: tglAwal,
-                                valueText:
-                                    new DateFormat('dd/MM/yyyy').format(_date),
-                                valueStyle: valueTglAwal,
-                                onPressed: () {
-                                  _selectionDate(context);
-                                  dtAwal = _date;
-                                },
+                              Container(
+                                padding: EdgeInsets.only(left: 30),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(tglAwal, style: GoogleFonts.inter()),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text("s/d", style: GoogleFonts.inter()),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(tglAkhir, style: GoogleFonts.inter()),
+                                  ],
+                                ),
                               ),
-                              TanggalSet(
-                                labelText: tglAkhir,
-                                valueText:
-                                    new DateFormat('dd/MM/yyyy').format(_date2),
-                                valueStyle: valueTglAkhir,
-                                onPressed: () {
-                                  _selectionDate2(context);
-                                  dtAkhir = _date2;
-                                },
-                              ),
+                              // TanggalSet(
+                              //   labelText: tglAwal,
+                              //   valueText:
+                              //       new DateFormat('dd/MM/yyyy').format(_date),
+                              //   valueStyle: valueTglAwal,
+                              //   onPressed: () {
+                              //     _selectionDate(context);
+                              //     dtAwal = _date;
+                              //   },
+                              // ),
+                              // TanggalSet(
+                              //   labelText: tglAkhir,
+                              //   valueText:
+                              //       new DateFormat('dd/MM/yyyy').format(_date2),
+                              //   valueStyle: valueTglAkhir,
+                              //   onPressed: () {
+                              //     _selectionDate2(context);
+                              //     dtAkhir = _date2;
+                              //   },
+                              // ),
                             ],
                           ),
                         ),
@@ -703,8 +733,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
               FlatButton(
                   color: Colors.red,
                   onPressed: () {
-                    print("cek tanggal1 $_date");
-                    print("cek tanggal2 $_date2");
+                    // print("cek tanggal1 $_date");
+                    // print("cek tanggal2 $_date2");
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute(builder: (context) {
                       return FormInputPembayaran(
@@ -712,7 +742,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idjenis_produk: idjenis_produk,
                           harga: harga,
                           keterangan: ket,
-                          jumlah_sewa: jumlah_sewas,
+                          jumlah_sewa: jumlah_sewas.toString(),
                           flagasuransi: asuransie,
                           flagvoucher: 0,
                           idasuransi: 1,
@@ -721,8 +751,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idvoucher: 0,
                           kapasitas: kapasitas,
                           alamat: alamat,
-                          tanggal_mulai: _date.toString(),
-                          tanggal_akhir: _date2.toString(),
+                          tanggal_mulai: tglAwal,
+                          tanggal_akhir: tglAkhir,
+                          // tanggal_mulai: _date.toString(),
+                          // tanggal_akhir: _date2.toString(),
                           keterangan_barang: _keteranganbarang.text.toString(),
                           nominal_barang: _nominalbarang.text.toString(),
                           total_harga: hasilperhitungan.toString());

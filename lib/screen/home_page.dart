@@ -13,6 +13,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
+import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Container(
                       padding: EdgeInsets.all(40),
-                      constraints: BoxConstraints.expand(height: 225),
+                      constraints: BoxConstraints.expand(height: 250),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topRight,
@@ -221,12 +222,21 @@ class _HomePageState extends State<HomePage> {
                                   style: GoogleFonts.inter(
                                       color: Colors.white, fontSize: 14),
                                 ),
-                                Icon(Icons.notification_important_rounded, color: Colors.white,)
+                                IconButton(
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                LogAktifitasNotif()));
+                                  },
+                                  icon: (Icon(Icons.notifications)),
+                                )
                               ],
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(top: 30),
+                            padding: EdgeInsets.only(top: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -266,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       padding: EdgeInsets.only(left: 50, right: 50),
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 190, left: 20, right: 20),
+                      margin: EdgeInsets.only(top: 200, left: 20, right: 20),
                       height: 100,
                       width: MediaQuery.of(context).size.width * 2.0,
                       // width: MediaQuery.of(context).size.width * 0.8,
