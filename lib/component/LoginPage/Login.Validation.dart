@@ -232,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   AccountChecker(
                     press: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) {

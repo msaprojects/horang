@@ -8,7 +8,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/account.dart';
 
-import 'OrderPage/KonfirmasiOrder.Detail.dart';
+import '../OrderPage/KonfirmasiOrder.Detail.dart';
 
 class Dummy1 extends StatefulWidget {
   var idlokasi,

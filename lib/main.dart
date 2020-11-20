@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:horang/component/dummy.dart';
-import 'package:horang/component/dummy1.dart';
+import 'package:horang/component/Dummy/dummy.dart';
+import 'package:horang/component/Dummy/dummy1.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 

@@ -5,19 +5,19 @@ class Customer{
   String token, nama_customer, alamat, noktp, blacklist;
 
   Customer({
-    this.idcustomer,
+    // this.idcustomer,
     this.nama_customer,
     this.alamat,
     this.noktp,
     this.blacklist,
-    this.idkota = 0,
+    this.idkota,
     this.token
     // this.nama_kota
   });
 
   factory Customer.fromJson(Map<String, dynamic> map){
     return Customer(
-      idcustomer: map['idcustomer'],
+      // idcustomer: map['idcustomer'],
       nama_customer: map['nama_customer'],
       alamat: map['alamat'],
       noktp: map['noktp'],
@@ -29,7 +29,7 @@ class Customer{
   }
   Map<String, dynamic> toJson(){
     return{
-      "idcustomer": idcustomer,
+      // "idcustomer": idcustomer,
       "nama_customer": nama_customer,
       "alamat": alamat,
       "noktp": noktp,
@@ -42,7 +42,7 @@ class Customer{
 
   @override
   String toString(){
-    return 'Customer{idcustomer : $idcustomer, idkota: $idkota, nama_customer: $nama_customer, alamat: $alamat, noktp: $noktp, token: $token, blacklist: $blacklist}';
+    return 'Customer{idkota: $idkota, nama_customer: $nama_customer, alamat: $alamat, noktp: $noktp, token: $token, blacklist: $blacklist}';
   }
 
 }

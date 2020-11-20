@@ -124,22 +124,22 @@ class _StorageExpired extends State<StorageExpired> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Container(
-                        width: 90,
-                        height: 90,
-                        // child: GestureDetector(
-                        //   child: ClipOval(
-                        //     child: Image.asset(
-                        //       "assets/image/container${index + 1}.png",
-                        //       fit: BoxFit.cover,
-                        //     ),
-                        //   ),
-                        //   onTap: () {},
-                        // ),
-                      ),
-                      SizedBox(
-                        width: 14,
-                      ),
+                      // Container(
+                      //   width: 90,
+                      //   height: 90,
+                      //   child: GestureDetector(
+                      //     child: ClipOval(
+                      //       child: Image.asset(
+                      //         "assets/image/container${index + 1}.png",
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ),
+                      //     onTap: () {},
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: 14,
+                      // ),
                       Expanded(
                         child: Container(
                           child: Column(
@@ -181,46 +181,12 @@ class _StorageExpired extends State<StorageExpired> {
                                 ),
                               ),
                               Text(
-                                "Terakhir diorder pada " +
+                                "Tanggal Order " +
                                     myStorage.tanggal_order,
                                 style: TextStyle(
                                   color: Colors.grey[800],
                                 ),
                               ),
-                              // Row(
-                              //   children: <Widget>[
-                              //     ButtonTheme(
-                              //       minWidth: 100,
-                              //       height: 30,
-                              //       child: RaisedButton(
-                              //         onPressed: () {
-                              //           Navigator.push(
-                              //             context,
-                              //             MaterialPageRoute(
-                              //                 builder: (context) =>
-                              //                     StorageHandler()),
-                              //           );
-                              //         },
-                              //         child: Text("Log"),
-                              //       ),
-                              //     ),
-                              //     SizedBox(
-                              //       width: 10,
-                              //     ),
-                              // ButtonTheme(
-                              //   minWidth: 100,
-                              //   height: 30,
-                              //   child: RaisedButton(
-                              //     color: Colors.transparent,
-                              //     onPressed: () {},
-                              //     child: Text(
-                              //       "Open",
-                              //       style: TextStyle(color: Colors.white),
-                              //     ),
-                              //   ),
-                              // ),
-                              //   ],
-                              // )
                             ],
                           ),
                         ),

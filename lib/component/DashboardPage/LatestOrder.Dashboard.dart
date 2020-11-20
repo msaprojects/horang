@@ -123,7 +123,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                             width: 10,
                           ),
                           Text(
-                            "Latest Order kosong...",
+                            "Anda Belum Ada Transaksi...",
                             style: GoogleFonts.lato(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),

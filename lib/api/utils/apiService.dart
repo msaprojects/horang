@@ -240,6 +240,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
+    print("tambah profile : "+response.body);
     if (response.statusCode == 201) {
       return true;
     } else {

@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class TambahProfile extends StatefulWidget {
@@ -94,7 +93,6 @@ class _TambahProfileState extends State<TambahProfile> {
 
   @override
   Widget build(BuildContext context) {
-
     void Keluarr() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       cekToken();
@@ -145,53 +143,58 @@ class _TambahProfileState extends State<TambahProfile> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child:Container(
-                    width: 500,
-                    height: 50,
-                    child: FlatButton(
-                      child: Text(
-                        "Simpan",
-                        style: TextStyle(color: Colors.white),
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Container(
+                      width: 500,
+                      height: 50,
+                      child: FlatButton(
+                        child: Text(
+                          "Simpan",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (_isFieldNamaLengkap == null ||
+                                _isFieldAlamat == null ||
+                                _isFieldNoKtp == null ||
+                                !_isFieldNamaLengkap ||
+                                !_isFieldAlamat ||
+                                !_isFieldNoKtp) {
+                              _scaffoldState.currentState.showSnackBar(
+                                SnackBar(
+                                  content: Text("Kolom Tidak Boleh Kosong"),
+                                ),
+                              );
+                              return;
+                            }
+                            setState(() => _isLoading = true);
+                            Customer data = Customer(
+                              nama_customer:
+                                  _controllerNamaLengkap.text.toString(),
+                              noktp: _controllerNoKtp.text.toString(),
+                              alamat: _controllerAlamat.text.toString(),
+                              token: access_token,
+                              blacklist: "0",
+                              idkota: int.parse(valKota),
+                            );
+                            print("Tambah Customer : "+data.toString());
+                            _apiService.TambahCustomer(data)
+                                .then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                Keluarr();
+                              } else {
+                                _scaffoldState.currentState
+                                    .showSnackBar(SnackBar(
+                                  content: Text("Data Gagal Disimpan"),
+                                ));
+                              }
+                            });
+                          });
+                        },
+                        color: Colors.blue,
                       ),
-                      onPressed: () {
-                        if (_isFieldNamaLengkap == null ||
-                            _isFieldAlamat == null ||
-                            _isFieldNoKtp == null ||
-                            !_isFieldNamaLengkap ||
-                            !_isFieldAlamat ||
-                            !_isFieldNoKtp) {
-                          _scaffoldState.currentState.showSnackBar(
-                            SnackBar(
-                              content: Text("Kolom Tidak Boleh Kosong"),
-                            ),
-                          );
-                          return;
-                        }
-                        setState(() => _isLoading = true);
-                        Customer customer = Customer(
-                          nama_customer: _controllerNamaLengkap.text.toString(),
-                          noktp: _controllerNoKtp.text.toString(),
-                          alamat: _controllerAlamat.text.toString(),
-                          token: access_token,
-                          blacklist: "0",
-                          idkota: int.parse(valKota),
-                        );
-                        _apiService.TambahCustomer(customer).then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          if (isSuccess) {
-                            Keluarr();
-                          } else {
-                            _scaffoldState.currentState.showSnackBar(SnackBar(
-                              content: Text("Data Gagal Disimpan"),
-                            ));
-                          }
-                        });
-                      },
-                      color: Colors.blue,
-                    ),
-                  )
-                )
+                    ))
               ],
             ),
           ),

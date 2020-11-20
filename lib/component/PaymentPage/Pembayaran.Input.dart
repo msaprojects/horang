@@ -109,7 +109,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       totallharga,
       stotal_asuransi,
       stotalharixharga,
-  stotaldeposit;
+      stotaldeposit;
+
+  var hasilperhitungan;
 
   enableButton() {
     setState(() {
@@ -189,6 +191,20 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     stotaldeposit = widget.totaldeposit;
 //    }
     cekToken();
+    hitungall(sharga.toString(), jumlah_sewa, flagasuransi,
+        double.parse(stotal_asuransi), snominal_barang, stotaldeposit);
+  }
+
+  String hitungall(String harga, String durasi, int boolasuransi,
+      double asuransi, String nominalbaranginput, String nomdeposit) {
+    if (boolasuransi == 0) asuransi = 0;
+    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
+        ((asuransi / 100) * double.parse(nominalbaranginput)) +
+        double.parse(nomdeposit) * double.parse(harga));
+    return ((double.parse(harga) * double.parse(durasi)) +
+            ((asuransi / 100) * double.parse(nominalbaranginput)) +
+            double.parse(nomdeposit) * double.parse(harga))
+        .toStringAsFixed(2);
   }
 
   @override
@@ -199,10 +215,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     } else {
       asuransitxt = "Tidak";
     }
-    totallharga = double.parse(stotal_harga) +
-        double.parse(stotal_asuransi) +
-        double.parse(sharga.toString()) -
-        double.parse(sharga.toString());
+    // totallharga = double.parse(stotal_harga) +
+    //     double.parse(stotal_asuransi) +
+    //     double.parse(sharga.toString()) -
+    //     double.parse(sharga.toString());
     var media = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -295,7 +311,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                rupiah(snominal_barang,),
+                                rupiah(
+                                  snominal_barang,
+                                ),
                               ),
                             ),
                           ],
@@ -382,8 +400,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text("+"+
-                                rupiah(stotal_asuransi),
+                              child: Text(
+                                "+" + rupiah(stotal_asuransi),
                               ),
                             ),
                           ],
@@ -401,8 +419,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                "+" +
-                                    rupiah(stotaldeposit),
+                                "+" + rupiah(stotaldeposit),
                               ),
                             ),
                           ],
@@ -420,8 +437,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                "-" +
-                                    rupiah(stotaldeposit),
+                                "-" + rupiah(stotaldeposit),
                               ),
                             ),
                           ],
@@ -449,7 +465,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(right: 60),
                               child: Text(
-                                rupiah(totallharga, separator: ','),
+                                rupiah(stotal_harga),
                                 style: (TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
@@ -674,7 +690,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan",
+                                  "Lanjutkan"+stotal_harga,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
@@ -698,8 +714,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   flag_selesai: 0,
                                                   harga: double.parse(
                                                       sharga.toString()),
-                                                  total_harga: double.parse(
-                                                      totallharga.toString()),
+                                                  total_harga: double.parse(stotal_harga),
                                                   deposit_tambah: double.parse(
                                                       sharga.toString()),
                                                   deposit_pakai: double.parse(
@@ -721,41 +736,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   keterangan_deposit: "-",
                                                 )));
                                   });
-                                  // setState(() {
-                                  //   Navigator.push(context,
-                                  //       MaterialPageRoute(builder: (context) {
-                                  //         return KonfirmPayment(
-                                  //           idjenis_produk: idjenis_produk,
-                                  //           idlokasi: idlokasi,
-                                  //           jumlah_sewa: jumlah_sewa,
-                                  //           idasuransi: 1,
-                                  //           idvoucher: idvoucher,
-                                  //           flagvoucher: flagvoucher,
-                                  //           flagasuransi: flagasuransi,
-                                  //           idpayment_gateway: idpayment.toString(),
-                                  //           flag_selesai: 0,
-                                  //           harga: double.parse(sharga.toString()),
-                                  //           total_harga:
-                                  //           double.parse(totallharga.toString()),
-                                  //           deposit_tambah:
-                                  //           double.parse(sharga.toString()),
-                                  //           deposit_pakai:
-                                  //           double.parse(sharga.toString()),
-                                  //           keterangan: keterangan.toString(),
-                                  //           nomor_polis: nomor_polis,
-                                  //           tanggal_berakhir_polis:
-                                  //           tanggal_berakhir_polis,
-                                  //           tanggal_mulai: stanggal_mulai,
-                                  //           tanggal_akhir: stanggal_akhir,
-                                  //           nominal_barang: double.parse("0.0"),
-                                  //           keterangan_barang: sketerangan_barang,
-                                  //           tanggal_order: "DATE(NOW())",
-                                  //           nominal_deposit:
-                                  //           double.parse(sharga.toString()),
-                                  //           keterangan_deposit: "-",
-                                  //         );
-                                  //       }));
-                                  // });
                                 })
                           ],
                         ),

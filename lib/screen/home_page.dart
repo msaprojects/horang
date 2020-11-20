@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "1280K",
+                                  "0",
                                   style: GoogleFonts.inter(
                                       color: Colors.white,
                                       fontSize: 35,
@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 2,
                                 ),
                                 Text(
-                                  "SALDO TERPAKAI 2.879K",
+                                  "SALDO TERPAKAI 0",
                                   style: GoogleFonts.inter(
                                       color: Colors.white.withOpacity(0.5),
                                       fontSize: 14),
@@ -268,11 +268,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.only(top: 50),
-                    //   child: VoucherDashboard(),
-                    // ),
-                    // VoucherDashboard(),
                     Container(
                       padding: EdgeInsets.only(left: 50, right: 50),
                       alignment: Alignment.center,
@@ -299,10 +294,6 @@ class _HomePageState extends State<HomePage> {
                                               "Fitur ini masih dalam proses pengembangan"),
                                           duration: Duration(seconds: 5),
                                         ));
-                                        // _scaffoldState.currentState.showSnackBar(
-                                        //     SnackBar(
-                                        //         content: Text(
-                                        //             "Fitur ini masih dalam proses pengembangan")));
                                       }),
                                   Text(
                                     "Refresh",
@@ -327,10 +318,6 @@ class _HomePageState extends State<HomePage> {
                                               "Fitur ini masih dalam proses pengembangan"),
                                           duration: Duration(seconds: 5),
                                         ));
-                                        // _scaffoldState.currentState.showSnackBar(
-                                        //     SnackBar(
-                                        //         content: Text(
-                                        //             "Fitur ini masih dalam proses pengembangan")));
                                       }),
                                   Text(
                                     "Histori",
@@ -399,33 +386,33 @@ class _HomePageState extends State<HomePage> {
             color: Colors.grey[300],
           ),
           ////////////////// SESI PRODUK ////////////////////////
-          Container(
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-                  child: Text(
-                    'Pilihan Produk',
-                    style: mTitleStyle,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                  child: SelectableText(
-                    "See All...",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProdukList()));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ProdukDashboard(),
+          // Container(
+          //   child: Row(
+          //     children: <Widget>[
+          //       Padding(
+          //         padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
+          //         child: Text(
+          //           'Pilihan Produk',
+          //           style: mTitleStyle,
+          //         ),
+          //       ),
+          //       Padding(
+          //         padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+          //         child: SelectableText(
+          //           "See All...",
+          //           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          //           onTap: () {
+          //             Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                     builder: (context) => ProdukList()));
+          //           },
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // ProdukDashboard(),
           ////////////////// END SESI PRODUK ////////////////////////
 
           /////////////////// SESI LATEST ORDER ////////////////////

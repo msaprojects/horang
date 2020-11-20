@@ -85,12 +85,12 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                   "5Something wrong with message: ${snapshot.error.toString()}"),
             );
           }
-          // else if (snapshot.connectionState == ConnectionState.waiting) {
+          else if (snapshot.connectionState == ConnectionState.waiting) {
           //   print("koneksi waiting");
-          //   // return Center(
-          //   //   child: CircularProgressIndicator(),
-          //   // );
-          // }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           else if (snapshot.connectionState == ConnectionState.done) {
             print("snapssss" + snapshot.toString());
             List<OrderSukses> orderstatuss = snapshot.data;
@@ -667,7 +667,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       child: Text("OK"),
       onPressed: () {
         print("ini konfirmasi order detail");
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
     );

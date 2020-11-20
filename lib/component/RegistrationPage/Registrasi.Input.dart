@@ -261,7 +261,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
     );

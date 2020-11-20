@@ -223,7 +223,7 @@ class _UbahProfileState extends State<UbahProfile> {
             setState(() => _isLoading = true);
             print("cek kota " + valKota.toString());
             Customer customer = Customer(
-idcustomer: idcustomer,
+// idcustomer: idcustomer,
               nama_customer: _controllerNamaLengkap.text.toString(),
               alamat: _controllerAlamat.text.toString(),
               noktp: _controllerNoktp.text.toString(),
