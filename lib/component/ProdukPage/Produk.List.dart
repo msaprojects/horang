@@ -337,7 +337,19 @@ class _ProdukList extends State<ProdukList> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
-            return _buildListView(profiles);
+            if (profiles !=null) {
+              return _buildListView(profiles);
+            } else {
+              return Center(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Column(
+                    children: [Image.asset("assets/image/datanotfound.png")],
+                  ),
+                ),
+              );
+            }
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -355,176 +367,186 @@ class _ProdukList extends State<ProdukList> {
           SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
-              child: Expanded(
-                  child: Container(
-                padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                ),
-                color: Colors.grey[100],
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    JenisProduk jenisProduk = dataIndex[index];
-                    return Card(
-                      child: InkWell(
-                        onTap: () {
-                          if (nama_customer == "" ||
-                              nama_customer == null ||
-                              nama_customer == "0") {
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                              duration: Duration(seconds: 10),
-                            ));
+              child: Column(
+                children: [
+                  Expanded(
+                      child: Container(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                    ),
+                    color: Colors.grey[100],
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        JenisProduk jenisProduk = dataIndex[index];
+                        return Card(
+                          child: InkWell(
+                            onTap: () {
+                              if (nama_customer == "" ||
+                                  nama_customer == null ||
+                                  nama_customer == "0") {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+                                  duration: Duration(seconds: 10),
+                                ));
 //                        Navigator.pop(context, false);
-                          } else {
-                            // print("tanggal awal adalah" + _tanggalAwal);
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return FormInputOrder(
-                                jenisProduk: jenisProduk,
-                                tglawal12: _tanggalAwal,
-                                tglakhir12: _tanggalAkhir,
-                              );
-                            }));
-                          }
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
+                              } else if (jenisProduk.avail == 0) {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Unit saat ini belum tersedia!, silahkan pilih tanggal dan kota yang lain'),
+                                  duration: Duration(seconds: 3),
+                                ));
+                              } else {
+                                // print("tanggal awal adalah" + _tanggalAwal);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return FormInputOrder(
+                                    jenisProduk: jenisProduk,
+                                    tglawal12: _tanggalAwal,
+                                    tglakhir12: _tanggalAkhir,
+                                  );
+                                }));
+                              }
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: Container(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.4,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image: NetworkImage(
-                                                  jenisProduk.gambar))),
-                                    ),
-                                  ),
-                                ),
-                                Column(
+                                Row(
                                   children: <Widget>[
-                                    Text(
-                                      jenisProduk.kapasitas,
-                                      style: GoogleFonts.inter(
-                                          fontSize: 14,
-                                          color: Colors.grey[800],
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      jenisProduk.nama_kota,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12,
-                                        color: Colors.grey[500],
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10, right: 10),
+                                      child: Container(
+                                        child: Container(
+                                          height:
+                                              MediaQuery.of(context).size.width *
+                                                  0.4,
+                                          width: MediaQuery.of(context).size.width *
+                                              0.4,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  fit: BoxFit.contain,
+                                                  image: NetworkImage(
+                                                      jenisProduk.gambar))),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      rupiah(jenisProduk.harga.toString(),
-                                          separator: ',', trailing: '.00'),
-                                      // jenisProduk.harga.toString(),
-                                      style: GoogleFonts.inter(
-                                          fontSize: 15,
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.fade,
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          jenisProduk.kapasitas,
+                                          style: GoogleFonts.inter(
+                                              fontSize: 14,
+                                              color: Colors.grey[800],
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          jenisProduk.nama_kota,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            color: Colors.grey[500],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          rupiah(jenisProduk.harga.toString(),
+                                              separator: ',', trailing: '.00'),
+                                          // jenisProduk.harga.toString(),
+                                          style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 16, right: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 16, right: 16),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      Icon(
-                                        Icons.widgets,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        "Tersedia " +
-                                            jenisProduk.avail.toString() +
-                                            " Unit",
-                                        style: TextStyle(
+                                      Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.widgets,
+                                            size: 12,
                                             color: Colors.grey[600],
-                                            fontSize: 12),
-                                      )
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            "Tersedia " +
+                                                jenisProduk.avail.toString() +
+                                                " Unit",
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 12),
+                                          )
+                                        ],
+                                      ),
+                                      // Row(
+                                      //   children: <Widget>[
+                                      //     Icon(
+                                      //       Icons.remove_red_eye,
+                                      //       size: 12,
+                                      //       color: Colors.grey[600],
+                                      //     ),
+                                      //     SizedBox(
+                                      //       width: 4,
+                                      //     ),
+                                      //     Text("5 Viewer",
+                                      //         style: TextStyle(
+                                      //             color: Colors.grey[600],
+                                      //             fontSize: 12),
+                                      //         overflow: TextOverflow.fade)
+                                      //   ],
+                                      // ),
+                                      //
+                                      // Row(
+                                      //   children: <Widget>[
+                                      //     Icon(
+                                      //       Icons.local_grocery_store,
+                                      //       size: 12,
+                                      //       color: Colors.grey[600],
+                                      //     ),
+                                      //     SizedBox(
+                                      //       width: 4,
+                                      //     ),
+                                      //     Text("Disewa 3 Kali",
+                                      //         style: TextStyle(
+                                      //             color: Colors.grey[600],
+                                      //             fontSize: 12),
+                                      //         overflow: TextOverflow.fade)
+                                      //   ],
+                                      // ),
                                     ],
                                   ),
-                                  // Row(
-                                  //   children: <Widget>[
-                                  //     Icon(
-                                  //       Icons.remove_red_eye,
-                                  //       size: 12,
-                                  //       color: Colors.grey[600],
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 4,
-                                  //     ),
-                                  //     Text("5 Viewer",
-                                  //         style: TextStyle(
-                                  //             color: Colors.grey[600],
-                                  //             fontSize: 12),
-                                  //         overflow: TextOverflow.fade)
-                                  //   ],
-                                  // ),
-                                  //
-                                  // Row(
-                                  //   children: <Widget>[
-                                  //     Icon(
-                                  //       Icons.local_grocery_store,
-                                  //       size: 12,
-                                  //       color: Colors.grey[600],
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 4,
-                                  //     ),
-                                  //     Text("Disewa 3 Kali",
-                                  //         style: TextStyle(
-                                  //             color: Colors.grey[600],
-                                  //             fontSize: 12),
-                                  //         overflow: TextOverflow.fade)
-                                  //   ],
-                                  // ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  itemCount: dataIndex.length,
-                ),
-              )),
+                          ),
+                        );
+                      },
+                      itemCount: dataIndex.length,
+                    ),
+                  )),
+                ],
+              ),
             ),
           )
         ],
