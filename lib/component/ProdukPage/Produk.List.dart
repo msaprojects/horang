@@ -24,14 +24,17 @@ class ProdukList extends StatefulWidget {
   @override
   _ProdukList createState() => _ProdukList();
 }
-class MyHttpOverride extends HttpOverrides{
+
+class MyHttpOverride extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext context) {
     // TODO: implement createHttpClient
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=>true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
+
 class _ProdukList extends State<ProdukList> {
   bool a = false;
   String mText = DateTime.now().toString();
@@ -54,6 +57,8 @@ class _ProdukList extends State<ProdukList> {
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
   Future<List<JenisProduk>> url;
+  DateTime sekarang = new DateTime.now();
+  var FlagCari =0;
 
   List<dynamic> _dataKota = List();
   void getcomboProduk() async {
@@ -227,6 +232,9 @@ class _ProdukList extends State<ProdukList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
+
+                      ),
+                      Container(
                         width: MediaQuery.of(context).size.width * 0.9,
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: FlatButton(
@@ -238,7 +246,7 @@ class _ProdukList extends State<ProdukList> {
                             mText,
                             style: GoogleFonts.inter(
                               color: Colors.white,
-                              fontSize: 11.5,
+                              fontSize: 18,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -249,6 +257,7 @@ class _ProdukList extends State<ProdukList> {
                               child: Column(
                               children: [
                                 SfDateRangePicker(
+                                  minDate: DateTime(sekarang.year, sekarang.month, sekarang.day),
                                   onSelectionChanged: _onSelectionChanged,
                                   selectionMode:
                                       DateRangePickerSelectionMode.range,
@@ -290,12 +299,13 @@ class _ProdukList extends State<ProdukList> {
                   color: Colors.blue,
                   onPressed: () {
                     setState(() {
-                      print("Val Kota$valKota");
+                      // print("Val Kota$valKota");
+                      FlagCari = 1;
                       _search(context);
                     });
                   },
                   child: Text('Cari')),
-              _search(context),
+               FlagCari == 1 ? _search(context) :  Text("Harap Pilih Tanggal dan Kota")
             ],
           ),
         ),
@@ -315,22 +325,18 @@ class _ProdukList extends State<ProdukList> {
         future: _apiService.listProduk(data),
         builder:
             (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
+          print("Loading... $snapshot");
           if (snapshot.hasError) {
             print(snapshot.error.toString());
             return Center(
               child: Text(
                   // "8Something wrong with message: ${snapshot.error.toString()}"
-                  "Harap pilih tanggal dan kota yang ingin anda sewa"
-              ),
+                  "Harap pilih tanggal dan kota yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
-            // List<JenisProduk> profiles = snapshot.data
-            //     .where((element) => element.nama_lokasi == valKota)
-            //     .toList();
-            // print("ada gk ya ? "+_controlleridkota.toString());
             return _buildListView(profiles);
           } else {
             return Center(
@@ -461,7 +467,9 @@ class _ProdukList extends State<ProdukList> {
                                         width: 4,
                                       ),
                                       Text(
-                                        "Tersedia "+jenisProduk.avail.toString()+" Unit",
+                                        "Tersedia " +
+                                            jenisProduk.avail.toString() +
+                                            " Unit",
                                         style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 12),
