@@ -15,7 +15,6 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ProdukList extends StatefulWidget {
@@ -37,7 +36,21 @@ class MyHttpOverride extends HttpOverrides {
 
 class _ProdukList extends State<ProdukList> {
   bool a = false;
+  DateTime dtAwal, dtAkhir, _date, _date2;
   String mText = DateTime.now().toString();
+  String aText = DateTime.now().add(Duration(days: 5)).toString();
+  // DateTime sDate = DateTime(DateTime.now().year, DateTime.now().month,
+  //     DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
+  // DateTime fDate =
+  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+  //         .add(Duration(days: 5));
+
+  // DateTime tanggalini = DateTime.now();
+  String string = DateFormat.yMMMd().add_Hm().format(DateTime.now());
+  // DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+  // String string = dateFormat.format(DateTime.now());
+  // DateTime dateTime = dateFormat.parse("yyyy-MM-dd");
+
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -45,7 +58,6 @@ class _ProdukList extends State<ProdukList> {
   int valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
-  DateTime dtAwal, dtAkhir, _date, _date2;
   var ttanggalAwal = 'Pilih tanggal',
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
@@ -58,7 +70,11 @@ class _ProdukList extends State<ProdukList> {
   String _pTanggalAkhir = "";
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
-  var FlagCari =0;
+  // String mmtext = DateTime.now().toString();
+  // String aatext = DateTime.now().add(Duration(days: 5)).toString();
+  String mmtext = DateFormat.yMMMd().format(DateTime.now());
+  String aatext = DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
+  var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
   void getcomboProduk() async {
@@ -119,11 +135,17 @@ class _ProdukList extends State<ProdukList> {
                 DateFormat('yyyy-MM-dd')
                     .format(args.value.endDate ?? args.value.startDate)
                     .toString();
+          
         _tanggalAwal =
             DateFormat('yyyy-MM-dd').format(args.value.startDate).toString();
         _tanggalAkhir = DateFormat('yyyy-MM-dd')
             .format(args.value.endDate ?? args.value.startDate)
             .toString();
+        if(args.value.endDate.isAfter(args.value.startDate)){
+          a = false;
+          mmtext = _tanggalAwal;
+          aatext = _tanggalAkhir;
+        }
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
@@ -196,11 +218,14 @@ class _ProdukList extends State<ProdukList> {
     setState(() {
       if (a) {
         a = false;
-        mText =
-            "Anda Memilih Tanggal " + _tanggalAwal + " s/d " + _tanggalAkhir;
+        mmtext = _tanggalAwal;
+        aatext = _tanggalAkhir;
       } else {
         a = true;
-        mText = DateTime.now().toString();
+        // Text("maybe");
+        // mText = DateTime.now().toString();
+        // sDate.toString();
+        // fDate.toString();
       }
     });
   }
@@ -211,13 +236,17 @@ class _ProdukList extends State<ProdukList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        title: Text(
+          "Halaman Order",
+          style: TextStyle(color: Colors.black),
+        ),
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: Colors.transparent,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
             }),
       ),
       body: SingleChildScrollView(
@@ -231,33 +260,83 @@ class _ProdukList extends State<ProdukList> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-
-                      ),
+                      Container(),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.1,
                         margin: EdgeInsets.only(left: 16, right: 16),
                         child: FlatButton(
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(5)),
-                          color: Colors.red,
+                          color: Colors.grey[200],
                           onPressed: _visibilitymethod,
-                          child: Text(
-                            mText,
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.left,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    "Mulai",
+                                    style: GoogleFonts.lato(
+                                        fontSize: 12, color: Colors.grey[800]),
+                                  ),
+                                  Text(
+                                    "Akhir",
+                                    style: GoogleFonts.lato(
+                                        fontSize: 12, color: Colors.grey[800]),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              // Text(
+                              //   string,
+                              //   mText,
+                              //   style: GoogleFonts.inter(
+                              //     color: Colors.grey[800],
+                              //     fontSize: 18,
+                              //   ),
+                              //   textAlign: TextAlign.left,
+                              // ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    // string,
+                                    // sDate.toString(),
+                                    mmtext,
+                                    style: GoogleFonts.lato(
+                                        fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                                  ),
+                                  Icon(Icons.arrow_forward_rounded),
+                                  Text(
+                                    // fDate.toString(),
+                                    aatext,
+                                    style: GoogleFonts.lato(
+                                        fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 7,
                       ),
                       a == true
                           ? new Container(
                               child: Column(
                               children: [
                                 SfDateRangePicker(
-                                  minDate: DateTime(sekarang.year, sekarang.month, sekarang.day),
+                                  // minDate: sDate,
+                                  // maxDate: fDate,
+                                  minDate: DateTime(sekarang.year,
+                                      sekarang.month, sekarang.day),
                                   onSelectionChanged: _onSelectionChanged,
                                   selectionMode:
                                       DateRangePickerSelectionMode.range,
@@ -265,7 +344,7 @@ class _ProdukList extends State<ProdukList> {
                                       DateTime.now()
                                           .subtract(const Duration(days: 0)),
                                       DateTime.now()
-                                          .add(const Duration(days: 0))),
+                                          .add(const Duration(days: 5))),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(
@@ -305,7 +384,9 @@ class _ProdukList extends State<ProdukList> {
                     });
                   },
                   child: Text('Cari')),
-               FlagCari == 1 ? _search(context) :  Text("Harap Pilih Tanggal dan Kota")
+              FlagCari == 1
+                  ? _search(context)
+                  : Text("Harap Pilih Tanggal dan Kota")
             ],
           ),
         ),
@@ -337,7 +418,7 @@ class _ProdukList extends State<ProdukList> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
-            if (profiles !=null) {
+            if (profiles != null) {
               return _buildListView(profiles);
             } else {
               return Center(
@@ -345,7 +426,15 @@ class _ProdukList extends State<ProdukList> {
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Column(
-                    children: [Image.asset("assets/image/datanotfound.png")],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/image/datanotfound.png"),
+                      Text(
+                        "Oppss..Maaf container yang anda cari tidak ditemukan, pilih tanggal dan kota lainya.",
+                        style: GoogleFonts.inter(color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
                   ),
                 ),
               );
@@ -382,6 +471,8 @@ class _ProdukList extends State<ProdukList> {
                         return Card(
                           child: InkWell(
                             onTap: () {
+                              // print("idjenis produknya adalah");
+                              // print(jenisProduk.idjenis_produk);
                               if (nama_customer == "" ||
                                   nama_customer == null ||
                                   nama_customer == "0") {
@@ -415,13 +506,17 @@ class _ProdukList extends State<ProdukList> {
                                 Row(
                                   children: <Widget>[
                                     Padding(
-                                      padding: EdgeInsets.only(left: 10, right: 10),
+                                      padding:
+                                          EdgeInsets.only(left: 10, right: 10),
                                       child: Container(
                                         child: Container(
-                                          height:
-                                              MediaQuery.of(context).size.width *
-                                                  0.4,
-                                          width: MediaQuery.of(context).size.width *
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.4,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
                                               0.4,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
@@ -557,14 +652,20 @@ class _ProdukList extends State<ProdukList> {
   Widget _buildKomboProduk(int kotaaaa) {
     return DropdownButtonFormField(
       hint: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: Text("Pilih Kota",
-            textAlign: TextAlign.end,
-            style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
-      ),
+          padding: EdgeInsets.only(left: 10),
+          child: Row(
+            children: [
+              Icon(Icons.search,),
+              SizedBox(width: 7,),
+              Text("Pilih Kota",
+                  textAlign: TextAlign.end,
+                  style:
+                      GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+            ],
+          )),
       value: valKota,
       decoration: InputDecoration(
-          fillColor: Colors.white,
+          fillColor: Colors.grey[200],
           filled: true,
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(

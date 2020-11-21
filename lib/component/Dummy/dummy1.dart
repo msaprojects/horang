@@ -121,7 +121,7 @@ class _Dummy1State extends State<Dummy1> {
   void initState() {
     knamaprovider = widget.namaprovider;
     kidlokasi = widget.idlokasi;
-    kidjenis_produk = widget.idlokasi;
+    kidjenis_produk = widget.idjenis_produk;
     kidcustomer = widget.idcustomer;
     kketerangan = widget.keterangan;
     kjumlah_sewa = widget.jumlah_sewa.toString();
@@ -148,10 +148,10 @@ class _Dummy1State extends State<Dummy1> {
     ktoken = widget.token;
     kno_ovo = widget.no_ovo;
     ktanggal_akhir = widget.tanggal_akhir;
-    print("object" + knominal_deposit.toString());
+    print("object" + kidjenis_produk.toString());
 
     OrderProduk orderProduk = OrderProduk(
-        idjenis_produk: kidjenis_produk,
+        idjenis_produk: int.parse(kidjenis_produk),
         idlokasi: kidlokasi,
         jumlah_sewa: int.parse(kjumlah_sewa),
         idasuransi: 1,

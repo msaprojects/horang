@@ -695,6 +695,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 ),
                                 onPressed: () {
                                   setState(() {
+                                    // print("idjenisdipembayaran");
+                                    // print(idjenis_produk.toString());
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

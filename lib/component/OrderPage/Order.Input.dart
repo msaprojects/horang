@@ -721,6 +721,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
               FlatButton(
                   color: Colors.red,
                   onPressed: () {
+                    // print("orderinput idjenisproduk");
+                    // print(idjenis_produk);
                     // print("cek tanggal1 $_date");
                     // print("cek tanggal2 $_date2");
                     Navigator.of(context)

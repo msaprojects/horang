@@ -247,8 +247,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => Dummy1(
-                            
-                              idjenis_produk: kidjenis_produk,
+                              idjenis_produk: kidjenis_produk.toString(),
                               idlokasi: kidlokasi,
                               jumlah_sewa: kjumlah_sewa,
                               idasuransi: 1,
