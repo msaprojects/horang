@@ -94,7 +94,7 @@ class _StorageActive extends State<StorageActive> {
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<MystorageModel> profiles =
-                  snapshot.data.where((i) => i.aktif == "AKTIF").toList();
+                  snapshot.data.where((i) => i.status == "AKTIF").toList();
               return _buildListview(profiles);
             } else {
               return Center(
@@ -109,24 +109,6 @@ class _StorageActive extends State<StorageActive> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16),
-            child: TextField(
-              decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[300])),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey[300],
-                  ),
-                  suffixIcon: Icon(
-                    Icons.filter_list,
-                    color: Colors.lightBlue,
-                  ),
-                  hintText: "Cari Item",
-                  focusColor: Colors.blue),
-            ),
-          ),
           Expanded(
             child: Container(
               child: Container(
@@ -142,67 +124,146 @@ class _StorageActive extends State<StorageActive> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Container(
-                              width: 90,
-                              height: 90,
-                            ),
-                            SizedBox(
-                              width: 14,
-                            ),
                             Expanded(
                               child: Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      myStorage.kode_kontainer,
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      myStorage.nama,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    Text(
-                                      myStorage.nama_kota,
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
-                                      ),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                          text: 'Berakhir ',
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Kode Kontainer : ',
                                           style: TextStyle(
                                               fontSize: 16,
-                                              color: Colors.blue[300],
-                                              fontWeight: FontWeight.bold),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: myStorage.hari.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.blue[300],
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            TextSpan(
-                                              text: ' Hari Lagi',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.blue[300],
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ]),
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.kode_kontainer,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      myStorage.tanggal_order,
-                                      style: TextStyle(
-                                        color: Colors.grey[800],
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Jenis Kontainer : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.nama,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Lokasi : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.nama_lokasi,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Alamat : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.keterangan,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Jumlah Sewa : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.hari.toString(),
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Tanggal Order : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.tanggal_order,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Tanggal Mulai : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.tanggal_mulai,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'Tanggal Akhir : ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          myStorage.tanggal_akhir,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
                                     ),
                                     Row(
                                       children: <Widget>[
@@ -232,8 +293,6 @@ class _StorageActive extends State<StorageActive> {
                                                     idtransaksi_detail:
                                                         myStorage
                                                             .idtransaksi_detail,
-                                                    idtransaksi:
-                                                        myStorage.idtransaksi,
                                                     nama: myStorage.nama,
                                                   );
                                                 }));

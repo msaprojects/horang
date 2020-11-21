@@ -19,13 +19,12 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class KonfirmasiLog extends StatefulWidget {
   // MystorageModel mystorage;
   // KonfirmasiLog({this.mystorage});
-  var kode_kontainer, nama_kota, idtransaksi_detail, idtransaksi, nama;
+  var kode_kontainer, nama_kota, idtransaksi_detail, nama;
   KonfirmasiLog(
       {this.nama_kota,
       this.nama,
       this.kode_kontainer,
-      this.idtransaksi_detail,
-      this.idtransaksi});
+      this.idtransaksi_detail});
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -97,9 +96,8 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     kode_kontainer1 = widget.kode_kontainer;
     nama_kota1 = widget.nama_kota;
     idtransaksi_det = widget.idtransaksi_detail;
-    idtransaksii = widget.idtransaksi;
     nama1 = widget.nama;
-    // super.initState();
+    super.initState();
     cekToken();
   }
 

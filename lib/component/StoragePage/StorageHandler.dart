@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horang/component/StoragePage/StorageNonActive.List.dart';
 
 import 'StorageActive.List.dart';
 import 'StorageExpired.List.dart';
@@ -20,7 +21,7 @@ class _StorageHandler extends State<StorageHandler>
   void initState() {
     super.initState();
     controller = TabController(
-        vsync: this, length: 2); //LENGTH = TOTAL TAB YANG AKAN DIBUAT
+        vsync: this, length: 3); //LENGTH = TOTAL TAB YANG AKAN DIBUAT
   }
 
   @override
@@ -53,11 +54,15 @@ class _StorageHandler extends State<StorageHandler>
             controller: controller,
             tabs: <Widget>[
               new Tab(
-                  icon: new Icon(Icons.all_inclusive, color: Colors.black),
-                  text: "Sedang Berjalan"),
+                  icon: new Icon(Icons.timer, color: Colors.black),
+                  text: "Belum Aktif"),
               new Tab(
-                icon: new Icon(Icons.clear, color: Colors.black),
-                text: "Pesanan Expired",
+                icon: new Icon(Icons.av_timer_sharp, color: Colors.black),
+                text: "Berjalan",
+              ),
+              new Tab(
+                icon: new Icon(Icons.timer_off_rounded, color: Colors.black),
+                text: "Expired",
               ),
             ],
           ),
@@ -66,8 +71,9 @@ class _StorageHandler extends State<StorageHandler>
           controller: controller,
           children: <Widget>[
             // OnGoing(),
+            StorageNonActive(),
             StorageActive(),
-            StorageExpired()
+            StorageExpired(),
           ],
         ),
       ),

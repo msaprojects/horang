@@ -97,7 +97,7 @@ class _StorageActive extends State<StorageActive> {
             //   return Text("data kosong");
             // } else {
             List<MystorageModel> profiles = snapshot.data
-                .where((element) => element.aktif == "AKTIF")
+                .where((element) => element.status == "AKTIF")
                 .toList();
             print("profile $profiles");
             if (profiles.isNotEmpty) {
@@ -137,7 +137,6 @@ class _StorageActive extends State<StorageActive> {
                       kode_kontainer: kontainerActive.kode_kontainer,
                       nama_kota: kontainerActive.nama_kota,
                       idtransaksi_detail: kontainerActive.idtransaksi_detail,
-                      idtransaksi: kontainerActive.idtransaksi,
                       nama: kontainerActive.nama,
                       // jenisProduk: jenisProduk,
                     );

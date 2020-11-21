@@ -1,53 +1,65 @@
 import 'dart:convert';
 
 class MystorageModel {
-  int hari, idtransaksi_detail, idtransaksi;
-  String kode_kontainer, nama, nama_kota, tanggal_order, aktif;
+  int hari, idtransaksi_detail;
+  String tanggal_mulai,
+      tanggal_akhir,
+      tanggal_order,
+      kode_kontainer,
+      nama,
+      nama_kota,
+      nama_lokasi,
+      keterangan,
+      status;
 
   MystorageModel(
-      {this.kode_kontainer,
+      {this.hari,
       this.idtransaksi_detail,
-      this.idtransaksi,
+      this.tanggal_mulai,
+      this.tanggal_akhir,
+      this.tanggal_order,
+      this.kode_kontainer,
       this.nama,
       this.nama_kota,
-      this.tanggal_order,
-      this.hari,
-      this.aktif});
+      this.nama_lokasi,
+      this.keterangan,
+      this.status});
 
-  factory MystorageModel.fromJson(Map<String, dynamic> map) {
+  factory MystorageModel.fromJson(Map<String, dynamic> map){
     return MystorageModel(
-        kode_kontainer: map["kode_kontainer"],
-        idtransaksi_detail: map["idtransaksi_detail"],
-        idtransaksi: map["idtransaksi"],
-        nama: map["nama"],
-        nama_kota: map["nama_kota"],
-        tanggal_order: map["tanggal_order"],
-        hari: map["hari"],
-        aktif: map["AKTIF"]);
+      hari: map['hari'],
+      idtransaksi_detail: map['idtransaksi_detail'],
+      tanggal_mulai: map['tanggal_mulai'],
+      tanggal_akhir: map['tanggal_akhir'],
+      tanggal_order: map['tanggal_order'],
+      kode_kontainer: map['kode_kontainer'],
+      nama: map['nama'],
+      nama_kota: map['nama_kota'],
+      nama_lokasi: map['nama_lokasi'],
+      keterangan: map['keterangan'],
+      status: map['status']
+    );
   }
-  Map<String, dynamic> toJson() {
-    return {
+
+  Map<String, dynamic> toJson(){
+    return{
+      "hari": hari,
+      "idtransaksi_detail": idtransaksi_detail,
+      "tanggal_mulai": tanggal_mulai,
+      "tanggal_akhir": tanggal_akhir,
+      "tanggal_order": tanggal_order,
       "kode_kontainer": kode_kontainer,
       "nama": nama,
-      "idtransaksi_detail": idtransaksi_detail,
-      "idtransaksi": idtransaksi,
       "nama_kota": nama_kota,
-      "tanggal_order": tanggal_order,
-      "hari": hari,
-      "AKTIF": aktif
+      "nama_lokasi": nama_lokasi,
+      "keterangan": keterangan,
+      "status": status
     };
   }
 
   @override
   String toString() {
-    return 'Mystorage{kode_kontainer: $kode_kontainer,'
-        'nama: $nama,'
-        'idtransaksi_detail: $idtransaksi_detail,'
-        'idtransaksi: $idtransaksi,'
-        'nama_kota: $nama_kota,'
-        'tanggal_order: $tanggal_order,'
-        'hari: $hari,'
-        'AKTIF: $aktif}';
+    return 'MystorageModel{hari: $hari, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status}';
   }
 }
 
