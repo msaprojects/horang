@@ -76,20 +76,19 @@ class _HistoryPageState extends State<HistoryPage> {
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listHistory(access_token),
-        builder: (BuildContext context, AsyncSnapshot<List<history>> snapshot) {
-          print("hmm : ${snapshot.connectionState}");
+        builder: (BuildContext context, AsyncSnapshot<List<HistoryModel>> snapshot) {
           if (snapshot.hasError) {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                  "4Something wrong with message: ${snapshot.error.toString()}"),
+                  "Something wrong with message: ${snapshot.error.toString()}"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List<history> historyyy = snapshot.data;
+            List<HistoryModel> historyyy = snapshot.data;
             return _buildListView(historyyy);
           } else {
             return Center(
@@ -101,13 +100,13 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget _buildListView(List<history> dataIndex) {
+  Widget _buildListView(List<HistoryModel> dataIndex) {
     DateTime date = DateTime.now();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          "History",
+          "History Pembayaran",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
@@ -121,24 +120,6 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16),
-            child: TextField(
-              decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[300])),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey[300],
-                  ),
-                  suffixIcon: Icon(
-                    Icons.filter_list,
-                    color: Colors.lightBlue,
-                  ),
-                  hintText: "Cari Item",
-                  focusColor: Colors.blue),
-            ),
-          ),
           Expanded(
               child: Container(
             padding: EdgeInsets.only(
@@ -148,27 +129,15 @@ class _HistoryPageState extends State<HistoryPage> {
             color: Colors.grey[100],
             child: ListView.builder(
               itemBuilder: (context, index) {
-                history History = dataIndex[index];
+                HistoryModel history = dataIndex[index];
                 return Card(
                   // child: Column(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   child: InkWell(
                     onTap: () {
-                      if (idcustomer == "0") {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                          duration: Duration(seconds: 10),
-                        ));
-                        Navigator.pop(context, false);
-                      } else {
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return FormInputOrder(
-                        //     // jenisProduk: ,
-                        //   );
-                        // }));
-                      }
+                      setState(() {
+
+                      });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -188,94 +157,75 @@ class _HistoryPageState extends State<HistoryPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      "No. Order : " + History.no_order,
+                                      "No. Kontainer : " +
+                                          history.kode_kontainer,
                                       overflow: TextOverflow.visible,
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey[800],
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    // Text(
-                                    //   tanggal(date, shortMonth: true),
-                                    //   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                                    // )
                                   ],
                                 ),
-                                // Text(
-                                //   "No. Order : " + History.no_order,
-                                //   style: TextStyle(
-                                //       fontSize: 16,
-                                //       color: Colors.grey[800],
-                                //       fontWeight: FontWeight.bold),
-                                // ),
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Customer : " + History.nama_customer,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black45,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Text(
-                                        tanggal(date, shortMonth: true),
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  "No. Order : " + history.no_order,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 8,
+                                Text(
+                                  "No. Bayar : " + history.kode_refrensi,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
                                 ),
-
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Text(
-                                      "Sewa : " + History.jumlah_sewa + " Hari",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black45,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                    Text(
-                                      rupiah(History.total_harga,
-                                          separator: ',', trailing: '.00'),
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                  ],
+                                Text(
+                                  "Nominal Bayar : " + rupiah(history.total_harga.toString()),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
                                 ),
-
-                                // Text(
-                                //   rupiah(
-                                //     History.total_harga,
-                                //     separator: ',',
-                                //     trailing: '.00'
-                                //   ),
-                                //   style: TextStyle(
-                                //       fontSize: 20,
-                                //       color: Colors.green,
-                                //       fontWeight: FontWeight.bold),
-                                //   overflow: TextOverflow.fade,
-                                // ),
-
+                                Text(
+                                  "Jumlah Sewa : " + history.jumlah_sewa.toString() +" /Hari",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                                Text(
+                                  "Harga : " + rupiah(history.harga.toString()) +" /Hari",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                                Text(
+                                  "Tgl Order : " + history.tanggal_order,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                                Text(
+                                  "Tgl awal sewa : " + history.tanggal_mulai,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                                Text(
+                                  "Tgl akhir sewa : " + history.tanggal_akhir,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 20,
                                 ),

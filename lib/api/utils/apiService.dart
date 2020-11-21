@@ -148,7 +148,7 @@ class ApiService {
   }
 
   //LOAD HISTORY LIST
-  Future<List<history>> listHistory(String token) async {
+  Future<List<HistoryModel>> listHistory(String token) async {
     final response = await client
         .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
