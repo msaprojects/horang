@@ -390,274 +390,277 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
 
   Widget _designForm(List<OrderSukses> dataIndex) {
     OrderSukses orders;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Detail Pesanan Anda",
-          style: TextStyle(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Detail Pesanan Anda",
+            style: TextStyle(color: Colors.white),
+          ),
+          //Blocking Back
+          automaticallyImplyLeading: false,
         ),
-        //Blocking Back
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(
-                left: 5,
-                right: 5,
-              ),
-              color: Colors.grey[100],
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  OrderSukses os = dataIndex[index];
-                  print("KOREF" + os.kode_refrensi);
-                  return Card(
-                    child: new Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "No. Order :",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                os.no_order,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(children: <Widget>[
-                                Text("Nomor Kontainer :")
-                              ]),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                os.kode_kontainer,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                ),
+                color: Colors.grey[100],
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    OrderSukses os = dataIndex[index];
+                    print("KOREF" + os.kode_refrensi);
+                    return Card(
+                      child: new Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "No. Order :",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Durasi :")],
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  os.no_order,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 12),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(children: <Widget>[
+                                  Text("Nomor Kontainer :")
+                                ]),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  os.kode_kontainer,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Durasi :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  os.jumlah_sewa.toString(),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Asuransi :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  'Ya, Rp. 50.000',
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Voucher :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  'Tidak, Rp. 0',
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Harga Sewa :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  os.harga.toString(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Divider(
+                            height: 16,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "No. Pembayaran :",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 20),
+                                child: Text(
+                                  os.kode_refrensi,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Pembayaran")],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Text(
+                                  os.nama_provider,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Status Pembayaran")],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Text(
+                                  'Berhasil',
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Row(
+                                  children: <Widget>[Text("Total Pembayaran")],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Text(
+                                  os.total_harga.toString(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width / 1,
+                            height: 60,
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            margin: EdgeInsets.only(top: 3),
+                            child: RaisedButton(
+                              color: Colors.blue[300],
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()));
+                              },
                               child: Text(
-                                os.jumlah_sewa.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                "OK",
+                                style: (TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white)),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Asuransi :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                'Ya, Rp. 50.000',
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Voucher :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                'Tidak, Rp. 0',
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Harga Sewa :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                os.harga.toString(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Divider(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "No. Pembayaran :",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 20),
-                              child: Text(
-                                os.kode_refrensi,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Pembayaran")],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Text(
-                                os.nama_provider,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Status Pembayaran")],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Text(
-                                'Berhasil',
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                children: <Widget>[Text("Total Pembayaran")],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Text(
-                                os.total_harga.toString(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 1,
-                          height: 60,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          margin: EdgeInsets.only(top: 3),
-                          child: RaisedButton(
-                            color: Colors.blue[300],
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Home()));
-                            },
-                            child: Text(
-                              "OK",
-                              style: (TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white)),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: dataIndex.length,
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: dataIndex.length,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

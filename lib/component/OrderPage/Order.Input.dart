@@ -775,7 +775,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
       onChanged: (value) {
         setState(() {
           valasuransi = value.toString();
-          print("damn" + value.toString());
         });
       },
     );

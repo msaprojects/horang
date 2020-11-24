@@ -16,6 +16,7 @@ import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class ProdukList extends StatefulWidget {
   var tanggalAwal, tanggalAkhir;
@@ -36,7 +37,7 @@ class MyHttpOverride extends HttpOverrides {
 
 class _ProdukList extends State<ProdukList> {
   bool a = false;
-  DateTime dtAwal, dtAkhir, _date, _date2;
+  DateTime dtAwal, dtAkhir, _date1, _date2;
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
   // DateTime sDate = DateTime(DateTime.now().year, DateTime.now().month,
@@ -54,7 +55,7 @@ class _ProdukList extends State<ProdukList> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  String urlcomboKota = "http://server.horang.id:9992/api/lokasi/";
+  String urlcomboKota = "https://server.horang.id:9993/api/lokasi/";
   int valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
@@ -70,10 +71,14 @@ class _ProdukList extends State<ProdukList> {
   String _pTanggalAkhir = "";
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
+  // String mmtext;
+  // String aatext;
   // String mmtext = DateTime.now().toString();
   // String aatext = DateTime.now().add(Duration(days: 5)).toString();
+
   String mmtext = DateFormat.yMMMd().format(DateTime.now());
-  String aatext = DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
+  String aatext =
+      DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
   var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
@@ -126,25 +131,37 @@ class _ProdukList extends State<ProdukList> {
     });
   }
 
+  int diffInDays(DateTime akhir, DateTime awal) {
+    return ((akhir.difference(awal) -
+                    Duration(hours: akhir.hour) +
+                    Duration(hours: awal.hour))
+                .inHours /
+            24)
+        .round();
+  }
+
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
-        _range =
-            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString() +
-                ' - ' +
-                DateFormat('yyyy-MM-dd')
-                    .format(args.value.endDate ?? args.value.startDate)
-                    .toString();
-          
-        _tanggalAwal =
-            DateFormat('yyyy-MM-dd').format(args.value.startDate).toString();
-        _tanggalAkhir = DateFormat('yyyy-MM-dd')
-            .format(args.value.endDate ?? args.value.startDate)
-            .toString();
-        if(args.value.endDate.isAfter(args.value.startDate)){
+        _date1 = args.value.startDate;
+        _date2 = args.value.endDate;
+        if (diffInDays(_date2, _date1) < 5) {
+          //kasih alert disini ya
+          // _date2 = _date1.add(Duration(days: 5));
+          DateValidation(context, _date2 = _date1.add(Duration(days: 5)));
+        }
+        _range = DateFormat('yyyy-MM-dd').format(_date1).toString() +
+            ' - ' +
+            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+        _tanggalAkhir =
+            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        if (_date2.isAfter(_date1)) {
           a = false;
-          mmtext = _tanggalAwal;
-          aatext = _tanggalAkhir;
+          initializeDateFormatting("id_ID", null).then((_) {
+            mmtext = DateFormat.yMMMEd("id_ID").format(_date1);
+            aatext = DateFormat.yMMMEd("id_ID").format(_date2);
+          });
         }
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
@@ -199,9 +216,16 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   void initState() {
+    initializeDateFormatting("id_ID", null).then((_) {
+      mmtext = DateFormat.yMMMEd("id_ID").format(DateTime.now());
+      aatext = DateFormat.yMMMEd("id_ID")
+          .format(DateTime.now().add(Duration(days: 5)));
+    });
     cekToken();
-    ttanggalAwal = widget.tanggalAwal;
-    ttanggalAkhir = widget.tanggalAkhir;
+    _date1 = DateTime.now();
+    _date2 = DateTime.now().add(Duration(days: 5));
+    // ttanggalAwal = widget.tanggalAwal;
+    // ttanggalAkhir = widget.tanggalAkhir;
     print("HMMM : $access_token");
     _cekKoneksi();
     super.initState();
@@ -218,8 +242,8 @@ class _ProdukList extends State<ProdukList> {
     setState(() {
       if (a) {
         a = false;
-        mmtext = _tanggalAwal;
-        aatext = _tanggalAkhir;
+        // mmtext = _tanggalAwal;
+        // aatext = _tanggalAkhir;
       } else {
         a = true;
         // Text("maybe");
@@ -310,14 +334,18 @@ class _ProdukList extends State<ProdukList> {
                                     // sDate.toString(),
                                     mmtext,
                                     style: GoogleFonts.lato(
-                                        fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.arrow_forward_rounded),
                                   Text(
                                     // fDate.toString(),
                                     aatext,
                                     style: GoogleFonts.lato(
-                                        fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -340,11 +368,13 @@ class _ProdukList extends State<ProdukList> {
                                   onSelectionChanged: _onSelectionChanged,
                                   selectionMode:
                                       DateRangePickerSelectionMode.range,
-                                  initialSelectedRange: PickerDateRange(
-                                      DateTime.now()
-                                          .subtract(const Duration(days: 0)),
-                                      DateTime.now()
-                                          .add(const Duration(days: 5))),
+                                  initialSelectedRange:
+                                      PickerDateRange(_date1, _date2),
+                                  // initialSelectedRange: PickerDateRange(
+                                  //     DateTime.now()
+                                  //         .subtract(const Duration(days: 0)),
+                                  //     DateTime.now()
+                                  //         .add(const Duration(days: 5))),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(
@@ -430,7 +460,7 @@ class _ProdukList extends State<ProdukList> {
                     children: [
                       Image.asset("assets/image/datanotfound.png"),
                       Text(
-                        "Oppss..Maaf container yang anda cari tidak ditemukan, pilih tanggal dan kota lainya.",
+                        "Oppss..Maaf Jenis Container yang anda cari tidak ditemukan, pilih tanggal dan kota lainya.",
                         style: GoogleFonts.inter(color: Colors.grey),
                         textAlign: TextAlign.center,
                       )
@@ -655,8 +685,12 @@ class _ProdukList extends State<ProdukList> {
           padding: EdgeInsets.only(left: 10),
           child: Row(
             children: [
-              Icon(Icons.search,),
-              SizedBox(width: 7,),
+              Icon(
+                Icons.search,
+              ),
+              SizedBox(
+                width: 7,
+              ),
               Text("Pilih Kota",
                   textAlign: TextAlign.end,
                   style:
@@ -733,6 +767,33 @@ class _ProdukList extends State<ProdukList> {
       content: Text("Anda harus melengkapi akun sebelum melakukan transaksi!"),
       actions: [
         okButton,
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
+  DateValidation(BuildContext context, kondisi) {
+    Widget okButton = FlatButton(
+      child: Text("Iya"),
+      onPressed: () {
+      kondisi;
+        Navigator.pop(context);
+      },
+    );
+    Widget cancelButton = FlatButton(
+      child: Text("Tidak"),
+      onPressed: () => Navigator.pop(context),
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Minimum sewa 5 Hari"),
+      content: Text("Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?"),
+      actions: [
+        okButton,
+        cancelButton,
       ],
     );
     showDialog(
