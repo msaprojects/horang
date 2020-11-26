@@ -40,22 +40,11 @@ class _ProdukList extends State<ProdukList> {
   DateTime dtAwal, dtAkhir, _date1, _date2;
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
-  // DateTime sDate = DateTime(DateTime.now().year, DateTime.now().month,
-  //     DateTime.now().day, DateTime.now().hour, DateTime.now().minute);
-  // DateTime fDate =
-  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-  //         .add(Duration(days: 5));
-
-  // DateTime tanggalini = DateTime.now();
   String string = DateFormat.yMMMd().add_Hm().format(DateTime.now());
-  // DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-  // String string = dateFormat.format(DateTime.now());
-  // DateTime dateTime = dateFormat.parse("yyyy-MM-dd");
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  String urlcomboKota = "https://server.horang.id:9993/api/lokasi/";
   int valKota;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
   TextEditingController _controlleridkota;
@@ -83,7 +72,7 @@ class _ProdukList extends State<ProdukList> {
 
   List<dynamic> _dataKota = List();
   void getcomboProduk() async {
-    final response = await http.get(urlcomboKota,
+    final response = await http.get(ApiService().urllokasi,
         headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
     setState(() {
@@ -361,8 +350,6 @@ class _ProdukList extends State<ProdukList> {
                               child: Column(
                               children: [
                                 SfDateRangePicker(
-                                  // minDate: sDate,
-                                  // maxDate: fDate,
                                   minDate: DateTime(sekarang.year,
                                       sekarang.month, sekarang.day),
                                   onSelectionChanged: _onSelectionChanged,
@@ -370,11 +357,6 @@ class _ProdukList extends State<ProdukList> {
                                       DateRangePickerSelectionMode.range,
                                   initialSelectedRange:
                                       PickerDateRange(_date1, _date2),
-                                  // initialSelectedRange: PickerDateRange(
-                                  //     DateTime.now()
-                                  //         .subtract(const Duration(days: 0)),
-                                  //     DateTime.now()
-                                  //         .add(const Duration(days: 5))),
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(
@@ -430,13 +412,11 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("YUHUU " + data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
         builder:
             (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
-          print("Loading... $snapshot");
           if (snapshot.hasError) {
             print(snapshot.error.toString());
             return Center(

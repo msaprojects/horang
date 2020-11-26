@@ -41,7 +41,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var Value,
       title,
       valasuransi,
-      urlcomboAsuransi = "http://server.horang.id:9992/api/asuransiaktif";
+      urlasuransi = ApiService().baseUrl+"asuransiaktif";
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
@@ -139,7 +139,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       _fieldketerangan;
 
   void getAsuransi() async {
-    final response = await http.get(urlcomboAsuransi,
+    final response = await http.get(ApiService().urlasuransi,
         headers: {"Authorization": "BEARER ${access_token}"});
     setState(() {
       nomasuransi = json.decode(response.body)[0]['nilai'];
@@ -721,10 +721,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
               FlatButton(
                   color: Colors.red,
                   onPressed: () {
-                    // print("orderinput idjenisproduk");
-                    // print(idjenis_produk);
-                    // print("cek tanggal1 $_date");
-                    // print("cek tanggal2 $_date2");
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute(builder: (context) {
                       return FormInputPembayaran(
@@ -743,8 +739,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           alamat: alamat,
                           tanggal_mulai: tglAwal,
                           tanggal_akhir: tglAkhir,
-                          // tanggal_mulai: _date.toString(),
-                          // tanggal_akhir: _date2.toString(),
                           keterangan_barang: _keteranganbarang.text.toString(),
                           nominal_barang: _nominalbarang.text.toString(),
                           total_harga: hasilperhitungan.toString(),

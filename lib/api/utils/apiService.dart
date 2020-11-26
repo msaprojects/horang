@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
+import 'package:horang/api/models/deposit/ceksaldo.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
@@ -33,31 +33,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  // final String baseUrl = "http://192.168.1.219:9992/api/";
-  // final String baseUrl = "http://104.199.147.100:9992/api/";
-  // final String baseUrl = "http://server.horang.id:9992/api/";
   final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
   ResponseCode responseCode;
   OrderSukses orderSukses = OrderSukses();
-  var vall;
+
+  //URL MAKER
+  String urlasuransi, urlceksaldo, urllokasi;
+  ApiService() {
+    urlasuransi = baseUrl + "asuransiaktif";
+    urlceksaldo = baseUrl + "ceksaldo";
+    urllokasi = baseUrl + "lokasi";
+  }
 
   /////////////////////// LIST /////////////////////////
 
   Future<List<xenditmodel>> xenditUrl() async {
-    String username = 'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
+    String username =
+        'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
     String password = '';
-    String basicAuth = 'Basic '+base64Encode(utf8.encode('$username:$password'));
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     final response = await client.get("https://api.xendit.co/balance",
         headers: {
           "content-type": "application/json",
-          "Authorization": basicAuth});
-    print("XENDIT RESULT : "+response.body);
-    // if (response.statusCode == 200) {
-    //   return jenisprodukFromJson(response.body);
-    // } else {
-    //   return null;
-    // }
+          "Authorization": basicAuth
+        });
   }
 
   //LOAD JENIS PRODUK
@@ -78,7 +79,6 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: PostProdukModelToJson(data),
     );
-    print("avail : "+response.body);
     response.body;
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
@@ -91,12 +91,8 @@ class ApiService {
   Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
     final response = await client.get("$baseUrl/orderdet/$idorder",
         headers: {"Authorization": "BEARER ${token}"});
-    print("cek stsscode ${response.statusCode}+ $token");
-    print("cek body" +response.body);
-    print("token"+ token);
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
-      
     } else {
       return null;
     }
@@ -117,7 +113,6 @@ class ApiService {
   Future<List<MystorageModel>> listMystorage(String token) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("JSON LIST STORAGE"+response.body);
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
     } else {
@@ -200,7 +195,6 @@ class ApiService {
     var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
     responseCode = ResponseCode.fromJson(message);
-    print(token.access_token);
     if (response.statusCode == 200) {
 //      Share Preference
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -216,14 +210,12 @@ class ApiService {
   }
 
 //  ORDER PRODUK
-  Future<int>tambahOrderProduk(OrderProduk data) async {
+  Future<int> tambahOrderProduk(OrderProduk data) async {
     final response = await client.post(
       "$baseUrl/order",
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
     } else if (response.statusCode == 204) {
@@ -240,7 +232,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
-    print("tambah profile : "+response.body);
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -313,8 +304,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -367,8 +356,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
-    print("cek body"+ response.body);
-    print("cek sttscode ${response.statusCode}");
     response.body;
     if (response.statusCode == 200) {
       return logAktifitasNotifFromJson(response.body);
@@ -378,10 +365,11 @@ class ApiService {
   }
 
   Future<List<LogList>> listloggs(String token, idtransaksi_detail) async {
-   final response = await client.post(
+    final response = await client.post(
       "$baseUrl/log",
       headers: {"content-type": "application/json"},
-      body: jsonEncode({"token": "${token}", "idtransaksi_detail":"${idtransaksi_detail}"}),
+      body: jsonEncode(
+          {"token": "${token}", "idtransaksi_detail": "${idtransaksi_detail}"}),
     );
     if (response.statusCode == 200) {
       return LoglistFromJson(response.body);
@@ -430,7 +418,6 @@ class ApiService {
     }
   }
 
-
   //////////////////////////////////////////////
 
   ////////////////////// END UBAH /////////////////////
@@ -441,8 +428,6 @@ class ApiService {
   Future<bool> checkingToken(String token) async {
     final response = await client.get("$baseUrl/ceklogin",
         headers: {"Authorization": "BEARER ${token}"});
-        print("cekkk123 ${token}+${response.statusCode}");
-        print(response.statusCode);
     if (response.statusCode == 200) {
       return true;
     } else {

@@ -1,21 +1,19 @@
-import 'dart:io';
+import 'dart:convert';
 import 'dart:ui';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
-import 'package:horang/component/DashboardPage/Produk.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 // final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -51,6 +49,8 @@ class _HomePageState extends State<HomePage> {
   String token = '';
   static String dataName = '';
   static String dataAge = '';
+  var ceksaldo;
+  // String urlceksaldo = "https://server.horang.id:9993/api/ceksaldo";
 
   // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
   //   debugPrint('onBackgroundMessage: $message');
@@ -72,6 +72,12 @@ class _HomePageState extends State<HomePage> {
   //   return null;
   // }
 
+  void getSaldo() async {
+    final response = await http.get(ApiService().urlceksaldo,
+        headers: {"Authorization": "BEARER ${access_token}"});
+    ceksaldo = json.decode(response.body)[0]['saldo'];
+  }
+
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -79,8 +85,8 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-//    print("Hasil token from login : "+refresh_token);
-//    print(sp.getString("access_token")+" ---///--- "+sp.getString("refresh_token"));
+   // print("Hasil token from login : "+refresh_token);
+   print(sp.getString("access_token")+" ---///--- "+sp.getString("refresh_token"));
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
 
     if (idcustomer.toString() == '0') {
@@ -153,6 +159,7 @@ class _HomePageState extends State<HomePage> {
             }
           }));
     }
+    getSaldo();
   }
 
   @override
@@ -182,13 +189,13 @@ class _HomePageState extends State<HomePage> {
     // firebaseMessaging.getToken().then((token) => setState(() {
     //       this.token = token;
     //     }));
-    super.initState();
     cekToken();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //print("idcustomernya adalah : " + idcustomer);
+
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
@@ -206,7 +213,6 @@ class _HomePageState extends State<HomePage> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [Colors.purple, Colors.blue],
-                          // tileMode: TileMode.repeated
                         ),
                         // color: Colors.blue[400]
                       ),
@@ -247,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "0",
+                                  ceksaldo.toString(),
                                   style: GoogleFonts.inter(
                                       color: Colors.white,
                                       fontSize: 35,
@@ -256,12 +262,6 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 2,
                                 ),
-                                Text(
-                                  "SALDO TERPAKAI 0",
-                                  style: GoogleFonts.inter(
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize: 14),
-                                )
                               ],
                             ),
                           ),
@@ -288,12 +288,9 @@ class _HomePageState extends State<HomePage> {
                                       icon:
                                           Icon(Icons.refresh_rounded, size: 30),
                                       onPressed: () {
-                                        Scaffold.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Fitur ini masih dalam proses pengembangan"),
-                                          duration: Duration(seconds: 5),
-                                        ));
+                                        setState(() {
+                                          getSaldo();
+                                        });
                                       }),
                                   Text(
                                     "Refresh",
@@ -461,7 +458,6 @@ class _HomePageState extends State<HomePage> {
               FlatButton(
                   color: Colors.red,
                   onPressed: () {
-                    // print("skanlah1");
                     Navigator.of(context).pop();
                   },
                   child: Text("Ok"))

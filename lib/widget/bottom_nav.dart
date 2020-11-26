@@ -5,7 +5,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/component/account_page/account.dart';
-import 'package:horang/screen/home_page.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {

@@ -79,10 +79,11 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
           print("hmm : ${snapshot.connectionState}");
           if (snapshot.hasError) {
-            print("coba aja" + snapshot.error.toString());
+            print("Error ${snapshot.error.toString()}");
             return Center(
-              child: Text(
-                  "5Something wrong with message: ${snapshot.error.toString()}"),
+              child: CircularProgressIndicator(),
+              // child: Text(
+              //     "5Something wrong with message: ${snapshot.error.toString()}"),
             );
           }
           else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -92,9 +93,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             );
           }
           else if (snapshot.connectionState == ConnectionState.done) {
-            print("snapssss" + snapshot.toString());
             List<OrderSukses> orderstatuss = snapshot.data;
-            print("iknow ${snapshot.data}");
             return _designForm(orderstatuss);
           } else {
             return Center(
@@ -413,7 +412,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     OrderSukses os = dataIndex[index];
-                    print("KOREF" + os.kode_refrensi);
                     return Card(
                       child: new Column(
                         children: <Widget>[
@@ -693,7 +691,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
 class TicketClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    // TODO: implement getClip
     Path path = Path();
 
     path.lineTo(0, size.height);
@@ -712,17 +709,6 @@ class TicketClipper extends CustomClipper<Path> {
     path.lineTo(size.width, 0);
     path.close();
     return path;
-    // path.lineTo(size.width, size.height);
-    // path.lineTo(size.width, 0.0);
-
-    // path.addOval(Rect.fromCircle(
-    //   center: Offset(0.0, size.height / 2), radius: 20.0
-    // ));
-    // path.addOval(Rect.fromCircle(
-    //   center: Offset(size.width, size.height / 2), radius: 20.0
-    // ));
-
-    // return path;
   }
 
   @override

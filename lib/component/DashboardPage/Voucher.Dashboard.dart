@@ -4,7 +4,7 @@ import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
-import 'package:horang/screen/home_page.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

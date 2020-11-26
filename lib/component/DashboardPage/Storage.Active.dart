@@ -79,9 +79,7 @@ class _StorageActive extends State<StorageActive> {
         future: _apiService.listMystorage(access_token),
         builder: (BuildContext context,
             AsyncSnapshot<List<MystorageModel>> snapshot) {
-          print("hmm : ${snapshot.connectionState}");
           if (snapshot.hasError) {
-            print(snapshot.error.toString());
             return Center(
               child: Text(
                   "3Something wrong with message: ${snapshot.error.toString()}"),
@@ -91,20 +89,12 @@ class _StorageActive extends State<StorageActive> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            print("snapsottttt ${snapshot.data == "AKTIF"}");
-            // if (snapshot.data == "AKTIF" && snapshot.data == false) {
-            //   print("sawadikap");
-            //   return Text("data kosong");
-            // } else {
             List<MystorageModel> profiles = snapshot.data
                 .where((element) => element.status == "AKTIF")
                 .toList();
-            print("profile $profiles");
             if (profiles.isNotEmpty) {
-              // print("masak air");
               return _buildlistview(profiles);
             } else {
-              print("gdmntit");
               return Text("data kosong");
             }
           }

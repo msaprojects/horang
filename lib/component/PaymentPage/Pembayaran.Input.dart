@@ -215,10 +215,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     } else {
       asuransitxt = "Tidak";
     }
-    // totallharga = double.parse(stotal_harga) +
-    //     double.parse(stotal_asuransi) +
-    //     double.parse(sharga.toString()) -
-    //     double.parse(sharga.toString());
     var media = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -663,40 +659,15 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
-
-                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // Container(
-                            //   child: Row(
-                            //       children: <Widget>[
-                            //         Checkbox(
-                            //           value: asuransi,
-                            //           onChanged: (bool asuransii) {
-                            //             setState(() {
-                            //               asuransi = asuransii;
-                            //               if (asuransi == true) {
-
-                            //               } else {
-
-                            //               }
-                            //             });
-                            //           },
-                            //         ),
-                            //         SizedBox(width: 8.0),
-                            //         Text("Asuransi (Rp. 50.000)"),
-                            //       ],
-                            //     ),
-                            // ),
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan"+stotal_harga,
+                                  "Lanjutkan",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    // print("idjenisdipembayaran");
-                                    // print(idjenis_produk.toString());
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
@@ -707,7 +678,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                       idjenis_produk,
                                                   idlokasi: idlokasi,
                                                   jumlah_sewa: jumlah_sewa,
-                                                  idasuransi: 1,
+                                                  idasuransi: idasuransi,
                                                   idvoucher: idvoucher,
                                                   flagvoucher: flagvoucher,
                                                   flagasuransi: flagasuransi,
@@ -716,7 +687,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   flag_selesai: 0,
                                                   harga: double.parse(
                                                       sharga.toString()),
-                                                  total_harga: double.parse(stotal_harga),
+                                                  total_harga: double.parse(
+                                                      stotal_harga),
                                                   deposit_tambah: double.parse(
                                                       sharga.toString()),
                                                   deposit_pakai: double.parse(
@@ -729,7 +701,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   tanggal_mulai: stanggal_mulai,
                                                   tanggal_akhir: stanggal_akhir,
                                                   nominal_barang:
-                                                      double.parse("0.0"),
+                                                      snominal_barang,
                                                   keterangan_barang:
                                                       sketerangan_barang,
                                                   tanggal_order: "DATE(NOW())",
