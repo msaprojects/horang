@@ -7,8 +7,10 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
+import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
+import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
@@ -18,6 +20,8 @@ import 'package:http/http.dart' as http;
 // final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class HomePage extends StatefulWidget {
+  HomePage({Key key, this.title}): super(key: key);
+  final String title;
   int _current = 0;
   @override
   _HomePageState createState() => _HomePageState();
@@ -25,6 +29,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
+  TabController tabController;
   int _current = 0;
   Widget currentScreen = HomePage();
 
@@ -32,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -189,6 +195,7 @@ class _HomePageState extends State<HomePage> {
     // firebaseMessaging.getToken().then((token) => setState(() {
     //       this.token = token;
     //     }));
+    
     cekToken();
     super.initState();
   }
@@ -206,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                 Stack(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(40),
+                      padding: EdgeInsets.all(30),
                       constraints: BoxConstraints.expand(height: 250),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -432,7 +439,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StorageExpired()));
+                            builder: (context) => HistoryPage()
+                              // builder: (context) => StorageHandler(initialIndex: 1,)
+                              ));
                     },
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/utils/constant_color.dart';
@@ -150,74 +151,73 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       margin: EdgeInsets.only(left: 16, right: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 6,
+        itemCount: dataIndex.length,
         itemBuilder: (context, index) {
           MystorageModel mystorageModel = dataIndex[index];
           return GestureDetector(
-              onTap: () {
-                if (idcustomer == "0") {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                    duration: Duration(seconds: 10),
-                  ));
+            onTap: () {
+              if (idcustomer == "0") {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+                  duration: Duration(seconds: 10),
+                ));
 //                        Navigator.pop(context, false);
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StorageExpired()));
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                margin: EdgeInsets.all(8),
-                height: 64,
-                width: MediaQuery.of(context).size.width * 0.5,
-                decoration: BoxDecoration(
-                  color: mFillColor,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: mBorderColor, width: 1),
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HistoryPage()));
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              margin: EdgeInsets.all(8),
+              height: 64,
+              width: MediaQuery.of(context).size.width * 0.5,
+              decoration: BoxDecoration(
+                color: mFillColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: mBorderColor, width: 1),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      mystorageModel.nama,
+                      // "cek",
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: mTitleColor),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      mystorageModel.kode_kontainer,
+                      // "cek",
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: mTitleColor),
+                    ),
+                    SizedBox(
+                      height: 1,
+                    ),
+                    Text(
+                      'See Details...',
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: mSubtitleColor),
+                    ),
+                  ],
                 ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        mystorageModel.nama,
-                        // "cek",
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: mTitleColor),
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        mystorageModel.kode_kontainer,
-                        // "cek",
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: mTitleColor),
-                      ),
-                      SizedBox(
-                        height: 1,
-                      ),
-                      Text(
-                        'See Details...',
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                            color: mSubtitleColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ));
+              ),
+            ),
+          );
         },
       ),
     );

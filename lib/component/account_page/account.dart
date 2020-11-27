@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
@@ -110,91 +111,109 @@ class _AccountState extends State<Account> {
         ),
         body: ListView(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            // ),
             Container(
+              margin: EdgeInsets.only(left: 12, right: 12, bottom: 10),
+              height: MediaQuery.of(context).size.height * 0.110,
+              color: Colors.white,
               child: Container(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Card(
-                  color: Colors.grey[200],
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: 50,
-                        child: ClipOval(
-                          child: Image.asset('assets/image/userpng.png'),
-                        ),
-                      ),
-                      // Text("$nama_customer")
-                      Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "$nama_customer",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
+                margin: EdgeInsets.all(15),
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.person_pin,size: 50,),
+                    SizedBox(width: 10,),
+                    Text(
+                      "$nama_customer",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Lengkapi Profile"),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              //onTap: () {routing();}),
-              onTap: () {
-                if (idcustomer == 0) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TambahProfile()));
-                } else {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UbahProfile()));
-                }
-              },
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("Lengkapi Profile", style: GoogleFonts.inter(fontWeight: FontWeight.bold),),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  //onTap: () {routing();}),
+                  onTap: () {
+                    if (idcustomer == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TambahProfile()));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UbahProfile()));
+                    }
+                  },
+                ),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.edit),
-              title: Text("Pin"),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    // MaterialPageRoute(builder: (context) => Pin2()));
-                    MaterialPageRoute(builder: (context) => UbahPin()));
-                // UbahProfile();
-              },
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text("Pin", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        // MaterialPageRoute(builder: (context) => Pin2()));
+                        MaterialPageRoute(builder: (context) => UbahPin()));
+                    // UbahProfile();
+                  },
+                ),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.phonelink_lock),
-              title: Text("Ubah Password"),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UbahPass()));
-                // UbahProfile();
-              },
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.phonelink_lock),
+                  title: Text("Ubah Password", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UbahPass()));
+                    // UbahProfile();
+                  },
+                ),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.event_note),
-              title: Text("Syarat dan Ketentuan"),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.event_note),
+                  title: Text("Syarat dan Ketentuan", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {},
+                ),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.loop),
-              title: Text("Logout"),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {
-                Keluarr();
-              },
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.loop),
+                  title: Text("Logout", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {
+                    Keluarr();
+                  },
+                ),
+              ),
             ),
           ],
         ));

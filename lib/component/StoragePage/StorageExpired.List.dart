@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -7,12 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'StorageHandler.dart';
 
-class StorageExpired extends StatefulWidget {
+class StorageExpired1 extends StatefulWidget {
+  final TabController tabController;
+
+  const StorageExpired1({Key key, this.tabController}) : super(key: key);
   @override
   _StorageExpired createState() => _StorageExpired();
 }
 
-class _StorageExpired extends State<StorageExpired> {
+class _StorageExpired extends State<StorageExpired1> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -99,7 +103,27 @@ class _StorageExpired extends State<StorageExpired> {
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<MystorageModel> profiles =
                   snapshot.data.where((i) => i.status == "EXPIRED").toList();
-              return _buildListview(profiles);
+              if (profiles.isNotEmpty) {
+                return _buildListview(profiles);
+              } else {
+                return Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/image/datanotfound.png"),
+                        Text(
+                          "Oppss..Maaf data kontainer expired kosong.",
+                          style: GoogleFonts.inter(color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
             } else {
               return Center(
                 child: CircularProgressIndicator(),
@@ -119,165 +143,117 @@ class _StorageExpired extends State<StorageExpired> {
             itemCount: dataIndex == null ? 0 : dataIndex.length,
             itemBuilder: (BuildContext context, int index) {
               MystorageModel myStorage = dataIndex[index];
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+              return GestureDetector(
+                onTap: () {
+                  // print("damn it man" + myStorage.kode_kontainer.toString());
+                  _openAlertDialog(
+                    context,
+                    myStorage.kode_kontainer.toString(),
+                    myStorage.nama.toString(),
+                    myStorage.nama_lokasi.toString(),
+                    myStorage.keterangan,
+                    myStorage.tanggal_order,
+                    myStorage.tanggal_mulai,
+                    myStorage.tanggal_akhir,
+                    myStorage.hari.toString(),
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Card(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Kode Kontainer : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
+                                    'Kode Kontainer : ' +
+                                        myStorage.kode_kontainer,
+                                    style: GoogleFonts.inter(fontSize: 14),
                                   ),
-                                  Text(
-                                    myStorage.kode_kontainer,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
+                                  SizedBox(
+                                    height: 3,
                                   ),
+                                  Text('Jenis Kontainer : ' + myStorage.nama,
+                                      style: GoogleFonts.inter(fontSize: 14)),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text('Lokasi : ' + myStorage.nama_lokasi,
+                                      style: GoogleFonts.inter(fontSize: 14)),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: <Widget>[
+                                  //     Text(
+                                  //       'Kode Kontainer : ',
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //     Text(
+                                  //       myStorage.kode_kontainer,
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: <Widget>[
+                                  //     Text(
+                                  //       'Jenis Kontainer : ',
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //     Text(
+                                  //       myStorage.nama,
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: <Widget>[
+                                  //     Text(
+                                  //       'Lokasi : ',
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //     Text(
+                                  //       myStorage.nama_lokasi,
+                                  //       style: TextStyle(
+                                  //           fontSize: 16, color: Colors.black),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      "Ketuk untuk detail...",
+                                      style: GoogleFonts.lato(
+                                          fontSize: 12,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                  )
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Jenis Kontainer : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.nama,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Lokasi : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.nama_lokasi,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Alamat : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.keterangan,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Jumlah Sewa : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.hari.toString(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Tanggal Order : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.tanggal_order,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Tanggal Mulai : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.tanggal_mulai,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Tanggal Akhir : ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    myStorage.tanggal_akhir,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    height: 10,
-                  )
-                ],
+                    ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Divider(
+                    //   height: 10,
+                    // )
+                  ],
+                ),
               );
             },
             // separatorBuilder: (context, index) => Divider(),
@@ -286,6 +262,112 @@ class _StorageExpired extends State<StorageExpired> {
         ),
       ),
     );
+  }
+
+  void _openAlertDialog(
+      BuildContext context,
+      String kode_kontainer,
+      nama,
+      nama_lokasi,
+      keterangan,
+      tanggal_order,
+      tanggal_mulai,
+      tanggal_akhir,
+      hari) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new Container(
+              width: 260.0,
+              height: 300.0,
+              decoration: new BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: const Color(0xFFFFFF),
+                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+              ),
+              child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Detail Pesanan...",
+                              style: GoogleFonts.lato(fontSize: 12),
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("Kode Kontainer : " + kode_kontainer.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Jenis : " + nama.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Nama Lokasi : " + nama_lokasi.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Keterangan : " + keterangan.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Lama Order : " + hari.toString() + " Hari",
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Tanggal Order : " + tanggal_order.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Tanggal Mulai : " + tanggal_mulai.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Tanggal Akhir : " + tanggal_akhir.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              width: 900,
+                              child: FlatButton(
+                                  color: Colors.blue,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Ok',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ))),
+                        ],
+                      ),
+                    )
+                  ]),
+            ),
+          );
+        });
+    // showDialog(context: context, child: dialog);
   }
 
   showAlertDialog(BuildContext context) {

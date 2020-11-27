@@ -79,12 +79,11 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
           print("hmm : ${snapshot.connectionState}");
           if (snapshot.hasError) {
-            print("Error ${snapshot.error.toString()}");
-            return Center(
-              child: CircularProgressIndicator(),
-              // child: Text(
-              //     "5Something wrong with message: ${snapshot.error.toString()}"),
-            );
+            print("coba aja" + snapshot.error.toString());
+            // return Center(
+            //   child: Text(
+            //       "5Something wrong with message: ${snapshot.error.toString()}"),
+            // );
           }
           else if (snapshot.connectionState == ConnectionState.waiting) {
           //   print("koneksi waiting");
