@@ -1,5 +1,6 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
@@ -191,7 +192,11 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (Route<dynamic> route) => false);
             }),
       ),
       body: Container(
@@ -210,6 +215,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                 ),
                 TextFormField(
                   controller: _noOvo,
+                  // ignore: deprecated_member_use
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(

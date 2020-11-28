@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,7 +94,33 @@ class _StorageActive extends State<StorageActive> {
             if (profiles.isNotEmpty) {
               return _buildlistview(profiles);
             } else {
-              return Text("data kosong");
+              print("gdmntit");
+              return Container(
+                margin: EdgeInsets.only(bottom: 20),
+                height: MediaQuery.of(context).size.height * 0.1,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Card(
+                  child: Center(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline_rounded,
+                        color: Colors.orange,
+                        size: 18,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Anda Belum Ada Transaksi...",
+                        style: GoogleFonts.lato(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )),
+                ),
+              );
             }
           }
         });

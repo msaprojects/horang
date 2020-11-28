@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:commons/commons.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -175,7 +174,12 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         Text("Kota : " + nama_kota1.toString(),
                             style: GoogleFonts.lato(
                                 fontSize: 14, fontWeight: FontWeight.bold)),
-                        Text("idtransaksi : " + idtransaksii.toString() + "-" + "iddetail-transaksi" + idtransaksi_det.toString(),
+                        Text(
+                            "idtransaksi : " +
+                                idtransaksii.toString() +
+                                "-" +
+                                "iddetail-transaksi" +
+                                idtransaksi_det.toString(),
                             style: GoogleFonts.lato(
                                 fontSize: 14, fontWeight: FontWeight.bold)),
                       ],
@@ -186,196 +190,248 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
+            padding: EdgeInsets.only(left: 15, right: 15),
             alignment: Alignment.center,
-            child: Row(
+            child: Column(
               children: [
-                Wrap(
-                  spacing: 2.0,
-                  children: [
-                    FlatButton(
-                        onPressed: () {
-                          setState(() {
-                            _isLoading = true;
-                            // print('cekmasuk');
-                            LogOpen logopen = LogOpen(
-                              idtransaksi_detail: idtransaksi_det,
-                              token: access_token,
-                            );
-                            if (widget.kode_kontainer != null ||
-                                widget.nama_kota != null) {
-                              _apiService.OpenLog(logopen).then((isSuccess) {
-                                // print('cekmasuk2');
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  // print('cekmasuk3');
-                                  Widget okbutton = FlatButton(
-                                    child: Text("Ok"),
-                                    onPressed: () {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(builder: (BuildContext context) => Home()),
-                                        ModalRoute.withName('/Home'),
-                                      );
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) => Home()));
-                                      // Navigator.pop(context);
-                                    }
-                                  );
-                                  AlertDialog alert = AlertDialog(
-                                    title: Text("Peringatan"),
-                                    content: Text("Data Berhasil disimpan"),
-                                    actions: [
-                                      okbutton,
-                                    ],
-                                  );
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return alert;
-                                    },
-                                  );
-                                } else {
-                                  // print('cekmasuk4');
-                                  _scaffoldState.currentState.showSnackBar(
-                                      SnackBar(
-                                          content: Text("Submit data failed")));
-                                }
-                              });
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 50,
+                  child: FlatButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.lock_open_outlined),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Text("Open",
+                            style: GoogleFonts.inter(
+                                fontSize: 16, fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                    color: Colors.orange,
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                        // print('cekmasuk');
+                        LogOpen logopen = LogOpen(
+                          idtransaksi_detail: idtransaksi_det,
+                          token: access_token,
+                        );
+                        if (widget.kode_kontainer != null ||
+                            widget.nama_kota != null) {
+                          _apiService.OpenLog(logopen).then((isSuccess) {
+                            // print('cekmasuk2');
+                            setState(() => _isLoading = false);
+                            if (isSuccess) {
+                              // print('cekmasuk3');
+                              // Widget okbutton = FlatButton(
+                              //     child: Text("Ok"),
+                              //     onPressed: () {
+                              //       Navigator.pushAndRemoveUntil(
+                              //           context,
+                              //           MaterialPageRoute(
+                              //               builder: (context) => Home()),
+                              //           (Route<dynamic> route) => false);
+                              //     });
+                              successDialog(context,
+                                  "Permintaan open berhasil dilakukan !",
+                                  // showNeutralButton: false,
+                                  closeOnBackPress: true,
+                                  // positiveText: "Oke",
+                              //     positiveAction: () {
+                              //   Navigator.pushAndRemoveUntil(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //           builder: (context) => ListLog()),
+                              //       (Route<dynamic> route) => false);
+                              // }
+                              );
+                              // AlertDialog alert = AlertDialog(
+                              //   title: Text("Peringatan"),
+                              //   content: Text("Data Berhasil disimpan"),
+                              //   actions: [
+                              //     okbutton,
+                              //   ],
+                              // );
+                              // showDialog(
+                              //   context: context,
+                              //   builder: (BuildContext context) {
+                              //     return alert;
+                              //   },
+                              // );
+                            } else {
+                              // print('cekmasuk4');
+                              _scaffoldState.currentState.showSnackBar(SnackBar(
+                                  content: Text("Submit data failed")));
                             }
                           });
-                        },
-                        child: Chip(
-                          shadowColor: Colors.black,
-                          avatar: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            child: Text(
-                              'O',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          label: Text(
-                            "Open",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: Colors.white70,
-                        )),
-                    FlatButton(
-                        onPressed: () {
-                          setState(() {
-                            _isLoading = true;
-                            selesaiLog selesai = selesaiLog(
-                                idtransaksi: idtransaksii, token: access_token);
-                            if (widget.nama_kota != null ||
-                                widget.kode_kontainer != null) {
-                              _apiService.SelesaiLog(selesai).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    Flushbar(
-                                      message: "Ok masuk",
-                                      flushbarPosition: FlushbarPosition.BOTTOM,
-                                      icon: Icon(Icons.ac_unit),
-                                      flushbarStyle: FlushbarStyle.GROUNDED,
-                                      duration: Duration(seconds: 5),
-                                    )..show(
-                                        _scaffoldState.currentState.context);
-                                  });
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              StorageActive()));
-                                } else {
-                                  print('cekmasuk4');
-                                  _scaffoldState.currentState.showSnackBar(
-                                      SnackBar(
-                                          content: Text("Submit data failed")));
-                                }
+                        }
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                // child: Chip(
+                //   shadowColor: Colors.black,
+                //   avatar: CircleAvatar(
+                //     backgroundColor: Colors.green,
+                //     child: Text(
+                //       'O',
+                //       style: TextStyle(
+                //           color: Colors.white,
+                //           fontWeight: FontWeight.bold, fontSize: 20),
+                //     ),
+                //   ),
+                //   label: Text(
+                //     "Open",
+                //     style: TextStyle(color: Colors.black, fontSize: 20),
+                //   ),
+                //   backgroundColor: Colors.blueGrey,
+                // )),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 50,
+                  child: FlatButton(
+                    child: Row(
+                      children: [
+                        Icon(Icons.check_circle_rounded),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Text("Selesai",
+                            style: GoogleFonts.inter(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    color: Colors.lightBlue,
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                        selesaiLog selesai = selesaiLog(
+                            idtransaksi: idtransaksii, token: access_token);
+                        if (widget.nama_kota != null ||
+                            widget.kode_kontainer != null) {
+                          _apiService.SelesaiLog(selesai).then((isSuccess) {
+                            setState(() => _isLoading = false);
+                            if (isSuccess) {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((timeStamp) {
+                                Flushbar(
+                                  message: "Ok masuk",
+                                  flushbarPosition: FlushbarPosition.BOTTOM,
+                                  icon: Icon(Icons.ac_unit),
+                                  flushbarStyle: FlushbarStyle.GROUNDED,
+                                  duration: Duration(seconds: 5),
+                                )..show(_scaffoldState.currentState.context);
                               });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => StorageActive1()));
+                            } else {
+                              print('cekmasuk4');
+                              _scaffoldState.currentState.showSnackBar(SnackBar(
+                                  content: Text("Submit data failed")));
                             }
                           });
-                        },
-                        child: Chip(
-                          shadowColor: Colors.black,
-                          avatar: CircleAvatar(
-                            backgroundColor: Colors.blue,
-                            child: Text(
-                              'S',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          label: Text(
-                            "Selesai",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: Colors.white70,
-                        )),
-                    FlatButton(
-                        onPressed: () {
-                          print("DETAIL ORDER MASUK : $idtransaksi_det");
-                          setState(() {
-                            _isLoading = true;
-                            Logs log1 = Logs(
-                                idtransaksi_detail: idtransaksi_det,
-                                token: access_token);
+                        }
+                      });
+                    },
+                    // child: Chip(
+                    //   shadowColor: Colors.black,
+                    //   avatar: CircleAvatar(
+                    //     backgroundColor: Colors.blue,
+                    //     child: Text(
+                    //       'S',
+                    //       style: TextStyle(
+                    //           color: Colors.white, fontWeight: FontWeight.bold),
+                    //     ),
+                    //   ),
+                    //   label: Text(
+                    //     "Selesai",
+                    //     style: TextStyle(color: Colors.black),
+                    //   ),
+                    //   backgroundColor: Colors.white70,
+                    // )
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 50,
+                  child: FlatButton(
+                    child: Row(
+                      children: [
+                        Icon(Icons.sticky_note_2_sharp),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Text("Log",
+                            style: GoogleFonts.inter(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    color: Colors.green,
+                    onPressed: () {
+                      print("DETAIL ORDER MASUK : $idtransaksi_det");
+                      setState(() {
+                        _isLoading = true;
+                        Logs log1 = Logs(
+                            idtransaksi_detail: idtransaksi_det,
+                            token: access_token);
 
-                            if (widget.idtransaksi_detail != null) {
-                              _apiService.Log_(log1).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    Flushbar(
-                                      message: "Ok masuk",
-                                      flushbarPosition: FlushbarPosition.BOTTOM,
-                                      icon: Icon(Icons.ac_unit),
-                                      flushbarStyle: FlushbarStyle.GROUNDED,
-                                      duration: Duration(seconds: 5),
-                                    )..show(
-                                        _scaffoldState.currentState.context);
-                                  });
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ListLog(
-                                      iddetail_orders: log1.idtransaksi_detail,
-                                    );
-                                  }));
-                                } else {
-                                  print('cekmasuk4');
-                                  _scaffoldState.currentState.showSnackBar(
-                                      SnackBar(
-                                          content: Text("Submit data failed")));
-                                }
+                        if (widget.idtransaksi_detail != null) {
+                          _apiService.Log_(log1).then((isSuccess) {
+                            setState(() => _isLoading = false);
+                            if (isSuccess) {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((timeStamp) {
+                                Flushbar(
+                                  message: "Ok masuk",
+                                  flushbarPosition: FlushbarPosition.BOTTOM,
+                                  icon: Icon(Icons.ac_unit),
+                                  flushbarStyle: FlushbarStyle.GROUNDED,
+                                  duration: Duration(seconds: 5),
+                                )..show(_scaffoldState.currentState.context);
                               });
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ListLog(
+                                  iddetail_orders: log1.idtransaksi_detail,
+                                );
+                              }));
+                            } else {
+                              print('cekmasuk4');
+                              _scaffoldState.currentState.showSnackBar(SnackBar(
+                                  content: Text("Submit data failed")));
                             }
                           });
-                        },
-                        child: Chip(
-                          shadowColor: Colors.black,
-                          avatar: CircleAvatar(
-                            backgroundColor: Colors.orange,
-                            child: Text(
-                              'L',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          label: Text(
-                            "Log",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: Colors.grey[300],
-                        )),
-                  ],
+                        }
+                      });
+                    },
+                    // child: Chip(
+                    //   shadowColor: Colors.black,
+                    //   avatar: CircleAvatar(
+                    //     backgroundColor: Colors.orange,
+                    //     child: Text(
+                    //       'L',
+                    //       style: TextStyle(
+                    //           color: Colors.white, fontWeight: FontWeight.bold),
+                    //     ),
+                    //   ),
+                    //   label: Text(
+                    //     "Log",
+                    //     style: TextStyle(color: Colors.black),
+                    //   ),
+                    //   backgroundColor: Colors.grey[300],
+                    // )
+                  ),
                 ),
               ],
             ),

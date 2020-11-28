@@ -619,7 +619,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           ),
           Padding(
             // padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -638,17 +638,19 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     ],
                   ),
                 ),
+                SizedBox(width: 10),
                 Container(
-                  alignment: Alignment.center,
-                  width: 140,
+                  alignment: Alignment.centerRight,
+                  width: 200,
                   height: 100,
                   // margin: EdgeInsets.only(top: 3),
                   child: OutlineButton(
-                    highlightColor: Colors.red,
-                    focusColor: Colors.green,
+                    borderSide: BorderSide(
+                      color: Colors.green,
+                      width: 2
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: BorderSide(color: Colors.red)),
+                        borderRadius: BorderRadius.circular(12.0)),
                     color: Colors.green,
                     onPressed: () {
                       setState(() {
