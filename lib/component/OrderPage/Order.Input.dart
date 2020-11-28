@@ -41,7 +41,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var Value,
       title,
       valasuransi,
-      urlasuransi = ApiService().baseUrl+"asuransiaktif";
+      urlasuransi = ApiService().baseUrl + "asuransiaktif";
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
@@ -51,9 +51,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
       total_asuransi,
       totalhariharga,
       totaldeposit,
-      idasuransi;
+      idasuransi,
+      ceksaldo, kondisisaldo, hargaxhari;
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
+
+  void getSaldo() async {
+    final response = await http.get(ApiService().urlceksaldo,
+        headers: {"Authorization": "BEARER ${access_token}"});
+    ceksaldo = json.decode(response.body)[0]['saldo'];
+  }
 
   // Future<void> _selectionDate(BuildContext context) async {
   //   final DateTime picked = await showDatePicker(
@@ -141,12 +148,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void getAsuransi() async {
     final response = await http.get(ApiService().urlasuransi,
         headers: {"Authorization": "BEARER ${access_token}"});
-    setState(() {
-      nomasuransi = json.decode(response.body)[0]['nilai'];
-      idasuransi = json.decode(response.body)[0]['idasuransi'];
-      hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
-          asuransie, nomasuransi, _nominalbarang.text.toString());
-    });
+    // setState(() {
+    nomasuransi = json.decode(response.body)[0]['nilai'];
+    idasuransi = json.decode(response.body)[0]['idasuransi'];
+    hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
+        asuransie, nomasuransi, _nominalbarang.text.toString());
+    // });
   }
 
   SharedPreferences sp;
@@ -210,6 +217,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             }
           }));
       getAsuransi();
+      getSaldo();
     }
   }
 
@@ -219,6 +227,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     asuransie = 1;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
+    getSaldo();
     if (widget.jenisProduk != null) {
       idjenis_produk = widget.jenisProduk.idjenis_produk;
       kapasitas = widget.jenisProduk.kapasitas;
@@ -236,6 +245,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
         asuransie, nomasuransi, _nominalbarang.text.toString());
     _nominalbarang.addListener(() {
       setState(() {
+        getAsuransi();
+        getSaldo();
+        print("Nominal Point : "+ceksaldo.toString());
         if (_nominalbarang.text == "")
           hasilperhitungan = hitungall(harga.toString(),
               jumlah_sewas.toString(), asuransie, nomasuransi, "0");
@@ -443,25 +455,24 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     ],
                   ),
                   Divider(),
-                  Container(
-                    padding: EdgeInsets.only(left: 30),
-                    child: Row(
-                      children: <Widget>[
-                        Checkbox(
-                          value: true,
-                          onChanged: (bool depositt) {
-                            setState(() {});
-                          },
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text("Deposit Terpakai " +
-                            rupiah(harga * 3, separator: ','))
-                      ],
-                    ),
-                  ),
-                  Divider(),
+                  // Container(
+                  //   padding: EdgeInsets.only(left: 30),
+                  //   child: Row(
+                  //     children: <Widget>[
+                  //       Checkbox(
+                  //         value: true,
+                  //         onChanged: (bool depositt) {
+                  //           setState(() {});
+                  //         },
+                  //       ),
+                  //       SizedBox(
+                  //         width: 8,
+                  //       ),
+                  //       Flexible(child: Text(kondisisaldo))
+                  //     ],
+                  //   ),
+                  // ),
+                  // Divider(),
                   Container(
                     child: Row(
                       children: <Widget>[
@@ -529,7 +540,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   onChanged: (value) {
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != _fieldketerangan) {
-                                      print("----" + value);
                                       setState(() =>
                                           _fieldketerangan = isFieldValid);
                                     } else {
@@ -660,7 +670,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               nomasuransi,
                               _nominalbarang.text.toString());
                         }
-                        orderConfirmation(context);
+                        getSaldo();
+                        hargaxhari = harga*3;
+                        print("Harga X Hari : "+hargaxhari.toString());
+                        print("Cek Saldo : "+ceksaldo.toString());
+                        if(ceksaldo != hargaxhari){
+                          kondisisaldo = "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari";
+                        }else{
+                          kondisisaldo = "";
+                        }
+                        if(ceksaldo < hargaxhari){
+                          cekDeposit(context);
+                        }else{
+                          orderConfirmation(context);
+                        }
                       });
                     },
                     child: Text(
@@ -693,6 +716,27 @@ class _FormDetailOrder extends State<FormInputOrder> {
       title: Text("Sesi Anda Berakhir!"),
       content: Text(
           "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+  cekDeposit(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        orderConfirmation(context);
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Saldo Point Tidak Cukup"),
+      content: Text(
+          "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"),
       actions: [
         okButton,
       ],

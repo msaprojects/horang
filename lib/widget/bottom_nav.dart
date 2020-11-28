@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
@@ -72,144 +74,147 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageStorage(
-        bucket: bucket,
-        child: currentScreen,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.shopping_basket),
-        backgroundColor: Colors.blue[300],
-        onPressed: () {
-          setState(() {
-            currentScreen = StorageHandler();
-            currentTab = 4;
-          });
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          child: Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                MaterialButton(
-                  minWidth: 30,
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = HomePage();
-                      currentTab = 0;
-                    });
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.home,
-                        color: currentTab == 0
-                            ? Colors.blue[300]
-                            : Colors.grey[400],
-                      ),
-                      Text(
-                        'Home',
-                        style: TextStyle(
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        body: PageStorage(
+          bucket: bucket,
+          child: currentScreen,
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.shopping_basket),
+          backgroundColor: Colors.blue[300],
+          onPressed: () {
+            setState(() {
+              currentScreen = StorageHandler();
+              currentTab = 4;
+            });
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+            shape: CircularNotchedRectangle(),
+            child: Container(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  MaterialButton(
+                    minWidth: 30,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = HomePage();
+                        currentTab = 0;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.home,
                           color: currentTab == 0
                               ? Colors.blue[300]
                               : Colors.grey[400],
                         ),
-                      ),
-                    ],
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                            color: currentTab == 0
+                                ? Colors.blue[300]
+                                : Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                MaterialButton(
-                  minWidth: 30,
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = ProdukList();
-                      currentTab = 1;
-                    });
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.shopping_cart,
-                        color: currentTab == 1
-                            ? Colors.blue[300]
-                            : Colors.grey[400],
-                      ),
-                      Text(
-                        'My Order',
-                        style: TextStyle(
+                  MaterialButton(
+                    minWidth: 30,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = ProdukList();
+                        currentTab = 1;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.shopping_cart,
                           color: currentTab == 1
                               ? Colors.blue[300]
                               : Colors.grey[400],
                         ),
-                      ),
-                    ],
+                        Text(
+                          'My Order',
+                          style: TextStyle(
+                            color: currentTab == 1
+                                ? Colors.blue[300]
+                                : Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                MaterialButton(
-                  minWidth: 30,
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = HistoryPage();
-                      currentTab = 2;
-                    });
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.history,
-                        color: currentTab == 2
-                            ? Colors.blue[300]
-                            : Colors.grey[400],
-                      ),
-                      Text(
-                        'History',
-                        style: TextStyle(
+                  MaterialButton(
+                    minWidth: 30,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = HistoryPage();
+                        currentTab = 2;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.history,
                           color: currentTab == 2
                               ? Colors.blue[300]
                               : Colors.grey[400],
                         ),
-                      ),
-                    ],
+                        Text(
+                          'History',
+                          style: TextStyle(
+                            color: currentTab == 2
+                                ? Colors.blue[300]
+                                : Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                MaterialButton(
-                  minWidth: 30,
-                  onPressed: () {
-                    setState(() {
-                      currentScreen = Account();
-                      currentTab = 3;
-                    });
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.account_circle,
-                        color: currentTab == 3
-                            ? Colors.blue[300]
-                            : Colors.grey[400],
-                      ),
-                      Text(
-                        'Profil',
-                        style: TextStyle(
+                  MaterialButton(
+                    minWidth: 30,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = Account();
+                        currentTab = 3;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.account_circle,
                           color: currentTab == 3
                               ? Colors.blue[300]
                               : Colors.grey[400],
                         ),
-                      ),
-                    ],
+                        Text(
+                          'Profil',
+                          style: TextStyle(
+                            color: currentTab == 3
+                                ? Colors.blue[300]
+                                : Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                ],
+              ),
+            )),
+      ),
     );
   }
 

@@ -8,7 +8,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/account.dart';
 
-import '../OrderPage/KonfirmasiOrder.Detail.dart';
+import 'KonfirmasiOrder.Detail.dart';
 
 class Dummy1 extends StatefulWidget {
   var idlokasi,
@@ -162,7 +162,7 @@ class _Dummy1State extends State<Dummy1> {
         flag_selesai: 0,
         total_harga: ktotal_harga,
         harga: kharga,
-        nominal_barang: knominal_barang,
+        nominal_barang: double.parse(knominal_barang),
         deposit_tambah: kdeposit_tambah,
         deposit_pakai: kdeposit_pakai,
         token: ktoken,
@@ -190,7 +190,7 @@ class _Dummy1State extends State<Dummy1> {
         if (idorder == -1) {
           print("Container tidak tersedia");
           errorDialog(context, "Kontainer tidak tersedia",
-              positiveText: "Ok", showNeutralButton: false, positiveAction: () {
+              positiveText: "OK", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

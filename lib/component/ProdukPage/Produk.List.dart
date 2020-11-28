@@ -764,16 +764,11 @@ class _ProdukList extends State<ProdukList> {
         Navigator.pop(context);
       },
     );
-    Widget cancelButton = FlatButton(
-      child: Text("Tidak"),
-      onPressed: () => Navigator.pop(context),
-    );
     AlertDialog alert = AlertDialog(
       title: Text("Minimum sewa 5 Hari"),
       content: Text("Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?"),
       actions: [
         okButton,
-        cancelButton,
       ],
     );
     showDialog(

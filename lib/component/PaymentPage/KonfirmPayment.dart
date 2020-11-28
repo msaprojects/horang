@@ -8,7 +8,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/Dummy/dummy.dart';
-import 'package:horang/component/Dummy/dummy1.dart';
+import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -243,36 +243,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               ),
               onPressed: () {
                 setState(() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => Dummy1(
-                              idjenis_produk: kidjenis_produk.toString(),
-                              idlokasi: kidlokasi,
-                              jumlah_sewa: kjumlah_sewa,
-                              idasuransi: kidasuransi,
-                              idvoucher: kidvoucher,
-                              flagasuransi: kflagasuransi,
-                              flagvoucher: kflagvoucher,
-                              idpayment_gateway:
-                                  int.parse(kidpayment_gateway.toString()),
-                              flag_selesai: 0,
-                              total_harga: kstotal_harga,
-                              harga: ksharga,
-                              nominal_barang: ksnominal_barang,
-                              deposit_tambah: double.parse(ksharga.toString()),
-                              deposit_pakai: double.parse(ksharga.toString()),
-                              token: access_token,
-                              keterangan: kketerangan,
-                              nomor_polis: knomor_polis,
-                              tanggal_berakhir_polis: ktanggal_berakhir_polis,
-                              tanggal_mulai: kstanggal_mulai,
-                              tanggal_akhir: kstanggal_akhir,
-                              keterangan_barang: ksketerangan_barang,
-                              tanggal_order: "DATE(NOW())",
-                              keterangan_deposit: "-",
-                              nominal_deposit: double.parse(ksharga.toString()),
-                              no_ovo: _noOvo.text.toString())));
+                  OrderConfirmation(context, _noOvo.text.toString());
                 });
               },
             )
@@ -286,7 +257,6 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        print("ini pembayaran input");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
@@ -297,6 +267,66 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
           "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
       actions: [
         okButton,
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+  OrderConfirmation(BuildContext context, String notelp) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        setState(() {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => Dummy1(
+                      idjenis_produk: kidjenis_produk.toString(),
+                      idlokasi: kidlokasi,
+                      jumlah_sewa: kjumlah_sewa,
+                      idasuransi: kidasuransi,
+                      idvoucher: kidvoucher,
+                      flagasuransi: kflagasuransi,
+                      flagvoucher: kflagvoucher,
+                      idpayment_gateway:
+                      int.parse(kidpayment_gateway.toString()),
+                      flag_selesai: 0,
+                      total_harga: kstotal_harga,
+                      harga: ksharga,
+                      nominal_barang: ksnominal_barang,
+                      deposit_tambah: double.parse(ksharga.toString()),
+                      deposit_pakai: double.parse(ksharga.toString()),
+                      token: access_token,
+                      keterangan: kketerangan,
+                      nomor_polis: knomor_polis,
+                      tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                      tanggal_mulai: kstanggal_mulai,
+                      tanggal_akhir: kstanggal_akhir,
+                      keterangan_barang: ksketerangan_barang,
+                      tanggal_order: "DATE(NOW())",
+                      keterangan_deposit: "-",
+                      nominal_deposit: double.parse(ksharga.toString()),
+                      no_ovo: _noOvo.text.toString())));
+        });
+      },
+    );
+    Widget cancelButton = FlatButton(
+      child: Text("Batal"),
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Konfirmasi"),
+      content: Text(
+          "pastikan nomor $notelp ini sudah terdaftar di ewallet!"),
+      actions: [
+        okButton,
+        cancelButton
       ],
     );
     showDialog(

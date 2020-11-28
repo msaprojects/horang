@@ -77,9 +77,8 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
         future: _apiService.listOrderSukses(access_token, idorders),
         builder:
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
-          print("hmm : ${snapshot.connectionState}");
+          print("Cek Koneksi Konfirmasi Order : ${snapshot.connectionState}");
           if (snapshot.hasError) {
-            print("Error ${snapshot.error.toString()}");
             return Center(
               child: CircularProgressIndicator(),
               // child: Text(
@@ -87,7 +86,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             );
           }
           else if (snapshot.connectionState == ConnectionState.waiting) {
-          //   print("koneksi waiting");
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -389,9 +387,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
 
   Widget _designForm(List<OrderSukses> dataIndex) {
     OrderSukses orders;
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
             "Detail Pesanan Anda",
@@ -659,7 +655,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             ),
           ],
         ),
-      ),
     );
   }
 

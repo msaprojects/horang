@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:horang/component/Dummy/dummy.dart';
-import 'package:horang/component/Dummy/dummy1.dart';
+import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
+import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: Dummy1(),
-      home: Home(),
+      home: LoginPage(),
       // home: dummyDesign(),
     );
   }

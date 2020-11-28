@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/OrderPage/KonfirmasiLog.dart';
-import 'package:horang/component/OrderPage/Order.Input2.dart';
+import 'package:horang/component/Key/KonfirmasiLog.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
