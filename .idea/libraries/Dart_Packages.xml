@@ -233,17 +233,17 @@
             </list>
           </value>
         </entry>
-        <entry key="flutter_ticket_widget">
-          <value>
-            <list>
-              <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_ticket_widget-0.0.1/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="flutter_web_plugins">
           <value>
             <list>
               <option value="$USER_HOME$/Developer/flutter/packages/flutter_web_plugins/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="fluttertoast">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.5/lib" />
             </list>
           </value>
         </entry>
@@ -694,7 +694,7 @@
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_spinkit-4.1.2+1/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.18.1/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_swiper-1.1.6/lib" />
-      <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_ticket_widget-0.0.1/lib" />
+      <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.5/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/google_fonts-1.1.1/lib" />
       <root url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.12.2/lib" />

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/OrderPage/Order.Input2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
 
@@ -78,7 +77,6 @@ class _HistoryPageState extends State<HistoryPage> {
         future: _apiService.listHistory(access_token),
         builder: (BuildContext context, AsyncSnapshot<List<HistoryModel>> snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error.toString());
             return Center(
               child: Text(
                   "Something wrong with message: ${snapshot.error.toString()}"),
@@ -250,7 +248,6 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        print("ini history page");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

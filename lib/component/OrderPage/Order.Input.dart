@@ -52,7 +52,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       totalhariharga,
       totaldeposit,
       idasuransi,
-      ceksaldo, kondisisaldo, hargaxhari;
+      ceksaldo,
+      kondisisaldo,
+      hargaxhari,
+      saldodepositkurangnominaldeposit;
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
@@ -61,69 +64,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
         headers: {"Authorization": "BEARER ${access_token}"});
     ceksaldo = json.decode(response.body)[0]['saldo'];
   }
-
-  // Future<void> _selectionDate(BuildContext context) async {
-  //   final DateTime picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: _date,
-  //     firstDate: DateTime(2020),
-  //     lastDate: DateTime(2030),
-  //     helpText: 'Select Tanggal Awal ',
-  //   );
-  //   if (picked != null && picked != _date) {
-  //     setState(() {
-  //       _date = picked;
-  //       if (_date.isAfter(_date2)) _date2 = _date.add(new Duration(days: 5));
-  //       jumlah_sewas = diffInDays(_date2, _date);
-  //       if (_nominalbarang.text == "") _nominalbarang.text = "0";
-  //       if (!asuransi)
-  //         hasilperhitungan = hitungall(
-  //             harga.toString(),
-  //             jumlah_sewas.toString(),
-  //             asuransie,
-  //             0,
-  //             _nominalbarang.text.toString());
-  //       else
-  //         hasilperhitungan = hitungall(
-  //             harga.toString(),
-  //             jumlah_sewas.toString(),
-  //             asuransie,
-  //             nomasuransi,
-  //             _nominalbarang.text.toString());
-  //     });
-  //   } else {}
-  // }
-
-  // Future<void> _selectionDate2(BuildContext context) async {
-  //   final DateTime picked = await showDatePicker(
-  //       context: context,
-  //       initialDate: _date2,
-  //       firstDate: DateTime(2020),
-  //       lastDate: DateTime(2030),
-  //       helpText: 'Select Tanggal Akhir ');
-  //   if (picked != null && picked != _date2) {
-  //     setState(() {
-  //       _date2 = picked;
-  //       if (_date2.isBefore(_date)) _date2 = _date.add(new Duration(days: 5));
-  //       print(diffInDays(_date2, _date));
-  //       if (_nominalbarang.text == "") _nominalbarang.text = "0";
-  //       if (!asuransi)
-  //         hasilperhitungan = hitungall(
-  //             harga.toString(),
-  //             jumlah_sewas.toString(),
-  //             asuransie,
-  //             0,
-  //             _nominalbarang.text.toString());
-  //       else
-  //         hasilperhitungan = hitungall(
-  //             harga.toString(),
-  //             jumlah_sewas.toString(),
-  //             asuransie,
-  //             nomasuransi,
-  //             _nominalbarang.text.toString());
-  //     });
-  //   } else {}
-  // }
 
   int diffInDays(tglAwal, tglAkhir) {
     return ((tglAkhir.difference(tglAwal) -
@@ -135,7 +75,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   TextEditingController _durasiorder = TextEditingController();
-  TextEditingController _note = TextEditingController();
   TextEditingController _vouchervalue = TextEditingController();
   TextEditingController _keteranganbarang = TextEditingController();
   TextEditingController _nominalbarang = TextEditingController();
@@ -169,8 +108,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       double asuransi, String nominalbaranginput) {
     if (boolasuransi == 0) asuransi = 0;
     total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
-    totalhariharga = (double.parse(harga) * double.parse(durasi));
-    totaldeposit = minimaldeposit * double.parse(harga);
+    totalhariharga = (int.parse(harga) * int.parse(durasi));
+    totaldeposit = minimaldeposit * int.parse(harga);
     return ((double.parse(harga) * double.parse(durasi)) +
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
             minimaldeposit * double.parse(harga))
@@ -240,14 +179,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
     tglAkhir = widget.tglakhir12.toString();
     jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
-    print("Jumlah Sewa" + jumlah_sewas.toString());
     hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
         asuransie, nomasuransi, _nominalbarang.text.toString());
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
         getSaldo();
-        print("Nominal Point : "+ceksaldo.toString());
         if (_nominalbarang.text == "")
           hasilperhitungan = hitungall(harga.toString(),
               jumlah_sewas.toString(), asuransie, nomasuransi, "0");
@@ -272,13 +209,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context);
+    getSaldo();
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
     return Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
-          widget.jenisProduk == null ? "Parsing data kosong" : "Detail Order",
+          "Isi Data Sewa",
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -365,7 +303,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 child: Text(
                                   "Durasi Sewa",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                      fontSize: 16
                                   ),
                                 ),
                               ),
@@ -374,38 +312,18 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(tglAwal, style: GoogleFonts.inter()),
+                                    Text(tglAwal, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold)),
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text("s/d", style: GoogleFonts.inter()),
+                                    Text("s/d", style: GoogleFonts.inter(fontSize: 14)),
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(tglAkhir, style: GoogleFonts.inter()),
+                                    Text(tglAkhir, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                               ),
-                              // TanggalSet(
-                              //   labelText: tglAwal,
-                              //   valueText:
-                              //       new DateFormat('dd/MM/yyyy').format(_date),
-                              //   valueStyle: valueTglAwal,
-                              //   onPressed: () {
-                              //     _selectionDate(context);
-                              //     dtAwal = _date;
-                              //   },
-                              // ),
-                              // TanggalSet(
-                              //   labelText: tglAkhir,
-                              //   valueText:
-                              //       new DateFormat('dd/MM/yyyy').format(_date2),
-                              //   valueStyle: valueTglAkhir,
-                              //   onPressed: () {
-                              //     _selectionDate2(context);
-                              //     dtAkhir = _date2;
-                              //   },
-                              // ),
                             ],
                           ),
                         ),
@@ -426,7 +344,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 child: Text(
                                   "Deskripsi Produk",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.bold, fontSize: 16
                                   ),
                                 ),
                               ),
@@ -542,8 +460,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     if (isFieldValid != _fieldketerangan) {
                                       setState(() =>
                                           _fieldketerangan = isFieldValid);
-                                    } else {
-                                      print("valid or not");
                                     }
                                   },
                                 ),
@@ -591,16 +507,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   color: Colors.orange,
                                   child: Text("Cek Voucher"),
                                   onPressed: () {
-                                    setState(() {
-                                      print("YUU" +
-                                          valasuransi +
-                                          " - " +
-                                          harga +
-                                          " - " +
-                                          jumlah_sewas.toString());
-//                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
-//                                      print("BISA YOK BISA! :"+perhitungan.toString());
-                                    });
+                                    setState(() {});
                                   },
                                 ),
                               ),
@@ -645,48 +552,51 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   height: 100,
                   // margin: EdgeInsets.only(top: 3),
                   child: OutlineButton(
-                    borderSide: BorderSide(
-                      color: Colors.green,
-                      width: 2
-                    ),
+                    borderSide: BorderSide(color: Colors.green, width: 2),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0)),
                     color: Colors.green,
                     onPressed: () {
-                      setState(() {
-                        if (asuransi == true) {
-                          asuransie = 1;
-                          hasilperhitungan = hitungall(
-                              harga.toString(),
-                              jumlah_sewas.toString(),
-                              asuransie,
-                              nomasuransi,
-                              _nominalbarang.text.toString());
-                        } else {
-                          asuransie = 0;
-                          nomasuransi = 0;
-                          hasilperhitungan = hitungall(
-                              harga.toString(),
-                              jumlah_sewas.toString(),
-                              asuransie,
-                              nomasuransi,
-                              _nominalbarang.text.toString());
-                        }
-                        getSaldo();
-                        hargaxhari = harga*3;
-                        print("Harga X Hari : "+hargaxhari.toString());
-                        print("Cek Saldo : "+ceksaldo.toString());
-                        if(ceksaldo != hargaxhari){
-                          kondisisaldo = "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari";
-                        }else{
-                          kondisisaldo = "";
-                        }
-                        if(ceksaldo < hargaxhari){
-                          cekDeposit(context);
-                        }else{
-                          orderConfirmation(context);
-                        }
-                      });
+                      _nominalbarang.text.toString() == "0" || _keteranganbarang.text.toString() == ""
+                          ? errorDialog(context,
+                              "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
+                          : setState(() {
+                              if (asuransi == true) {
+                                asuransie = 1;
+                                hasilperhitungan = hitungall(
+                                    harga.toString(),
+                                    jumlah_sewas.toString(),
+                                    asuransie,
+                                    nomasuransi,
+                                    _nominalbarang.text.toString());
+                              } else {
+                                asuransie = 0;
+                                nomasuransi = 0;
+                                hasilperhitungan = hitungall(
+                                    harga.toString(),
+                                    jumlah_sewas.toString(),
+                                    asuransie,
+                                    nomasuransi,
+                                    _nominalbarang.text.toString());
+                              }
+                              getSaldo();
+                              hargaxhari = harga * 3;
+                              saldodepositkurangnominaldeposit =
+                                  hargaxhari - ceksaldo;
+                              if (ceksaldo != hargaxhari) {
+                                kondisisaldo =
+                                    "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari, kurang " +
+                                        saldodepositkurangnominaldeposit
+                                            .toString();
+                              } else {
+                                kondisisaldo = "";
+                              }
+                              if (ceksaldo < hargaxhari || ceksaldo <= 0) {
+                                cekDeposit(context);
+                              } else {
+                                orderConfirmation(context);
+                              }
+                            });
                     },
                     child: Text(
                       "Lanjutkan Pembayaran",
@@ -709,7 +619,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        print("ini order input");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
@@ -728,11 +637,38 @@ class _FormDetailOrder extends State<FormInputOrder> {
           return alert;
         });
   }
+
   cekDeposit(BuildContext context) {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        orderConfirmation(context);
+        // orderConfirmation(context);
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return FormInputPembayaran(
+              flagasuransi: asuransie,
+              flagvoucher: 0,
+              idlokasi: idlokasi,
+              idjenis_produk: idjenis_produk,
+              idvoucher: 0,
+              idasuransi: idasuransi,
+              harga: harga,
+              jumlah_sewa: jumlah_sewas.toString(),
+              tanggal_mulai: tglAwal,
+              tanggal_akhir: tglAkhir,
+              tanggal_berakhir_polis: "DATE(NOW())",
+              nomor_polis: "Belum Diisi",
+              kapasitas: kapasitas,
+              alamat: alamat,
+              keterangan_barang: _keteranganbarang.text.toString(),
+              nominal_barang: _nominalbarang.text.toString(),
+              total_harga: hasilperhitungan.toString(),
+              total_asuransi: total_asuransi.toString(),
+              totalharixharga: totalhariharga.toString(),
+              totaldeposit: totaldeposit.toString(),
+              totalpointdeposit: ceksaldo.toString(),
+              deposit: saldodepositkurangnominaldeposit.toString());
+        }));
       },
     );
     AlertDialog alert = AlertDialog(
@@ -751,7 +687,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   orderConfirmation(BuildContext context) {
-    var ket = _note.text.toString();
     Widget cancelButton = FlatButton(
       child: Text("Cek Dulu"),
       onPressed: () => Navigator.pop(context),
@@ -770,27 +705,28 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute(builder: (context) {
                       return FormInputPembayaran(
-                          idlokasi: idlokasi,
-                          idjenis_produk: idjenis_produk,
-                          harga: harga,
-                          keterangan: ket,
-                          jumlah_sewa: jumlah_sewas.toString(),
                           flagasuransi: asuransie,
                           flagvoucher: 0,
-                          idasuransi: idasuransi,
-                          nomor_polis: "Belum Diisi",
-                          tanggal_berakhir_polis: "DATE(NOW())",
+                          idlokasi: idlokasi,
+                          idjenis_produk: idjenis_produk,
                           idvoucher: 0,
-                          kapasitas: kapasitas,
-                          alamat: alamat,
+                          idasuransi: idasuransi,
+                          harga: harga,
+                          jumlah_sewa: jumlah_sewas.toString(),
                           tanggal_mulai: tglAwal,
                           tanggal_akhir: tglAkhir,
+                          tanggal_berakhir_polis: "DATE(NOW())",
+                          nomor_polis: "Belum Diisi",
+                          kapasitas: kapasitas,
+                          alamat: alamat,
                           keterangan_barang: _keteranganbarang.text.toString(),
                           nominal_barang: _nominalbarang.text.toString(),
                           total_harga: hasilperhitungan.toString(),
                           total_asuransi: total_asuransi.toString(),
                           totalharixharga: totalhariharga.toString(),
-                          totaldeposit: totaldeposit.toString());
+                          totaldeposit: totaldeposit.toString(),
+                          totalpointdeposit: ceksaldo.toString(),
+                          deposit: saldodepositkurangnominaldeposit.toString());
                     }));
                   },
                   child: Text("Ok")),

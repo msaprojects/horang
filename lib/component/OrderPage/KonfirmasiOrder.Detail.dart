@@ -77,7 +77,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
         future: _apiService.listOrderSukses(access_token, idorders),
         builder:
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
-          print("Cek Koneksi Konfirmasi Order : ${snapshot.connectionState}");
           if (snapshot.hasError) {
             return Center(
               child: CircularProgressIndicator(),
@@ -390,7 +389,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Detail Pesanan Anda",
+            "Detail Transaksi Anda",
             style: TextStyle(color: Colors.white),
           ),
           //Blocking Back
@@ -435,7 +434,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                                 child: Text(
                                   os.no_order,
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 12),
+                                      fontWeight: FontWeight.bold, fontSize: 14),
                                 ),
                               ),
                             ],

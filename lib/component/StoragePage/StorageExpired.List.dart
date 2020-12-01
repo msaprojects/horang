@@ -93,9 +93,7 @@ class _StorageExpired extends State<StorageExpired1> {
               // (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
               (BuildContext context,
                   AsyncSnapshot<List<MystorageModel>> snapshot) {
-            print("coba cek lagi bro : ${snapshot.connectionState}");
             if (snapshot.hasError) {
-              print(snapshot.error.toString());
               return Center(
                 child: Text(
                     "10Something wrong with message ${snapshot.error.toString()}"),
@@ -145,7 +143,6 @@ class _StorageExpired extends State<StorageExpired1> {
               MystorageModel myStorage = dataIndex[index];
               return GestureDetector(
                 onTap: () {
-                  // print("damn it man" + myStorage.kode_kontainer.toString());
                   _openAlertDialog(
                     context,
                     myStorage.kode_kontainer.toString(),
@@ -374,7 +371,6 @@ class _StorageExpired extends State<StorageExpired1> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        print("ini storage exp");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

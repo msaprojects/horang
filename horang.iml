@@ -41,6 +41,12 @@
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/fluttertoast/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/get_version/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/get_version/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/get_version/build" />

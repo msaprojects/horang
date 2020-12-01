@@ -90,9 +90,7 @@ class _StorageActive extends State<StorageActive1>
           future: _apiService.listMystorage(access_token),
           builder: (BuildContext context,
               AsyncSnapshot<List<MystorageModel>> snapshot) {
-            print("coba cek lagi : ${snapshot.connectionState}");
             if (snapshot.hasError) {
-              print(snapshot.error.toString());
               return Center(
                 child: Text(
                     "9Something wrong with message ${snapshot.error.toString()}"),
@@ -143,7 +141,6 @@ class _StorageActive extends State<StorageActive1>
                   itemCount: dataIndex == null ? 0 : dataIndex.length,
                   itemBuilder: (BuildContext context, int index) {
                     MystorageModel myStorage = dataIndex[index];
-                    print("dataindex $dataIndex");
                     return GestureDetector(
                       onTap: () {
                         setState(() => isLoading = true);

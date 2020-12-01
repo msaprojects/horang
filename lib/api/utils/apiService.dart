@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
-import 'package:horang/api/models/deposit/ceksaldo.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';

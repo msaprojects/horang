@@ -107,7 +107,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
 
   @override
   Widget build(BuildContext context) {
-    print("NAMAAAAAA : ${nama_kota1}");
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
     return Scaffold(
       key: _scaffoldState,
@@ -214,7 +213,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     onPressed: () {
                       setState(() {
                         _isLoading = true;
-                        // print('cekmasuk');
                         LogOpen logopen = LogOpen(
                           idtransaksi_detail: idtransaksi_det,
                           token: access_token,
@@ -222,45 +220,13 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         if (widget.kode_kontainer != null ||
                             widget.nama_kota != null) {
                           _apiService.OpenLog(logopen).then((isSuccess) {
-                            // print('cekmasuk2');
                             setState(() => _isLoading = false);
                             if (isSuccess) {
-                              // print('cekmasuk3');
-                              // Widget okbutton = FlatButton(
-                              //     child: Text("Ok"),
-                              //     onPressed: () {
-                              //       Navigator.pushAndRemoveUntil(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (context) => Home()),
-                              //           (Route<dynamic> route) => false);
-                              //     });
-                              successDialog(context,
-                                  "Permintaan open berhasil dilakukan !",
-                                  // showNeutralButton: false,
-                                  closeOnBackPress: true,
-                                  // positiveText: "Oke",
-                              //     positiveAction: () {
-                              //   Navigator.pushAndRemoveUntil(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => ListLog()),
-                              //       (Route<dynamic> route) => false);
-                              // }
+                              successDialog(
+                                context,
+                                "Permintaan open berhasil dilakukan !",
+                                closeOnBackPress: true,
                               );
-                              // AlertDialog alert = AlertDialog(
-                              //   title: Text("Peringatan"),
-                              //   content: Text("Data Berhasil disimpan"),
-                              //   actions: [
-                              //     okbutton,
-                              //   ],
-                              // );
-                              // showDialog(
-                              //   context: context,
-                              //   builder: (BuildContext context) {
-                              //     return alert;
-                              //   },
-                              // );
                             } else {
                               // print('cekmasuk4');
                               _scaffoldState.currentState.showSnackBar(SnackBar(
@@ -275,23 +241,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                 SizedBox(
                   height: 20,
                 ),
-                // child: Chip(
-                //   shadowColor: Colors.black,
-                //   avatar: CircleAvatar(
-                //     backgroundColor: Colors.green,
-                //     child: Text(
-                //       'O',
-                //       style: TextStyle(
-                //           color: Colors.white,
-                //           fontWeight: FontWeight.bold, fontSize: 20),
-                //     ),
-                //   ),
-                //   label: Text(
-                //     "Open",
-                //     style: TextStyle(color: Colors.black, fontSize: 20),
-                //   ),
-                //   backgroundColor: Colors.blueGrey,
-                // )),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: 50,
@@ -333,7 +282,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                   MaterialPageRoute(
                                       builder: (context) => StorageActive1()));
                             } else {
-                              print('cekmasuk4');
                               _scaffoldState.currentState.showSnackBar(SnackBar(
                                   content: Text("Submit data failed")));
                             }
@@ -341,22 +289,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         }
                       });
                     },
-                    // child: Chip(
-                    //   shadowColor: Colors.black,
-                    //   avatar: CircleAvatar(
-                    //     backgroundColor: Colors.blue,
-                    //     child: Text(
-                    //       'S',
-                    //       style: TextStyle(
-                    //           color: Colors.white, fontWeight: FontWeight.bold),
-                    //     ),
-                    //   ),
-                    //   label: Text(
-                    //     "Selesai",
-                    //     style: TextStyle(color: Colors.black),
-                    //   ),
-                    //   backgroundColor: Colors.white70,
-                    // )
                   ),
                 ),
                 SizedBox(
@@ -415,22 +347,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         }
                       });
                     },
-                    // child: Chip(
-                    //   shadowColor: Colors.black,
-                    //   avatar: CircleAvatar(
-                    //     backgroundColor: Colors.orange,
-                    //     child: Text(
-                    //       'L',
-                    //       style: TextStyle(
-                    //           color: Colors.white, fontWeight: FontWeight.bold),
-                    //     ),
-                    //   ),
-                    //   label: Text(
-                    //     "Log",
-                    //     style: TextStyle(color: Colors.black),
-                    //   ),
-                    //   backgroundColor: Colors.grey[300],
-                    // )
                   ),
                 ),
               ],
@@ -438,191 +354,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
           )
         ],
       ),
-
-/////////////////////////////
-
-      // Container(
-      //   padding: EdgeInsets.all(9.0),
-      //   child: Column(
-      //     children: <Widget>[
-      //       Column(
-      //         children: <Widget>[
-      //           Container(
-      //             child: Text(
-      //               kode_kontainer1.toString(),
-      //               style: TextStyle(fontSize: 22, color: Colors.black),
-      //             ),
-      //           ),
-      //           Container(
-      //             child: Text(
-      //               nama_kota1.toString(),
-      //               style: TextStyle(fontSize: 22, color: Colors.black),
-      //             ),
-      //           ),
-      //           Container(
-      //             child: Text(
-      //               "idtransaksi det" + idtransaksi_det.toString(),
-      //               style: TextStyle(fontSize: 22, color: Colors.black),
-      //             ),
-      //           ),
-      //           Container(
-      //             child: Text(
-      //               "idtransaksi" + idtransaksii.toString(),
-      //               style: TextStyle(fontSize: 22, color: Colors.black),
-      //             ),
-      //           ),
-      //           Container(
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //               children: <Widget>[
-      //                 RaisedButton(
-      //                     child: Text('Open'),
-      //                     onPressed: () {
-      //                       setState(() {
-      //                         _isLoading = true;
-      //                         print('cekmasuk');
-      //                         LogOpen logopen = LogOpen(
-      //                           idtransaksi_detail: idtransaksi_det,
-      //                           token: access_token,
-      //                         );
-      //                         // print(
-      //                         //     "widget->kontainer" + widget.kode_kontainer);
-      //                         // print("widget->namakota" + widget.nama_kota);
-      //                         if (widget.kode_kontainer != null ||
-      //                             widget.nama_kota != null) {
-      //                           print('cekmasuk111');
-      //                           _apiService.OpenLog(logopen).then((isSuccess) {
-      //                             print('cekmasuk2');
-      //                             setState(() => _isLoading = false);
-      //                             if (isSuccess) {
-      //                               print('cekmasuk3');
-      //                               Widget okbutton = FlatButton(
-      //                                 child: Text("Ok"),
-      //                                 onPressed: () {
-      //                                   Navigator.push(
-      //                                       context,
-      //                                       MaterialPageRoute(
-      //                                           builder: (context) => Home()));
-      //                                   // Navigator.pop(context);
-      //                                 },
-      //                               );
-      //                               AlertDialog alert = AlertDialog(
-      //                                 title: Text("Peringatan"),
-      //                                 content: Text("Data Berhasil disimpan"),
-      //                                 actions: [
-      //                                   okbutton,
-      //                                 ],
-      //                               );
-      //                               showDialog(
-      //                                 context: context,
-      //                                 builder: (BuildContext context) {
-      //                                   return alert;
-      //                                 },
-      //                               );
-      //                             } else {
-      //                               print('cekmasuk4');
-      //                               _scaffoldState.currentState.showSnackBar(
-      //                                   SnackBar(
-      //                                       content:
-      //                                           Text("Submit data failed")));
-      //                             }
-      //                           });
-      //                         }
-      //                       });
-      //                     }),
-      //                 RaisedButton(
-      //                     child: Text('Selesai'),
-      //                     onPressed: () {
-      //                       setState(() {
-      //                         _isLoading = true;
-      //                         selesaiLog selesai = selesaiLog(
-      //                             idtransaksi: idtransaksii, token: access_token);
-      //                         if (widget.nama_kota != null ||
-      //                             widget.kode_kontainer != null) {
-      //                           _apiService.SelesaiLog(selesai)
-      //                               .then((isSuccess) {
-      //                             setState(() => _isLoading = false);
-      //                             if (isSuccess) {
-      //                               WidgetsBinding.instance
-      //                                   .addPostFrameCallback((timeStamp) {
-      //                                 Flushbar(
-      //                                   message: "Ok masuk",
-      //                                   flushbarPosition:
-      //                                       FlushbarPosition.BOTTOM,
-      //                                   icon: Icon(Icons.ac_unit),
-      //                                   flushbarStyle: FlushbarStyle.GROUNDED,
-      //                                   duration: Duration(seconds: 5),
-      //                                 )..show(
-      //                                     _scaffoldState.currentState.context);
-      //                               });
-      //                               Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(
-      //                                       builder: (context) =>
-      //                                           StorageActive()));
-      //                             } else {
-      //                               print('cekmasuk4');
-      //                               _scaffoldState.currentState.showSnackBar(
-      //                                   SnackBar(
-      //                                       content:
-      //                                           Text("Submit data failed")));
-      //                             }
-      //                           });
-      //                         }
-      //                       }
-      //                       );
-      //                     }),
-      //                 RaisedButton(
-      //                   child: Text('Log'),
-      //                   onPressed: () {
-      //                     print("DETAIL ORDER MASUK : $idtransaksi_det");
-      //                     setState(() {
-      //                       _isLoading = true;
-      //                       Logs log1 = Logs(
-      //                           idtransaksi_detail: idtransaksi_det,
-      //                           token: access_token);
-
-      //                       if (widget.idtransaksi_detail != null) {
-      //                         _apiService.Log_(log1).then((isSuccess) {
-      //                           setState(() => _isLoading = false);
-      //                           if (isSuccess) {
-      //                             WidgetsBinding.instance
-      //                                 .addPostFrameCallback((timeStamp) {
-      //                               Flushbar(
-      //                                 message: "Ok masuk",
-      //                                 flushbarPosition: FlushbarPosition.BOTTOM,
-      //                                 icon: Icon(Icons.ac_unit),
-      //                                 flushbarStyle: FlushbarStyle.GROUNDED,
-      //                                 duration: Duration(seconds: 5),
-      //                               )..show(
-      //                                   _scaffoldState.currentState.context);
-      //                             });
-      //                             Navigator.push(context,
-      //                                 MaterialPageRoute(builder: (context) {
-      //                                   return ListLog(
-      //                                     iddetail_orders: log1.idtransaksi_detail,
-      //                                   );
-      //                                 }));
-      //                           } else {
-      //                             print('cekmasuk4');
-      //                             _scaffoldState.currentState.showSnackBar(
-      //                                 SnackBar(
-      //                                     content: Text("Submit data failed")));
-      //                           }
-      //                         });
-      //                       }
-      //                     });
-      //                   },
-      //                   color: Colors.teal,
-      //                 ),
-      //               ],
-      //             ),
-      //           )
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -630,7 +361,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        print("ini konfirmasi log");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },

@@ -92,7 +92,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
           builder: (BuildContext context,
               AsyncSnapshot<List<MystorageModel>> snapshot) {
             if (snapshot.hasError) {
-              print(snapshot.error.toString());
               return Center(
                 child: Text(
                     "Something wrong with message ${snapshot.error.toString()}"),
@@ -598,43 +597,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
             content: Text("Apakah anda ingin membuka kontainer ini ?"),
             actions: [
               FlatButton(
-                  // color: Colors.red,
-                  onPressed: () {
-                    // setState(() {
-                    //   isLoading = true;
-                    //   print('cekmasuk123');
-                    //   LogOpen logopen = LogOpen(
-                    //     idtransaksi_detail: idtransaksi_detail,
-                    //     token: access_token,
-                    //   );
-                    //   if (kode_kontainer != null || nama_kota != null) {
-                    //     print('cekmasuk--');
-                    //     _apiService.OpenLog(logopen).then((isSuccess) {
-                    //       setState(() {
-                    //         if (isSuccess) {
-                    //           successDialog(
-                    //             context,
-                    //             "Permintaan open berhasil dilakukan !",
-                    //             closeOnBackPress: true,
-                    //           );
-                    //         } else {
-                    //           print('cekmasuk~~~');
-                    //           errorDialog(
-                    //               context, "Permintaan Open gagal dilakukan !");
-                    //         }
-                    //       });
-                    //     });
-                    //   }
-                    // }
-                    // );
-                  },
-                  // {
-                  //   Navigator.of(context)
-                  //       .pushReplacement(MaterialPageRoute(builder: (context) {
-                  //     return FormInputPembayaran(
-                  //         );
-                  //   }));
-                  // },
                   child: Text("Ya, Setuju")),
               cancelButton
             ],
