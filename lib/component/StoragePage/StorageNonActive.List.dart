@@ -343,8 +343,8 @@ class _StorageNonActive extends State<StorageNonActive1> {
         builder: (BuildContext context) {
           return AlertDialog(
             content: new Container(
-              width: 280.0,
-              height: 380.0,
+              width: 260.0,
+              height: 300.0,
               decoration: new BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: const Color(0xFFFFFF),
@@ -419,96 +419,96 @@ class _StorageNonActive extends State<StorageNonActive1> {
                               // width: 900,
                               child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 75,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.red,
-                                        onPressed: () {
-                                          _alertOpen(
-                                            context,
-                                            idtransaksi_detail,
-                                            kode_kontainer.toString(),
-                                            nama_kota,
-                                            nama,
-                                            nama_lokasi.toString(),
-                                            keterangan,
-                                            tanggal_order,
-                                            tanggal_mulai,
-                                            tanggal_akhir,
-                                            hari.toString(),
-                                          );
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.lock_open_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Open',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 13,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.green,
-                                        onPressed: () {},
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.check_box_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Selesai',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 13,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  Container(
-                                    width: 75,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.yellow[700],
-                                        onPressed: () {},
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.event_note_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Log',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Container(
+                              //       width: 75,
+                              //       height: 80,
+                              //       child: FlatButton(
+                              //           color: Colors.red,
+                              //           onPressed: () {
+                              //             _alertOpen(
+                              //               context,
+                              //               idtransaksi_detail,
+                              //               kode_kontainer.toString(),
+                              //               nama_kota,
+                              //               nama,
+                              //               nama_lokasi.toString(),
+                              //               keterangan,
+                              //               tanggal_order,
+                              //               tanggal_mulai,
+                              //               tanggal_akhir,
+                              //               hari.toString(),
+                              //             );
+                              //           },
+                              //           child: Column(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.spaceEvenly,
+                              //             children: [
+                              //               Icon(
+                              //                 Icons.lock_open_outlined,
+                              //                 color: Colors.white,
+                              //               ),
+                              //               Text(
+                              //                 'Open',
+                              //                 style: GoogleFonts.inter(
+                              //                     fontSize: 13,
+                              //                     color: Colors.white,
+                              //                     fontWeight: FontWeight.bold),
+                              //               ),
+                              //             ],
+                              //           )),
+                              //     ),
+                              //     Container(
+                              //       width: 80,
+                              //       height: 80,
+                              //       child: FlatButton(
+                              //           color: Colors.green,
+                              //           onPressed: () {},
+                              //           child: Column(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.spaceEvenly,
+                              //             children: [
+                              //               Icon(
+                              //                 Icons.check_box_outlined,
+                              //                 color: Colors.white,
+                              //               ),
+                              //               Text(
+                              //                 'Selesai',
+                              //                 style: GoogleFonts.inter(
+                              //                     fontSize: 13,
+                              //                     color: Colors.white,
+                              //                     fontWeight: FontWeight.bold),
+                              //               ),
+                              //             ],
+                              //           )),
+                              //     ),
+                              //     Container(
+                              //       width: 75,
+                              //       height: 80,
+                              //       child: FlatButton(
+                              //           color: Colors.yellow[700],
+                              //           onPressed: () {},
+                              //           child: Column(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.spaceEvenly,
+                              //             children: [
+                              //               Icon(
+                              //                 Icons.event_note_outlined,
+                              //                 color: Colors.white,
+                              //               ),
+                              //               Text(
+                              //                 'Log',
+                              //                 style: GoogleFonts.inter(
+                              //                     fontSize: 14,
+                              //                     color: Colors.white,
+                              //                     fontWeight: FontWeight.bold),
+                              //               ),
+                              //             ],
+                              //           )),
+                              //     ),
+                              //   ],
+                              // ),
                               Container(
                                 width: 900,
                                 // height: 40,

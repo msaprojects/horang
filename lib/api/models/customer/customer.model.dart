@@ -2,10 +2,12 @@ import 'dart:convert';
 
 class Customer{
   int idkota, idcustomer;
+  // ignore: non_constant_identifier_names
   String token, nama_customer, alamat, noktp, blacklist;
 
   Customer({
     // this.idcustomer,
+    // ignore: non_constant_identifier_names
     this.nama_customer,
     this.alamat,
     this.noktp,

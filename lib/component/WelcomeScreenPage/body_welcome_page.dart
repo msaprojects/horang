@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:horang/component/Dummy/dummypin.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/pin2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Pin2(),
+              builder: (context) => pinauth(),
             ));
     }
   }

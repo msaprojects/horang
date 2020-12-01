@@ -87,7 +87,12 @@ class _HistoryPageState extends State<HistoryPage> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<HistoryModel> historyyy = snapshot.data;
-            return _buildListView(historyyy);
+            if (historyyy.isEmpty) {
+              return Text("Data history belum ada");
+            } else {
+              return _buildListView(historyyy);
+            }
+            
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -197,7 +202,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                   ),
                                 ),
                                 Text(
-                                  "Harga : " + rupiah(history.harga.toString()) +" /Hari",
+                                  "Harga : "
+                                   + rupiah(history.harga.toString()) +" /Hari"
+                                   ,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black45,

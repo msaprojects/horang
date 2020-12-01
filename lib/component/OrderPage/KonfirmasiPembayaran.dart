@@ -21,6 +21,7 @@ class Dummy1 extends StatefulWidget {
       deposit_tambah,
       deposit_pakai,
       flagasuransi,
+      total_asuransi,
       flagvoucher,
       idasuransi,
       nomor_polis,
@@ -46,6 +47,7 @@ class Dummy1 extends StatefulWidget {
       this.keterangan,
       this.jumlah_sewa,
       this.flagasuransi,
+      this.total_asuransi,
       this.flagvoucher,
       this.idasuransi,
       this.nomor_polis,
@@ -84,6 +86,7 @@ class _Dummy1State extends State<Dummy1> {
       kketerangan,
       kjumlah_sewa,
       kflagasuransi,
+      ktotal_asuransi,
       kflag_selesai,
       kflagvoucher,
       kidasuransi,
@@ -130,6 +133,7 @@ class _Dummy1State extends State<Dummy1> {
     kdeposit_tambah = widget.deposit_tambah;
     kdeposit_pakai = widget.deposit_pakai;
     kflagasuransi = widget.flagasuransi;
+    ktotal_asuransi = widget.total_asuransi;
     kflagvoucher = widget.flagvoucher;
     kidasuransi = widget.idasuransi;
     knomor_polis = widget.nomor_polis;
@@ -185,6 +189,7 @@ class _Dummy1State extends State<Dummy1> {
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiOrderDetail(
                       idorder: idorder,
+                      total_asuransi: ktotal_asuransi,
                     )));
       } else {
         if (idorder == -1) {
@@ -274,7 +279,7 @@ class _Dummy1State extends State<Dummy1> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text("Menunggu pembayaran",
+                              Text("Menunggu pembayaran $ktotal_asuransi",
                                   style: GoogleFonts.inter(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold)),

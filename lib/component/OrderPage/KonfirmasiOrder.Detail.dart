@@ -4,13 +4,15 @@ import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/widget/bottom_nav.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmasiOrderDetail extends StatefulWidget {
   int idorder;
-  KonfirmasiOrderDetail({this.idorder});
+  var total_asuransi;
+  KonfirmasiOrderDetail({this.idorder, this.total_asuransi});
   @override
   _KonfirmasiOrderDetail createState() => _KonfirmasiOrderDetail();
 }
@@ -24,6 +26,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       email,
       nama_customer,
       idcustomer,
+      ktotal_asuransi,
       idorders = 0;
 
   cekToken() async {
@@ -67,6 +70,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   @override
   void initState() {
     idorders = widget.idorder;
+    ktotal_asuransi = widget.total_asuransi;
     cekToken();
   }
 
@@ -492,7 +496,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 20),
                                 child: Text(
-                                  'Ya, Rp. 50.000',
+                                  rupiah('${ktotal_asuransi}'),
                                 ),
                               ),
                             ],
@@ -528,7 +532,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 20),
                                 child: Text(
-                                  os.harga.toString(),
+                                  rupiah(os.harga.toString(),separator: ',', trailing: ".00"),
                                 ),
                               ),
                             ],
@@ -611,7 +615,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                               Container(
                                 padding: const EdgeInsets.only(right: 20),
                                 child: Text(
-                                  os.total_harga.toString(),
+                                  rupiah(os.total_harga.toString(),separator: ',', trailing: ".00"),
                                 ),
                               ),
                             ],

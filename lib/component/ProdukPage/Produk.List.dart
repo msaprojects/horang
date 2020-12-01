@@ -506,6 +506,7 @@ class _ProdukList extends State<ProdukList> {
                                     jenisProduk: jenisProduk,
                                     tglawal12: _tanggalAwal,
                                     tglakhir12: _tanggalAkhir,
+                                    
                                   );
                                 }));
                               }

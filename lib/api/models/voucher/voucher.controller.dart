@@ -3,7 +3,7 @@ import 'dart:convert';
 class Voucher{
   int idvoucher, jumlah_voucher;
   int persentase, nominal;
-  String keterangan, gambar;
+  String keterangan, gambar, kode_voucher;
 
   Voucher({
     this.idvoucher = 0,
@@ -11,7 +11,8 @@ class Voucher{
     this.persentase = 0,
     this.nominal = 0,
     this.keterangan,
-    this.gambar=""
+    this.gambar="",
+    this.kode_voucher
   });
 
   factory Voucher.fromJson(Map<String, dynamic> map){
@@ -21,7 +22,8 @@ class Voucher{
       persentase: map["persentase"],
       nominal: map["nominal"],
       keterangan: map["keterangan"],
-      gambar: map["gambar"]
+      gambar: map["gambar"],
+      kode_voucher: map["kode_voucher"]
     );
   }
 
@@ -32,13 +34,14 @@ class Voucher{
       "persentase": persentase,
       "nominal": nominal,
       "keterangan": keterangan,
-      "gambar": gambar
+      "gambar": gambar,
+      "kode_voucher": kode_voucher
     };
   }
 
   @override
   String toString(){
-    return 'Voucher{idvoucher: $idvoucher, jumlah_voucher: $jumlah_voucher, persentase: $persentase, nominal: $nominal, keterangan: $keterangan, gambar: $gambar}';
+    return 'Voucher{idvoucher: $idvoucher, jumlah_voucher: $jumlah_voucher, persentase: $persentase, nominal: $nominal, keterangan: $keterangan, gambar: $gambar, kode_voucher: $kode_voucher}';
   }
 
 }

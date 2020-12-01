@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:commons/commons.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,6 +15,7 @@ import 'package:horang/utils/constant_color.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:crypto/crypto.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -200,7 +202,12 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           setState(() => _isLoading = true);
                           String email = _controllerEmail.text.toString();
+                          // String email = sha256.convert(bytes1)
+                          // String email = _controllerEmail.text.toString();
                           String password = _controllerPassword.text.toString();
+                          var bytes1 = utf8.encode(password);
+                          var encrypt = sha256.convert(bytes1);
+                          print("kane $encrypt");
                           print("///---///" + email + "///---///" + password);
                           Pengguna pengguna = Pengguna(
                               email: email,

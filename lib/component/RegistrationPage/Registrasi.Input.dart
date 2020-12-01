@@ -39,10 +39,22 @@ class _RegistrasiState extends State<RegistrasiPage> {
       key: _scaffoldState,
       appBar: AppBar(
         backgroundColor: Colors.grey[100],
-        iconTheme: IconThemeData(color: Colors.grey),
+        // iconTheme: IconThemeData(color: Colors.red),
         title: Text(
           "Registrasi",
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: Colors.black),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()));
+          },
         ),
       ),
       body: SingleChildScrollView(

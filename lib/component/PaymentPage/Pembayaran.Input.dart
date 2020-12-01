@@ -653,7 +653,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan",
+                                  "Lanjutkan $stotal_asuransi",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
@@ -664,6 +664,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                             builder: (BuildContext context) =>
                                                 KonfirmPayment(
                                                   namaprovider: namaprovider,
+                                                  total_asuransi: stotal_asuransi,
                                                   idjenis_produk:
                                                       idjenis_produk,
                                                   idlokasi: idlokasi,

@@ -23,6 +23,7 @@ class KonfirmPayment extends StatefulWidget {
       idcustomer,
       keterangan,
       jumlah_sewa,
+      total_asuransi,
       idpayment_gateway,
       flag_selesai,
       deposit_tambah,
@@ -50,6 +51,7 @@ class KonfirmPayment extends StatefulWidget {
       this.idjenis_produk,
       this.keterangan,
       this.jumlah_sewa,
+      this.total_asuransi,
       this.flagasuransi,
       this.flagvoucher,
       this.idasuransi,
@@ -82,6 +84,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   var access_token, refresh_token, email, nama_customer;
   var kidlokasi,
       kidjenis_produk,
+      ktotal_asuransi,
       kidcustomer,
       kketerangan,
       kjumlah_sewa,
@@ -163,6 +166,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     ksharga = widget.harga;
     kflagvoucher = widget.flagvoucher;
     kflagasuransi = widget.flagasuransi;
+    ktotal_asuransi = widget.total_asuransi;
     kidasuransi = widget.idasuransi;
     knomor_polis = widget.nomor_polis;
     ktanggal_berakhir_polis = widget.tanggal_berakhir_polis;
@@ -245,7 +249,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             FlatButton(
               color: Colors.green,
               child: Text(
-                "Bayar Sekarang",
+                "Bayar Sekarang $ktotal_asuransi",
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
@@ -297,6 +301,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       idasuransi: kidasuransi,
                       idvoucher: kidvoucher,
                       flagasuransi: kflagasuransi,
+                      total_asuransi: ktotal_asuransi,
                       flagvoucher: kflagvoucher,
                       idpayment_gateway:
                       int.parse(kidpayment_gateway.toString()),
