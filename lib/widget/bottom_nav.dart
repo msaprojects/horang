@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
   ApiService _apiService = ApiService();
   bool isSuccess = false;
 
+  // ignore: non_constant_identifier_names
   var access_token, refresh_token, idcustomer, pin, nama_customer;
 
   cekToken() async {

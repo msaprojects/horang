@@ -500,95 +500,95 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   },
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 30, right: 30, top: 5),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukkan Kode Voucher Jika ada!',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  controller: _vouchervalue,
-                                  onChanged: (value) {
-                                    bool isFieldValid = value.trim().isNotEmpty;
-                                    if (isFieldValid != _fieldvoucher) {
-                                      setState(
-                                          () => _fieldvoucher = isFieldValid);
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 12.0),
-                              Container(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: FlatButton(
-                                  color: Colors.orange,
-                                  child: Text("Cek Voucher"),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        backgroundColor: Colors.transparent,
-                                        builder: (context) => Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.50,
-                                            decoration: new BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  new BorderRadius.only(
-                                                topLeft:
-                                                    const Radius.circular(25.0),
-                                                topRight:
-                                                    const Radius.circular(25.0),
-                                              ),
-                                            ),
-                                            child: SafeArea(
-                                                child: FutureBuilder(
-                                                    future:
-                                                        _apiService.listVoucher(
-                                                            access_token),
-                                                    builder: (context,
-                                                        AsyncSnapshot<
-                                                                List<Voucher>>
-                                                            snapshot) {
-                                                      if (snapshot.hasError) {
-                                                        return Center(
-                                                          child: Text(
-                                                              "Something wrong with message: ${snapshot.error.toString()}"),
-                                                        );
-                                                      } else if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return Center(
-                                                            child:
-                                                                CircularProgressIndicator());
-                                                      } else if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .done) {
-                                                        List<Voucher> vclist =
-                                                            snapshot.data;
-                                                        return _buildListvoucher(
-                                                            vclist);
-                                                      }
-                                                    }))));
-                                    // setState(() {
-                                    //   print("YUU" +
-                                    //       valasuransi +
-                                    //       " - " +
-                                    //       harga +
-                                    //       " - " +
-                                    //       jumlah_sewas.toString());
-                                    //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
-                                    //                                      print("BISA YOK BISA! :"+perhitungan.toString());
-                                    // }
-                                    // );
-                                  },
-                                ),
-                              ),
+                              // Container(
+                              //   padding: const EdgeInsets.only(
+                              //       left: 30, right: 30, top: 5),
+                              //   child: TextField(
+                              //     decoration: InputDecoration(
+                              //       hintText: 'Masukkan Kode Voucher Jika ada!',
+                              //       border: const OutlineInputBorder(),
+                              //     ),
+                              //     controller: _vouchervalue,
+                              //     onChanged: (value) {
+                              //       bool isFieldValid = value.trim().isNotEmpty;
+                              //       if (isFieldValid != _fieldvoucher) {
+                              //         setState(
+                              //             () => _fieldvoucher = isFieldValid);
+                              //       }
+                              //     },
+                              //   ),
+                              // ),
+                              // SizedBox(width: 12.0),
+                              // Container(
+                              //   padding: const EdgeInsets.only(left: 30),
+                              //   child: FlatButton(
+                              //     color: Colors.orange,
+                              //     child: Text("Cek Voucher"),
+                              //     onPressed: () {
+                              //       showModalBottomSheet(
+                              //           context: context,
+                              //           isScrollControlled: true,
+                              //           backgroundColor: Colors.transparent,
+                              //           builder: (context) => Container(
+                              //               height: MediaQuery.of(context)
+                              //                       .size
+                              //                       .height *
+                              //                   0.50,
+                              //               decoration: new BoxDecoration(
+                              //                 color: Colors.white,
+                              //                 borderRadius:
+                              //                     new BorderRadius.only(
+                              //                   topLeft:
+                              //                       const Radius.circular(25.0),
+                              //                   topRight:
+                              //                       const Radius.circular(25.0),
+                              //                 ),
+                              //               ),
+                              //               child: SafeArea(
+                              //                   child: FutureBuilder(
+                              //                       future:
+                              //                           _apiService.listVoucher(
+                              //                               access_token),
+                              //                       builder: (context,
+                              //                           AsyncSnapshot<
+                              //                                   List<Voucher>>
+                              //                               snapshot) {
+                              //                         if (snapshot.hasError) {
+                              //                           return Center(
+                              //                             child: Text(
+                              //                                 "Something wrong with message: ${snapshot.error.toString()}"),
+                              //                           );
+                              //                         } else if (snapshot
+                              //                                 .connectionState ==
+                              //                             ConnectionState
+                              //                                 .waiting) {
+                              //                           return Center(
+                              //                               child:
+                              //                                   CircularProgressIndicator());
+                              //                         } else if (snapshot
+                              //                                 .connectionState ==
+                              //                             ConnectionState
+                              //                                 .done) {
+                              //                           List<Voucher> vclist =
+                              //                               snapshot.data;
+                              //                           return _buildListvoucher(
+                              //                               vclist);
+                              //                         }
+                              //                       }))));
+                              //       // setState(() {
+                              //       //   print("YUU" +
+                              //       //       valasuransi +
+                              //       //       " - " +
+                              //       //       harga +
+                              //       //       " - " +
+                              //       //       jumlah_sewas.toString());
+                              //       //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
+                              //       //                                      print("BISA YOK BISA! :"+perhitungan.toString());
+                              //       // }
+                              //       // );
+                              //     },
+                              //   ),
+                              // ),
                             ],
                           ),
                         )

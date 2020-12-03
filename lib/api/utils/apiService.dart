@@ -303,6 +303,8 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
+    Map message = jsonDecode(response.statusCode.toString());
+    responseCode = ResponseCode.fromJson(message);
     if (response.statusCode == 200) {
       return true;
     } else {

@@ -368,7 +368,7 @@ class _OtpScreenState extends State<OtpScreen> {
               // Navigator.pop(
               //     _scaffoldState.currentState.context);
               // Text("data berhasil disimpam");
-            } else if (!isSuccess && pinIndex==4) {
+            } else if (!isSuccess && pinIndex>=4) {
               print('Pin salah masku, iling iling maneh');
               errorDialog(
                 context,

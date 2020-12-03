@@ -8,6 +8,7 @@ import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LatestOrderDashboard extends StatefulWidget {
@@ -168,17 +169,18 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => HistoryPage()));
                 _openAlertDialog(
-                    context,
-                    mystorageModel.harga,
-                    mystorageModel.jumlah_sewa,
-                    mystorageModel.kode_kontainer,
-                    mystorageModel.kode_refrensi,
-                    mystorageModel.no_order,
-                    mystorageModel.tanggal_akhir,
-                    mystorageModel.tanggal_mulai,
-                    mystorageModel.total_harga,
-                    mystorageModel.tanggal_order,
-                    mystorageModel.nama_provider);
+                  context,
+                  mystorageModel.no_order,
+                  mystorageModel.kode_refrensi,
+                  mystorageModel.kode_kontainer,
+                  mystorageModel.nama_provider,
+                  mystorageModel.tanggal_order,
+                  mystorageModel.tanggal_akhir,
+                  mystorageModel.tanggal_mulai,                  
+                  mystorageModel.total_harga,
+                  mystorageModel.harga,
+                  mystorageModel.jumlah_sewa,
+                );
               }
             },
             child: Container(
@@ -192,7 +194,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                 border: Border.all(color: mBorderColor, width: 1),
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: 16),
+                padding: EdgeInsets.only(left: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +204,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                       // "cek",
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                          fontSize: 18,
                           color: mTitleColor),
                     ),
                     SizedBox(
@@ -213,7 +215,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                       // "cek",
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 12,
                           color: mTitleColor),
                     ),
                     SizedBox(
@@ -238,9 +240,6 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
 
   void _openAlertDialog(
     BuildContext context,
-    int total_harga,
-    harga,
-    jumlah_sewa,
     String no_order,
     kode_refrensi,
     kode_kontainer,
@@ -248,6 +247,9 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
     tanggal_order,
     tanggal_mulai,
     tanggal_akhir,
+    int total_harga,
+    harga,
+    jumlah_sewa,
   ) {
     showDialog(
         context: context,
@@ -293,25 +295,25 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Nominal Bayar : " + total_harga.toString(),
+                          Text("Nominal Bayar : " + rupiah(total_harga.toString()),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Jumlah Sewa : " + jumlah_sewa.toString(),
+                          Text("Jumlah Sewa : " + jumlah_sewa.toString() +
+                                  " Hari",
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Harga : " + harga.toString(),
+                          Text("Harga : " + rupiah(harga.toString()),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
                           Text(
                               "Tgl Order : " +
-                                  tanggal_order.toString() +
-                                  " Hari",
+                                  tanggal_order.toString(),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,

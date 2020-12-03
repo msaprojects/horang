@@ -136,34 +136,42 @@ class _UbahPassState extends State<UbahPass> {
                           passwordlama: _controllerPasslama.text.toString(),
                           passwordbaru: _controllerPassbaru.text.toString(),
                           token: access_token);
-                      if (widget.password == null) {
-                        print("masuk");
-                        _apiService.UbahPassword(password).then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          if (isSuccess) {
-                            print("sukses");
-                            successDialog(
-                                context, "Ubah password berhasil disimpan",
-                                showNeutralButton: false,
-                                positiveText: "Okeh", positiveAction: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Account()),
-                                  (Route<dynamic> route) => false);
-                            });
+                      _apiService.UbahPassword(password).then((isSuccess) {
+                        setState(() => _isLoading = false);
+                        if (_controllerPassbaru.text.toString() != _controllerPassretype.text.toString()) {
+                          errorDialog(context,
+                              "Password baru dan retype password tidak sama, pastikan data yang anda masukkan benar.");
+                        } else {
+                          if (_controllerPassbaru.text.toString() == _controllerPasslama.text.toString()) {
+                            errorDialog(context,
+                                "Password baru dan password lama tidak boleh sama.");
                           } else {
-                            print("gagal");
-                            errorDialog(
-                                  context, 
+                            if (isSuccess) {
+                              print("sukses");
+                              successDialog(
+                                  context, "Ubah password berhasil disimpan",
+                                  showNeutralButton: false,
+                                  positiveText: "Okeh", positiveAction: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Account()),
+                                    (Route<dynamic> route) => false);
+                              });
+                            } else {
+                              print("dede ${_apiService.responseCode}");
+                              if (_apiService.responseCode == "401") {
+                                errorDialog(context,
+                                    "Password lama yang anda masukkan salah.");
+                              }
+                              print("gagal");
+                              errorDialog(context,
                                   "Ubah Password gagal disimpan, silahkan dicek ulang");
-                            // _scaffoldState.currentState.showSnackBar(SnackBar(
-                            //   content: Text("Update password failed"),
-                            // ));
+                            }
                           }
-                        });
-                      }
+                        }
+                      });
                     },
                   ),
                 )

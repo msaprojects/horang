@@ -597,6 +597,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
             content: Text("Apakah anda ingin membuka kontainer ini ?"),
             actions: [
               FlatButton(
+                  onPressed: () {  },
                   child: Text("Ya, Setuju")),
               cancelButton
             ],

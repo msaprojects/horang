@@ -213,6 +213,8 @@ class _ProdukList extends State<ProdukList> {
     cekToken();
     _date1 = DateTime.now();
     _date2 = DateTime.now().add(Duration(days: 5));
+    _tanggalAwal = _date1.toString();
+    _tanggalAkhir = _date2.toString();
     // ttanggalAwal = widget.tanggalAwal;
     // ttanggalAkhir = widget.tanggalAkhir;
     print("HMMM : $access_token");
@@ -245,6 +247,7 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   Widget build(BuildContext context) {
+    // print("ttawalakhir ${_tanggalAwal + _tanggalAkhir}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -391,8 +394,8 @@ class _ProdukList extends State<ProdukList> {
                   onPressed: () {
                     setState(() {
                       // print("Val Kota$valKota");
-                      FlagCari = 1;
-                      _search(context);
+                        FlagCari = 1;
+                        _search(context);
                     });
                   },
                   child: Text('Cari')),
@@ -506,7 +509,6 @@ class _ProdukList extends State<ProdukList> {
                                     jenisProduk: jenisProduk,
                                     tglawal12: _tanggalAwal,
                                     tglakhir12: _tanggalAkhir,
-                                    
                                   );
                                 }));
                               }
@@ -761,13 +763,14 @@ class _ProdukList extends State<ProdukList> {
     Widget okButton = FlatButton(
       child: Text("Iya"),
       onPressed: () {
-      kondisi;
+        kondisi;
         Navigator.pop(context);
       },
     );
     AlertDialog alert = AlertDialog(
       title: Text("Minimum sewa 5 Hari"),
-      content: Text("Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?"),
+      content: Text(
+          "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?"),
       actions: [
         okButton,
       ],
