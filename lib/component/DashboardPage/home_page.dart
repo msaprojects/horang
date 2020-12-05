@@ -58,20 +58,20 @@ class _HomePageState extends State<HomePage> {
 
   static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
     debugPrint('onBackgroundMessage: $message');
-    if (message.containsKey('data')) {
+    if (message.containsKey('onMessage')) {
       String name = '';
       String age = '';
       if (Platform.isIOS) {
-        name = message['name'];
-        age = message['age'];
+        name = message['title'];
+        age = message['body'];
       } else if (Platform.isAndroid) {
-        var data = message['data'];
-        name = data['name'];
-        age = data['age'];
+        var data = message['onMessage'];
+        name = data['title'];
+        age = data['body'];
       }
       dataName = name;
       dataAge = age;
-      debugPrint('onBackgroundMessage: name: $name & age: $age');
+      debugPrint('onBackgroundMessage: title: $name & body: $age');
     }
     return null;
   }

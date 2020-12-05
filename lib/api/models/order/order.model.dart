@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class OrderProduk{
   int idjenis_produk, idlokasi, jumlah_sewa, idasuransi, idvoucher, flagvoucher, flagasuransi, idpayment_gateway, flag_selesai;
-  double total_harga, harga, nominal_barang, deposit_tambah, deposit_pakai, nominal_deposit;
+  double total_harga, harga, nominal_barang, deposit_tambah, deposit_pakai, nominal_deposit, deposit_minimum;
   String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang, tanggal_order, keterangan_deposit, no_ovo;
 
 
@@ -21,6 +21,7 @@ class OrderProduk{
     this.nominal_barang,
     this.deposit_tambah,
     this.deposit_pakai,
+    this.deposit_minimum,
     this.nominal_deposit,
     this.token,
     this.keterangan,
@@ -50,6 +51,7 @@ class OrderProduk{
       nominal_barang: map["nominal_barang"],
       deposit_pakai: map["deposit_pakai"],
       deposit_tambah: map["deposit_tambah"],
+      deposit_minimum: map["deposit_minimum"],
       nominal_deposit: map["nominal_deposit"],
       token: map["token"],
       keterangan: map["keterangan"],
@@ -80,6 +82,7 @@ class OrderProduk{
       "nominal_barang": nominal_barang,
       "deposit_pakai": deposit_pakai,
       "deposit_tambah": deposit_tambah,
+      "deposit_minimum": deposit_minimum,
       "nominal_deposit": nominal_deposit,
       "token": token,
       "keterangan": keterangan,
@@ -111,6 +114,7 @@ class OrderProduk{
         'nominal_barang: $nominal_barang,'
         'deposit_pakai: $deposit_pakai,'
         'deposit_tambah: $deposit_tambah,'
+        'deposit_minimum: $deposit_minimum,'
         'nominal_deposit: $nominal_deposit,'
         'token: $token,'
         'keterangan: $keterangan,'

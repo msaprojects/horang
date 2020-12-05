@@ -7,14 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/Dummy/dummypin.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
-import 'package:horang/utils/constant_color.dart';
-import 'package:horang/widget/datePicker.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -56,7 +52,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       totalhariharga,
       totaldeposit,
       idasuransi,
-      ceksaldo,
+      ceksaldo = 0,
       kondisisaldo,
       hargaxhari,
       saldodepositkurangnominaldeposit;
@@ -95,8 +91,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
     // setState(() {
     nomasuransi = json.decode(response.body)[0]['nilai'];
     idasuransi = json.decode(response.body)[0]['idasuransi'];
-    hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
-        asuransie, nomasuransi, _nominalbarang.text.toString());
+    hasilperhitungan = hitungall(
+        harga.toString(),
+        jumlah_sewas.toString(),
+        asuransie,
+        nomasuransi,
+        _nominalbarang.text.toString(),
+        ceksaldo.toString());
     // });
   }
 
@@ -110,14 +111,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
       idlokasi = 0;
 
   String hitungall(String harga, String durasi, int boolasuransi,
-      double asuransi, String nominalbaranginput) {
+      double asuransi, String nominalbaranginput, String ceksaldopoint) {
     if (boolasuransi == 0) asuransi = 0;
+
     total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
     totalhariharga = (int.parse(harga) * int.parse(durasi));
     totaldeposit = minimaldeposit * int.parse(harga);
+
     return ((double.parse(harga) * double.parse(durasi)) +
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
-            minimaldeposit * double.parse(harga))
+            minimaldeposit * double.parse(harga) -
+            double.parse(ceksaldopoint))
         .toStringAsFixed(2);
   }
 
@@ -185,23 +189,34 @@ class _FormDetailOrder extends State<FormInputOrder> {
     tglAkhir = widget.tglakhir12.toString();
     jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
-    hasilperhitungan = hitungall(harga.toString(), jumlah_sewas.toString(),
-        asuransie, nomasuransi, _nominalbarang.text.toString());
+    hasilperhitungan = hitungall(
+        harga.toString(),
+        jumlah_sewas.toString(),
+        asuransie,
+        nomasuransi,
+        _nominalbarang.text.toString(),
+        ceksaldo.toString());
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
         getSaldo();
         print("Nominal Point : " + ceksaldo.toString());
         if (_nominalbarang.text == "")
-          hasilperhitungan = hitungall(harga.toString(),
-              jumlah_sewas.toString(), asuransie, nomasuransi, "0");
+          hasilperhitungan = hitungall(
+              harga.toString(),
+              jumlah_sewas.toString(),
+              asuransie,
+              nomasuransi,
+              "0",
+              ceksaldo.toString());
         else
           hasilperhitungan = hitungall(
               harga.toString(),
               jumlah_sewas.toString(),
               asuransie,
               nomasuransi,
-              _nominalbarang.text.toString());
+              _nominalbarang.text.toString(),
+              ceksaldo.toString());
       });
     });
     super.initState();
@@ -438,7 +453,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 jumlah_sewas.toString(),
                                                 asuransie,
                                                 nomasuransi,
-                                                _nominalbarang.text.toString());
+                                                _nominalbarang.text.toString(),
+                                                ceksaldo.toString());
                                           } else {
                                             asuransie = 0;
                                             hasilperhitungan = hitungall(
@@ -446,7 +462,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 jumlah_sewas.toString(),
                                                 asuransie,
                                                 nomasuransi,
-                                                _nominalbarang.text.toString());
+                                                _nominalbarang.text.toString(),
+                                                ceksaldo.toString());
                                           }
                                         });
                                       },
@@ -647,7 +664,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     jumlah_sewas.toString(),
                                     asuransie,
                                     nomasuransi,
-                                    _nominalbarang.text.toString());
+                                    _nominalbarang.text.toString(),
+                                    ceksaldo.toString());
                               } else {
                                 asuransie = 0;
                                 nomasuransi = 0;
@@ -656,9 +674,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     jumlah_sewas.toString(),
                                     asuransie,
                                     nomasuransi,
-                                    _nominalbarang.text.toString());
+                                    _nominalbarang.text.toString(),
+                                    ceksaldo.toString());
                               }
                               getSaldo();
+                              if (ceksaldo == null) {
+                                ceksaldo = 0;
+                              }
                               hargaxhari = harga * 3;
                               saldodepositkurangnominaldeposit =
                                   hargaxhari - ceksaldo;

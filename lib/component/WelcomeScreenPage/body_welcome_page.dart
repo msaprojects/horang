@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,11 +33,19 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       });
     } else {
       _showbutton = false;
-      Navigator.push(
+      if(Platform.isIOS){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ));
+      }else if (Platform.isAndroid){
+        Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => pinauth(),
             ));
+      }
     }
   }
 

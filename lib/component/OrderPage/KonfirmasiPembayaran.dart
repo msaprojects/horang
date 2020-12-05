@@ -11,66 +11,61 @@ import 'package:horang/component/account_page/account.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
 class Dummy1 extends StatefulWidget {
-  var idlokasi,
-      idjenis_produk,
-      idcustomer,
-      keterangan,
+  var idjenis_produk,
+      idlokasi,
       jumlah_sewa,
-      idpayment_gateway,
-      flag_selesai,
-      deposit_tambah,
-      deposit_pakai,
+      idasuransi,
+      idvoucher,
       flagasuransi,
       total_asuransi,
       flagvoucher,
-      idasuransi,
+      idpayment_gateway,
+      flag_selesai,
+      total_harga,
+      harga,
+      nominal_barang,
+      deposit_tambah,
+      deposit_pakai,
+      deposit_minimum,
+      token,
+      keterangan,
       nomor_polis,
       tanggal_berakhir_polis,
-      idvoucher,
-      kapasitas,
-      harga,
-      alamat,
       tanggal_mulai,
+      tanggal_akhir,
       keterangan_barang,
-      nominal_barang,
-      total_harga,
       tanggal_order,
-      nominal_deposit,
       keterangan_deposit,
-      token,
-      no_ovo,
-      namaprovider,
-      tanggal_akhir;
+      nominal_deposit,
+      no_ovo;
   Dummy1(
-      {this.idlokasi,
-      this.idjenis_produk,
-      this.keterangan,
+      {this.idjenis_produk,
+      this.idlokasi,
       this.jumlah_sewa,
+      this.idasuransi,
+      this.idvoucher,
       this.flagasuransi,
       this.total_asuransi,
       this.flagvoucher,
-      this.idasuransi,
-      this.nomor_polis,
-      this.tanggal_berakhir_polis,
-      this.idvoucher,
-      this.kapasitas,
-      this.harga,
-      this.alamat,
       this.idpayment_gateway,
       this.flag_selesai,
+      this.total_harga,
+      this.harga,
+      this.nominal_barang,
       this.deposit_tambah,
       this.deposit_pakai,
-      this.tanggal_mulai,
-      this.tanggal_order,
-      this.nominal_deposit,
-      this.keterangan_deposit,
-      this.keterangan_barang,
-      this.nominal_barang,
-      this.total_harga,
+      this.deposit_minimum,
       this.token,
-      this.no_ovo,
-      this.namaprovider,
-      this.tanggal_akhir});
+      this.keterangan,
+      this.nomor_polis,
+      this.tanggal_berakhir_polis,
+      this.tanggal_mulai,
+      this.tanggal_akhir,
+      this.keterangan_barang,
+      this.tanggal_order,
+      this.keterangan_deposit,
+      this.nominal_deposit,
+      this.no_ovo});
   @override
   _Dummy1State createState() => _Dummy1State();
 }
@@ -79,59 +74,45 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _Dummy1State extends State<Dummy1> {
-  var kidlokasi,
-      knamaprovider,
-      kidjenis_produk,
-      kidcustomer,
-      kketerangan,
+  var kidjenis_produk,
+      kidlokasi,
       kjumlah_sewa,
+      kidasuransi,
+      kidvoucher,
       kflagasuransi,
       ktotal_asuransi,
-      kflag_selesai,
       kflagvoucher,
-      kidasuransi,
       kidpayment_gateway,
-      knomor_polis,
-      ktanggal_berakhir_polis,
-      kidvoucher,
-      kskapasitas,
-      ksharga,
-      ksalamat,
-      ksp,
-      ksketerangan_barang,
-      ksnominal_barang,
-      kstotal_harga,
-      kstanggal_mulai,
-      kstanggal_akhir,
-      kselectedValue,
+      kflag_selesai,
+      ktotal_harga,
+      kharga,
+      knominal_barang,
       kdeposit_tambah,
       kdeposit_pakai,
-      kkapasitas,
-      kharga,
-      ktanggal_mulai,
-      kketerangan_barang,
-      knominal_barang,
-      ktotal_harga,
-      ktanggal_order,
-      knominal_deposit,
-      kketerangan_deposit,
+      kdeposit_minimum,
       ktoken,
-      kno_ovo,
+      kketerangan,
+      knomor_polis,
+      ktanggal_berakhir_polis,
+      ktanggal_mulai,
       ktanggal_akhir,
-      kstotallharga;
+      kketerangan_barang,
+      ktanggal_order,
+      kketerangan_deposit,
+      knominal_deposit,
+      kno_ovo;
 
   @override
   void initState() {
-    knamaprovider = widget.namaprovider;
     kidlokasi = widget.idlokasi;
     kidjenis_produk = widget.idjenis_produk;
-    kidcustomer = widget.idcustomer;
     kketerangan = widget.keterangan;
     kjumlah_sewa = widget.jumlah_sewa.toString();
     kidpayment_gateway = widget.idpayment_gateway;
     kflag_selesai = widget.flag_selesai;
     kdeposit_tambah = widget.deposit_tambah;
     kdeposit_pakai = widget.deposit_pakai;
+    kdeposit_minimum = widget.deposit_minimum;
     kflagasuransi = widget.flagasuransi;
     ktotal_asuransi = widget.total_asuransi;
     kflagvoucher = widget.flagvoucher;
@@ -139,9 +120,7 @@ class _Dummy1State extends State<Dummy1> {
     knomor_polis = widget.nomor_polis;
     ktanggal_berakhir_polis = widget.tanggal_berakhir_polis;
     kidvoucher = widget.idvoucher;
-    kkapasitas = widget.kapasitas;
     kharga = widget.harga;
-    ksalamat = widget.alamat;
     ktanggal_mulai = widget.tanggal_mulai;
     kketerangan_barang = widget.keterangan_barang;
     knominal_barang = widget.nominal_barang;
@@ -152,7 +131,6 @@ class _Dummy1State extends State<Dummy1> {
     ktoken = widget.token;
     kno_ovo = widget.no_ovo;
     ktanggal_akhir = widget.tanggal_akhir;
-    print("object" + kidjenis_produk.toString());
 
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: int.parse(kidjenis_produk),
@@ -169,6 +147,7 @@ class _Dummy1State extends State<Dummy1> {
         nominal_barang: double.parse(knominal_barang),
         deposit_tambah: kdeposit_tambah,
         deposit_pakai: kdeposit_pakai,
+        deposit_minimum: kdeposit_minimum,
         token: ktoken,
         keterangan: kketerangan,
         nomor_polis: knomor_polis,
@@ -180,7 +159,7 @@ class _Dummy1State extends State<Dummy1> {
         keterangan_deposit: "-",
         nominal_deposit: knominal_deposit,
         no_ovo: kno_ovo.toString());
-    print("MODELLLL : " + orderProduk.toString());
+    print("SEND TO ORDER : "+orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
         print("masuk9");
@@ -306,16 +285,16 @@ class _Dummy1State extends State<Dummy1> {
             SizedBox(
               height: 15,
             ),
-            Card(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              elevation: 2.0,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 20, right: 20),
-                height: 50,
-                child: Text(knamaprovider.toString()),
-              ),
-            ),
+            // Card(
+            //   clipBehavior: Clip.antiAliasWithSaveLayer,
+            //   elevation: 2.0,
+            //   child: Container(
+            //     alignment: Alignment.centerLeft,
+            //     padding: EdgeInsets.only(left: 20, right: 20),
+            //     height: 50,
+            //     child: Text(knamaprovider.toString()),
+            //   ),
+            // ),
             SizedBox(
               height: 10,
             ),

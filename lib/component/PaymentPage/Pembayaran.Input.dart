@@ -193,19 +193,32 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     sdeposit = widget.deposit;
 //    }
     cekToken();
-    hitungall(sharga.toString(), jumlah_sewa, flagasuransi,
-        double.parse(stotal_asuransi), snominal_barang, stotaldeposit);
+    hitungall(
+        sharga.toString(),
+        jumlah_sewa,
+        flagasuransi,
+        double.parse(stotal_asuransi),
+        snominal_barang,
+        stotaldeposit,
+        stotalpointdeposit);
   }
 
-  String hitungall(String harga, String durasi, int boolasuransi,
-      double asuransi, String nominalbaranginput, String nomdeposit) {
+  String hitungall(
+      String harga,
+      String durasi,
+      int boolasuransi,
+      double asuransi,
+      String nominalbaranginput,
+      String nomdeposit,
+      String ceksaldopoint) {
     if (boolasuransi == 0) asuransi = 0;
     hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
         ((asuransi / 100) * double.parse(nominalbaranginput)) +
         double.parse(nomdeposit) * double.parse(harga));
     return ((double.parse(harga) * double.parse(durasi)) +
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
-            double.parse(nomdeposit) * double.parse(harga))
+            double.parse(nomdeposit) * double.parse(harga) -
+            double.parse(ceksaldopoint))
         .toStringAsFixed(2);
   }
 
@@ -286,8 +299,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                     stanggal_mulai,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text(
-                                      stanggal_akhir,
+                                  Text(stanggal_akhir,
                                       overflow: TextOverflow.ellipsis),
                                   Text(
                                     jumlah_sewa.toString() + " Hari",
@@ -297,7 +309,43 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                           ],
                         ),
-
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Row(
+                                children: <Widget>[Text("Harga Sewa :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                              const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                rupiah(sharga,
+                                    separator: ',', trailing: " /hari"), style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Row(
+                                children: <Widget>[Text("Asuransi :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                              const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                asuransitxt,
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           height: 8,
                         ),
@@ -319,33 +367,14 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
-                                children: <Widget>[Text("Harga Sewa :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(sharga,
-                                    separator: ',', trailing: ".00 /hari"),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
                                 children: <Widget>[Text("Subtotal :")],
                               ),
                             ),
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                "+" + rupiah(stotalharixharga, separator: ',', trailing: '.00'),
+                              child: Text(rupiah(stotalharixharga,
+                                        separator: ','),
                               ),
                             ),
                           ],
@@ -362,8 +391,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(stotaldeposit, separator: ',', trailing: '.00'),
+                              child: Text(rupiah(stotaldeposit,
+                                    separator: ','),
                               ),
                             ),
                           ],
@@ -374,32 +403,18 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
-                                children: <Widget>[Text("Deposit Terpakai : ")],
+                                children: <Widget>[
+                                  Text("Point Deposit Anda : ")
+                                ],
                               ),
                             ),
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                rupiah(stotalpointdeposit, separator: ',', trailing: '.00'),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Asuransi :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                asuransitxt,
+                                "-" +
+                                    rupiah(stotalpointdeposit,
+                                        separator: ','),
                               ),
                             ),
                           ],
@@ -416,8 +431,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                "+" + rupiah(stotal_asuransi, separator: ',', trailing: '0'),
+                              child: Text(rupiah(stotal_asuransi,
+                                        separator: ','),
                               ),
                             ),
                           ],
@@ -425,7 +440,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         Container(
                           padding: const EdgeInsets.only(left: 30),
                           child: Row(
-                            children: <Widget>[Text("( Nominal Barang : "+rupiah(snominal_barang+" )"), style: TextStyle(fontStyle: FontStyle.italic),)],
+                            children: <Widget>[
+                              Text(
+                                "( Nominal Barang : " +
+                                    rupiah(snominal_barang + " )"),
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              )
+                            ],
                           ),
                         ),
                         SizedBox(
@@ -653,7 +674,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan $stotal_asuransi",
+                                  "Lanjutkan Pembayaran",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
@@ -664,7 +685,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                             builder: (BuildContext context) =>
                                                 KonfirmPayment(
                                                   namaprovider: namaprovider,
-                                                  total_asuransi: stotal_asuransi,
+                                                  total_asuransi:
+                                                      stotal_asuransi,
                                                   idjenis_produk:
                                                       idjenis_produk,
                                                   idlokasi: idlokasi,
@@ -681,9 +703,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   total_harga: double.parse(
                                                       stotal_harga),
                                                   deposit_tambah: double.parse(
-                                                      sharga.toString()),
+                                                      sdeposit.toString()),
                                                   deposit_pakai: double.parse(
-                                                      sharga.toString()),
+                                                      stotalpointdeposit
+                                                          .toString()),
+                                                  deposit_minimum: double.parse(
+                                                      stotaldeposit.toString()),
                                                   keterangan:
                                                       keterangan.toString(),
                                                   nomor_polis: nomor_polis,
@@ -698,7 +723,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                   tanggal_order: "DATE(NOW())",
                                                   nominal_deposit: double.parse(
                                                       sharga.toString()),
-                                                  keterangan_deposit: "-",
                                                 )));
                                   });
                                 })

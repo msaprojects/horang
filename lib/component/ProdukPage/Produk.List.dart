@@ -60,10 +60,6 @@ class _ProdukList extends State<ProdukList> {
   String _pTanggalAkhir = "";
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
-  // String mmtext;
-  // String aatext;
-  // String mmtext = DateTime.now().toString();
-  // String aatext = DateTime.now().add(Duration(days: 5)).toString();
 
   String mmtext = DateFormat.yMMMd().format(DateTime.now());
   String aatext =
@@ -134,17 +130,11 @@ class _ProdukList extends State<ProdukList> {
       if (args.value is PickerDateRange) {
         _date1 = args.value.startDate;
         _date2 = args.value.endDate;
-        if (diffInDays(_date2, _date1) < 5) {
-          //kasih alert disini ya
-          // _date2 = _date1.add(Duration(days: 5));
-          DateValidation(context, _date2 = _date1.add(Duration(days: 5)));
-        }
         _range = DateFormat('yyyy-MM-dd').format(_date1).toString() +
             ' - ' +
             DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
         _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
-        _tanggalAkhir =
-            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        _tanggalAkhir = DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
         if (_date2.isAfter(_date1)) {
           a = false;
           initializeDateFormatting("id_ID", null).then((_) {
@@ -152,6 +142,11 @@ class _ProdukList extends State<ProdukList> {
             aatext = DateFormat.yMMMEd("id_ID").format(_date2);
           });
         }
+
+        if (diffInDays(DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) < 5) {
+          DateValidation(context, _date2 = _date1.add(Duration(days: 5)));
+        }
+
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
@@ -233,14 +228,8 @@ class _ProdukList extends State<ProdukList> {
     setState(() {
       if (a) {
         a = false;
-        // mmtext = _tanggalAwal;
-        // aatext = _tanggalAkhir;
       } else {
         a = true;
-        // Text("maybe");
-        // mText = DateTime.now().toString();
-        // sDate.toString();
-        // fDate.toString();
       }
     });
   }
@@ -604,41 +593,6 @@ class _ProdukList extends State<ProdukList> {
                                           )
                                         ],
                                       ),
-                                      // Row(
-                                      //   children: <Widget>[
-                                      //     Icon(
-                                      //       Icons.remove_red_eye,
-                                      //       size: 12,
-                                      //       color: Colors.grey[600],
-                                      //     ),
-                                      //     SizedBox(
-                                      //       width: 4,
-                                      //     ),
-                                      //     Text("5 Viewer",
-                                      //         style: TextStyle(
-                                      //             color: Colors.grey[600],
-                                      //             fontSize: 12),
-                                      //         overflow: TextOverflow.fade)
-                                      //   ],
-                                      // ),
-                                      //
-                                      // Row(
-                                      //   children: <Widget>[
-                                      //     Icon(
-                                      //       Icons.local_grocery_store,
-                                      //       size: 12,
-                                      //       color: Colors.grey[600],
-                                      //     ),
-                                      //     SizedBox(
-                                      //       width: 4,
-                                      //     ),
-                                      //     Text("Disewa 3 Kali",
-                                      //         style: TextStyle(
-                                      //             color: Colors.grey[600],
-                                      //             fontSize: 12),
-                                      //         overflow: TextOverflow.fade)
-                                      //   ],
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -762,10 +716,9 @@ class _ProdukList extends State<ProdukList> {
   DateValidation(BuildContext context, kondisi) {
     Widget okButton = FlatButton(
       child: Text("Iya"),
-      onPressed: () {
-        kondisi;
-        Navigator.pop(context);
-      },
+      onPressed: () =>
+        Navigator.pop(context)
+      ,
     );
     AlertDialog alert = AlertDialog(
       title: Text("Minimum sewa 5 Hari"),

@@ -28,6 +28,7 @@ class KonfirmPayment extends StatefulWidget {
       flag_selesai,
       deposit_tambah,
       deposit_pakai,
+      deposit_minimum,
       flagasuransi,
       flagvoucher,
       idasuransi,
@@ -43,7 +44,6 @@ class KonfirmPayment extends StatefulWidget {
       total_harga,
       tanggal_order,
       nominal_deposit,
-      keterangan_deposit,
       tanggal_akhir;
   KonfirmPayment(
       {this.idlokasi,
@@ -65,10 +65,10 @@ class KonfirmPayment extends StatefulWidget {
       this.flag_selesai,
       this.deposit_tambah,
       this.deposit_pakai,
+      this.deposit_minimum,
       this.tanggal_mulai,
       this.tanggal_order,
       this.nominal_deposit,
-      this.keterangan_deposit,
       this.keterangan_barang,
       this.nominal_barang,
       this.total_harga,
@@ -106,6 +106,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kstanggal_akhir,
       kselectedValue,
       knamaprovider,
+      ksdeposit_pakai,
+      ksdeposit_tambah,
+      ksdeposit_minimum,
       kstotallharga;
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -179,6 +182,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     ksnominal_barang = widget.nominal_barang;
     kstotal_harga = widget.total_harga;
     knamaprovider = widget.namaprovider;
+    ksdeposit_tambah = widget.deposit_tambah;
+    ksdeposit_pakai = widget.deposit_pakai;
+    ksdeposit_minimum = widget.deposit_minimum;
 //    }
     cekToken();
     super.initState();
@@ -234,7 +240,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                   height: 15,
                 ),
                 Text(
-                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran",
+                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran $ksdeposit_minimum",
                   style: GoogleFonts.inter(height: 1.5, fontSize: 14),
                 ),
                 SizedBox(
@@ -249,7 +255,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             FlatButton(
               color: Colors.green,
               child: Text(
-                "Bayar Sekarang $ktotal_asuransi",
+                "Bayar Sekarang",
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
@@ -286,7 +292,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
           return alert;
         });
   }
+
   OrderConfirmation(BuildContext context, String notelp) {
+    print("Print Nominal Minimum Deposit : "+ksdeposit_minimum.toString());
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
@@ -304,13 +312,14 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       total_asuransi: ktotal_asuransi,
                       flagvoucher: kflagvoucher,
                       idpayment_gateway:
-                      int.parse(kidpayment_gateway.toString()),
+                          int.parse(kidpayment_gateway.toString()),
                       flag_selesai: 0,
                       total_harga: kstotal_harga,
                       harga: ksharga,
                       nominal_barang: ksnominal_barang,
-                      deposit_tambah: double.parse(ksharga.toString()),
-                      deposit_pakai: double.parse(ksharga.toString()),
+                      deposit_tambah: ksdeposit_tambah,
+                      deposit_pakai: ksdeposit_pakai,
+                      deposit_minimum: ksdeposit_minimum,
                       token: access_token,
                       keterangan: kketerangan,
                       nomor_polis: knomor_polis,
@@ -319,7 +328,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       tanggal_akhir: kstanggal_akhir,
                       keterangan_barang: ksketerangan_barang,
                       tanggal_order: "DATE(NOW())",
-                      keterangan_deposit: "-",
+                      keterangan_deposit:
+                          "Deposit terpakai Rp. " + ksdeposit_tambah.toString(),
                       nominal_deposit: double.parse(ksharga.toString()),
                       no_ovo: _noOvo.text.toString())));
         });
@@ -334,12 +344,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     );
     AlertDialog alert = AlertDialog(
       title: Text("Konfirmasi"),
-      content: Text(
-          "pastikan nomor $notelp ini sudah terdaftar di ewallet!"),
-      actions: [
-        okButton,
-        cancelButton
-      ],
+      content: Text("pastikan nomor $notelp ini sudah terdaftar di ewallet!"),
+      actions: [okButton, cancelButton],
     );
     showDialog(
         context: context,

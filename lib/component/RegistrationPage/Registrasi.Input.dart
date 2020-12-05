@@ -103,7 +103,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
 //                              return;
                             } else {
                               setState(() => _isLoading = true);
-                              Pengguna pengguna = Pengguna(
+                              PenggunaModel pengguna = PenggunaModel(
                                   email: email,
                                   no_hp: nohp,
                                   password: password,

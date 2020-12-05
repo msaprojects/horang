@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:commons/commons.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,65 +40,89 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final scaffoldState = GlobalKey<ScaffoldState>();
-  // final firebaseMessaging = FirebaseMessaging();
   final controllerTopic = TextEditingController();
   bool isSubscribed = false;
-  String token = '';
+  String token;
   static String dataName = '';
   static String dataAge = '';
 
-  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-  //   debugPrint('onBackgroundMessage: $message');
-  //   if (message.containsKey('data')) {
-  //     String name = '';
-  //     String age = '';
-  //     if (Platform.isIOS) {
-  //       name = message['name'];
-  //       age = message['age'];
-  //     } else if (Platform.isAndroid) {
-  //       var data = message['data'];
-  //       name = data['name'];
-  //       age = data['age'];
-  //     }
-  //     dataName = name;
-  //     dataAge = age;
-  //     debugPrint('onBackgroundMessage: name: $name & age: $age');
-  //   }
-  //   return null;
-  // }
+  //FIREBASE
+  final firebaseMessaging = FirebaseMessaging();
 
-  // @override
-  // void initState() {
-  //   firebaseMessaging.configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       debugPrint('onMessage: $message');
-  //       getDataFcm(message);
-  //     },
-  //     onBackgroundMessage: onBackgroundMessage,
-  //     onResume: (Map<String, dynamic> message) async {
-  //       debugPrint('onResume: $message');
-  //       getDataFcm(message);
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       debugPrint('onLaunch: $message');
-  //       getDataFcm(message);
-  //     },
-  //   );
-  //   firebaseMessaging.requestNotificationPermissions(
-  //     const IosNotificationSettings(
-  //         sound: true, badge: true, alert: true, provisional: true),
-  //   );
-  //   firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-  //     debugPrint('Settings registered: $settings');
-  //   });
-  //   firebaseMessaging.getToken().then((token) => setState(() {
-  //         this.token = token;
-  //       }));
-  //   super.initState();
-  // }
+  static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
+    debugPrint('onBackgroundMessage: $message');
+    if (message.containsKey('onMessage')) {
+      String name = '';
+      String age = '';
+      if (Platform.isIOS) {
+        name = message['title'];
+        age = message['body'];
+      } else if (Platform.isAndroid) {
+        var data = message['onMessage'];
+        name = data['title'];
+        age = data['body'];
+      }
+      dataName = name;
+      dataAge = age;
+      debugPrint('onBackgroundMessage: name: $name & age: $age');
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        debugPrint('onMessage: $message');
+        getDataFcm(message);
+      },
+      onBackgroundMessage: onBackgroundMessage,
+      onResume: (Map<String, dynamic> message) async {
+        debugPrint('onResume: $message');
+        getDataFcm(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        debugPrint('onLaunch: $message');
+        getDataFcm(message);
+      },
+    );
+    firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: true),
+    );
+    firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+      debugPrint('Settings registered: $settings');
+    });
+    firebaseMessaging.getToken().then((token) => setState(() {
+          this.token = token;
+        }));
+    super.initState();
+  }
+
+  void getDataFcm(Map<String, dynamic> message) {
+    String name = '';
+    String age = '';
+    if (Platform.isIOS) {
+      name = message['name'];
+      age = message['age'];
+    } else if (Platform.isAndroid) {
+      var data = message['data'];
+      name = data['name'];
+      age = data['age'];
+    }
+    if (name.isNotEmpty && age.isNotEmpty) {
+      setState(() {
+        dataName = name;
+        dataAge = age;
+      });
+    }
+    debugPrint('getDataFcm: name: $name & age: $age');
+  }
+  //END FIREBASE
 
   @override
   Widget build(BuildContext context) {
+    print("Token Firebase : " + token);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -209,17 +234,18 @@ class _LoginPageState extends State<LoginPage> {
                           var encrypt = sha256.convert(bytes1);
                           print("kane $encrypt");
                           print("///---///" + email + "///---///" + password);
-                          Pengguna pengguna = Pengguna(
+                          PenggunaModel pengguna = PenggunaModel(
                               email: email,
                               password: password,
                               status: 0,
                               notification_token: token,
                               token_mail: "0");
+                          print("Post to Pengguna : " + pengguna.toString());
                           _apiService.xenditUrl();
                           _apiService.loginIn(pengguna).then((isSuccess) {
                             setState(() => _isLoading = false);
                             if (isSuccess) {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Home()));
@@ -331,24 +357,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-//   void getDataFcm(Map<String, dynamic> message) {
-//     String name = '';
-//     String age = '';
-//     if (Platform.isIOS) {
-//       name = message['name'];
-//       age = message['age'];
-//     } else if (Platform.isAndroid) {
-//       var data = message['data'];
-//       name = data['name'];
-//       age = data['age'];
-//     }
-//     if (name.isNotEmpty && age.isNotEmpty) {
-//       setState(() {
-//         dataName = name;
-//         dataAge = age;
-//       });
-//     }
-//     debugPrint('getDataFcm: name: $name & age: $age');
-//   }
 }

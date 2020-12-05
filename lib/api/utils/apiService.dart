@@ -168,7 +168,7 @@ class ApiService {
   ////////////////////// TAMBAH ////////////////////////
 
   //REGISTRASI
-  Future<bool> signup(Pengguna data) async {
+  Future<bool> signup(PenggunaModel data) async {
     final response = await client.post(
       "$baseUrl/registrasi",
       headers: {"content-type": "application/json"},
@@ -184,7 +184,7 @@ class ApiService {
   }
 
 //  LOGIN
-  Future<bool> loginIn(Pengguna data) async {
+  Future<bool> loginIn(PenggunaModel data) async {
     var response = await client.post(
       "$baseUrl/login",
       headers: {"content-type": "application/json"},

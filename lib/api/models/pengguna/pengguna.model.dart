@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-class Pengguna{
+class PenggunaModel{
 
   int idpengguna, status;
   String email, no_hp, password, notification_token, token_mail;
 
-  Pengguna({
+  PenggunaModel({
     this.idpengguna = 0,
     this.status = 0,
     this.email,
@@ -15,8 +15,8 @@ class Pengguna{
     this.token_mail
   });
 
-  factory Pengguna.fromJson(Map<String, dynamic> map){
-    return Pengguna(
+  factory PenggunaModel.fromJson(Map<String, dynamic> map){
+    return PenggunaModel(
       idpengguna: map["idpengguna"],
       status: map["status"],
       email: map["email"],
@@ -38,14 +38,19 @@ class Pengguna{
       "token_mail": token_mail
       };
   }
+
+  @override
+  String toString() {
+    return 'PenggunaModel{idpengguna: $idpengguna, status: $status, email: $email, no_hp: $no_hp, password: $password, notification_token: $notification_token, token_mail: $token_mail}';
+  }
 }
 
-  List<Pengguna> penggunaFromJson(String jsonData){
+  List<PenggunaModel> penggunaFromJson(String jsonData){
     final data = json.decode(jsonData);
-    return List<Pengguna>.from(data.map((item) => Pengguna.fromJson(item)));
+    return List<PenggunaModel>.from(data.map((item) => PenggunaModel.fromJson(item)));
   }
 
-  String penggunaToJson(Pengguna data){
+  String penggunaToJson(PenggunaModel data){
     final jsonData = data.toJson();
     return json.encode(jsonData);
   }
