@@ -28,6 +28,8 @@ class _StorageActive extends State<StorageActive1>
       nama,
       nama_customer,
       keterangan,
+      idtransaksi,
+      idtransaksi_detail,
       kode_kontainer,
       nama_kota,
       nama_lokasi,
@@ -151,19 +153,31 @@ class _StorageActive extends State<StorageActive1>
                             duration: Duration(seconds: 10),
                           ));
                         } else {
-                          _openAlertDialog(
-                            context,
-                            myStorage.idtransaksi_detail,
-                            myStorage.kode_kontainer.toString(),
-                            myStorage.nama_kota,
-                            myStorage.nama,
-                            myStorage.nama_lokasi.toString(),
-                            myStorage.keterangan,
-                            myStorage.tanggal_order,
-                            myStorage.tanggal_mulai,
-                            myStorage.tanggal_akhir,
-                            myStorage.hari.toString(),
-                          );
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      KonfirmasiLog(
+                                        kode_kontainer: kode_kontainer,
+                                        nama_kota: nama_kota,
+                                        // idtransaksi_detail: ,
+                                        idtransaksi_detail: idtransaksi,
+                                        idtransaksi: idtransaksi,
+                                        nama: nama,
+                                      )));
+                          // _openAlertDialog(
+                          //   context,
+                          //   myStorage.idtransaksi_detail,
+                          //   myStorage.idtransaksi,
+                          //   myStorage.kode_kontainer.toString(),
+                          //   myStorage.nama_kota,
+                          //   myStorage.nama,
+                          //   myStorage.nama_lokasi.toString(),
+                          //   myStorage.keterangan,
+                          //   myStorage.tanggal_order,
+                          //   myStorage.tanggal_mulai,
+                          //   myStorage.tanggal_akhir,
+                          //   myStorage.hari.toString(),
+                          // );
                         }
                       },
                       child: Column(
@@ -294,319 +308,230 @@ class _StorageActive extends State<StorageActive1>
         });
   }
 
-  void _openAlertDialog(
-      BuildContext context,
-      int idtransaksi_detail,
-      String kode_kontainer,
-      nama_kota,
-      nama,
-      nama_lokasi,
-      keterangan,
-      tanggal_order,
-      tanggal_mulai,
-      tanggal_akhir,
-      hari) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Container(
-              width: 280.0,
-              height: 380.0,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
-              child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              "Detail Pesanan...",
-                              style: GoogleFonts.lato(fontSize: 12),
-                            ),
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Kode Kontainer : " + kode_kontainer.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Kota : " + nama_kota.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Jenis : " + nama.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Nama Lokasi : " + nama_lokasi.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Keterangan : " + keterangan.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Lama Order : " + hari.toString() + " Hari",
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Tanggal Order : " + tanggal_order.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Tanggal Mulai : " + tanggal_mulai.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text("Tanggal Akhir : " + tanggal_akhir.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              // width: 900,
-                              child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 75,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.red,
-                                        onPressed: () {
-                                          _alertOpen(
-                                            context,
-                                            idtransaksi_detail,
-                                            kode_kontainer.toString(),
-                                            nama_kota,
-                                            nama,
-                                            nama_lokasi.toString(),
-                                            keterangan,
-                                            tanggal_order,
-                                            tanggal_mulai,
-                                            tanggal_akhir,
-                                            hari.toString(),
-                                          );
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.lock_open_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Open',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 13,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.green,
-                                        onPressed: () {},
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.check_box_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Selesai',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 13,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  Container(
-                                    width: 75,
-                                    height: 80,
-                                    child: FlatButton(
-                                        color: Colors.yellow[700],
-                                        onPressed: () {},
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.event_note_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              'Log',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                width: 900,
-                                // height: 40,
-                                child: FlatButton(
-                                    height: 40,
-                                    color: Colors.blue,
-                                    onPressed: () {
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  KonfirmasiLog(
-                                                    kode_kontainer:
-                                                        kode_kontainer,
-                                                    nama_kota: nama_kota,
-                                                    // idtransaksi_detail: ,
-                                                    idtransaksi_detail:
-                                                        idtransaksi_detail,
-                                                    nama: nama,
-                                                  )));
-                                      // Navigator.pop(context);
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (context) {
-                                      //   return KonfirmasiLog(
-                                      //     kode_kontainer: kode_kontainer,
-                                      //     nama_kota: nama_kota,
-                                      //     // idtransaksi_detail: ,
-                                      //     idtransaksi_detail:
-                                      //         idtransaksi_detail,
-                                      //     nama: nama,
-                                      //   );
-                                      // }));
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.exit_to_app_outlined,
-                                            color: Colors.white),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          'Hal. detail log',
-                                          style: GoogleFonts.inter(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                            ],
-                          )),
-                        ],
-                      ),
-                    )
-                  ]),
-            ),
-          );
-        });
-  }
+  // void _openAlertDialog(
+  //     BuildContext context,
+  //     int idtransaksi_detail, idtransaksi,
+  //     String kode_kontainer,
+  //     nama_kota,
+  //     nama,
+  //     nama_lokasi,
+  //     keterangan,
+  //     tanggal_order,
+  //     tanggal_mulai,
+  //     tanggal_akhir,
+  //     hari) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           content: new Container(
+  //             width: 280.0,
+  //             height: 380.0,
+  //             decoration: new BoxDecoration(
+  //               shape: BoxShape.rectangle,
+  //               color: const Color(0xFFFFFF),
+  //               borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+  //             ),
+  //             child: new Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                 children: <Widget>[
+  //                   Container(
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Container(
+  //                           child: Text(
+  //                             "Detail Pesanan...",
+  //                             style: GoogleFonts.lato(fontSize: 12),
+  //                           ),
+  //                         ),
+  //                         Divider(),
+  //                         SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Text("Kode Kontainer : " + kode_kontainer.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Kota : " + nama_kota.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Jenis : " + nama.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Nama Lokasi : " + nama_lokasi.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Keterangan : " + keterangan.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Lama Order : " + hari.toString() + " Hari",
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Tanggal Order : " + tanggal_order.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Tanggal Mulai : " + tanggal_mulai.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text("Tanggal Akhir : " + tanggal_akhir.toString(),
+  //                             style: GoogleFonts.lato(fontSize: 14)),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         SizedBox(
+  //                           height: 10,
+  //                         ),
+  //                         Container(
+  //                             // width: 900,
+  //                             child: Column(
+  //                           children: [
+  //                             Container(
+  //                               width: 900,
+  //                               // height: 40,
+  //                               child: FlatButton(
+  //                                   height: 40,
+  //                                   color: Colors.blue,
+  //                                   onPressed: () {
+  //                                     Navigator.of(context).pushReplacement(
+  //                                         MaterialPageRoute(
+  //                                             builder: (BuildContext context) =>
+  //                                                 KonfirmasiLog(
+  //                                                   kode_kontainer:
+  //                                                       kode_kontainer,
+  //                                                   nama_kota: nama_kota,
+  //                                                   // idtransaksi_detail: ,
+  //                                                   idtransaksi_detail:
+  //                                                       idtransaksi_detail,
+  //                                                       idtransaksi: idtransaksi,
+  //                                                   nama: nama,
+  //                                                 )));
+  //                                     // Navigator.pop(context);
+  //                                     // Navigator.push(context,
+  //                                     //     MaterialPageRoute(builder: (context) {
+  //                                     //   return KonfirmasiLog(
+  //                                     //     kode_kontainer: kode_kontainer,
+  //                                     //     nama_kota: nama_kota,
+  //                                     //     // idtransaksi_detail: ,
+  //                                     //     idtransaksi_detail:
+  //                                     //         idtransaksi_detail,
+  //                                     //     nama: nama,
+  //                                     //   );
+  //                                     // }));
+  //                                   },
+  //                                   child: Row(
+  //                                     mainAxisAlignment:
+  //                                         MainAxisAlignment.center,
+  //                                     children: [
+  //                                       Icon(Icons.exit_to_app_outlined,
+  //                                           color: Colors.white),
+  //                                       SizedBox(
+  //                                         width: 10,
+  //                                       ),
+  //                                       Text(
+  //                                         'Hal. detail log',
+  //                                         style: GoogleFonts.inter(
+  //                                             fontSize: 14,
+  //                                             color: Colors.white,
+  //                                             fontWeight: FontWeight.bold),
+  //                                       ),
+  //                                     ],
+  //                                   )),
+  //                             ),
+  //                           ],
+  //                         )),
+  //                       ],
+  //                     ),
+  //                   )
+  //                 ]),
+  //           ),
+  //         );
+  //       });
+  // }
 
-  void _alertOpen(
-      BuildContext context,
-      int idtransaksi_detail,
-      String kode_kontainer,
-      nama_kota,
-      nama,
-      nama_lokasi,
-      keterangan,
-      tanggal_order,
-      tanggal_mulai,
-      tanggal_akhir,
-      hari) {
-    // var ket = _note.text.toString();
-    Widget cancelButton = FlatButton(
-      child: Text("Batal"),
-      onPressed: () => Navigator.pop(context),
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Konfirmasi Action" + idtransaksi_detail.toString()),
-            content: Text("Apakah anda ingin membuka kontainer ini ?"),
-            actions: [
-              FlatButton(
-                  // color: Colors.red,
-                  onPressed: () {
-                    // setState(() {
-                    //   isLoading = true;
-                    //   print('cekmasuk123');
-                    //   LogOpen logopen = LogOpen(
-                    //     idtransaksi_detail: idtransaksi_detail,
-                    //     token: access_token,
-                    //   );
-                    //   if (kode_kontainer != null || nama_kota != null) {
-                    //     print('cekmasuk--');
-                    //     _apiService.OpenLog(logopen).then((isSuccess) {
-                    //       setState(() {
-                    //         if (isSuccess) {
-                    //           successDialog(
-                    //             context,
-                    //             "Permintaan open berhasil dilakukan !",
-                    //             closeOnBackPress: true,
-                    //           );
-                    //         } else {
-                    //           print('cekmasuk~~~');
-                    //           errorDialog(
-                    //               context, "Permintaan Open gagal dilakukan !");
-                    //         }
-                    //       });
-                    //     });
-                    //   }
-                    // }
-                    // );
-                  },
-                  // {
-                  //   Navigator.of(context)
-                  //       .pushReplacement(MaterialPageRoute(builder: (context) {
-                  //     return FormInputPembayaran(
-                  //         );
-                  //   }));
-                  // },
-                  child: Text("Ya, Setuju")),
-              cancelButton
-            ],
-          );
-        });
-  }
+  // void _alertOpen(
+  //     BuildContext context,
+  //     int idtransaksi_detail,
+  //     String kode_kontainer,
+  //     nama_kota,
+  //     nama,
+  //     nama_lokasi,
+  //     keterangan,
+  //     tanggal_order,
+  //     tanggal_mulai,
+  //     tanggal_akhir,
+  //     hari) {
+  //   // var ket = _note.text.toString();
+  //   Widget cancelButton = FlatButton(
+  //     child: Text("Batal"),
+  //     onPressed: () => Navigator.pop(context),
+  //   );
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: Text("Konfirmasi Action" + idtransaksi_detail.toString()),
+  //           content: Text("Apakah anda ingin membuka kontainer ini ?"),
+  //           actions: [
+  //             FlatButton(
+  //                 // color: Colors.red,
+  //                 onPressed: () {
+  //                   // setState(() {
+  //                   //   isLoading = true;
+  //                   //   print('cekmasuk123');
+  //                   //   LogOpen logopen = LogOpen(
+  //                   //     idtransaksi_detail: idtransaksi_detail,
+  //                   //     token: access_token,
+  //                   //   );
+  //                   //   if (kode_kontainer != null || nama_kota != null) {
+  //                   //     print('cekmasuk--');
+  //                   //     _apiService.OpenLog(logopen).then((isSuccess) {
+  //                   //       setState(() {
+  //                   //         if (isSuccess) {
+  //                   //           successDialog(
+  //                   //             context,
+  //                   //             "Permintaan open berhasil dilakukan !",
+  //                   //             closeOnBackPress: true,
+  //                   //           );
+  //                   //         } else {
+  //                   //           print('cekmasuk~~~');
+  //                   //           errorDialog(
+  //                   //               context, "Permintaan Open gagal dilakukan !");
+  //                   //         }
+  //                   //       });
+  //                   //     });
+  //                   //   }
+  //                   // }
+  //                   // );
+  //                 },
+  //                 // {
+  //                 //   Navigator.of(context)
+  //                 //       .pushReplacement(MaterialPageRoute(builder: (context) {
+  //                 //     return FormInputPembayaran(
+  //                 //         );
+  //                 //   }));
+  //                 // },
+  //                 child: Text("Ya, Setuju")),
+  //             cancelButton
+  //           ],
+  //         );
+  //       });
+  // }
 
   AccountValidation(BuildContext context) {
     Widget okButton = FlatButton(

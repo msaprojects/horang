@@ -360,14 +360,15 @@ class _OtpScreenState extends State<OtpScreen> {
         _apiService.CekPin(pin_cek1).then((isSuccess) {
           setState(() {
             if (isSuccess && pinIndex ==4) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Home(),
-                  ));
-              // Navigator.pop(
-              //     _scaffoldState.currentState.context);
-              // Text("data berhasil disimpam");
+              Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Home()),
+                    (Route<dynamic> route) => false);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => Home(),
+              //     ));
             } else if (!isSuccess && pinIndex>=4) {
               print('Pin salah masku, iling iling maneh');
               errorDialog(

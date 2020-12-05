@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+   DateTime backbuttonpressedtime;
   int currentTab = 0;
   final List<Widget> screen = [HomePage()];
   Widget currentScreen = HomePage();
@@ -76,7 +77,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: _onBackPressed,
       child: Scaffold(
         body: PageStorage(
           bucket: bucket,
@@ -217,6 +218,22 @@ class _HomeState extends State<Home> {
             )),
       ),
     );
+  }
+
+   Future<bool> _onBackPressed() async {
+    DateTime currenttime = DateTime.now();
+    bool backbutton = backbuttonpressedtime == null ||
+        currenttime.difference(backbuttonpressedtime) > Duration(seconds: 3);
+
+    if (backbutton) {
+      backbuttonpressedtime = currenttime;
+      Fluttertoast.showToast(
+          msg: "Klik 2x untuk keluar aplikasi",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+      return false;
+    }
+    return true;
   }
 
   showAlertDialog(BuildContext context) {

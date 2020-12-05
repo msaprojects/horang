@@ -516,19 +516,19 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                     height: 40,
                                     color: Colors.blue,
                                     onPressed: () {
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  KonfirmasiLog(
-                                                    kode_kontainer:
-                                                        kode_kontainer,
-                                                    nama_kota: nama_kota,
-                                                    // idtransaksi_detail: ,
-                                                    idtransaksi_detail:
-                                                        idtransaksi_detail,
-                                                    nama: nama,
-                                                  )));
-                                      // Navigator.pop(context);
+                                      // Navigator.of(context).pushReplacement(
+                                      //     MaterialPageRoute(
+                                      //         builder: (BuildContext context) =>
+                                      //             KonfirmasiLog(
+                                      //               kode_kontainer:
+                                      //                   kode_kontainer,
+                                      //               nama_kota: nama_kota,
+                                      //               // idtransaksi_detail: ,
+                                      //               idtransaksi_detail:
+                                      //                   idtransaksi_detail,
+                                      //               nama: nama,
+                                      //             )));
+                                      Navigator.pop(context);
                                       // Navigator.push(context,
                                       //     MaterialPageRoute(builder: (context) {
                                       //   return KonfirmasiLog(
@@ -551,7 +551,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                           width: 10,
                                         ),
                                         Text(
-                                          'Hal. detail log',
+                                          'Kembali',
                                           style: GoogleFonts.inter(
                                               fontSize: 14,
                                               color: Colors.white,

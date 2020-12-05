@@ -18,9 +18,10 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class KonfirmasiLog extends StatefulWidget {
   // MystorageModel mystorage;
   // KonfirmasiLog({this.mystorage});
-  var kode_kontainer, nama_kota, idtransaksi_detail, nama;
+  var kode_kontainer, nama_kota, idtransaksi_detail, nama, idtransaksi;
   KonfirmasiLog(
       {this.nama_kota,
+      this.idtransaksi,
       this.nama,
       this.kode_kontainer,
       this.idtransaksi_detail});
@@ -95,6 +96,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     kode_kontainer1 = widget.kode_kontainer;
     nama_kota1 = widget.nama_kota;
     idtransaksi_det = widget.idtransaksi_detail;
+    idtransaksii = widget.idtransaksi;
     nama1 = widget.nama;
     super.initState();
     cekToken();
@@ -214,7 +216,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                       setState(() {
                         _isLoading = true;
                         LogOpen logopen = LogOpen(
-                          idtransaksi_detail: idtransaksi_det,
+                          idtransaksi_detail: idtransaksii,
                           token: access_token,
                         );
                         if (widget.kode_kontainer != null ||
@@ -251,7 +253,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         SizedBox(
                           width: 30,
                         ),
-                        Text("Selesai",
+                        Text("Selesai" + idtransaksii.toString(),
                             style: GoogleFonts.inter(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                       ],

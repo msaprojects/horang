@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -88,7 +89,23 @@ class _HistoryPageState extends State<HistoryPage> {
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<HistoryModel> historyyy = snapshot.data;
             if (historyyy.isEmpty) {
-              return Text("Data history belum ada");
+              return Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/image/datanotfound.png"),
+                        Text(
+                          "Oppss..Maaf data history kosong.",
+                          style: GoogleFonts.inter(color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
+                );
             } else {
               return _buildListView(historyyy);
             }
@@ -116,163 +133,185 @@ class _HistoryPageState extends State<HistoryPage> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Colors.black,
           ),
           onPressed: () {},
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-            ),
-            color: Colors.grey[100],
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                HistoryModel history = dataIndex[index];
-                return Card(
-                  // child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+              ),
+              color: Colors.grey[100],
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  HistoryModel history = dataIndex[index];
+                  return Card(
+                    // child: Column(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    child: InkWell(
+                      // onTap: () {
+                      //   setState(() {
 
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.only(left: 20)),
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "No. Kontainer : " +
-                                          history.kode_kontainer,
-                                      overflow: TextOverflow.visible,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey[800],
-                                          fontWeight: FontWeight.bold),
+                      //   });
+                      // },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(padding: EdgeInsets.only(left: 20)),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        "No. Kontainer : " +
+                                            history.kode_kontainer,
+                                        overflow: TextOverflow.visible,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "No. Order : " + history.no_order,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "No. Order : " + history.no_order,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
                                   ),
-                                ),
-                                Text(
-                                  "No. Bayar : " + history.kode_refrensi,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "No. Bayar : " + history.kode_refrensi,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Nominal Bayar : " + rupiah(history.total_harga.toString()),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Nominal Bayar : " + rupiah(history.total_harga.toString()),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Jumlah Sewa : " + history.jumlah_sewa.toString() +" /Hari",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Jumlah Sewa : " + history.jumlah_sewa.toString() +" /Hari",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Harga : "
-                                   + rupiah(history.harga.toString()) +" /Hari"
-                                   ,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Harga : "
+                                     + rupiah(history.harga.toString()) +" /Hari"
+                                     ,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Tgl Order : " + history.tanggal_order,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Tgl Order : " + history.tanggal_order,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Tgl awal sewa : " + history.tanggal_mulai,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Tgl awal sewa : " + history.tanggal_mulai,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "Tgl akhir sewa : " + history.tanggal_akhir,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black45,
+                                  Text(
+                                    "Tgl akhir sewa : " + history.tanggal_akhir,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            )),
-                          ],
-                        ),
-                      ],
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              itemCount: dataIndex.length,
-            ),
-          ))
-        ],
+                  );
+                },
+                itemCount: dataIndex.length,
+              ),
+            ))
+          ],
+        ),
       ),
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
+  Future showAlertDialog(BuildContext context) {
+    return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return alert;
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            content: Text(
+                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
         });
   }
+
+  // showAlertDialog(BuildContext context) {
+  //   Widget okButton = FlatButton(
+  //     child: Text("OK"),
+  //     onPressed: () {
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (context) => LoginPage()));
+  //     },
+  //   );
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("Sesi Anda Berakhir!"),
+  //     content: Text(
+  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return alert;
+  //       });
+  // }
 
   AccountValidation(BuildContext context) {
     Widget okButton = FlatButton(
