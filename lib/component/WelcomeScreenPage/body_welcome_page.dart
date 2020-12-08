@@ -63,11 +63,11 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/svg/drawing_login1.svg",
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-            ),
+            // SvgPicture.asset(
+            //   "assets/svg/drawing_login1.svg",
+            //   alignment: Alignment.center,
+            //   fit: BoxFit.contain,
+            // ),
             SizedBox(height: size.height * 0.03),
             SpinKitCircle(
               color: Colors.blue,

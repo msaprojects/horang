@@ -157,12 +157,12 @@ class _StorageActive extends State<StorageActive1>
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       KonfirmasiLog(
-                                        kode_kontainer: kode_kontainer,
-                                        nama_kota: nama_kota,
+                                        kode_kontainer: myStorage.kode_kontainer,
+                                        nama_kota: myStorage.nama_kota,
                                         // idtransaksi_detail: ,
-                                        idtransaksi_detail: idtransaksi,
-                                        idtransaksi: idtransaksi,
-                                        nama: nama,
+                                        idtransaksi_detail: myStorage.idtransaksi_detail,
+                                        idtransaksi: myStorage.idtransaksi,
+                                        nama: myStorage.nama,
                                       )));
                           // _openAlertDialog(
                           //   context,

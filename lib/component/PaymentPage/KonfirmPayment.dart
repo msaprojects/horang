@@ -240,7 +240,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                   height: 15,
                 ),
                 Text(
-                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran $ksdeposit_minimum",
+                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
                   style: GoogleFonts.inter(height: 1.5, fontSize: 14),
                 ),
                 SizedBox(
@@ -260,6 +260,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               ),
               onPressed: () {
                 setState(() {
+                  print("stay with us");
                   OrderConfirmation(context, _noOvo.text.toString());
                 });
               },
@@ -294,63 +295,47 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   }
 
   OrderConfirmation(BuildContext context, String notelp) {
-    print("Print Nominal Minimum Deposit : "+ksdeposit_minimum.toString());
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        setState(() {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => Dummy1(
-                      idjenis_produk: kidjenis_produk.toString(),
-                      idlokasi: kidlokasi,
-                      jumlah_sewa: kjumlah_sewa,
-                      idasuransi: kidasuransi,
-                      idvoucher: kidvoucher,
-                      flagasuransi: kflagasuransi,
-                      total_asuransi: ktotal_asuransi,
-                      flagvoucher: kflagvoucher,
-                      idpayment_gateway:
-                          int.parse(kidpayment_gateway.toString()),
-                      flag_selesai: 0,
-                      total_harga: kstotal_harga,
-                      harga: ksharga,
-                      nominal_barang: ksnominal_barang,
-                      deposit_tambah: ksdeposit_tambah,
-                      deposit_pakai: ksdeposit_pakai,
-                      deposit_minimum: ksdeposit_minimum,
-                      token: access_token,
-                      keterangan: kketerangan,
-                      nomor_polis: knomor_polis,
-                      tanggal_berakhir_polis: ktanggal_berakhir_polis,
-                      tanggal_mulai: kstanggal_mulai,
-                      tanggal_akhir: kstanggal_akhir,
-                      keterangan_barang: ksketerangan_barang,
-                      tanggal_order: "DATE(NOW())",
-                      keterangan_deposit:
-                          "Deposit terpakai Rp. " + ksdeposit_tambah.toString(),
-                      nominal_deposit: double.parse(ksharga.toString()),
-                      no_ovo: _noOvo.text.toString())));
-        });
-      },
-    );
-    Widget cancelButton = FlatButton(
-      child: Text("Batal"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Konfirmasi"),
-      content: Text("pastikan nomor $notelp ini sudah terdaftar di ewallet!"),
-      actions: [okButton, cancelButton],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
+    print("Print Nominal Minimum Deposit : " + ksdeposit_minimum.toString());
+    infoDialog(
+      context, 
+      "pastikan nomor $notelp ini sudah terdaftar di ewallet!",
+      showNeutralButton: false,
+      positiveText: "Ok",
+      positiveAction: (){
+        Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Dummy1(
+                        idjenis_produk: kidjenis_produk.toString(),
+                        idlokasi: kidlokasi,
+                        jumlah_sewa: kjumlah_sewa,
+                        idasuransi: kidasuransi,
+                        idvoucher: kidvoucher,
+                        flagasuransi: kflagasuransi,
+                        total_asuransi: ktotal_asuransi,
+                        flagvoucher: kflagvoucher,
+                        idpayment_gateway:
+                            int.parse(kidpayment_gateway.toString()),
+                        flag_selesai: 0,
+                        total_harga: kstotal_harga,
+                        harga: ksharga,
+                        nominal_barang: ksnominal_barang,
+                        deposit_tambah: ksdeposit_tambah,
+                        deposit_pakai: ksdeposit_pakai,
+                        deposit_minimum: ksdeposit_minimum,
+                        token: access_token,
+                        keterangan: kketerangan,
+                        nomor_polis: knomor_polis,
+                        tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                        tanggal_mulai: kstanggal_mulai,
+                        tanggal_akhir: kstanggal_akhir,
+                        keterangan_barang: ksketerangan_barang,
+                        tanggal_order: "DATE(NOW())",
+                        keterangan_deposit: "Deposit terpakai Rp. " +
+                            ksdeposit_tambah.toString(),
+                        nominal_deposit: double.parse(ksharga.toString()),
+                        no_ovo: _noOvo.text.toString())));
+          });
+      }
+      
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,41 +47,44 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
-  final scaffoldState = GlobalKey<ScaffoldState>();
-  final firebaseMessaging = FirebaseMessaging();
-  final controllerTopic = TextEditingController();
+  // final scaffoldState = GlobalKey<ScaffoldState>();
+  // final firebaseMessaging = FirebaseMessaging();
+  // final controllerTopic = TextEditingController();
 
-  bool isSubscribed = false;
-  String token = '';
-  static String dataName = '';
-  static String dataAge = '';
-  var ceksaldo;
+  // bool isSubscribed = false;
+  // String token = '';
+  // static String dataName = '';
+  // static String dataAge = '';
+  // var ceksaldo;
   // String urlceksaldo = "https://server.horang.id:9993/api/ceksaldo";
 
-  static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-    debugPrint('onBackgroundMessage: $message');
-    if (message.containsKey('onMessage')) {
-      String name = '';
-      String age = '';
-      if (Platform.isIOS) {
-        name = message['title'];
-        age = message['body'];
-      } else if (Platform.isAndroid) {
-        var data = message['onMessage'];
-        name = data['title'];
-        age = data['body'];
-      }
-      dataName = name;
-      dataAge = age;
-      debugPrint('onBackgroundMessage: title: $name & body: $age');
-    }
-    return null;
-  }
+  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
+  //   debugPrint('onBackgroundMessage: $message');
+  //   if (message.containsKey('onMessage')) {
+  //     String name = '';
+  //     String age = '';
+  //     if (Platform.isIOS) {
+  //       name = message['title'];
+  //       age = message['body'];
+  //     } else if (Platform.isAndroid) {
+  //       var data = message['onMessage'];
+  //       name = data['title'];
+  //       age = data['body'];
+  //     }
+  //     dataName = name;
+  //     dataAge = age;
+  //     debugPrint('onBackgroundMessage: title: $name & body: $age');
+  //   }
+  //   return null;
+  // }
 
-  Future getSaldo() async {
+  getSaldo() async {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
-    ceksaldo = json.decode(response.body)[0]['saldo'];
+    return jsonDecode(response.body);
+    // final response = await http.get(ApiService().urlceksaldo,
+    //     headers: {"Authorization": "BEARER ${access_token}"});
+    // ceksaldo = json.decode(response.body)[0]['saldo'];
   }
 
   cekToken() async {
@@ -264,14 +266,57 @@ class _HomePageState extends State<HomePage> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    ceksaldo.toString(),
-                                    // ceksaldo.toString(),
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  FutureBuilder(
+                                      future: getSaldo(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          print("masuk pak eko" +snapshot.data.toString());
+                                          var saldoadatidak =
+                                              snapshot.data[0]['saldo'];
+                                          print(
+                                              "ada saldonya tha $saldoadatidak");
+                                          if (snapshot.data[0]['saldo'] == null) {
+                                            return Text(
+                                              "Kosong",
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold),
+                                            );
+                                          } else {
+                                            return Text(
+                                              saldoadatidak.toString(),
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontSize: 35,
+                                                  fontWeight: FontWeight.bold),
+                                            );
+                                          }
+                                        } else if (snapshot == null) {
+                                          print("tidak ada data");
+                                          return Container(
+                                              child: Text(
+                                            "Saldo Kosong",
+                                            style: GoogleFonts.inter(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold),
+                                          ));
+                                        } else {
+                                          return Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                      }),
+                                  // Text(
+                                  //   ceksaldo.toString(),
+                                  //   style: GoogleFonts.inter(
+                                  //       color: Colors.white,
+                                  //       fontSize: 35,
+                                  //       fontWeight: FontWeight.bold),
+                                  // ),
                                   SizedBox(
                                     height: 2,
                                   ),

@@ -682,21 +682,32 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 ceksaldo = 0;
                               }
                               hargaxhari = harga * 3;
-                              saldodepositkurangnominaldeposit =
-                                  hargaxhari - ceksaldo;
-                              if (ceksaldo != hargaxhari) {
+                              if (ceksaldo >= hargaxhari) {
+                                saldodepositkurangnominaldeposit = 0;
+                                kondisisaldo = "";
+                                orderConfirmation(context);
+                              } else {
+                                saldodepositkurangnominaldeposit =
+                                    hargaxhari - ceksaldo;
                                 kondisisaldo =
                                     "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari, kurang " +
                                         saldodepositkurangnominaldeposit
                                             .toString();
-                              } else {
-                                kondisisaldo = "";
-                              }
-                              if (ceksaldo < hargaxhari || ceksaldo <= 0) {
                                 cekDeposit(context);
-                              } else {
-                                orderConfirmation(context);
                               }
+                              // if (ceksaldo != hargaxhari) {
+                              //   kondisisaldo =
+                              //       "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari, kurang " +
+                              //           saldodepositkurangnominaldeposit
+                              //               .toString();
+                              // } else {
+                              //   kondisisaldo = "";
+                              // }
+                              // if (ceksaldo < hargaxhari || ceksaldo <= 0) {
+                              //   cekDeposit(context);
+                              // } else {
+                              //   orderConfirmation(context);
+                              // }
                             });
                     },
                     child: Text(
@@ -741,51 +752,52 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        // orderConfirmation(context);
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) {
-          return FormInputPembayaran(
-              flagasuransi: asuransie,
-              flagvoucher: 0,
-              idlokasi: idlokasi,
-              idjenis_produk: idjenis_produk,
-              idvoucher: 0,
-              idasuransi: idasuransi,
-              harga: harga,
-              jumlah_sewa: jumlah_sewas.toString(),
-              tanggal_mulai: tglAwal,
-              tanggal_akhir: tglAkhir,
-              tanggal_berakhir_polis: "DATE(NOW())",
-              nomor_polis: "Belum Diisi",
-              kapasitas: kapasitas,
-              alamat: alamat,
-              keterangan_barang: _keteranganbarang.text.toString(),
-              nominal_barang: _nominalbarang.text.toString(),
-              total_harga: hasilperhitungan.toString(),
-              total_asuransi: total_asuransi.toString(),
-              totalharixharga: totalhariharga.toString(),
-              totaldeposit: totaldeposit.toString(),
-              totalpointdeposit: ceksaldo.toString(),
-              deposit: saldodepositkurangnominaldeposit.toString());
-        }));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Saldo Point Tidak Cukup"),
-      content: Text(
-          "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
+    infoDialog(context,
+        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
+        showNeutralButton: false, positiveText: "Ok", positiveAction: () {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return FormInputPembayaran(
+            flagasuransi: asuransie,
+            flagvoucher: 0,
+            idlokasi: idlokasi,
+            idjenis_produk: idjenis_produk,
+            idvoucher: 0,
+            idasuransi: idasuransi,
+            harga: harga,
+            jumlah_sewa: jumlah_sewas.toString(),
+            tanggal_mulai: tglAwal,
+            tanggal_akhir: tglAkhir,
+            tanggal_berakhir_polis: "DATE(NOW())",
+            nomor_polis: "Belum Diisi",
+            kapasitas: kapasitas,
+            alamat: alamat,
+            keterangan_barang: _keteranganbarang.text.toString(),
+            nominal_barang: _nominalbarang.text.toString(),
+            total_harga: hasilperhitungan.toString(),
+            total_asuransi: total_asuransi.toString(),
+            totalharixharga: totalhariharga.toString(),
+            totaldeposit: totaldeposit.toString(),
+            totalpointdeposit: ceksaldo.toString(),
+            deposit: saldodepositkurangnominaldeposit.toString());
+      }));
+    });
+
+    // },
+    // );
+    // AlertDialog alert = AlertDialog(
+    //   title: Text("Saldo Point Tidak Cukup"),
+    //   content: Text(
+    //       "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"),
+    //   actions: [
+    //     okButton,
+    //   ],
+    // );
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return alert;
+    //     });
   }
 
   orderConfirmation(BuildContext context) {
