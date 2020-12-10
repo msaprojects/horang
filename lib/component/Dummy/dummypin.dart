@@ -370,7 +370,6 @@ class _OtpScreenState extends State<OtpScreen> {
               //       builder: (context) => Home(),
               //     ));
             } else if (!isSuccess && pinIndex>=4) {
-              print('Pin salah masku, iling iling maneh');
               errorDialog(
                 context,
                 "Pin yang anda masukkan salah",
@@ -456,7 +455,12 @@ class _OtpScreenState extends State<OtpScreen> {
                 Icons.clear,
                 color: Colors.white,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                 Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()),
+                    (Route<dynamic> route) => false);
+              }),
         )
       ],
     );

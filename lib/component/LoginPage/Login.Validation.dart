@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:commons/commons.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,77 +47,35 @@ class _LoginPageState extends State<LoginPage> {
   static String dataAge = '';
 
   //FIREBASE
-  // final firebaseMessaging = FirebaseMessaging();
+  final firebaseMessaging = FirebaseMessaging();
 
-  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-  //   debugPrint('onBackgroundMessage: $message');
-  //   if (message.containsKey('onMessage')) {
-  //     String name = '';
-  //     String age = '';
-  //     if (Platform.isIOS) {
-  //       name = message['title'];
-  //       age = message['body'];
-  //     } else if (Platform.isAndroid) {
-  //       var data = message['onMessage'];
-  //       name = data['title'];
-  //       age = data['body'];
-  //     }
-  //     dataName = name;
-  //     dataAge = age;
-  //     debugPrint('onBackgroundMessage: name: $name & age: $age');
-  //   }
-  //   return null;
-  // }
+  @override
+  void initState() {
+    firebaseMessaging.getToken().then((token) => setState(() {
+          this.token = token;
+        }));
+    super.initState();
+  }
 
-  // @override
-  // void initState() {
-  //   firebaseMessaging.configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       debugPrint('onMessage: $message');
-  //       getDataFcm(message);
-  //     },
-  //     onBackgroundMessage: onBackgroundMessage,
-  //     onResume: (Map<String, dynamic> message) async {
-  //       debugPrint('onResume: $message');
-  //       getDataFcm(message);
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       debugPrint('onLaunch: $message');
-  //       getDataFcm(message);
-  //     },
-  //   );
-  //   firebaseMessaging.requestNotificationPermissions(
-  //     const IosNotificationSettings(
-  //         sound: true, badge: true, alert: true, provisional: true),
-  //   );
-  //   firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-  //     debugPrint('Settings registered: $settings');
-  //   });
-  //   firebaseMessaging.getToken().then((token) => setState(() {
-  //         this.token = token;
-  //       }));
-  //   super.initState();
-  // }
-
-  // void getDataFcm(Map<String, dynamic> message) {
-  //   String name = '';
-  //   String age = '';
-  //   if (Platform.isIOS) {
-  //     name = message['name'];
-  //     age = message['age'];
-  //   } else if (Platform.isAndroid) {
-  //     var data = message['data'];
-  //     name = data['name'];
-  //     age = data['age'];
-  //   }
-  //   if (name.isNotEmpty && age.isNotEmpty) {
-  //     setState(() {
-  //       dataName = name;
-  //       dataAge = age;
-  //     });
-  //   }
-  //   debugPrint('getDataFcm: name: $name & age: $age');
-  // }
+  void getDataFcm(Map<String, dynamic> message) {
+    String name = '';
+    String age = '';
+    if (Platform.isIOS) {
+      name = message['name'];
+      age = message['age'];
+    } else if (Platform.isAndroid) {
+      var data = message['data'];
+      name = data['name'];
+      age = data['age'];
+    }
+    if (name.isNotEmpty && age.isNotEmpty) {
+      setState(() {
+        dataName = name;
+        dataAge = age;
+      });
+    }
+    debugPrint('getDataFcm: name: $name & age: $age');
+  }
   //END FIREBASE
 
   @override
