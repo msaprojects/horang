@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="1.8 (2)" />
         <option name="modules">
           <set>
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+5/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-0.4.2+10/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.3/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.3/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.5/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/local_auth-0.6.3+4/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.4.3+2/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.24/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/share-0.6.5+4/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12+4/android" />
-            <option value="C:/PROGRAMMING/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.7.10/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+5/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/device_info-0.4.2+10/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.3/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.3/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.4/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/local_auth-0.6.3+4/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.4.3+2/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.24/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/share-0.6.5+4/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12+4/android" />
+            <option value="$PROJECT_DIR$/../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.7.10/android" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:commons/commons.dart';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
@@ -20,6 +21,7 @@ import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
+import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/models/xendit.model.dart';
@@ -34,15 +36,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
-  ResponseCode responseCode;
+  // ResponseCode responseCode;
+  ResponseCodeCustom responseCode;
   OrderSukses orderSukses = OrderSukses();
+  List<Customers> _data = [];
+  List<Customers> get datacus => _data;
 
   //URL MAKER
-  String urlasuransi, urlceksaldo, urllokasi;
+  String urlasuransi, urlceksaldo, urllokasi, urlgetlist;
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
     urllokasi = baseUrl + "lokasi";
+    urlgetlist = baseUrl + "customer";
   }
 
   /////////////////////// LIST /////////////////////////
@@ -90,6 +96,7 @@ class ApiService {
   Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
     final response = await client.get("$baseUrl/orderdet/$idorder",
         headers: {"Authorization": "BEARER ${token}"});
+        print("cek idorder diapi $idorder");
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
     } else {
@@ -131,7 +138,7 @@ class ApiService {
   }
 
   //LOAD DETAIL CUSTOMER
-  Future<List<Customer>> getCustomer(access_token) async {
+  Future<List<Customers>> getCustomer(access_token) async {
     final response = await client.get("$baseUrl/customer",
         headers: {"Authorization": "BEARER ${access_token}"});
     if (response.statusCode == 200) {
@@ -139,6 +146,10 @@ class ApiService {
     } else {
       return null;
     }
+  }
+
+  Future<Customers> findcust(String idcustomer) async {
+    return _data.firstWhere((element) => element.idcustomer == idcustomer);
   }
 
   //LOAD HISTORY LIST
@@ -175,7 +186,7 @@ class ApiService {
       body: penggunaToJson(data),
     );
     Map message = jsonDecode(response.body);
-    responseCode = ResponseCode.fromJson(message);
+    responseCode = ResponseCodeCustom.fromJson(message);
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -193,7 +204,7 @@ class ApiService {
     Map test = jsonDecode(response.body);
     var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
-    responseCode = ResponseCode.fromJson(message);
+    responseCode = ResponseCodeCustom.fromJson(message);
     if (response.statusCode == 200) {
 //      Share Preference
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -225,7 +236,7 @@ class ApiService {
   }
 
   //Tambah Customer
-  Future<bool> TambahCustomer(Customer data) async {
+  Future<bool> TambahCustomer(Customers data) async {
     final response = await client.post(
       "$baseUrl/customer",
       headers: {"Content-type": "application/json"},
@@ -243,7 +254,7 @@ class ApiService {
   //////////////////////// UBAH ////////////////////////
 
 //  UBAH CUSTOMER
-  Future<bool> UpdateCustomer(Customer data) async {
+  Future<bool> UpdateCustomer(Customers data) async {
     final response = await client.post(
       "$baseUrl/ucustomer",
       headers: {"Content-type": "application/json"},
@@ -290,6 +301,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
+    print("cek pin111 ${response.body}");
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -304,7 +316,8 @@ class ApiService {
       body: PasswordToJson(data),
     );
     Map message = jsonDecode(response.statusCode.toString());
-    responseCode = ResponseCode.fromJson(message);
+    responseCode = ResponseCodeCustom.fromJson(message);
+    // print("responsss" + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
     } else {

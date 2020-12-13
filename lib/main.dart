@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
+import 'package:horang/component/Dummy/dummypin.dart';
+import 'package:horang/component/Dummy/dummypin2.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -26,7 +30,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      // home: ProdukList(),
+      home: WelcomePage(),
     );
   }
 }

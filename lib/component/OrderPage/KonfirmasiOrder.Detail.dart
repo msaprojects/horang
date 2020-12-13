@@ -70,6 +70,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   @override
   void initState() {
     idorders = widget.idorder;
+    print("idorrr $idorders");
     ktotal_asuransi = widget.total_asuransi;
     cekToken();
   }
@@ -83,9 +84,9 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
           if (snapshot.hasError) {
             return Center(
-              child: CircularProgressIndicator(),
-              // child: Text(
-              //     "5Something wrong with message: ${snapshot.error.toString()}"),
+              // child: CircularProgressIndicator(),
+              child: Text(
+                  "5Something wrong with message: ${snapshot.error.toString()}"),
             );
           }
           else if (snapshot.connectionState == ConnectionState.waiting) {

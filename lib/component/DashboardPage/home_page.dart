@@ -225,11 +225,13 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "${ucapan()}, $nama_customer",
-                                    // ucapan(),
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white, fontSize: 14),
+                                  Flexible(
+                                    child: Text(
+                                      "${ucapan()}, $nama_customer",
+                                      // ucapan(),
+                                      style: GoogleFonts.inter(
+                                          color: Colors.white, fontSize: 14),
+                                    ),
                                   ),
                                   IconButton(
                                     color: Colors.white,
@@ -259,12 +261,14 @@ class _HomePageState extends State<HomePage> {
                                       future: getSaldo(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          print("masuk pak eko" +snapshot.data.toString());
+                                          print("masuk pak eko" +
+                                              snapshot.data.toString());
                                           var saldoadatidak =
                                               snapshot.data[0]['saldo'];
                                           print(
                                               "ada saldonya tha $saldoadatidak");
-                                          if (snapshot.data[0]['saldo'] == null) {
+                                          if (snapshot.data[0]['saldo'] ==
+                                              null) {
                                             return Text(
                                               "Kosong",
                                               style: GoogleFonts.inter(

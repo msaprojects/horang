@@ -152,30 +152,39 @@ class _UbahPinState extends State<UbahPin> {
                             });
                           }
                         } else {
-                          print("cek pin ubah" + pin);
                           Pin_Model pinubah = Pin_Model(
                               pinlama: _controllerPassLama.text.toString(),
                               pinbaru: _controllerPassBaru.text.toString(),
                               token: access_token);
-                          print("cek pin ubah1" + pin);
                           if (widget.ubahPin == null) {
-                            print("cek pin ubah2" + pin);
-                            _apiService.UbahPin(pinubah).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                print("cek pin ubah3" + pin);
-                                successDialog(context,
-                                    "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                    showNeutralButton: false,
-                                    positiveText: "Oke", positiveAction: () {
-                                  Keluarr();
-                                });
+                            if (_controllerPassLama.text != pin) {
+                              return warningDialog(context,
+                                  "PIN lama yang anda masukkan tidak sama. ");
+                            } else {
+                              if (_controllerPassBaru.text !=
+                                  _controllerPassBaruRetype.text) {
+                                return warningDialog(context,
+                                    "PIN baru dan Retype PIN tidak sama");
                               } else {
-                                print("cek pin ubah4" + pin);
-                                errorDialog(context,
-                                    "Data pin gagal diubah, silahkan dicek ulang");
+                                _apiService.UbahPin(pinubah).then((isSuccess) {
+                                  setState(() => _isLoading = false);
+                                  if (isSuccess) {
+                                    print("cek pin ubah3" + pin);
+                                    successDialog(context,
+                                        "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                        showNeutralButton: false,
+                                        positiveText: "Oke",
+                                        positiveAction: () {
+                                      Keluarr();
+                                    });
+                                  } else {
+                                    print("cek pin ubah4" + pin);
+                                    errorDialog(context,
+                                        "Data pin gagal diubah, silahkan dicek ulang");
+                                  }
+                                });
                               }
-                            });
+                            }
                           }
                         }
                       });

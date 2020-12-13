@@ -7,6 +7,7 @@ import 'package:horang/api/models/log/openLog.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/ListLog.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
@@ -206,37 +207,47 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         SizedBox(
                           width: 30,
                         ),
-                        Text("Open",
+                        Text("Open $idtransaksi_det",
                             style: GoogleFonts.inter(
                                 fontSize: 16, fontWeight: FontWeight.bold))
                       ],
                     ),
                     color: Colors.orange,
                     onPressed: () {
-                      setState(() {
-                        _isLoading = true;
-                        LogOpen logopen = LogOpen(
-                          idtransaksi_detail: idtransaksii,
-                          token: access_token,
-                        );
-                        if (widget.kode_kontainer != null ||
-                            widget.nama_kota != null) {
-                          _apiService.OpenLog(logopen).then((isSuccess) {
-                            setState(() => _isLoading = false);
-                            if (isSuccess) {
-                              successDialog(
-                                context,
-                                "Permintaan open berhasil dilakukan !",
-                                closeOnBackPress: true,
-                              );
-                            } else {
-                              // print('cekmasuk4');
-                              _scaffoldState.currentState.showSnackBar(SnackBar(
-                                  content: Text("Submit data failed")));
-                            }
-                          });
-                        }
-                      });
+                      warningDialog(context,
+                          "Apakah anda ingin membuka kode kontainer $kode_kontainer1 ini ?",
+                          positiveText: "Ya",
+                          negativeText: "Batal",
+                          showNeutralButton: false, 
+                          positiveAction: () {
+                        setState(() {
+                          _isLoading = true;
+                          LogOpen logopen = LogOpen(
+                            idtransaksi_detail: idtransaksi_det,
+                            token: access_token,
+                          );
+                          if (widget.kode_kontainer != null ||
+                              widget.nama_kota != null) {
+                            _apiService.OpenLog(logopen).then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                successDialog(
+                                  context,
+                                  "Permintaan open berhasil dilakukan !",
+                                  closeOnBackPress: true,
+                                );
+                              } else {
+                                errorDialog(context,
+                                    "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                                // print('cekmasuk4');
+                                // _scaffoldState.currentState.showSnackBar(
+                                //     SnackBar(
+                                //         content: Text("Submit data failed")));
+                              }
+                            });
+                          }
+                        });
+                      }, negativeAction: () {});
                     },
                   ),
                 ),
@@ -260,36 +271,57 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     ),
                     color: Colors.lightBlue,
                     onPressed: () {
-                      setState(() {
-                        _isLoading = true;
-                        selesaiLog selesai = selesaiLog(
-                            idtransaksi: idtransaksii, token: access_token);
-                        if (widget.nama_kota != null ||
-                            widget.kode_kontainer != null) {
-                          _apiService.SelesaiLog(selesai).then((isSuccess) {
-                            setState(() => _isLoading = false);
-                            if (isSuccess) {
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((timeStamp) {
-                                Flushbar(
-                                  message: "Ok masuk",
-                                  flushbarPosition: FlushbarPosition.BOTTOM,
-                                  icon: Icon(Icons.ac_unit),
-                                  flushbarStyle: FlushbarStyle.GROUNDED,
-                                  duration: Duration(seconds: 5),
-                                )..show(_scaffoldState.currentState.context);
-                              });
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => StorageActive1()));
-                            } else {
-                              _scaffoldState.currentState.showSnackBar(SnackBar(
-                                  content: Text("Submit data failed")));
-                            }
-                          });
-                        }
-                      });
+                      warningDialog(context,
+                          "Apakah anda ingin menyelesaikan transaksi ini ?",
+                          showNeutralButton: false, positiveAction: () {
+                        setState(() {
+                          _isLoading = true;
+                          selesaiLog selesai = selesaiLog(
+                              idtransaksi: idtransaksii, token: access_token);
+                          if (widget.nama_kota != null ||
+                              widget.kode_kontainer != null) {
+                            _apiService.SelesaiLog(selesai).then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                successDialog(context, "Berhasil",
+                                    showNeutralButton: false,
+                                    positiveAction: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()));
+                                }, positiveText: "Ok");
+                                // WidgetsBinding.instance
+                                //     .addPostFrameCallback((timeStamp) {
+                                //   Flushbar(
+                                //     message: "Ok masuk",
+                                //     flushbarPosition:
+                                //         FlushbarPosition.BOTTOM,
+                                //     icon: Icon(Icons.ac_unit),
+                                //     flushbarStyle: FlushbarStyle.GROUNDED,
+                                //     duration: Duration(seconds: 5),
+                                //   )..show(
+                                //       _scaffoldState.currentState.context);
+                                // });
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             StorageActive1()));
+                              } else {
+                                errorDialog(
+                                    context, "Transaksi gagal dilakukan !");
+                                // _scaffoldState.currentState.showSnackBar(
+                                //     SnackBar(
+                                //         content:
+                                //             Text("Submit data failed")));
+                              }
+                            });
+                          }
+                        });
+                      },
+                          positiveText: "Ya",
+                          negativeText: "Tidak",
+                          negativeAction: () {});
                     },
                   ),
                 ),

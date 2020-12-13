@@ -1,4 +1,5 @@
 import 'package:commons/commons.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,13 +43,14 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token;
+  var token = "", newtoken = "", access_token, refresh_token, token_notifikasi;
   bool hasError = false,
       isSuccess = true,
       _checkbio = false,
       _canCheckBiometrics;
   String errorMessage;
   SharedPreferences sp;
+  final firebaseMessaging = FirebaseMessaging();
 
   LocalAuthentication auth = LocalAuthentication();
   List<BiometricType> _availableBiometrics;
@@ -117,6 +119,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
+     firebaseMessaging.getToken().then((token_notifikasi) => setState(() {
+          this.token_notifikasi = token_notifikasi;
+        }));
+        print("token 2 "+ token_notifikasi.toString());
     print("Toookeeeeennnnn $access_token");
     _checkBiometric();
     _getAvailableBiometrics();
@@ -138,6 +144,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("token 3 $token_notifikasi");
     return SafeArea(
       child: Column(
         children: [
@@ -352,33 +359,56 @@ class _OtpScreenState extends State<OtpScreen> {
         // this.thisText = controller.text;
         // print("Gassskaaan ========> $thisText");
         print("Cek pin: $strpin");
+        
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
           pin_cek: strpin,
           token_cek: access_token,
+          token_notifikasi: token_notifikasi
         );
+        print("pin 99 $pin_cek1");
         print("Cek PIN masuk maskuh: $pin_cek1");
         _apiService.CekPin(pin_cek1).then((isSuccess) {
           setState(() {
-            if (isSuccess && pinIndex ==4) {
+            if (isSuccess && pinIndex == 4) {
               Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => Home()),
-                    (Route<dynamic> route) => false);
+                  MaterialPageRoute(builder: (BuildContext context) => Home()),
+                  (Route<dynamic> route) => false);
               // Navigator.push(
               //     context,
               //     MaterialPageRoute(
               //       builder: (context) => Home(),
               //     ));
-            } else if (!isSuccess && pinIndex>=4) {
-              errorDialog(
-                context,
-                "Pin yang anda masukkan salah",
-              );
+            } else if (!isSuccess && pinIndex >= 4) {
+              print('Pin salah masku, iling iling maneh');
+              return 
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      Navigator.of(context).pop(true);
+                    });
+                    return AlertDialog(
+                      title: Text("Pin salah"),
+                    );
+                  });
+              // return false;
+              // errorDialog(
+              //   context,
+              //   "Pin yang anda masukkan salah",
+              // );
             }
           });
         });
       });
     }
+  }
+
+  _confalert(){
+    final snackbar = SnackBar(
+      content: Text("This is where your put data"),
+      duration: Duration(milliseconds: 50),
+      );
+      Scaffold.of(context).showSnackBar(snackbar);
   }
 
   setPin(int n, String text) {

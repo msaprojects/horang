@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-class Customer{
+class Customers{
   int idkota, idcustomer;
   // ignore: non_constant_identifier_names
-  String token, nama_customer, alamat, noktp, blacklist;
+  String token, nama_customer, alamat, noktp, blacklist, email, no_hp;
 
-  Customer({
+  Customers({
     // this.idcustomer,
     // ignore: non_constant_identifier_names
     this.nama_customer,
@@ -13,12 +13,14 @@ class Customer{
     this.noktp,
     this.blacklist,
     this.idkota,
-    this.token
+    this.token,
+    this.email,
+    this.no_hp
     // this.nama_kota
   });
 
-  factory Customer.fromJson(Map<String, dynamic> map){
-    return Customer(
+  factory Customers.fromJson(Map<String, dynamic> map){
+    return Customers(
       // idcustomer: map['idcustomer'],
       nama_customer: map['nama_customer'],
       alamat: map['alamat'],
@@ -27,6 +29,8 @@ class Customer{
       idkota: map['idkota'],
       // nama_kota: map['nama_kota']
       token: map['token'],
+      email: map['email'],
+      no_hp: map['no_hp'],
     );
   }
   Map<String, dynamic> toJson(){
@@ -38,6 +42,8 @@ class Customer{
       "blacklist": blacklist.toString(),
       "idkota": idkota,
       // "nama_kota": nama_kota
+      // "email": email,
+      // "no_hp": no_hp,
       "token": token
     };
   }
@@ -49,12 +55,12 @@ class Customer{
 
 }
 
-List<Customer> customerFromJson(String jsonData){
+List<Customers> customerFromJson(String jsonData){
   final data = json.decode(jsonData);
-  return List<Customer>.from(data.map((item) => Customer.fromJson(item)));
+  return List<Customers>.from(data.map((item) => Customers.fromJson(item)));
 }
 
-String customerToJson(Customer data){
+String customerToJson(Customers data){
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }

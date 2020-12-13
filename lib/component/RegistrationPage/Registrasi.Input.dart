@@ -14,7 +14,7 @@ class RegistrasiPage extends StatefulWidget {
 
 class _RegistrasiState extends State<RegistrasiPage> {
   bool _isLoading = false, _obsecureText = true, _obsecureText1 = true;
-  ResponseCode responseCode;
+  ResponseCodeCustom responseCode;
   ApiService _apiService = ApiService();
   bool _fieldEmail = false,
       _fieldNo_Hp = false,
@@ -117,16 +117,11 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                   _controllerPassword.clear();
                                   _controllerPasswordRetype.clear();
                                   showAlertDialog(context);
-                                  // _scaffoldState.currentState
-                                  //     .showSnackBar(SnackBar(
-                                  //   content: Text(
-                                  //       "${_apiService.responseCode.mMessage}"),
-                                  // ));
                                 } else {
                                   _scaffoldState.currentState
                                       .showSnackBar(SnackBar(
                                     content: Text(
-                                        "${_apiService.responseCode.mMessage}"),
+                                        "${_apiService.responseCode}"),
                                   ));
                                 }
                               });

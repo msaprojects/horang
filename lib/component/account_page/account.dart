@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -7,6 +8,7 @@ import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/component/account_page/ubah_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Account extends StatefulWidget {
   @override
@@ -27,7 +29,17 @@ class _AccountState extends State<Account> {
       pin,
       nama_customer,
       idpengguna,
-      routing;
+      routing,
+      nmcust,
+      alamat,
+      noktp,
+      idkotas;
+
+  void getlistaprofile() async {
+    final response = await http.get(ApiService().urlgetlist,
+        headers: {"Authorization": "BEARER ${access_token}"});
+        nmcust = json.decode(response.body)[0]['nama_customer'];
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -36,6 +48,7 @@ class _AccountState extends State<Account> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    idpengguna = sp.getString("idpengguna");
     // print("cek ada pin gak ya ? "+pin);
     print("cek ada namacus gak ya ? " + nama_customer);
     // print("cek ada id gak ya ? "+idcustomer);
@@ -75,6 +88,7 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
+    getlistaprofile();
     cekToken();
   }
 
@@ -122,8 +136,13 @@ class _AccountState extends State<Account> {
                 margin: EdgeInsets.all(15),
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.person_pin,size: 50,),
-                    SizedBox(width: 10,),
+                    Icon(
+                      Icons.person_pin,
+                      size: 50,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text(
                       "$nama_customer",
                       style: TextStyle(
@@ -140,7 +159,10 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.person),
-                  title: Text("Lengkapi Profile", style: GoogleFonts.inter(fontWeight: FontWeight.bold),),
+                  title: Text(
+                    "Lengkapi Profile",
+                    style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                  ),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   //onTap: () {routing();}),
                   onTap: () {
@@ -150,6 +172,7 @@ class _AccountState extends State<Account> {
                           MaterialPageRoute(
                               builder: (context) => TambahProfile()));
                     } else {
+                      print("icust'epiro pak " + nama_customer.toString());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -164,7 +187,8 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.edit),
-                  title: Text("Pin", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  title: Text("Pin",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
                     Navigator.push(
@@ -181,7 +205,8 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.phonelink_lock),
-                  title: Text("Ubah Password", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  title: Text("Ubah Password",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
                     Navigator.push(context,
@@ -196,7 +221,8 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.event_note),
-                  title: Text("Syarat dan Ketentuan", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  title: Text("Syarat dan Ketentuan",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {},
                 ),
@@ -207,7 +233,8 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.loop),
-                  title: Text("Logout", style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                  title: Text("Logout",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
                     Keluarr();

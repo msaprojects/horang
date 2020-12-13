@@ -24,7 +24,7 @@ class _TambahProfileState extends State<TambahProfile> {
   String _nama,
       _alamat,
       _noKtp,
-      urlcomboKota = "http://server.horang.id:9992/api/kota/",
+      urlcomboKota = "https://server.horang.id:9993/api/kota/",
       valKota;
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
@@ -168,7 +168,7 @@ class _TambahProfileState extends State<TambahProfile> {
                               return;
                             }
                             setState(() => _isLoading = true);
-                            Customer data = Customer(
+                            Customers data = Customers(
                               nama_customer:
                                   _controllerNamaLengkap.text.toString(),
                               noktp: _controllerNoKtp.text.toString(),

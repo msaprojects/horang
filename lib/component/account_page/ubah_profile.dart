@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'dart:ui';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/account_page/account.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class UbahProfile extends StatefulWidget {
-  Customer customer;
-  UbahProfile({this.customer});
+  Customers dcustomer;
+  UbahProfile({this.dcustomer});
 
   @override
   _UbahProfileState createState() => _UbahProfileState();
@@ -19,28 +22,38 @@ class UbahProfile extends StatefulWidget {
 class _UbahProfileState extends State<UbahProfile> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token, idcustomer;
+  var token = "",
+      newtoken = "",
+      access_token,
+      refresh_token,
+      idcustomer,
+      namcus;
   bool _isLoading = true, _obsecureText = true;
   String _nama,
       _alamat,
       _noKtp,
-      urlcomboKota = "http://server.horang.id:9992/api/kota/",
+      _email,
+      _noHp,
+      urlcomboKota = "https://server.horang.id:9993/api/kota/",
       // urlcomboKota = "http://192.168.6.113:9992/api/kota/",
       valKota;
   bool _fieldNamaLengkap = false,
       _fieldAlamat = false,
       _fieldNoktp = false,
+      _fieldEmail = false,
+      _fieldNoHp = false,
       // _blacklist = true,
       _fieldidkota,
       isSuccess = true;
   int _idkota, _idpengguna;
-  TextEditingController _controllerNamaLengkap;
-  TextEditingController _controllerAlamat;
-  TextEditingController _controllerNoktp;
-  TextEditingController _controlleridkota;
 
-  // String kota_id;
-  // List<String> kota = ["Surabaya", "Solo", "Gresik"];
+  var _controllerNamaLengkap = TextEditingController();
+  var _controllerAlamat = TextEditingController();
+  var _controllerNoktp = TextEditingController();
+  var _controlleridkota = TextEditingController();
+  var _controllerEmail = TextEditingController();
+  var _controllerNoHp = TextEditingController();
+
   //COMBOBOX KOTA
   List<dynamic> _dataKota = List();
   void getcomboKota() async {
@@ -58,7 +71,9 @@ class _UbahProfileState extends State<UbahProfile> {
     refresh_token = sp.getString("refresh_token");
     _nama = sp.getString("nama_customer");
     _alamat = sp.getString("alamat");
-    _noKtp = sp.getString("noktp");
+    // _noKtp = sp.getString("noktp");
+    // _email = sp.getString("email");
+    // _noHp = sp.getString("no_hp");
     valKota.toString();
     idcustomer = sp.getString("idcustomer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
@@ -124,15 +139,15 @@ class _UbahProfileState extends State<UbahProfile> {
         body: SafeArea(
           child: FutureBuilder(
             future: _apiService.getCustomer(access_token),
-            builder: (context, AsyncSnapshot<List<Customer>> snapshot) {
+            builder: (context, AsyncSnapshot<List<Customers>> snapshot) {
               print(context);
               if (snapshot.hasError) {
                 return Center(
                   child: Text("ada kesalaahan : ${snapshot.error.toString()}"),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
-                // print(snapshot.data);
-                List<Customer> customer = snapshot.data;
+                print("maersk ${snapshot.data}");
+                List<Customers> customer = snapshot.data;
                 return _buildIsifield(customer);
                 // _simpan()
               } else {
@@ -143,7 +158,7 @@ class _UbahProfileState extends State<UbahProfile> {
         ));
   }
 
-  Widget _buildIsifield(List<Customer> customer) {
+  Widget _buildIsifield(List<Customers> customer) {
     // print(customer[0].idkota);
     idcustomer = customer[0].idcustomer;
     return Container(
@@ -157,6 +172,10 @@ class _UbahProfileState extends State<UbahProfile> {
               child: new Column(
                 children: <Widget>[
                   _buildTextFieldNoKtp(customer[0].noktp),
+                  SizedBox(height: 10),
+                  _buildTextFieldNoHp(customer[0].no_hp),
+                  SizedBox(height: 10),
+                  _buildTextFieldEmail(customer[0].email),
                   SizedBox(height: 10),
                   _buildTextFieldNamaLengkap(customer[0].nama_customer),
                   SizedBox(height: 10),
@@ -172,7 +191,72 @@ class _UbahProfileState extends State<UbahProfile> {
                       ],
                     ),
                   ),
-                  _simpan()
+                  // _simpan()
+                  Container(
+                    width: 500,
+                    height: 50,
+                    child: FlatButton(
+                      color: Colors.blue,
+                      child: Text(
+                        widget.dcustomer == null
+                            ? "Simpan".toUpperCase()
+                            : "Update Data".toUpperCase(),
+                        // "Simpan",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () async {
+                        //print("kay");
+                        // String noktp = _controllerNoktp.text.toString();
+                        //print("noktp :$noktp");
+                        // String namalengkap = _controllerNamaLengkap.text.toString();
+                        String alamat = _controllerAlamat.text.toString();
+                        setState(() {
+                          alamat.isEmpty
+                              ? _fieldAlamat = true
+                              : _fieldAlamat = false;
+                        });
+                        print("----" + _fieldNamaLengkap.toString());
+                        print("try die " + _controllerAlamat.text + _controllerNoHp.text + _controllerEmail.text + _controllerNoktp.text);
+                        setState(() => _isLoading = true);
+                        print("cek kota " + valKota.toString());
+                        Customers customer1 = Customers(
+                          // nama_customer: _controllerNamaLengkap.text.toString(),
+                          // no_hp: _controllerNoHp.text.toString(),
+                          // email: _controllerEmail.text.toString(),
+                          // noktp: _controllerNoktp.text.toString(),
+                          nama_customer: _controllerNamaLengkap.text.toString(),
+                          // no_hp: _controllerNoHp.text.toString(),
+                          // email: _controllerEmail.text.toString(),
+                          noktp: _controllerNoktp.text.toString(),
+                          alamat: _controllerAlamat.text.toString(),
+                          blacklist: "0",
+                          token: access_token,
+                          idkota: int.parse(valKota),
+                        );
+                        print('MASUK ${customer1}');
+                        _apiService.UpdateCustomer(customer1).then((isSuccess) {
+                          setState(() => _isLoading = true);
+                          if (isSuccess) {
+                            print("sukses");
+                            successDialog(
+                                context, "Data profile berhasil disimpan",
+                                showNeutralButton: false,
+                                positiveText: "Ok", positiveAction: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => Account()),
+                                  (route) => false);
+                            });
+                            // return showAlertDialog(context);
+                          } else {
+                            errorDialog(context, "Data profile gagal disimpan");
+                            // Text("Data gagal disimpan, ${_apiService}");
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -185,103 +269,81 @@ class _UbahProfileState extends State<UbahProfile> {
     ));
   }
 
-  Widget _simpan() {
-    return SingleChildScrollView(
-      child: Container(
-        width: 500,
-        height: 50,
-        child: FlatButton(
-          color: Colors.blue,
-          child: Text(
-            widget.customer == null
-                ? "Simpan".toUpperCase()
-                : "Update Data".toUpperCase(),
-            // "Simpan",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          onPressed: () async {
-            //print("kay");
-            String noktp = _controllerNoktp.text.toString();
-            //print("noktp :$noktp");
-            String namalengkap = _controllerNamaLengkap.text.toString();
-            String alamat = _controllerAlamat.text.toString();
-            setState(() {
-              noktp.isEmpty ? _fieldNoktp = true : _fieldNoktp = false;
-              namalengkap.isEmpty
-                  ? _fieldNamaLengkap = true
-                  : _fieldNamaLengkap = false;
-              alamat.isEmpty ? _fieldAlamat = true : _fieldAlamat = false;
-            });
-            print("----" + _fieldNamaLengkap.toString());
-//             if (!_fieldNoktp || !_fieldNamaLengkap || !_fieldAlamat) {
-////                _scaffoldState.currentState.showSnackBar(SnackBar(
-////                  content: Text("Harap isi Semua Kolom"),
-////                ));
-//                _simpan();
-//               return;
-//             }
-            setState(() => _isLoading = true);
-            print("cek kota " + valKota.toString());
-            Customer customer = Customer(
-// idcustomer: idcustomer,
-              nama_customer: _controllerNamaLengkap.text.toString(),
-              alamat: _controllerAlamat.text.toString(),
-              noktp: _controllerNoktp.text.toString(),
-              blacklist: "0",
-              token: access_token,
-              idkota: int.parse(valKota),
-            );
-            print('MASUK ${customer}');
-            _apiService.UpdateCustomer(customer).then((isSuccess) {
-              setState(() => _isLoading = true);
-              if (isSuccess) {
-                print("sukse");
-                // return showAlertDialog(context);
-              } else {
-                Text("Data gagal disimpan, ${_apiService}");
-              }
-            });
-            // if (widget.customer == null) {
-            //   _apiService
-            //       .createCustomer(customer)
-            //       .then((isSuccess) {
-            //     print("cek: $_apiService");
-            //     setState(() => _isLoading = true);
-            //     if (isSuccess) {
-            //       print("cek sukses");
-            //       return showAlertDialog(context);
-            //     } else {
-            //       Text("Data Gagal Disimpan!, ${_apiService}");
-
-            //     }
-            //   });
-            // } else {
-            //   customer.idcustomer = widget.customer.idcustomer;
-            //   _apiService.UpdateCustomer(customer)
-            //       .then((isSuccess) {
-            //     setState(() => _isLoading = true);
-            //     if (isSuccess) {
-            //       Navigator.pop(
-            //           _scaffoldState.currentState.context);
-            //     } else {
-            //       _scaffoldState.currentState.showSnackBar(SnackBar(
-            //         content: Text("Update data gagal"),
-            //       ));
-            //     }
-            //   });
-            // }
-          },
-        ),
-      ),
-    );
-  }
+  // Widget _simpan() {
+  //   return SingleChildScrollView(
+  //     child: Container(
+  //       width: 500,
+  //       height: 50,
+  //       child: FlatButton(
+  //         color: Colors.blue,
+  //         child: Text(
+  //           widget.dcustomer == null
+  //               ? "Simpan".toUpperCase()
+  //               : "Update Data".toUpperCase(),
+  //           // "Simpan",
+  //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  //         ),
+  //         onPressed: () async {
+  //           //print("kay");
+  //           // String noktp = _controllerNoktp.text.toString();
+  //           //print("noktp :$noktp");
+  //           // String namalengkap = _controllerNamaLengkap.text.toString();
+  //           String alamat = _controllerAlamat.text.toString();
+  //           setState(() {
+  //             alamat.isEmpty ? _fieldAlamat = true : _fieldAlamat = false;
+  //           });
+  //           print("----" + _fieldNamaLengkap.toString());
+  //           print("try die" + _noKtp.toString() + _noHp.toString());
+  //           setState(() => _isLoading = true);
+  //           print("cek kota " + valKota.toString());
+  //           Customers customer = Customers(
+  //             // nama_customer: _controllerNamaLengkap.text.toString(),
+  //             // no_hp: _controllerNoHp.text.toString(),
+  //             // email: _controllerEmail.text.toString(),
+  //             // noktp: _controllerNoktp.text.toString(),
+  //             nama_customer: _nama,
+  //             no_hp: _fieldNoHp.toString(),
+  //             email: _fieldEmail.toString(),
+  //             noktp: _noKtp,
+  //             alamat: _controllerAlamat.text.toString(),
+  //             blacklist: "0",
+  //             token: access_token,
+  //             idkota: int.parse(valKota),
+  //           );
+  //           print('MASUK ${customer}');
+  //           _apiService.UpdateCustomer(customer).then((isSuccess) {
+  //             setState(() => _isLoading = true);
+  //             if (isSuccess) {
+  //               print("sukses");
+  //               successDialog(context, "Data profile berhasil disimpan",
+  //                   showNeutralButton: false,
+  //                   positiveText: "Ok", positiveAction: () {
+  //                 Navigator.of(context).pushAndRemoveUntil(
+  //                     MaterialPageRoute(builder: (context) => Account()),
+  //                     (route) => false);
+  //               });
+  //               // return showAlertDialog(context);
+  //             } else {
+  //               errorDialog(context, "Data profile gagal disimpan");
+  //               // Text("Data gagal disimpan, ${_apiService}");
+  //             }
+  //           });
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildTextFieldNoKtp(String val) {
     // print("noktp"+val);
-    _controllerNoktp = TextEditingController(text: val);
+    _controllerNoktp.text = val;
     return TextFormField(
       controller: _controllerNoktp,
       // initialValue: "1",
+      style: TextStyle(color: Colors.grey),
+      enabled: false,
+      enableInteractiveSelection: false,
+      readOnly: true,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
@@ -290,20 +352,69 @@ class _UbahProfileState extends State<UbahProfile> {
         errorText: _fieldNoktp ? "No Ktp Harus Diiisi" : null,
       ),
 
-      // onChanged: (val) {
-      //   bool isFieldValid = val.trim().isNotEmpty;
-      //   if (isFieldValid != _fieldNoktp) {
-      //     setState(() => _fieldNoktp = isFieldValid);
-      //   }
+      onChanged: (val) {
+        bool isFieldValid = val.trim().isNotEmpty;
+        if (isFieldValid != _fieldNoktp) {
+          _fieldNoktp = isFieldValid;
+        }
+      },
+    );
+  }
+
+  Widget _buildTextFieldNoHp(String val) {
+    _controllerNoHp.text = val;
+    return TextFormField(
+      controller: _controllerNoHp,
+      style: TextStyle(color: Colors.grey),
+      enabled: false,
+      enableInteractiveSelection: false,
+      readOnly: true,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        // hintText: val,
+        labelText: "No. Hp",
+        border: OutlineInputBorder(),
+        errorText: _fieldNoHp ? "No. Hp Harus Diiisi" : null,
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   _fieldNamaLengkap = isFieldValid;
+      //   // print("----"+_fieldNamaLengkap.toString());
+      // },
+    );
+  }
+
+  Widget _buildTextFieldEmail(String val) {
+    _controllerEmail.text = val;
+    return TextFormField(
+      controller: _controllerEmail,
+      style: TextStyle(color: Colors.grey),
+      enabled: false,
+      enableInteractiveSelection: false,
+      readOnly: true,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        // hintText: val,
+        labelText: "Email",
+        border: OutlineInputBorder(),
+        errorText: _fieldEmail ? "Nama Email Harus Diiisi" : null,
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   _fieldNamaLengkap = isFieldValid;
+      //   // print("----"+_fieldNamaLengkap.toString());
       // },
     );
   }
 
   Widget _buildTextFieldNamaLengkap(String val) {
-    _controllerNamaLengkap = TextEditingController(text: val);
+    _controllerNamaLengkap.text = val;
     return TextFormField(
       controller: _controllerNamaLengkap,
-      // initialValue: val,
+      style: TextStyle(color: Colors.grey),
+      enabled: false,
+      enableInteractiveSelection: false,
+      readOnly: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         // hintText: val,
@@ -320,7 +431,7 @@ class _UbahProfileState extends State<UbahProfile> {
   }
 
   Widget _buildTextFieldAlamat(String val) {
-    _controllerAlamat = TextEditingController(text: val);
+    _controllerAlamat.text = val;
     return TextFormField(
       controller: _controllerAlamat,
       // initialValue: val,
@@ -332,19 +443,20 @@ class _UbahProfileState extends State<UbahProfile> {
         border: OutlineInputBorder(),
         errorText: _fieldAlamat ? "Alamat Harus Diiisi" : null,
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _fieldAlamat) {
-          setState(() => _fieldAlamat = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _fieldAlamat) {
+      //     setState(() => _fieldAlamat = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildKomboKota(String kotaaaa) {
     // List<dynamic> _dataKota = List();
     print("buildkombokota : $_dataKota");
-    _controlleridkota = TextEditingController(text: kotaaaa);
+    _controlleridkota.text = kotaaaa;
+    // _controlleridkota = TextEditingController(text: kotaaaa);
     return DropdownButtonFormField(
       hint: Text("Pilih Kota"),
       value: valKota,
@@ -356,52 +468,15 @@ class _UbahProfileState extends State<UbahProfile> {
         );
       }).toList(),
       onChanged: (value) {
-        setState(() {
-          valKota = value.toString();
-          print("damn" + value.toString());
-        });
+        valKota = value.toString();
+        // setState(() {
+        // valKota = value.toString();
+        // print("damn" + value.toString());
+        // }
+        // );
       },
     );
   }
-
-  // Widget _buildComboKota() {
-  //   return DropDownField(
-  //     onValueChanged: (dynamic value) {
-  //       _valKota = value;
-  //     },
-  //     value: kota_id,
-  //     required: true,
-  //     hintText: 'Pilih Kota Anda',
-  //     labelText: 'Kota',
-  //     items: kota,
-  //   );
-  // }
-
-  // Widget _buildComboKota() {
-  // return DropdownButton(
-  //   hint: Text("Pilih Kota"),
-  //   value: valKota,
-  //   items: _dataKota.map((item){
-  //     return DropdownMenuItem(
-  //       child: Text(item['nama_kota']),
-  //       value: item['nama_kota'],
-  //     );
-  //   }).toList(),
-  //   onChanged: (value){
-  //     setState(() {
-  //       valKota = value;
-  //     });
-  //   },
-  // );
-  // Text(
-  //   "Kamu memilih kota $valKota",
-  //   style: TextStyle(
-  //     color: Colors.black,
-  //     fontSize: 20,
-  //     fontWeight: FontWeight.bold
-  //   ),
-  // );
-  // }
 
   showAlertDialog(BuildContext context) {
     Widget okButton = FlatButton(

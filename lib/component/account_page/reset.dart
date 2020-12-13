@@ -1,6 +1,8 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/LoginPage/Login.Validation.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -108,12 +110,19 @@ class _ResetState extends State<Reset> {
                               _apiService.ResendEmail(reset).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  Navigator.pop(context);
+                                  successDialog(context,
+                                      "Resend email berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                      showNeutralButton: false,
+                                      positiveText: "Ok", positiveAction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) => false);
+                                  });
                                 } else {
-                                  print('gagal');
-                                  // _scaffoldState.currentState.showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text("Submit data gagal")));
+                                  errorDialog(
+                                    context, 
+                                    "Data gagal disimpan");
                                 }
                               });
                             } else if (tipes == "ResetPassword") {

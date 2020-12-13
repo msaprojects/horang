@@ -1,13 +1,14 @@
-class ResponseCode {
-  String sStatusCode, mMessage;
+class ResponseCodeCustom {
+  String mMessage;
+  num sStatusCode;
 
-  ResponseCode({
+  ResponseCodeCustom({
     this.sStatusCode,
     this.mMessage
   });
 
-  factory ResponseCode.fromJson(Map<String, dynamic> map){
-    return ResponseCode(
+  factory ResponseCodeCustom.fromJson(Map<String, dynamic> map){
+    return ResponseCodeCustom(
         sStatusCode: map["statuscode"],
         mMessage: map["message"]
     );
