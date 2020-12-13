@@ -120,18 +120,25 @@ class _ResetState extends State<Reset> {
                                         (route) => false);
                                   });
                                 } else {
-                                  errorDialog(
-                                    context, 
-                                    "Data gagal disimpan");
+                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
                                 }
                               });
                             } else if (tipes == "ResetPassword") {
                               _apiService.ForgetPass(reset).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  Navigator.pop(context);
+                                  successDialog(context,
+                                      "Reset password berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                      showNeutralButton: false,
+                                      positiveText: "Ok", positiveAction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) => false);
+                                  });
                                 } else {
-                                  print('gagal');
+                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
+                                  // print('gagal');
                                   // _scaffoldState.currentState.showSnackBar(
                                   //     SnackBar(
                                   //         content: Text("Submit data gagal")));
@@ -141,9 +148,17 @@ class _ResetState extends State<Reset> {
                               _apiService.ForgetPin(reset).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  Navigator.pop(context);
+                                  successDialog(context,
+                                      "Reset Pin berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                      showNeutralButton: false,
+                                      positiveText: "Ok", positiveAction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) => false);
+                                  });
                                 } else {
-                                  print('gagal');
+                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
                                   // _scaffoldState.currentState.showSnackBar(
                                   //     SnackBar(
                                   //         content: Text("Submit data gagal")));

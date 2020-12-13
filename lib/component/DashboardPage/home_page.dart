@@ -489,7 +489,8 @@ class _HomePageState extends State<HomePage> {
                                     // StorageHandler(
                                     //       initialIndex: 2,
                                     //     )
-                                    HistoryPage()));
+                                    HistoryPage()
+                                    ));
                       },
                     ),
                   ),

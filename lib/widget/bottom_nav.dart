@@ -11,11 +11,15 @@ import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
+  final int initIndexHome;
+
+  const Home({Key key, this.initIndexHome}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  var initIndex;
    DateTime backbuttonpressedtime;
   int currentTab = 0;
   final List<Widget> screen = [HomePage()];
@@ -70,6 +74,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    currentTab = widget.initIndexHome;
     super.initState();
     cekToken();
   }

@@ -6,6 +6,7 @@ import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/account.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -159,7 +160,7 @@ class _UbahProfileState extends State<UbahProfile> {
   }
 
   Widget _buildIsifield(List<Customers> customer) {
-    // print(customer[0].idkota);
+    print("santzz ${customer[0].nama_kota}");
     idcustomer = customer[0].idcustomer;
     return Container(
         child: SingleChildScrollView(
@@ -186,7 +187,7 @@ class _UbahProfileState extends State<UbahProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        _buildKomboKota(customer[0].idkota.toString()),
+                        _buildKomboKota(customer[0].nama_kota.toString()),
                         // Text("kamu memilih kota $valKota"),
                       ],
                     ),
@@ -217,7 +218,11 @@ class _UbahProfileState extends State<UbahProfile> {
                               : _fieldAlamat = false;
                         });
                         print("----" + _fieldNamaLengkap.toString());
-                        print("try die " + _controllerAlamat.text + _controllerNoHp.text + _controllerEmail.text + _controllerNoktp.text);
+                        print("try die " +
+                            _controllerAlamat.text +
+                            _controllerNoHp.text +
+                            _controllerEmail.text +
+                            _controllerNoktp.text);
                         setState(() => _isLoading = true);
                         print("cek kota " + valKota.toString());
                         Customers customer1 = Customers(
@@ -245,7 +250,9 @@ class _UbahProfileState extends State<UbahProfile> {
                                 positiveText: "Ok", positiveAction: () {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                      builder: (context) => Account()),
+                                      builder: (context) => Home(
+                                            initIndexHome: 0,
+                                          )),
                                   (route) => false);
                             });
                             // return showAlertDialog(context);
@@ -458,7 +465,7 @@ class _UbahProfileState extends State<UbahProfile> {
     _controlleridkota.text = kotaaaa;
     // _controlleridkota = TextEditingController(text: kotaaaa);
     return DropdownButtonFormField(
-      hint: Text("Pilih Kota"),
+      hint: Text(kotaaaa),
       value: valKota,
       items: _dataKota.map((item) {
         return DropdownMenuItem(

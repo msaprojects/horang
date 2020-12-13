@@ -4,6 +4,7 @@ import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/account.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -154,7 +155,7 @@ class _UbahPassState extends State<UbahPass> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          Account()),
+                                          Home(initIndexHome: 0,)),
                                   (Route<dynamic> route) => false);
                             });
                           } else {

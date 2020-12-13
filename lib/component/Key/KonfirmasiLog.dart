@@ -19,12 +19,24 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class KonfirmasiLog extends StatefulWidget {
   // MystorageModel mystorage;
   // KonfirmasiLog({this.mystorage});
-  var kode_kontainer, nama_kota, idtransaksi_detail, nama, idtransaksi;
+  var kode_kontainer,
+      nama_kota,
+      idtransaksi_detail,
+      nama,
+      idtransaksi,
+      tglmulai,
+      tglakhir,
+      tglorder,
+      keterangan;
   KonfirmasiLog(
       {this.nama_kota,
       this.idtransaksi,
       this.nama,
       this.kode_kontainer,
+      this.tglmulai,
+      this.tglakhir,
+      this.tglorder,
+      this.keterangan,
       this.idtransaksi_detail});
 
   @override
@@ -49,6 +61,10 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       nama_kota1,
       status1,
       nama1,
+      tglmulai,
+      tglakhir,
+      tglorder,
+      keterangan,
       idtransaksii;
   TextEditingController _controllerNoKontainer = TextEditingController();
   TextEditingController _controllerLokasi = TextEditingController();
@@ -99,6 +115,10 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     idtransaksi_det = widget.idtransaksi_detail;
     idtransaksii = widget.idtransaksi;
     nama1 = widget.nama;
+    tglmulai = widget.tglmulai;
+    tglorder = widget.tglorder;
+    tglakhir = widget.tglakhir;
+    keterangan = widget.keterangan;
     super.initState();
     cekToken();
   }
@@ -129,264 +149,307 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
               Navigator.pop(context);
             }),
       ),
-      body: Column(
-        children: [
-          InkWell(
-            child: Container(
-              margin: EdgeInsets.only(bottom: 5),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 0, left: 5, right: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Stack(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(25),
-                    margin: EdgeInsets.only(
-                        bottom: 25, top: 25, left: 15, right: 15),
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    decoration: BoxDecoration(
-                        gradient: new LinearGradient(
-                            colors: [Colors.white, Colors.blue[300]]),
-                        // color: Colors.blue[200],
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 13.0,
-                            offset: Offset(0, 13),
-                          )
-                        ]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("Kode Kontainer : " + kode_kontainer1.toString(),
-                            style: GoogleFonts.lato(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: 9,
-                        ),
-                        Text("Nama Kontainer : " + nama1.toString(),
-                            style: GoogleFonts.lato(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text("Kota : " + nama_kota1.toString(),
-                            style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
-                        Text(
-                            "idtransaksi : " +
-                                idtransaksii.toString() +
-                                "-" +
-                                "iddetail-transaksi" +
-                                idtransaksi_det.toString(),
-                            style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.only(left: 10.0),
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                      // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.overlay),
+                      image: new AssetImage("assets/image/container1.png"),
+                      fit: BoxFit.cover,
+                    )),
                   ),
                 ],
               ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 50,
-                  child: FlatButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.lock_open_outlined),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Text("Open $idtransaksi_det",
-                            style: GoogleFonts.inter(
-                                fontSize: 16, fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                    color: Colors.orange,
-                    onPressed: () {
-                      warningDialog(context,
-                          "Apakah anda ingin membuka kode kontainer $kode_kontainer1 ini ?",
-                          positiveText: "Ya",
-                          negativeText: "Batal",
-                          showNeutralButton: false, 
-                          positiveAction: () {
-                        setState(() {
-                          _isLoading = true;
-                          LogOpen logopen = LogOpen(
-                            idtransaksi_detail: idtransaksi_det,
-                            token: access_token,
-                          );
-                          if (widget.kode_kontainer != null ||
-                              widget.nama_kota != null) {
-                            _apiService.OpenLog(logopen).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                successDialog(
-                                  context,
-                                  "Permintaan open berhasil dilakukan !",
-                                  closeOnBackPress: true,
-                                );
-                              } else {
-                                errorDialog(context,
-                                    "Open kontainer $kode_kontainer1 gagal dilakukan !");
-                                // print('cekmasuk4');
-                                // _scaffoldState.currentState.showSnackBar(
-                                //     SnackBar(
-                                //         content: Text("Submit data failed")));
-                              }
-                            });
-                          }
-                        });
-                      }, negativeAction: () {});
-                    },
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 50,
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        Icon(Icons.check_circle_rounded),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Text("Selesai" + idtransaksii.toString(),
-                            style: GoogleFonts.inter(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
+                  Text(nama1.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(kode_kontainer1.toString(),
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 5,
+                    width: 50,
+                    color: Colors.redAccent,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Kota",
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  Text(nama_kota1.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Tanggal Mulai",
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  Text(tglmulai.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Tanggal Akhir",
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  Text(tglakhir.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Keterangan",
+                      style:
+                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  Text(keterangan.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+                  // Text(
+                  //     "idtransaksi : " +
+                  //         idtransaksii.toString() +
+                  //         "-" +
+                  //         "iddetail-transaksi" +
+                  //         idtransaksi_det.toString(),
+                  //     style: GoogleFonts.lato(
+                  //         fontSize: 14, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              // padding: EdgeInsets.only(left: 15, right: 15),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 70,
+                    child: FlatButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lock_open_outlined),
+                          // Text("Open $idtransaksi_det",
+                          Text("Open",
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold))
+                        ],
+                      ),
+                      color: Colors.orange,
+                      onPressed: () {
+                        warningDialog(context,
+                            "Apakah anda ingin membuka kode kontainer $kode_kontainer1 ini ?",
+                            positiveText: "Ya",
+                            negativeText: "Batal",
+                            showNeutralButton: false, positiveAction: () {
+                          setState(() {
+                            _isLoading = true;
+                            LogOpen logopen = LogOpen(
+                              idtransaksi_detail: idtransaksi_det,
+                              token: access_token,
+                            );
+                            if (widget.kode_kontainer != null ||
+                                widget.nama_kota != null) {
+                              _apiService.OpenLog(logopen).then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (isSuccess) {
+                                  successDialog(
+                                    context,
+                                    "Permintaan open berhasil dilakukan !",
+                                    closeOnBackPress: true,
+                                  );
+                                } else {
+                                  errorDialog(context,
+                                      "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                                  // print('cekmasuk4');
+                                  // _scaffoldState.currentState.showSnackBar(
+                                  //     SnackBar(
+                                  //         content: Text("Submit data failed")));
+                                }
+                              });
+                            }
+                          });
+                        }, negativeAction: () {});
+                      },
                     ),
-                    color: Colors.lightBlue,
-                    onPressed: () {
-                      warningDialog(context,
-                          "Apakah anda ingin menyelesaikan transaksi ini ?",
-                          showNeutralButton: false, positiveAction: () {
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 90,
+                    height: 70,
+                    child: FlatButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle_rounded),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          // Text("Selesai" + idtransaksii.toString(),
+                          Text("Selesai",
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      color: Colors.lightBlue,
+                      onPressed: () {
+                        warningDialog(context,
+                            "Apakah anda ingin menyelesaikan transaksi ini ?",
+                            showNeutralButton: false, positiveAction: () {
+                          setState(() {
+                            _isLoading = true;
+                            selesaiLog selesai = selesaiLog(
+                                idtransaksi: idtransaksii, token: access_token);
+                            if (widget.nama_kota != null ||
+                                widget.kode_kontainer != null) {
+                              _apiService.SelesaiLog(selesai).then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (isSuccess) {
+                                  successDialog(context, "Berhasil",
+                                      showNeutralButton: false,
+                                      positiveAction: () {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
+                                  }, positiveText: "Ok");
+                                  // WidgetsBinding.instance
+                                  //     .addPostFrameCallback((timeStamp) {
+                                  //   Flushbar(
+                                  //     message: "Ok masuk",
+                                  //     flushbarPosition:
+                                  //         FlushbarPosition.BOTTOM,
+                                  //     icon: Icon(Icons.ac_unit),
+                                  //     flushbarStyle: FlushbarStyle.GROUNDED,
+                                  //     duration: Duration(seconds: 5),
+                                  //   )..show(
+                                  //       _scaffoldState.currentState.context);
+                                  // });
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             StorageActive1()));
+                                } else {
+                                  errorDialog(
+                                      context, "Transaksi gagal dilakukan !");
+                                  // _scaffoldState.currentState.showSnackBar(
+                                  //     SnackBar(
+                                  //         content:
+                                  //             Text("Submit data failed")));
+                                }
+                              });
+                            }
+                          });
+                        },
+                            positiveText: "Ya",
+                            negativeText: "Tidak",
+                            negativeAction: () {});
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 80,
+                    height: 70,
+                    child: FlatButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.sticky_note_2_sharp),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Text("Log",
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      color: Colors.green,
+                      onPressed: () {
+                        print("DETAIL ORDER MASUK : $idtransaksi_det");
                         setState(() {
                           _isLoading = true;
-                          selesaiLog selesai = selesaiLog(
-                              idtransaksi: idtransaksii, token: access_token);
-                          if (widget.nama_kota != null ||
-                              widget.kode_kontainer != null) {
-                            _apiService.SelesaiLog(selesai).then((isSuccess) {
+                          Logs log1 = Logs(
+                              idtransaksi_detail: idtransaksi_det,
+                              token: access_token);
+
+                          if (widget.idtransaksi_detail != null) {
+                            _apiService.Log_(log1).then((isSuccess) {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
-                                successDialog(context, "Berhasil",
-                                    showNeutralButton: false,
-                                    positiveAction: () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage()));
-                                }, positiveText: "Ok");
-                                // WidgetsBinding.instance
-                                //     .addPostFrameCallback((timeStamp) {
-                                //   Flushbar(
-                                //     message: "Ok masuk",
-                                //     flushbarPosition:
-                                //         FlushbarPosition.BOTTOM,
-                                //     icon: Icon(Icons.ac_unit),
-                                //     flushbarStyle: FlushbarStyle.GROUNDED,
-                                //     duration: Duration(seconds: 5),
-                                //   )..show(
-                                //       _scaffoldState.currentState.context);
-                                // });
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             StorageActive1()));
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  Flushbar(
+                                    message: "Ok masuk",
+                                    flushbarPosition: FlushbarPosition.BOTTOM,
+                                    icon: Icon(Icons.ac_unit),
+                                    flushbarStyle: FlushbarStyle.GROUNDED,
+                                    duration: Duration(seconds: 5),
+                                  )..show(_scaffoldState.currentState.context);
+                                });
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ListLog(
+                                    iddetail_orders: log1.idtransaksi_detail,
+                                  );
+                                }));
                               } else {
-                                errorDialog(
-                                    context, "Transaksi gagal dilakukan !");
-                                // _scaffoldState.currentState.showSnackBar(
-                                //     SnackBar(
-                                //         content:
-                                //             Text("Submit data failed")));
+                                print('cekmasuk4');
+                                _scaffoldState.currentState.showSnackBar(
+                                    SnackBar(
+                                        content: Text("Submit data failed")));
                               }
                             });
                           }
                         });
                       },
-                          positiveText: "Ya",
-                          negativeText: "Tidak",
-                          negativeAction: () {});
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 50,
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        Icon(Icons.sticky_note_2_sharp),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Text("Log",
-                            style: GoogleFonts.inter(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
                     ),
-                    color: Colors.green,
-                    onPressed: () {
-                      print("DETAIL ORDER MASUK : $idtransaksi_det");
-                      setState(() {
-                        _isLoading = true;
-                        Logs log1 = Logs(
-                            idtransaksi_detail: idtransaksi_det,
-                            token: access_token);
-
-                        if (widget.idtransaksi_detail != null) {
-                          _apiService.Log_(log1).then((isSuccess) {
-                            setState(() => _isLoading = false);
-                            if (isSuccess) {
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((timeStamp) {
-                                Flushbar(
-                                  message: "Ok masuk",
-                                  flushbarPosition: FlushbarPosition.BOTTOM,
-                                  icon: Icon(Icons.ac_unit),
-                                  flushbarStyle: FlushbarStyle.GROUNDED,
-                                  duration: Duration(seconds: 5),
-                                )..show(_scaffoldState.currentState.context);
-                              });
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ListLog(
-                                  iddetail_orders: log1.idtransaksi_detail,
-                                );
-                              }));
-                            } else {
-                              print('cekmasuk4');
-                              _scaffoldState.currentState.showSnackBar(SnackBar(
-                                  content: Text("Submit data failed")));
-                            }
-                          });
-                        }
-                      });
-                    },
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -153,7 +153,7 @@ class _StorageActive extends State<StorageActive1>
                             duration: Duration(seconds: 10),
                           ));
                         } else {
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       KonfirmasiLog(
@@ -163,6 +163,10 @@ class _StorageActive extends State<StorageActive1>
                                         idtransaksi_detail: myStorage.idtransaksi_detail,
                                         idtransaksi: myStorage.idtransaksi,
                                         nama: myStorage.nama,
+                                        tglmulai: myStorage.tanggal_mulai,
+                                        tglakhir: myStorage.tanggal_akhir,
+                                        tglorder: myStorage.tanggal_order,
+                                        keterangan: myStorage.keterangan,
                                       )));
                           // _openAlertDialog(
                           //   context,
