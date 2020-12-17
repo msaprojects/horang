@@ -19,7 +19,6 @@ class FormInputOrder extends StatefulWidget {
   JenisProduk jenisProduk;
   var tglawal12, tglakhir12;
   FormInputOrder({this.jenisProduk, this.tglawal12, this.tglakhir12});
-  // FormInputOrder({this.jenisProduk});
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -36,12 +35,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
   int asuransie = 1;
   int minimaldeposit = 3; //query dari setting minimal hari deposit
   double nomasuransi;
+  var email_asuransi;
   double nomdeclarebarang = 0.00;
 
   var Value,
       title,
-      valasuransi,
-      urlasuransi = ApiService().baseUrl + "asuransiaktif";
+      valasuransi;
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
@@ -90,6 +89,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         headers: {"Authorization": "BEARER ${access_token}"});
     // setState(() {
     nomasuransi = json.decode(response.body)[0]['nilai'];
+    email_asuransi = json.decode(response.body)[0]['email_asuransi'];
     idasuransi = json.decode(response.body)[0]['idasuransi'];
     hasilperhitungan = hitungall(
         harga.toString(),
@@ -106,7 +106,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var access_token,
       refresh_token,
       idcustomer,
-      email,
       nama_customer,
       idlokasi = 0;
 
@@ -130,7 +129,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
 
     // print("CEKK IDCUSTOMER" + idcustomer);
@@ -171,7 +169,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   void initState() {
-    nomasuransi = 0;
+    nomasuransi = 0.0;
     asuransie = 1;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
@@ -230,6 +228,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   Widget build(BuildContext context) {
+    print("IDASURANSI : " + idasuransi.toString() + email_asuransi.toString());
     var media = MediaQuery.of(context);
     getSaldo();
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
@@ -289,13 +288,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               height: 16,
                             ),
                             Text(
-                              //                           rupiah(History.total_harga,
-                              // separator: ',', trailing: '.00'),
                               "Harga : " +
                                   rupiah(harga,
                                       separator: '.',
                                       trailing: ',00' + "/Hari"),
-                              // "Harga : Rp. " + harga + "/hari",
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -401,24 +397,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     ],
                   ),
                   Divider(),
-                  // Container(
-                  //   padding: EdgeInsets.only(left: 30),
-                  //   child: Row(
-                  //     children: <Widget>[
-                  //       Checkbox(
-                  //         value: true,
-                  //         onChanged: (bool depositt) {
-                  //           setState(() {});
-                  //         },
-                  //       ),
-                  //       SizedBox(
-                  //         width: 8,
-                  //       ),
-                  //       Flexible(child: Text(kondisisaldo))
-                  //     ],
-                  //   ),
-                  // ),
-                  // Divider(),
                   Container(
                     child: Row(
                       children: <Widget>[
@@ -517,95 +495,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   },
                                 ),
                               ),
-                              // Container(
-                              //   padding: const EdgeInsets.only(
-                              //       left: 30, right: 30, top: 5),
-                              //   child: TextField(
-                              //     decoration: InputDecoration(
-                              //       hintText: 'Masukkan Kode Voucher Jika ada!',
-                              //       border: const OutlineInputBorder(),
-                              //     ),
-                              //     controller: _vouchervalue,
-                              //     onChanged: (value) {
-                              //       bool isFieldValid = value.trim().isNotEmpty;
-                              //       if (isFieldValid != _fieldvoucher) {
-                              //         setState(
-                              //             () => _fieldvoucher = isFieldValid);
-                              //       }
-                              //     },
-                              //   ),
-                              // ),
-                              // SizedBox(width: 12.0),
-                              // Container(
-                              //   padding: const EdgeInsets.only(left: 30),
-                              //   child: FlatButton(
-                              //     color: Colors.orange,
-                              //     child: Text("Cek Voucher"),
-                              //     onPressed: () {
-                              //       showModalBottomSheet(
-                              //           context: context,
-                              //           isScrollControlled: true,
-                              //           backgroundColor: Colors.transparent,
-                              //           builder: (context) => Container(
-                              //               height: MediaQuery.of(context)
-                              //                       .size
-                              //                       .height *
-                              //                   0.50,
-                              //               decoration: new BoxDecoration(
-                              //                 color: Colors.white,
-                              //                 borderRadius:
-                              //                     new BorderRadius.only(
-                              //                   topLeft:
-                              //                       const Radius.circular(25.0),
-                              //                   topRight:
-                              //                       const Radius.circular(25.0),
-                              //                 ),
-                              //               ),
-                              //               child: SafeArea(
-                              //                   child: FutureBuilder(
-                              //                       future:
-                              //                           _apiService.listVoucher(
-                              //                               access_token),
-                              //                       builder: (context,
-                              //                           AsyncSnapshot<
-                              //                                   List<Voucher>>
-                              //                               snapshot) {
-                              //                         if (snapshot.hasError) {
-                              //                           return Center(
-                              //                             child: Text(
-                              //                                 "Something wrong with message: ${snapshot.error.toString()}"),
-                              //                           );
-                              //                         } else if (snapshot
-                              //                                 .connectionState ==
-                              //                             ConnectionState
-                              //                                 .waiting) {
-                              //                           return Center(
-                              //                               child:
-                              //                                   CircularProgressIndicator());
-                              //                         } else if (snapshot
-                              //                                 .connectionState ==
-                              //                             ConnectionState
-                              //                                 .done) {
-                              //                           List<Voucher> vclist =
-                              //                               snapshot.data;
-                              //                           return _buildListvoucher(
-                              //                               vclist);
-                              //                         }
-                              //                       }))));
-                              //       // setState(() {
-                              //       //   print("YUU" +
-                              //       //       valasuransi +
-                              //       //       " - " +
-                              //       //       harga +
-                              //       //       " - " +
-                              //       //       jumlah_sewas.toString());
-                              //       //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
-                              //       //                                      print("BISA YOK BISA! :"+perhitungan.toString());
-                              //       // }
-                              //       // );
-                              //     },
-                              //   ),
-                              // ),
                             ],
                           ),
                         )
@@ -678,9 +567,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     ceksaldo.toString());
                               }
                               getSaldo();
-                              if (ceksaldo == null) {
-                                ceksaldo = 0;
-                              }
+                              // if (ceksaldo == null) {
+                              //   ceksaldo = 0;
+                              // }
                               hargaxhari = harga * 3;
                               if (ceksaldo >= hargaxhari) {
                                 saldodepositkurangnominaldeposit = 0;
@@ -695,19 +584,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             .toString();
                                 cekDeposit(context);
                               }
-                              // if (ceksaldo != hargaxhari) {
-                              //   kondisisaldo =
-                              //       "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari, kurang " +
-                              //           saldodepositkurangnominaldeposit
-                              //               .toString();
-                              // } else {
-                              //   kondisisaldo = "";
-                              // }
-                              // if (ceksaldo < hargaxhari || ceksaldo <= 0) {
-                              //   cekDeposit(context);
-                              // } else {
-                              //   orderConfirmation(context);
-                              // }
                             });
                     },
                     child: Text(
@@ -779,25 +655,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
             totalharixharga: totalhariharga.toString(),
             totaldeposit: totaldeposit.toString(),
             totalpointdeposit: ceksaldo.toString(),
+            email_asuransi: email_asuransi.toString(),
             deposit: saldodepositkurangnominaldeposit.toString());
       }));
     });
-
-    // },
-    // );
-    // AlertDialog alert = AlertDialog(
-    //   title: Text("Saldo Point Tidak Cukup"),
-    //   content: Text(
-    //       "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"),
-    //   actions: [
-    //     okButton,
-    //   ],
-    // );
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return alert;
-    //     });
   }
 
   orderConfirmation(BuildContext context) {
@@ -840,6 +701,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           totalharixharga: totalhariharga.toString(),
                           totaldeposit: totaldeposit.toString(),
                           totalpointdeposit: ceksaldo.toString(),
+                          email_asuransi: email_asuransi.toString(),
                           deposit: saldodepositkurangnominaldeposit.toString());
                     }));
                   },
@@ -849,61 +711,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
           );
         });
   }
-
-  Widget _buildAsuransi(String idasuransi) {
-    _controllerIdAsuransi = TextEditingController(text: idasuransi);
-    return DropdownButtonFormField(
-      hint: Text("Pilih Asuransi"),
-      value: valasuransi,
-      items: _dataAsuransi.map((item) {
-        return DropdownMenuItem(
-          // child: Text(item['nama_kota']),
-          child: Text("${item['nama_asuransi']}"),
-          value: item['nilai'].toString(),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          valasuransi = value.toString();
-        });
-      },
-    );
-  }
-
-  // @override
-  // Widget build1(BuildContext context){
-  //   return SafeArea(
-  //     child: FutureBuilder(
-  //       future: _apiService.listVoucher(access_token),
-  //       builder: (BuildContext context, AsyncSnapshot<List<Voucher>> snapshot) {
-  //         if (snapshot.hasError) {
-  //           print("xxaa1");
-  //           print(_apiService.listVoucher(access_token));
-  //           print(snapshot.error.toString());
-  //           return Center(
-  //             child: Text(
-  //                 "Something wrong with message: ${snapshot.error.toString()}"),
-  //           );
-  //         } else if (snapshot.connectionState == ConnectionState.waiting) {
-  //           print("xxaa2 2");
-  //           print(_apiService.listVoucher(access_token));
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         } else if (snapshot.connectionState == ConnectionState.done) {
-  //           print("xxaa3 3");
-  //           print(_apiService.listVoucher(access_token));
-  //           List<Voucher> vocuer = snapshot.data;
-  //           return _buildListvoucher(vocuer);
-  //         } else {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _buildListvoucher(List<Voucher> dataIndex) {
     return Container(
@@ -929,9 +736,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       MaterialPageRoute(
                           builder: (BuildContext context) => FormInputOrder()),
                       (route) => false);
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return FormInputOrder();
-                  // }));
                 }
               },
               child: Container(
@@ -952,7 +756,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           children: [
                             Text(voucherlist.kode_voucher.toString()),
                             Text(voucherlist.nominal.toString()),
-                            // Text(voucherlist.keterangan.toString())
                           ],
                         ),
                       ],

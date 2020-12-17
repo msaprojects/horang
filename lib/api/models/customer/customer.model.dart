@@ -1,13 +1,10 @@
 import 'dart:convert';
 
 class Customers{
-  int idkota, idcustomer;
-  // ignore: non_constant_identifier_names
+  num idkota, idcustomer;
   String token, nama_customer, alamat, noktp, blacklist, email, no_hp, nama_kota;
 
   Customers({
-    // this.idcustomer,
-    // ignore: non_constant_identifier_names
     this.nama_customer,
     this.alamat,
     this.noktp,
@@ -21,7 +18,6 @@ class Customers{
 
   factory Customers.fromJson(Map<String, dynamic> map){
     return Customers(
-      // idcustomer: map['idcustomer'],
       nama_customer: map['nama_customer'],
       alamat: map['alamat'],
       noktp: map['noktp'],
@@ -35,15 +31,11 @@ class Customers{
   }
   Map<String, dynamic> toJson(){
     return{
-      // "idcustomer": idcustomer,
       "nama_customer": nama_customer,
       "alamat": alamat,
       "noktp": noktp,
       "blacklist": blacklist.toString(),
       "idkota": idkota,
-      // "nama_kota": nama_kota
-      // "email": email,
-      // "no_hp": no_hp,
       "token": token
     };
   }

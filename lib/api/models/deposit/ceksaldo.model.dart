@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class CekSaldoModel {
-  int saldo;
+  num saldo;
 
   CekSaldoModel({this.saldo});
 

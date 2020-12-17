@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class JenisProduk{
 
-  int idlokasi, idjenis_produk, harga, avail;
+  num idlokasi, idjenis_produk, harga, avail;
   String kapasitas, keterangan, gambar, nama_kota, nama_lokasi;
 
   JenisProduk({

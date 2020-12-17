@@ -261,30 +261,15 @@ class _HomePageState extends State<HomePage> {
                                       future: getSaldo(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          print("masuk pak eko" +
-                                              snapshot.data.toString());
                                           var saldoadatidak =
                                               snapshot.data[0]['saldo'];
-                                          print(
-                                              "ada saldonya tha $saldoadatidak");
-                                          if (snapshot.data[0]['saldo'] ==
-                                              null) {
-                                            return Text(
-                                              "Kosong",
-                                              style: GoogleFonts.inter(
-                                                  color: Colors.white,
-                                                  fontSize: 30,
-                                                  fontWeight: FontWeight.bold),
-                                            );
-                                          } else {
-                                            return Text(
-                                              saldoadatidak.toString(),
-                                              style: GoogleFonts.inter(
-                                                  color: Colors.white,
-                                                  fontSize: 35,
-                                                  fontWeight: FontWeight.bold),
-                                            );
-                                          }
+                                          return Text(
+                                            saldoadatidak.toString(),
+                                            style: GoogleFonts.inter(
+                                                color: Colors.white,
+                                                fontSize: 35,
+                                                fontWeight: FontWeight.bold),
+                                          );
                                         } else if (snapshot == null) {
                                           print("tidak ada data");
                                           return Container(
@@ -489,8 +474,7 @@ class _HomePageState extends State<HomePage> {
                                     // StorageHandler(
                                     //       initialIndex: 2,
                                     //     )
-                                    HistoryPage()
-                                    ));
+                                    HistoryPage()));
                       },
                     ),
                   ),

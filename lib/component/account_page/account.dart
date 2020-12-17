@@ -114,7 +114,7 @@ class _AccountState extends State<Account> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            "Profile",
+            "AKUN",
             style: TextStyle(color: Colors.black),
           ),
           elevation: 0,
@@ -253,6 +253,12 @@ class _AccountState extends State<Account> {
                 ),
               ),
             ),
+            SizedBox(height: 10.0,),
+            Center(
+              child: Text(
+                "Version 1.1.0.1 Debug"
+              ),
+            )
           ],
         ));
   }

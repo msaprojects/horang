@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class MystorageModel {
-  int hari, idtransaksi_detail, idtransaksi;
+  num hari, idtransaksi_detail, idtransaksi;
   String tanggal_mulai,
       tanggal_akhir,
       tanggal_order,

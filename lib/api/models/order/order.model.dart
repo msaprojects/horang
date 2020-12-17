@@ -1,142 +1,123 @@
 import 'dart:convert';
 
-class OrderProduk{
-  int idjenis_produk, idlokasi, jumlah_sewa, idasuransi, idvoucher, flagvoucher, flagasuransi, idpayment_gateway, flag_selesai;
-  double total_harga, harga, nominal_barang, deposit_tambah, deposit_pakai, nominal_deposit, deposit_minimum;
-  String token, keterangan, nomor_polis, tanggal_berakhir_polis, tanggal_mulai, tanggal_akhir, keterangan_barang, tanggal_order, keterangan_deposit, no_ovo;
+class OrderProduk {
+  num idlokasi,
+      idjenis_produk,
+      total_harga,
+      deposit_tambah,
+      deposit_pakai,
+      deposit_minimum,
+      jumlah_sewa,
+      idvoucher,
+      idasuransi,
+      idpayment_gateway,
+      nominal_barang,
+      harga;
 
+  String token,
+      tanggal_mulai,
+      tanggal_akhir,
+      keterangan_barang,
+      no_ovo,
+      email_asuransi;
 
-  OrderProduk({
-    this.idjenis_produk,
-    this.idlokasi,
-    this.jumlah_sewa,
-    this.idasuransi,
-    this.idvoucher,
-    this.flagvoucher,
-    this.flagasuransi,
-    this.idpayment_gateway,
-    this.flag_selesai,
-    this.total_harga,
-    this.harga,
-    this.nominal_barang,
-    this.deposit_tambah,
-    this.deposit_pakai,
-    this.deposit_minimum,
-    this.nominal_deposit,
-    this.token,
-    this.keterangan,
-    this.nomor_polis,
-    this.tanggal_berakhir_polis,
-    this.tanggal_mulai,
-    this.tanggal_akhir,
-    this.keterangan_barang,
-    this.tanggal_order,
-    this.keterangan_deposit,
-    this.no_ovo
-  });
+  OrderProduk(
+      {this.idjenis_produk,
+      this.idlokasi,
+      this.jumlah_sewa,
+      this.idasuransi,
+      this.idvoucher,
+      this.idpayment_gateway,
+      this.total_harga,
+      this.harga,
+      this.nominal_barang,
+      this.deposit_tambah,
+      this.deposit_pakai,
+      this.deposit_minimum,
+      this.token,
+      this.tanggal_mulai,
+      this.tanggal_akhir,
+      this.keterangan_barang,
+      this.no_ovo,
+      this.email_asuransi});
 
-  factory OrderProduk.fromJson(Map<String, dynamic> map){
+  factory OrderProduk.fromJson(Map<String, dynamic> map) {
     return OrderProduk(
       idjenis_produk: map["idjenis_produk"],
       idlokasi: map["idlokasi"],
       jumlah_sewa: map["jumlah_sewa"],
       idasuransi: map["idasuransi"],
       idvoucher: map["idvoucher"],
-      flagvoucher: map["flagvoucher"],
-      flagasuransi: map["flagasuransi"],
       idpayment_gateway: map["idpayment_gateway"],
-      flag_selesai: map["flag_selesai"],
       total_harga: map["total_harga"],
       harga: map["harga"],
       nominal_barang: map["nominal_barang"],
       deposit_pakai: map["deposit_pakai"],
       deposit_tambah: map["deposit_tambah"],
       deposit_minimum: map["deposit_minimum"],
-      nominal_deposit: map["nominal_deposit"],
       token: map["token"],
-      keterangan: map["keterangan"],
-      nomor_polis: map["nomor_polis"],
-      tanggal_berakhir_polis: map["tanggal_berakhir_polis"],
       tanggal_mulai: map["tanggal_mulai"],
       tanggal_akhir: map["tanggal_akhir"],
       keterangan_barang: map["keterangan_barang"],
-      tanggal_order: map["tanggal_order"],
-      keterangan_deposit: map["keterangan_deposit"],
-      no_ovo: map["no_ovo"]
+      no_ovo: map["no_ovo"],
+      email_asuransi: map["email_asuransi"],
     );
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "idjenis_produk": idjenis_produk,
       "idlokasi": idlokasi,
       "jumlah_sewa": jumlah_sewa,
       "idasuransi": idasuransi,
       "idvoucher": idvoucher,
-      "flagvoucher": flagvoucher,
-      "flagasuransi": flagasuransi,
       "idpayment_gateway": idpayment_gateway,
-      "flag_selesai": flag_selesai,
       "total_harga": total_harga,
       "harga": harga,
       "nominal_barang": nominal_barang,
       "deposit_pakai": deposit_pakai,
       "deposit_tambah": deposit_tambah,
       "deposit_minimum": deposit_minimum,
-      "nominal_deposit": nominal_deposit,
       "token": token,
-      "keterangan": keterangan,
-      "nomor_polis": nomor_polis,
-      "tanggal_berakhir_polis": tanggal_berakhir_polis,
       "tanggal_mulai": tanggal_mulai,
       "tanggal_akhir": tanggal_akhir,
       "keterangan_barang": keterangan_barang,
-      "tanggal_order": tanggal_order,
-      "keterangan_deposit": keterangan_deposit,
-      "no_ovo": no_ovo
+      "no_ovo": no_ovo,
+      "email_asuransi": email_asuransi,
     };
   }
 
   @override
-  String toString(){
+  String toString() {
     return 'OrderProduk{'
         'idjenis_produk: $idjenis_produk,'
         'idlokasi: $idlokasi,'
         'jumlah_sewa: $jumlah_sewa,'
         'idasuransi: $idasuransi,'
         'idvoucher: $idvoucher,'
-        'flagvoucher: $flagvoucher,'
-        'flagasuransi: $flagasuransi,'
         'idpayment_gateway: $idpayment_gateway,'
-        'flag_selesai: $flag_selesai,'
         'total_harga: $total_harga,'
         'harga: $harga,'
         'nominal_barang: $nominal_barang,'
         'deposit_pakai: $deposit_pakai,'
         'deposit_tambah: $deposit_tambah,'
         'deposit_minimum: $deposit_minimum,'
-        'nominal_deposit: $nominal_deposit,'
         'token: $token,'
-        'keterangan: $keterangan,'
-        'nomor_polis: $nomor_polis,'
-        'tanggal_berakhir_polis: $tanggal_berakhir_polis,'
         'tanggal_mulai: $tanggal_mulai,'
         'tanggal_akhir: $tanggal_akhir,'
         'keterangan_barang: $keterangan_barang,'
-        'tanggal_order: $tanggal_order,'
-        'keterangan_deposit: $keterangan_deposit,'
         'no_ovo: $no_ovo,'
+        'email_asuransi: $email_asuransi,'
         '}';
   }
-
 }
 
-List<OrderProduk> orderprodukFromJson(String jsonData){
+List<OrderProduk> orderprodukFromJson(String jsonData) {
   final data = json.decode(jsonData);
-  return List<OrderProduk>.from(data.map((item)=> OrderProduk.fromJson(item)));
+  return List<OrderProduk>.from(data.map((item) => OrderProduk.fromJson(item)));
 }
 
-String orderprodukToJson(OrderProduk data){
+String orderprodukToJson(OrderProduk data) {
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }

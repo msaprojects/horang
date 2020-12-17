@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class selesaiLog{
 
-  int idtransaksi;
+  num idtransaksi;
   String token;
 
   selesaiLog({

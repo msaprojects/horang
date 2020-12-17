@@ -16,10 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputPembayaran extends StatefulWidget {
-//  OrderProduk orderProduk;
-//  BodyPembayaran({this.orderProduk});
-  //     formatedate = DateFormat('dd-MM-yyyy').format(_date);
-  // formatedate2 = DateFormat('dd-MM-yyyy').format(_date2);
   bool warna;
   var flagasuransi,
       flagvoucher,
@@ -42,7 +38,8 @@ class FormInputPembayaran extends StatefulWidget {
       totalharixharga,
       totaldeposit,
       totalpointdeposit,
-      deposit;
+      deposit,
+      email_asuransi;
   FormInputPembayaran(
       {this.flagasuransi,
       this.flagvoucher,
@@ -65,7 +62,8 @@ class FormInputPembayaran extends StatefulWidget {
       this.totalharixharga,
       this.totaldeposit,
       this.totalpointdeposit,
-      this.deposit});
+      this.deposit,
+      this.email_asuransi});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -111,7 +109,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       stotalharixharga,
       stotaldeposit,
       stotalpointdeposit,
-      sdeposit;
+      sdeposit,
+      email_asuransi;
 
   var hasilperhitungan;
 
@@ -191,6 +190,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     stotaldeposit = widget.totaldeposit;
     stotalpointdeposit = widget.totalpointdeposit;
     sdeposit = widget.deposit;
+    email_asuransi = widget.email_asuransi;
 //    }
     cekToken();
     hitungall(
@@ -320,10 +320,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 60),
+                                  const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 rupiah(sharga,
-                                    separator: ',', trailing: " /hari"), style: TextStyle(fontStyle: FontStyle.italic),
+                                    separator: ',', trailing: " /hari"),
+                                style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                             ),
                           ],
@@ -339,9 +340,27 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                             Container(
                               padding:
-                              const EdgeInsets.only(top: 0.0, right: 60),
+                                  const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 asuransitxt,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: Row(
+                                children: <Widget>[Text("Keterangan Barang :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                sketerangan_barang,
                               ),
                             ),
                           ],
@@ -373,8 +392,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(rupiah(stotalharixharga,
-                                        separator: ','),
+                              child: Text(
+                                rupiah(stotalharixharga, separator: ','),
                               ),
                             ),
                           ],
@@ -391,8 +410,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(rupiah(stotaldeposit,
-                                    separator: ','),
+                              child: Text(
+                                rupiah(stotaldeposit, separator: ','),
                               ),
                             ),
                           ],
@@ -413,8 +432,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 "-" +
-                                    rupiah(stotalpointdeposit,
-                                        separator: ','),
+                                    rupiah(stotalpointdeposit, separator: ','),
                               ),
                             ),
                           ],
@@ -431,8 +449,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(rupiah(stotal_asuransi,
-                                        separator: ','),
+                              child: Text(
+                                rupiah(stotal_asuransi, separator: ','),
                               ),
                             ),
                           ],
@@ -684,46 +702,22 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
                                                 KonfirmPayment(
-                                                  namaprovider: namaprovider,
-                                                  total_asuransi:
-                                                      stotal_asuransi,
-                                                  idjenis_produk:
-                                                      idjenis_produk,
-                                                  idlokasi: idlokasi,
-                                                  jumlah_sewa: jumlah_sewa,
-                                                  idasuransi: idasuransi,
-                                                  idvoucher: idvoucher,
-                                                  flagvoucher: flagvoucher,
-                                                  flagasuransi: flagasuransi,
-                                                  idpayment_gateway:
-                                                      idpayment.toString(),
-                                                  flag_selesai: 0,
-                                                  harga: double.parse(
-                                                      sharga.toString()),
-                                                  total_harga: double.parse(
-                                                      stotal_harga),
-                                                  deposit_tambah: double.parse(
-                                                      sdeposit.toString()),
-                                                  deposit_pakai: double.parse(
-                                                      stotalpointdeposit
-                                                          .toString()),
-                                                  deposit_minimum: double.parse(
-                                                      stotaldeposit.toString()),
-                                                  keterangan:
-                                                      keterangan.toString(),
-                                                  nomor_polis: nomor_polis,
-                                                  tanggal_berakhir_polis:
-                                                      tanggal_berakhir_polis,
-                                                  tanggal_mulai: stanggal_mulai,
-                                                  tanggal_akhir: stanggal_akhir,
-                                                  nominal_barang:
-                                                      snominal_barang,
-                                                  keterangan_barang:
-                                                      sketerangan_barang,
-                                                  tanggal_order: "DATE(NOW())",
-                                                  nominal_deposit: double.parse(
-                                                      sharga.toString()),
-                                                )));
+                                                    idjenis_produk: idjenis_produk,
+                                                    idlokasi: idlokasi,
+                                                    jumlah_sewa: jumlah_sewa,
+                                                    idasuransi: idasuransi,
+                                                    idvoucher: idvoucher,
+                                                    idpayment_gateway: idpayment,
+                                                    harga: sharga,
+                                                    total_harga: stotal_harga,
+                                                    deposit_tambah: sdeposit,
+                                                    deposit_pakai: stotalpointdeposit,
+                                                    deposit_minimum: stotaldeposit,
+                                                    tanggal_mulai: stanggal_mulai,
+                                                    tanggal_akhir: stanggal_akhir,
+                                                    nominal_barang: snominal_barang,
+                                                    keterangan_barang: sketerangan_barang,
+                                                    email_asuransi: email_asuransi)));
                                   });
                                 })
                           ],

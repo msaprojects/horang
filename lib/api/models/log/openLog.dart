@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class LogOpen{
 
-  int idtransaksi_detail;
+  num idtransaksi_detail;
   String token;
 
   LogOpen({

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class PaymentGateway{
-  int idpayment_gateway, status;
+  num idpayment_gateway, status;
   String password;
   String nama_provider, token_provider;
 

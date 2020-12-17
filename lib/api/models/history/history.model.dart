@@ -1,34 +1,8 @@
 import 'dart:convert';
 
-// int parseIntFromMap(Map map, String key, [int defVal = 0]) {
-//     if (map == null) return defVal;
-//     if (!map.containsKey(key)) return defVal;
-
-//     if (map[key] is String) {
-//       if (int.tryParse(map[key]) == null) {
-//         if (double.tryParse(map[key]) == null) {
-//           return defVal;
-//         } else {
-//           return double.tryParse(map[key]).toInt();
-//         }
-//       } else {
-//         return int.tryParse(map[key]);
-//       }
-//     } else if (map[key] is int) {
-//       return map[key];
-//     } else if (map[key] is double) {
-//       return map[key].toInt();
-//     } else if (map[key] is bool) {
-//       return map[key] ? 1 : 0;
-//     }
-
-//     return defVal;
-//   }
-
 class HistoryModel {
-  // int total_harga;
   num total_harga;
-  int harga, jumlah_sewa;
+  num harga, jumlah_sewa;
   String no_order,
       kode_refrensi,
       kode_kontainer,

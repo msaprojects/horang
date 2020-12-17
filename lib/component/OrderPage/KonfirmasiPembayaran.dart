@@ -1,54 +1,40 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
-import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
-import 'package:horang/component/account_page/account.dart';
+import 'package:indonesia/indonesia.dart';
 
 import 'KonfirmasiOrder.Detail.dart';
 
 class Dummy1 extends StatefulWidget {
-  var idjenis_produk,
-      idlokasi,
-      jumlah_sewa,
-      idasuransi,
-      idvoucher,
-      flagasuransi,
-      total_asuransi,
-      flagvoucher,
-      idpayment_gateway,
-      flag_selesai,
+  var idlokasi,
+      idjenis_produk,
       total_harga,
-      harga,
-      nominal_barang,
       deposit_tambah,
       deposit_pakai,
       deposit_minimum,
+      jumlah_sewa,
+      idvoucher,
+      idasuransi,
+      idpayment_gateway,
+      nominal_barang,
+      harga,
       token,
-      keterangan,
-      nomor_polis,
-      tanggal_berakhir_polis,
       tanggal_mulai,
       tanggal_akhir,
       keterangan_barang,
-      tanggal_order,
-      keterangan_deposit,
-      nominal_deposit,
-      no_ovo;
+      no_ovo,
+      email_asuransi;
+
   Dummy1(
       {this.idjenis_produk,
       this.idlokasi,
       this.jumlah_sewa,
       this.idasuransi,
       this.idvoucher,
-      this.flagasuransi,
-      this.total_asuransi,
-      this.flagvoucher,
       this.idpayment_gateway,
-      this.flag_selesai,
       this.total_harga,
       this.harga,
       this.nominal_barang,
@@ -56,16 +42,11 @@ class Dummy1 extends StatefulWidget {
       this.deposit_pakai,
       this.deposit_minimum,
       this.token,
-      this.keterangan,
-      this.nomor_polis,
-      this.tanggal_berakhir_polis,
       this.tanggal_mulai,
       this.tanggal_akhir,
       this.keterangan_barang,
-      this.tanggal_order,
-      this.keterangan_deposit,
-      this.nominal_deposit,
-      this.no_ovo});
+      this.no_ovo,
+      this.email_asuransi});
   @override
   _Dummy1State createState() => _Dummy1State();
 }
@@ -74,102 +55,74 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _Dummy1State extends State<Dummy1> {
-  var kidjenis_produk,
-      kidlokasi,
-      kjumlah_sewa,
-      kidasuransi,
-      kidvoucher,
-      kflagasuransi,
-      ktotal_asuransi,
-      kflagvoucher,
-      kidpayment_gateway,
-      kflag_selesai,
-      ktotal_harga,
-      kharga,
-      knominal_barang,
-      kdeposit_tambah,
-      kdeposit_pakai,
-      kdeposit_minimum,
-      ktoken,
-      kketerangan,
-      knomor_polis,
-      ktanggal_berakhir_polis,
-      ktanggal_mulai,
-      ktanggal_akhir,
-      kketerangan_barang,
-      ktanggal_order,
-      kketerangan_deposit,
-      knominal_deposit,
-      kno_ovo;
+  var idlokasi,
+      idjenis_produk,
+      total_harga,
+      deposit_tambah,
+      deposit_pakai,
+      deposit_minimum,
+      jumlah_sewa,
+      idvoucher,
+      idasuransi,
+      idpayment_gateway,
+      nominal_barang,
+      harga,
+      token,
+      tanggal_mulai,
+      tanggal_akhir,
+      keterangan_barang,
+      no_ovo,
+      email_asuransi;
 
   @override
   void initState() {
-    kidlokasi = widget.idlokasi;
-    kidjenis_produk = widget.idjenis_produk;
-    kketerangan = widget.keterangan;
-    kjumlah_sewa = widget.jumlah_sewa.toString();
-    kidpayment_gateway = widget.idpayment_gateway;
-    kflag_selesai = widget.flag_selesai;
-    kdeposit_tambah = widget.deposit_tambah;
-    kdeposit_pakai = widget.deposit_pakai;
-    kdeposit_minimum = widget.deposit_minimum;
-    kflagasuransi = widget.flagasuransi;
-    ktotal_asuransi = widget.total_asuransi;
-    kflagvoucher = widget.flagvoucher;
-    kidasuransi = widget.idasuransi;
-    knomor_polis = widget.nomor_polis;
-    ktanggal_berakhir_polis = widget.tanggal_berakhir_polis;
-    kidvoucher = widget.idvoucher;
-    kharga = widget.harga;
-    ktanggal_mulai = widget.tanggal_mulai;
-    kketerangan_barang = widget.keterangan_barang;
-    knominal_barang = widget.nominal_barang;
-    ktotal_harga = widget.total_harga;
-    ktanggal_order = widget.tanggal_order;
-    knominal_deposit = widget.nominal_deposit;
-    kketerangan_deposit = widget.keterangan_deposit;
-    ktoken = widget.token;
-    kno_ovo = widget.no_ovo;
-    ktanggal_akhir = widget.tanggal_akhir;
+    token = widget.token;
+    tanggal_mulai = widget.tanggal_mulai;
+    tanggal_akhir = widget.tanggal_akhir;
+    idlokasi = widget.idlokasi;
+    idjenis_produk = widget.idjenis_produk;
+    idvoucher = widget.idvoucher;
+    idasuransi = widget.idasuransi;
+    total_harga = widget.total_harga;
+    idlokasi = widget.idlokasi;
+    deposit_tambah = widget.deposit_tambah;
+    deposit_pakai = widget.deposit_pakai;
+    deposit_minimum = widget.deposit_minimum;
+    jumlah_sewa = widget.jumlah_sewa;
+    idpayment_gateway = widget.idpayment_gateway;
+    keterangan_barang = widget.keterangan_barang;
+    nominal_barang = widget.nominal_barang;
+    no_ovo = widget.no_ovo;
+    harga = widget.harga;
+    email_asuransi = widget.email_asuransi;
 
     OrderProduk orderProduk = OrderProduk(
-        idjenis_produk: int.parse(kidjenis_produk),
-        idlokasi: kidlokasi,
-        jumlah_sewa: int.parse(kjumlah_sewa),
-        idasuransi: 1,
-        idvoucher: kidvoucher,
-        flagasuransi: kflagasuransi,
-        flagvoucher: kflagvoucher,
-        idpayment_gateway: kidpayment_gateway,
-        flag_selesai: 0,
-        total_harga: ktotal_harga,
-        harga: kharga,
-        nominal_barang: double.parse(knominal_barang),
-        deposit_tambah: kdeposit_tambah,
-        deposit_pakai: kdeposit_pakai,
-        deposit_minimum: kdeposit_minimum,
-        token: ktoken,
-        keterangan: kketerangan,
-        nomor_polis: knomor_polis,
-        tanggal_berakhir_polis: ktanggal_berakhir_polis,
-        tanggal_mulai: ktanggal_mulai,
-        tanggal_akhir: ktanggal_akhir,
-        keterangan_barang: kketerangan_barang,
-        tanggal_order: "DATE(NOW())",
-        keterangan_deposit: "-",
-        nominal_deposit: knominal_deposit,
-        no_ovo: kno_ovo.toString());
-    print("SEND TO ORDER : "+orderProduk.toString());
+        idjenis_produk: idjenis_produk,
+        idlokasi: idlokasi,
+        jumlah_sewa: int.parse(jumlah_sewa),
+        idasuransi: idasuransi,
+        idvoucher: idvoucher,
+        idpayment_gateway: idpayment_gateway,
+        total_harga: double.parse(total_harga),
+        harga: harga,
+        nominal_barang: double.parse(nominal_barang),
+        deposit_tambah: double.parse(deposit_tambah),
+        deposit_pakai: double.parse(deposit_pakai),
+        deposit_minimum: double.parse(deposit_minimum),
+        token: token,
+        tanggal_mulai: tanggal_mulai,
+        tanggal_akhir: tanggal_akhir,
+        keterangan_barang: keterangan_barang,
+        no_ovo: no_ovo,
+        email_asuransi: email_asuransi);
+    print("SEND TO ORDER : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
-        print("masuk9");
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => KonfirmasiOrderDetail(
-                      idorder: idorder,
-                      total_asuransi: ktotal_asuransi,
-                    )));
+                builder: (BuildContext context) =>
+                    KonfirmasiOrderDetail(idorder: idorder)));
       } else {
         if (idorder == -1) {
           print("Container tidak tersedia");
@@ -235,7 +188,7 @@ class _Dummy1State extends State<Dummy1> {
                         Text("Total Bayar",
                             style: GoogleFonts.inter(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text("Rp. " + ktotal_harga.toString(),
+                        Text(rupiah(total_harga),
                             style: GoogleFonts.inter(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -258,7 +211,9 @@ class _Dummy1State extends State<Dummy1> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text("Menunggu pembayaran $ktotal_asuransi",
+                              Text(
+                                  "Menunggu pembayaran Sebesar " +
+                                      rupiah(total_harga),
                                   style: GoogleFonts.inter(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold)),
@@ -285,16 +240,6 @@ class _Dummy1State extends State<Dummy1> {
             SizedBox(
               height: 15,
             ),
-            // Card(
-            //   clipBehavior: Clip.antiAliasWithSaveLayer,
-            //   elevation: 2.0,
-            //   child: Container(
-            //     alignment: Alignment.centerLeft,
-            //     padding: EdgeInsets.only(left: 20, right: 20),
-            //     height: 50,
-            //     child: Text(knamaprovider.toString()),
-            //   ),
-            // ),
             SizedBox(
               height: 10,
             ),

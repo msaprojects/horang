@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class KomboKota{
 
-  int idkota;
+  num idkota;
   String nama_kota, keterangan, provinsi;
 
   KomboKota({

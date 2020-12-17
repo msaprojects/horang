@@ -11,8 +11,7 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmasiOrderDetail extends StatefulWidget {
   int idorder;
-  var total_asuransi;
-  KonfirmasiOrderDetail({this.idorder, this.total_asuransi});
+  KonfirmasiOrderDetail({this.idorder});
   @override
   _KonfirmasiOrderDetail createState() => _KonfirmasiOrderDetail();
 }
@@ -70,8 +69,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   @override
   void initState() {
     idorders = widget.idorder;
-    print("idorrr $idorders");
-    ktotal_asuransi = widget.total_asuransi;
     cekToken();
   }
 

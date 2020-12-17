@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class OrderSukses{
-  int idtransaksi, idpembayaran, idpayment_gateway, idproduk, jumlah_sewa;
+  num idtransaksi, idpembayaran, idpayment_gateway, idproduk, jumlah_sewa;
   // int total_harga, nominal, harga;
   num total_harga, nominal, harga;
   String no_order, keterangan, kode_refrensi, nama_provider, kode_kontainer;
