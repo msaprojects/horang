@@ -26,7 +26,9 @@ class Dummy1 extends StatefulWidget {
       tanggal_akhir,
       keterangan_barang,
       no_ovo,
-      email_asuransi;
+      email_asuransi,
+      flagasuransi,
+      flagvoucher;
 
   Dummy1(
       {this.idjenis_produk,
@@ -46,7 +48,9 @@ class Dummy1 extends StatefulWidget {
       this.tanggal_akhir,
       this.keterangan_barang,
       this.no_ovo,
-      this.email_asuransi});
+      this.email_asuransi,
+      this.flagasuransi,
+      this.flagvoucher});
   @override
   _Dummy1State createState() => _Dummy1State();
 }
@@ -72,7 +76,9 @@ class _Dummy1State extends State<Dummy1> {
       tanggal_akhir,
       keterangan_barang,
       no_ovo,
-      email_asuransi;
+      email_asuransi,
+      flagasuransi,
+      flagvoucher;
 
   @override
   void initState() {
@@ -95,6 +101,8 @@ class _Dummy1State extends State<Dummy1> {
     no_ovo = widget.no_ovo;
     harga = widget.harga;
     email_asuransi = widget.email_asuransi;
+    flagasuransi = widget.flagasuransi;
+    flagvoucher = widget.flagvoucher;
 
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: idjenis_produk,
@@ -114,7 +122,9 @@ class _Dummy1State extends State<Dummy1> {
         tanggal_akhir: tanggal_akhir,
         keterangan_barang: keterangan_barang,
         no_ovo: no_ovo,
-        email_asuransi: email_asuransi);
+        email_asuransi: email_asuransi,
+        flagasuransi: flagasuransi,
+        flagvoucher: flagvoucher);
     print("SEND TO ORDER : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
@@ -125,7 +135,6 @@ class _Dummy1State extends State<Dummy1> {
                     KonfirmasiOrderDetail(idorder: idorder)));
       } else {
         if (idorder == -1) {
-          print("Container tidak tersedia");
           errorDialog(context, "Kontainer tidak tersedia",
               positiveText: "OK", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(
@@ -134,7 +143,6 @@ class _Dummy1State extends State<Dummy1> {
                     builder: (BuildContext context) => ProdukList()));
           });
         } else {
-          print("Transaksi gagal !!");
           errorDialog(context, "Transaksi gagal disimpan",
               positiveText: "Ok", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(

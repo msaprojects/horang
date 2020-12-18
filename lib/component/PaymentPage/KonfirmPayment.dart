@@ -24,7 +24,9 @@ class KonfirmPayment extends StatefulWidget {
       tanggal_mulai,
       tanggal_akhir,
       keterangan_barang,
-      email_asuransi;
+      email_asuransi,
+      flagasuransi,
+      flagvoucher;
 
   KonfirmPayment(
       {this.idlokasi,
@@ -42,7 +44,9 @@ class KonfirmPayment extends StatefulWidget {
       this.nominal_barang,
       this.total_harga,
       this.email_asuransi,
-      this.tanggal_akhir});
+      this.tanggal_akhir,
+      this.flagasuransi,
+      this.flagvoucher});
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
@@ -67,7 +71,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       tanggal_mulai,
       tanggal_akhir,
       keterangan_barang,
-      email_asuransi;
+      email_asuransi,
+      flagasuransi,
+      flagvoucher;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -136,6 +142,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     deposit_pakai = widget.deposit_pakai;
     deposit_minimum = widget.deposit_minimum;
     email_asuransi = widget.email_asuransi;
+    flagasuransi = widget.flagasuransi;
+    flagvoucher = widget.flagvoucher;
     super.initState();
   }
 
@@ -250,6 +258,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => Dummy1(
+                  flagasuransi: flagasuransi,
+                  flagvoucher: flagvoucher,
                   idjenis_produk: idjenis_produk,
                   idlokasi: idlokasi,
                   jumlah_sewa: jumlah_sewa,

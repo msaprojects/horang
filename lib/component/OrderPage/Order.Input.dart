@@ -38,9 +38,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var email_asuransi;
   double nomdeclarebarang = 0.00;
 
-  var Value,
-      title,
-      valasuransi;
+  var Value, title, valasuransi;
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
@@ -103,11 +101,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   SharedPreferences sp;
   bool isSuccess = false;
-  var access_token,
-      refresh_token,
-      idcustomer,
-      nama_customer,
-      idlokasi = 0;
+  var access_token, refresh_token, idcustomer, nama_customer, idlokasi = 0;
 
   String hitungall(String harga, String durasi, int boolasuransi,
       double asuransi, String nominalbaranginput, String ceksaldopoint) {

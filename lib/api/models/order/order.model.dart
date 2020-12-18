@@ -12,7 +12,9 @@ class OrderProduk {
       idasuransi,
       idpayment_gateway,
       nominal_barang,
-      harga;
+      harga,
+      flagasuransi,
+      flagvoucher;
 
   String token,
       tanggal_mulai,
@@ -39,29 +41,32 @@ class OrderProduk {
       this.tanggal_akhir,
       this.keterangan_barang,
       this.no_ovo,
-      this.email_asuransi});
+      this.email_asuransi,
+      this.flagasuransi,
+      this.flagvoucher});
 
   factory OrderProduk.fromJson(Map<String, dynamic> map) {
     return OrderProduk(
-      idjenis_produk: map["idjenis_produk"],
-      idlokasi: map["idlokasi"],
-      jumlah_sewa: map["jumlah_sewa"],
-      idasuransi: map["idasuransi"],
-      idvoucher: map["idvoucher"],
-      idpayment_gateway: map["idpayment_gateway"],
-      total_harga: map["total_harga"],
-      harga: map["harga"],
-      nominal_barang: map["nominal_barang"],
-      deposit_pakai: map["deposit_pakai"],
-      deposit_tambah: map["deposit_tambah"],
-      deposit_minimum: map["deposit_minimum"],
-      token: map["token"],
-      tanggal_mulai: map["tanggal_mulai"],
-      tanggal_akhir: map["tanggal_akhir"],
-      keterangan_barang: map["keterangan_barang"],
-      no_ovo: map["no_ovo"],
-      email_asuransi: map["email_asuransi"],
-    );
+        idjenis_produk: map["idjenis_produk"],
+        idlokasi: map["idlokasi"],
+        jumlah_sewa: map["jumlah_sewa"],
+        idasuransi: map["idasuransi"],
+        idvoucher: map["idvoucher"],
+        idpayment_gateway: map["idpayment_gateway"],
+        total_harga: map["total_harga"],
+        harga: map["harga"],
+        nominal_barang: map["nominal_barang"],
+        deposit_pakai: map["deposit_pakai"],
+        deposit_tambah: map["deposit_tambah"],
+        deposit_minimum: map["deposit_minimum"],
+        token: map["token"],
+        tanggal_mulai: map["tanggal_mulai"],
+        tanggal_akhir: map["tanggal_akhir"],
+        keterangan_barang: map["keterangan_barang"],
+        no_ovo: map["no_ovo"],
+        email_asuransi: map["email_asuransi"],
+        flagasuransi: map['flagasuransi'],
+        flagvoucher: map['flagvoucher']);
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +89,8 @@ class OrderProduk {
       "keterangan_barang": keterangan_barang,
       "no_ovo": no_ovo,
       "email_asuransi": email_asuransi,
+      "flagasuransi": flagasuransi,
+      "flagvoucher": flagvoucher,
     };
   }
 
@@ -108,6 +115,8 @@ class OrderProduk {
         'keterangan_barang: $keterangan_barang,'
         'no_ovo: $no_ovo,'
         'email_asuransi: $email_asuransi,'
+        'flagasuransi: $flagasuransi,'
+        'flagvoucher: $flagvoucher,'
         '}';
   }
 }

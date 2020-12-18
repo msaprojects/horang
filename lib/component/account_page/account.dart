@@ -256,7 +256,7 @@ class _AccountState extends State<Account> {
             SizedBox(height: 10.0,),
             Center(
               child: Text(
-                "Version 1.1.0.1 Debug"
+                "Version 1.1.0.2 Debug"
               ),
             )
           ],

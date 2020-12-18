@@ -702,22 +702,33 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
                                                 KonfirmPayment(
-                                                    idjenis_produk: idjenis_produk,
+                                                    flagasuransi: flagasuransi,
+                                                    flagvoucher: flagvoucher,
+                                                    idjenis_produk:
+                                                        idjenis_produk,
                                                     idlokasi: idlokasi,
                                                     jumlah_sewa: jumlah_sewa,
                                                     idasuransi: idasuransi,
                                                     idvoucher: idvoucher,
-                                                    idpayment_gateway: idpayment,
+                                                    idpayment_gateway:
+                                                        idpayment,
                                                     harga: sharga,
                                                     total_harga: stotal_harga,
                                                     deposit_tambah: sdeposit,
-                                                    deposit_pakai: stotalpointdeposit,
-                                                    deposit_minimum: stotaldeposit,
-                                                    tanggal_mulai: stanggal_mulai,
-                                                    tanggal_akhir: stanggal_akhir,
-                                                    nominal_barang: snominal_barang,
-                                                    keterangan_barang: sketerangan_barang,
-                                                    email_asuransi: email_asuransi)));
+                                                    deposit_pakai:
+                                                        stotalpointdeposit,
+                                                    deposit_minimum:
+                                                        stotaldeposit,
+                                                    tanggal_mulai:
+                                                        stanggal_mulai,
+                                                    tanggal_akhir:
+                                                        stanggal_akhir,
+                                                    nominal_barang:
+                                                        snominal_barang,
+                                                    keterangan_barang:
+                                                        sketerangan_barang,
+                                                    email_asuransi:
+                                                        email_asuransi)));
                                   });
                                 })
                           ],
