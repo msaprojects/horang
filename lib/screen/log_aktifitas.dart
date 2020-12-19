@@ -27,33 +27,33 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       // showAlertDialog(context);
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-      //     (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
     } else {
-      // _apiService.checkingToken(access_token).then((value) => setState(() {
-      //       isSuccess = value;
-      //       //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-      //       if (!isSuccess) {
-      //         _apiService
-      //             .refreshToken(refresh_token)
-      //             .then((value) => setState(() {
-      //                   var newtoken = value;
-      //                   //setting access_token dari refresh_token
-      //                   if (newtoken != "") {
-      //                     sp.setString("access_token", newtoken);
-      //                     access_token = newtoken;
-      //                   } else {
-      //                     showAlertDialog(context);
-      //                     Navigator.of(context).pushAndRemoveUntil(
-      //                         MaterialPageRoute(
-      //                             builder: (BuildContext context) =>
-      //                                 LoginPage()),
-      //                         (Route<dynamic> route) => false);
-      //                   }
-      //                 }));
-      //       }
-      //     }));
+      _apiService.checkingToken(access_token).then((value) => setState(() {
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          // showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LoginPage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
+            }
+          }));
     }
   }
 
@@ -143,6 +143,8 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 logAktifitasNotif logNotif = dataIndex[index];
+                print("dataindex $idcustomer");
+                print("dataindex $dataIndex");
                 return Card(
                   // child: Column(
                   //   mainAxisAlignment: MainAxisAlignment.start,

@@ -114,19 +114,62 @@ class _OtpScreenState extends State<OtpScreen> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    // print("Jasukeeeeeeeeeeeee $access_token");
+    print("Jasukeeeeeeeeeeeee $access_token");
+
+    if (access_token == null) {
+      warningDialog(context,
+          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
+          title: "Sesi anda berakhir !",
+          showNeutralButton: false, positiveAction: () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            (Route<dynamic> route) => false);
+      }, positiveText: "Ok");
+    } else {
+      _apiService.checkingToken(access_token).then((value) => setState(() {
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          warningDialog(context,
+                              "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
+                              title: "Sesi anda berakhir !",
+                              showNeutralButton: false, positiveAction: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        LoginPage()),
+                                (Route<dynamic> route) => false);
+                          }, positiveText: "Ok");
+                        }
+                      }));
+            } else {
+              _checkBiometric();
+              _getAvailableBiometrics();
+              _authenticate();
+            }
+          }));
+    }
   }
 
   @override
   void initState() {
-     firebaseMessaging.getToken().then((token_notifikasi) => setState(() {
+    firebaseMessaging.getToken().then((token_notifikasi) => setState(() {
           this.token_notifikasi = token_notifikasi;
         }));
-        print("token 2 "+ token_notifikasi.toString());
+    print("token 2 " + token_notifikasi.toString());
     print("Toookeeeeennnnn $access_token");
-    _checkBiometric();
-    _getAvailableBiometrics();
-    _authenticate();
+    // _checkBiometric();
+    // _getAvailableBiometrics();
+    // _authenticate();
     super.initState();
     cekToken();
   }
@@ -359,12 +402,11 @@ class _OtpScreenState extends State<OtpScreen> {
         // this.thisText = controller.text;
         // print("Gassskaaan ========> $thisText");
         print("Cek pin: $strpin");
-        
+
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
-          pin_cek: strpin,
-          token_cek: access_token,
-          token_notifikasi: token_notifikasi
-        );
+            pin_cek: strpin,
+            token_cek: access_token,
+            token_notifikasi: token_notifikasi);
         print("pin 99 $pin_cek1");
         print("Cek PIN masuk maskuh: $pin_cek1");
         _apiService.CekPin(pin_cek1).then((isSuccess) {
@@ -380,8 +422,7 @@ class _OtpScreenState extends State<OtpScreen> {
               //     ));
             } else if (!isSuccess && pinIndex >= 4) {
               print('Pin salah masku, iling iling maneh');
-              return 
-              showDialog(
+              return showDialog(
                   context: context,
                   builder: (context) {
                     Future.delayed(Duration(milliseconds: 100), () {
@@ -403,12 +444,12 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-  _confalert(){
+  _confalert() {
     final snackbar = SnackBar(
       content: Text("This is where your put data"),
       duration: Duration(milliseconds: 50),
-      );
-      Scaffold.of(context).showSnackBar(snackbar);
+    );
+    Scaffold.of(context).showSnackBar(snackbar);
   }
 
   setPin(int n, String text) {
@@ -486,7 +527,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                 Navigator.of(context).pushAndRemoveUntil(
+                Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) => LoginPage()),
                     (Route<dynamic> route) => false);
