@@ -5,6 +5,7 @@ class MystorageModel {
   String tanggal_mulai,
       tanggal_akhir,
       tanggal_order,
+      noOrder,
       kode_kontainer,
       nama,
       nama_kota,
@@ -18,6 +19,7 @@ class MystorageModel {
       this.idtransaksi,
       this.tanggal_mulai,
       this.tanggal_akhir,
+      this.noOrder,
       this.tanggal_order,
       this.kode_kontainer,
       this.nama,
@@ -34,6 +36,7 @@ class MystorageModel {
       tanggal_mulai: map['tanggal_mulai'],
       tanggal_akhir: map['tanggal_akhir'],
       tanggal_order: map['tanggal_order'],
+      noOrder: map['no_order'],
       kode_kontainer: map['kode_kontainer'],
       nama: map['nama'],
       nama_kota: map['nama_kota'],
@@ -51,6 +54,7 @@ class MystorageModel {
       "tanggal_mulai": tanggal_mulai,
       "tanggal_akhir": tanggal_akhir,
       "tanggal_order": tanggal_order,
+      "no_order": noOrder,
       "kode_kontainer": kode_kontainer,
       "nama": nama,
       "nama_kota": nama_kota,
@@ -62,7 +66,7 @@ class MystorageModel {
 
   @override
   String toString() {
-    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status}';
+    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, no_order:$noOrder, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status}';
   }
 }
 

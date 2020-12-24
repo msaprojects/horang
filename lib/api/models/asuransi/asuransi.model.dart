@@ -3,13 +3,13 @@ import 'dart:convert';
 class AsuransiModel {
   num idasuransi, status;
   num nilai;
-  String nama_asuransi, perusahaan, alamat;
+  String namaasuransi, perusahaan, alamat;
 
   AsuransiModel(
       {this.idasuransi,
       this.status,
       this.nilai,
-      this.nama_asuransi,
+      this.namaasuransi,
       this.perusahaan,
       this.alamat});
 
@@ -17,7 +17,7 @@ class AsuransiModel {
     return AsuransiModel(
       idasuransi: map['idasuransi'],
       nilai: map['nilai'],
-      nama_asuransi: map['nama_asuransi'],
+      namaasuransi: map['nama_asuransi'],
       perusahaan: map['perusahaan'],
       alamat: map['alamat'],
     );
@@ -27,7 +27,7 @@ class AsuransiModel {
     return{
       "idasuransi": idasuransi,
       "nilai": nilai,
-      "nama_asuransi": nama_asuransi,
+      "nama_asuransi": namaasuransi,
       "perusahaan": perusahaan,
       "alamat": alamat,
     };
@@ -35,7 +35,7 @@ class AsuransiModel {
 
   @override
   String toString() {
-    return 'AsuransiModel{idasuransi: $idasuransi, status: $status, nilai: $nilai, nama_asuransi: $nama_asuransi, perusahaan: $perusahaan, alamat: $alamat}';
+    return 'AsuransiModel{idasuransi: $idasuransi, status: $status, nilai: $nilai, nama_asuransi: $namaasuransi, perusahaan: $perusahaan, alamat: $alamat}';
   }
 }
 

@@ -442,6 +442,7 @@ class ApiService {
   Future<bool> checkingToken(String token) async {
     final response = await client.get("$baseUrl/ceklogin",
         headers: {"Authorization": "BEARER ${token}"});
+        print("cek cheking token ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
     } else {

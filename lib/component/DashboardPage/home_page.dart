@@ -14,6 +14,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,6 +30,8 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -72,6 +75,20 @@ class _HomePageState extends State<HomePage> {
   //   }
   //   return null;
   // }
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.refreshCompleted();
+  }
+
+  void _onloading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    getSaldo();
+    // cekToken();
+    if (mounted) {
+      setState(() {});
+      _refreshController.loadComplete();
+    }
+  }
 
   getSaldo() async {
     final response = await http.get(ApiService().urlceksaldo,
@@ -201,291 +218,295 @@ class _HomePageState extends State<HomePage> {
       child: SingleChildScrollView(
         physics: ScrollPhysics(),
         child: Column(
-          children: <Widget>[
-            Container(
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(40),
-                        constraints: BoxConstraints.expand(height: 250),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [Colors.purple, Colors.blue],
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(40),
+                          constraints: BoxConstraints.expand(height: 250),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Colors.purple, Colors.blue],
+                            ),
+                            // color: Colors.blue[400]
                           ),
-                          // color: Colors.blue[400]
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "${ucapan()}, $nama_customer",
+                                        // ucapan(),
+                                        style: GoogleFonts.inter(
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        LogAktifitasNotif()));
+                                      },
+                                      icon: (Icon(Icons.notifications)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text('SALDO POINT',
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14, color: Colors.white)),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    FutureBuilder(
+                                        future: getSaldo(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            var saldoadatidak =
+                                                snapshot.data[0]['saldo'];
+                                            return Text(
+                                              saldoadatidak.toString(),
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontSize: 35,
+                                                  fontWeight: FontWeight.bold),
+                                            );
+                                          } else if (snapshot == null) {
+                                            print("tidak ada data");
+                                            return Container(
+                                                child: Text(
+                                              "Saldo Kosong",
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold),
+                                            ));
+                                          } else {
+                                            return Container(
+                                              height: 50,
+                                              width: 50,
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          }
+                                        }),
+                                    // Text(
+                                    //   ceksaldo.toString(),
+                                    //   style: GoogleFonts.inter(
+                                    //       color: Colors.white,
+                                    //       fontSize: 35,
+                                    //       fontWeight: FontWeight.bold),
+                                    // ),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          children: [
-                            Container(
+                        Container(
+                          padding: EdgeInsets.only(left: 50, right: 50),
+                          alignment: Alignment.center,
+                          margin:
+                              EdgeInsets.only(top: 200, left: 20, right: 20),
+                          height: 100,
+                          width: MediaQuery.of(context).size.width * 2.0,
+                          // width: MediaQuery.of(context).size.width * 0.8,
+                          child: Center(
+                            child: Card(
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Flexible(
-                                    child: Text(
-                                      "${ucapan()}, $nama_customer",
-                                      // ucapan(),
-                                      style: GoogleFonts.inter(
-                                          color: Colors.white, fontSize: 14),
-                                    ),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      IconButton(
+                                          icon: Icon(Icons.refresh_rounded,
+                                              size: 30),
+                                          onPressed: () {
+                                            setState(() {
+                                              getSaldo();
+                                            });
+                                          }),
+                                      Text(
+                                        "Refresh",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14, color: Colors.black),
+                                      )
+                                    ],
                                   ),
-                                  IconButton(
-                                    color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  LogAktifitasNotif()));
-                                    },
-                                    icon: (Icon(Icons.notifications)),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text('SALDO POINT',
-                                      style: GoogleFonts.inter(
-                                          fontSize: 14, color: Colors.white)),
-                                  SizedBox(
-                                    height: 10,
+                                  VerticalDivider(
+                                    color: Colors.black.withOpacity(0.3),
                                   ),
-                                  FutureBuilder(
-                                      future: getSaldo(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          var saldoadatidak =
-                                              snapshot.data[0]['saldo'];
-                                          return Text(
-                                            saldoadatidak.toString(),
-                                            style: GoogleFonts.inter(
-                                                color: Colors.white,
-                                                fontSize: 35,
-                                                fontWeight: FontWeight.bold),
-                                          );
-                                        } else if (snapshot == null) {
-                                          print("tidak ada data");
-                                          return Container(
-                                              child: Text(
-                                            "Saldo Kosong",
-                                            style: GoogleFonts.inter(
-                                                color: Colors.white,
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold),
-                                          ));
-                                        } else {
-                                          return Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                      }),
-                                  // Text(
-                                  //   ceksaldo.toString(),
-                                  //   style: GoogleFonts.inter(
-                                  //       color: Colors.white,
-                                  //       fontSize: 35,
-                                  //       fontWeight: FontWeight.bold),
-                                  // ),
-                                  SizedBox(
-                                    height: 2,
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      IconButton(
+                                          icon: Icon(Icons.history, size: 30),
+                                          onPressed: () {
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Fitur ini masih dalam proses pengembangan"),
+                                              duration: Duration(seconds: 5),
+                                            ));
+                                          }),
+                                      Text(
+                                        "Histori",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14, color: Colors.black),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 50, right: 50),
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 200, left: 20, right: 20),
-                        height: 100,
-                        width: MediaQuery.of(context).size.width * 2.0,
-                        // width: MediaQuery.of(context).size.width * 0.8,
-                        child: Center(
-                          child: Card(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    IconButton(
-                                        icon: Icon(Icons.refresh_rounded,
-                                            size: 30),
-                                        onPressed: () {
-                                          setState(() {
-                                            getSaldo();
-                                          });
-                                        }),
-                                    Text(
-                                      "Refresh",
-                                      style: GoogleFonts.inter(
-                                          fontSize: 14, color: Colors.black),
-                                    )
-                                  ],
-                                ),
-                                VerticalDivider(
-                                  color: Colors.black.withOpacity(0.3),
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    IconButton(
-                                        icon: Icon(Icons.history, size: 30),
-                                        onPressed: () {
-                                          Scaffold.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                                "Fitur ini masih dalam proses pengembangan"),
-                                            duration: Duration(seconds: 5),
-                                          ));
-                                        }),
-                                    Text(
-                                      "Histori",
-                                      style: GoogleFonts.inter(
-                                          fontSize: 14, color: Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ],
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
 
-            // VoucherDashboard(),
-            SizedBox(
-              height: 18,
-            ),
-
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-                    child: Text(
-                      'Kontainer Aktif',
-                      style: mTitleStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                    child: SelectableText(
-                      "",
-                      // "See All...",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StorageActive()));
-                      },
-                    ),
-                  ),
-                ],
+              // VoucherDashboard(),
+              SizedBox(
+                height: 18,
               ),
-            ),
-            StorageActive(),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 10,
-              color: Colors.grey[300],
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: VoucherDashboard(),
-            ),
-            Container(
-              height: 10,
-              color: Colors.grey[300],
-            ),
-            ////////////////// SESI PRODUK ////////////////////////
-            // Container(
-            //   child: Row(
-            //     children: <Widget>[
-            //       Padding(
-            //         padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-            //         child: Text(
-            //           'Pilihan Produk',
-            //           style: mTitleStyle,
-            //         ),
-            //       ),
-            //       Padding(
-            //         padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-            //         child: SelectableText(
-            //           "See All...",
-            //           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            //           onTap: () {
-            //             Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                     builder: (context) => ProdukList()));
-            //           },
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // ProdukDashboard(),
-            ////////////////// END SESI PRODUK ////////////////////////
 
-            /////////////////// SESI LATEST ORDER ////////////////////
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 16, top: 24),
-                    child: Text(
-                      'Latest Order',
-                      style: mTitleStyle,
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
+                      child: Text(
+                        'Kontainer Aktif',
+                        style: mTitleStyle,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 160, top: 24),
-                    child: SelectableText(
-                      "See All...",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    // StorageHandler(
-                                    //       initialIndex: 2,
-                                    //     )
-                                    HistoryPage()));
-                      },
+                    Padding(
+                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+                      child: SelectableText(
+                        "",
+                        // "See All...",
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StorageActive()));
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            LatestOrderDashboard()
-            ////////////////// END SESI LATEST ORDER ////////////////////////
-          ],
+              StorageActive(),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 10,
+                color: Colors.grey[300],
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: VoucherDashboard(),
+              ),
+              Container(
+                height: 10,
+                color: Colors.grey[300],
+              ),
+              ////////////////// SESI PRODUK ////////////////////////
+              // Container(
+              //   child: Row(
+              //     children: <Widget>[
+              //       Padding(
+              //         padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
+              //         child: Text(
+              //           'Pilihan Produk',
+              //           style: mTitleStyle,
+              //         ),
+              //       ),
+              //       Padding(
+              //         padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+              //         child: SelectableText(
+              //           "See All...",
+              //           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              //           onTap: () {
+              //             Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => ProdukList()));
+              //           },
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // ProdukDashboard(),
+              ////////////////// END SESI PRODUK ////////////////////////
+
+              /////////////////// SESI LATEST ORDER ////////////////////
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 16, top: 24),
+                      child: Text(
+                        'Latest Order',
+                        style: mTitleStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 160, top: 24),
+                      child: SelectableText(
+                        "See All...",
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      // StorageHandler(
+                                      //       initialIndex: 2,
+                                      //     )
+                                      HistoryPage()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              LatestOrderDashboard()
+              ////////////////// END SESI LATEST ORDER ////////////////////////
+            ],
+          ),
         ),
-      ),
     );
   }
 

@@ -149,6 +149,11 @@ class _StorageActive extends State<StorageActive> {
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return KonfirmasiLog(
+                      noOrder: kontainerActive.noOrder,
+                      tglakhir: kontainerActive.tanggal_akhir,
+                      tglmulai: kontainerActive.tanggal_mulai,
+                      tglorder: kontainerActive.tanggal_order,
+                      keterangan: kontainerActive.keterangan,
                       kode_kontainer: kontainerActive.kode_kontainer,
                       nama_kota: kontainerActive.nama_kota,
                       idtransaksi_detail: kontainerActive.idtransaksi_detail,

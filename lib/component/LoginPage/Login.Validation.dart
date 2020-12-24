@@ -14,6 +14,7 @@ import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:crypto/crypto.dart';
 
@@ -25,6 +26,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _platformImei = 'Unknown';
+  String uniqueId = "Unknown";
+  String macAddress = "Unknown";
+
+  // String _platformVersion = 'Unknown';
+  // String _imei = 'Unknown';
+  // String _serial = 'Unknown';
+  // String _androidID = 'Unknown';
+  // Map _idMap = Map();
+
   LocalAuthentication _auth = LocalAuthentication();
   bool _isLoading = false, _obsecureText = true, _checkbio = false;
   ApiService _apiService = ApiService();
@@ -54,6 +65,32 @@ class _LoginPageState extends State<LoginPage> {
           this.token = token;
         }));
     super.initState();
+    print("jackmac111");
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async{
+    String platformImei;
+    String idunique;
+    String _macaddress;
+
+    try {
+      // _macaddress = await GetMac.macAddress;
+      platformImei = await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+      List<String> multiImei = await ImeiPlugin.getImeiMulti();
+      print(multiImei);
+      idunique = await ImeiPlugin.getId();
+    }on PlatformException{
+      // platformImei = 'failed vetsion';
+      macAddress = 'gagal mendapatkan mac address';
+    }
+    if(!mounted) return;
+    setState(() {
+      print("jackmac");
+      // macAddress = _macaddress;
+      _platformImei = platformImei;
+      uniqueId = idunique;
+    });
   }
 
   void getDataFcm(Map<String, dynamic> message) {
@@ -79,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print("Token Firebase : " + token);
+    print("imeinya : " + _platformImei +"||"+ uniqueId);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -97,6 +134,18 @@ class _LoginPageState extends State<LoginPage> {
                     "LOGIN",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  // Text(
+                  //   'Mac addressnya : $macAddress',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                  // Text(
+                  //   'serial code $_serial',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
+                  // Text(
+                  //   'andro id $_androidID',
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
                   SizedBox(
                     height: size.height * 0.03,
                   ),

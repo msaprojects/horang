@@ -47,6 +47,12 @@ dependencies:
   syncfusion_flutter_datepicker: ^18.3.47-beta
   fluttertoast: ^7.1.4
   firebase_messaging: ^7.0.3
+  intl: ^0.16.1
+  imei_plugin: ^1.2.0
+  pull_to_refresh: ^1.6.3
+  # get_mac: ^0.0.1
+  # android_multiple_identifier: ^1.0.3
+  # path_provider: ^1.6.24
 #  firebase_core: ^0.5.2+1
 
 dev_dependencies:

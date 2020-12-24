@@ -31,6 +31,7 @@ class _StorageActive extends State<StorageActive1>
       idtransaksi,
       idtransaksi_detail,
       kode_kontainer,
+      noOrder,
       nama_kota,
       nama_lokasi,
       tanggal_order,
@@ -159,6 +160,7 @@ class _StorageActive extends State<StorageActive1>
                                       KonfirmasiLog(
                                         kode_kontainer: myStorage.kode_kontainer,
                                         nama_kota: myStorage.nama_kota,
+                                        noOrder: myStorage.noOrder,
                                         // idtransaksi_detail: ,
                                         idtransaksi_detail: myStorage.idtransaksi_detail,
                                         idtransaksi: myStorage.idtransaksi,
@@ -197,6 +199,25 @@ class _StorageActive extends State<StorageActive1>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'No. Order : ',
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14),
+                                            ),
+                                            Text(
+                                              myStorage.noOrder.toString(),
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,

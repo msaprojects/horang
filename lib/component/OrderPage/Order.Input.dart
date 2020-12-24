@@ -75,6 +75,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   TextEditingController _vouchervalue = TextEditingController();
   TextEditingController _keteranganbarang = TextEditingController();
   TextEditingController _nominalbarang = TextEditingController();
+  // final currency = NumberFormat("#,##0","id");
   // final _nominalbarang = MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   bool _fieldDurasiOrder = false,
       _fieldNote = false,
@@ -470,17 +471,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 padding: const EdgeInsets.only(
                                     left: 30, right: 30, top: 5),
                                 child: TextField(
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                                   decoration: InputDecoration(
                                     hintText: 'Masukkan Total Nominal Barang',
                                     border: const OutlineInputBorder(),
                                   ),
                                   controller: _nominalbarang,
-                                  inputFormatters: [
+                                  
+                                  inputFormatters: <TextInputFormatter>[
+                                    
                                     // ignore: deprecated_member_use
-                                    WhitelistingTextInputFormatter.digitsOnly,
+                                    WhitelistingTextInputFormatter.digitsOnly, 
+                                    
                                   ],
                                   onChanged: (value) {
+                                    print("tes nom barang sss "+ _nominalbarang.toString());
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != _fieldnominalbarang) {
                                       setState(() =>
@@ -760,5 +765,24 @@ class _FormDetailOrder extends State<FormInputOrder> {
             );
           }),
     );
+  }
+}
+
+class CurrencyFormat extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // TODO: implement formatEditUpdate
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+    double value = double.parse(newValue.text);
+    final money = NumberFormat("#.###.###,00", "id");
+    // final money = NumberFormat.currency(locale: 'id',symbol: 'Rp. ', decimalDigits: 0);
+    String newText = money.format(value);
+
+    return newValue.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newText.length));
   }
 }

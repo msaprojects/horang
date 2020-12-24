@@ -160,7 +160,7 @@ class _UbahProfileState extends State<UbahProfile> {
   }
 
   Widget _buildIsifield(List<Customers> customer) {
-    print("santzz ${customer[0].nama_kota}");
+    print("santzz ${customer[0].namakota}");
     idcustomer = customer[0].idcustomer;
     return Container(
         child: SingleChildScrollView(
@@ -174,11 +174,11 @@ class _UbahProfileState extends State<UbahProfile> {
                 children: <Widget>[
                   _buildTextFieldNoKtp(customer[0].noktp),
                   SizedBox(height: 10),
-                  _buildTextFieldNoHp(customer[0].no_hp),
+                  _buildTextFieldNoHp(customer[0].nohp),
                   SizedBox(height: 10),
                   _buildTextFieldEmail(customer[0].email),
                   SizedBox(height: 10),
-                  _buildTextFieldNamaLengkap(customer[0].nama_customer),
+                  _buildTextFieldNamaLengkap(customer[0].namacustomer),
                   SizedBox(height: 10),
                   _buildTextFieldAlamat(customer[0].alamat),
                   SizedBox(height: 10),
@@ -187,7 +187,7 @@ class _UbahProfileState extends State<UbahProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        _buildKomboKota(customer[0].nama_kota.toString()),
+                        _buildKomboKota(customer[0].namakota.toString()),
                         // Text("kamu memilih kota $valKota"),
                       ],
                     ),
@@ -230,7 +230,7 @@ class _UbahProfileState extends State<UbahProfile> {
                           // no_hp: _controllerNoHp.text.toString(),
                           // email: _controllerEmail.text.toString(),
                           // noktp: _controllerNoktp.text.toString(),
-                          nama_customer: _controllerNamaLengkap.text.toString(),
+                          namacustomer: _controllerNamaLengkap.text.toString(),
                           // no_hp: _controllerNoHp.text.toString(),
                           // email: _controllerEmail.text.toString(),
                           noktp: _controllerNoktp.text.toString(),

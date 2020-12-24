@@ -1,6 +1,5 @@
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,12 +12,12 @@ import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class pinauth extends StatefulWidget {
+class Pinauth extends StatefulWidget {
   @override
-  _pinauthState createState() => _pinauthState();
+  _PinauthState createState() => _PinauthState();
 }
 
-class _pinauthState extends State<pinauth> {
+class _PinauthState extends State<Pinauth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +54,23 @@ class _OtpScreenState extends State<OtpScreen> {
   LocalAuthentication auth = LocalAuthentication();
   List<BiometricType> _availableBiometrics;
   String autherized = "Not auth";
+
+  // Future<void> _deleteCacheDir() async {
+  //   final cacheDir = await getTemporaryDirectory();
+
+  //   if (cacheDir.existsSync()) {
+  //     cacheDir.deleteSync(recursive: true);
+  //   }
+  // }
+
+  // Future<void> _deleteAppDir() async {
+  //   final appDir = await getApplicationSupportDirectory();
+
+  //   if (appDir.existsSync()) {
+  //     appDir.deleteSync(recursive: true);
+  //   }
+  // }
+
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
     bool canCheckBiometrics;
@@ -117,6 +133,7 @@ class _OtpScreenState extends State<OtpScreen> {
     print("Jasukeeeeeeeeeeeee $access_token");
 
     if (access_token == null) {
+      print("cek debug 1");
       warningDialog(context,
           "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
           title: "Sesi anda berakhir !",
@@ -126,23 +143,34 @@ class _OtpScreenState extends State<OtpScreen> {
             (Route<dynamic> route) => false);
       }, positiveText: "Ok");
     } else {
+      print("cek debug 2");
       _apiService.checkingToken(access_token).then((value) => setState(() {
+            print("cek debug 3");
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
+              print("cek debug 4");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
+                          print("cek new tokennya ${newtoken.toString()}");
+                          print("cek debug 5");
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
+                          _checkBiometric();
+                          _getAvailableBiometrics();
+                          _authenticate();
                         } else {
+                          print("cek debug 6");
                           warningDialog(context,
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
-                              title: "Sesi anda berakhir !",
+                              title: "Sesi anda berakhir 1!",
                               showNeutralButton: false, positiveAction: () {
+                            // _deleteAppDir();
+                            // _deleteCacheDir();
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
@@ -152,9 +180,13 @@ class _OtpScreenState extends State<OtpScreen> {
                         }
                       }));
             } else {
+              print("cek debug 7");
+              // print(access_token);
+              // print(refresh_token);
               _checkBiometric();
               _getAvailableBiometrics();
               _authenticate();
+              // buildlist__();
             }
           }));
     }
@@ -187,7 +219,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("token 3 $token_notifikasi");
+    // print("access token $access_token");
+    // print("refresh token $refresh_token");
     return SafeArea(
       child: Column(
         children: [
@@ -213,6 +246,31 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
     );
   }
+
+  // buildlist__() {
+  //   return Column(
+  //     children: [
+  //       buildExitButton(),
+  //       Expanded(
+  //           child: Container(
+  //         alignment: Alignment(0, 0.5),
+  //         padding: EdgeInsets.symmetric(horizontal: 16.0),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             // pinIndexSetup(),
+  //             buildSecurityText(),
+  //             SizedBox(
+  //               height: 40.0,
+  //             ),
+  //             buildPinRow(),
+  //           ],
+  //         ),
+  //       )),
+  //       buildNumPad(),
+  //     ],
+  //   );
+  // }
 
   buildNumPad() {
     return Expanded(

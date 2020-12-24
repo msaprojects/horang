@@ -43,7 +43,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => pinauth(),
+              builder: (context) => Pinauth(),
             ));
       }
     }

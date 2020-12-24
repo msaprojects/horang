@@ -169,7 +169,7 @@ class _TambahProfileState extends State<TambahProfile> {
                             }
                             setState(() => _isLoading = true);
                             Customers data = Customers(
-                              nama_customer:
+                              namacustomer:
                                   _controllerNamaLengkap.text.toString(),
                               noktp: _controllerNoKtp.text.toString(),
                               alamat: _controllerAlamat.text.toString(),

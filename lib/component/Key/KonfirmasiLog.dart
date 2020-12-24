@@ -24,6 +24,7 @@ class KonfirmasiLog extends StatefulWidget {
       idtransaksi_detail,
       nama,
       idtransaksi,
+      noOrder,
       tglmulai,
       tglakhir,
       tglorder,
@@ -33,6 +34,7 @@ class KonfirmasiLog extends StatefulWidget {
       this.idtransaksi,
       this.nama,
       this.kode_kontainer,
+      this.noOrder,
       this.tglmulai,
       this.tglakhir,
       this.tglorder,
@@ -61,6 +63,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       nama_kota1,
       status1,
       nama1,
+      noOrder1,
       tglmulai,
       tglakhir,
       tglorder,
@@ -115,6 +118,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     idtransaksi_det = widget.idtransaksi_detail;
     idtransaksii = widget.idtransaksi;
     nama1 = widget.nama;
+    noOrder1 = widget.noOrder;
     tglmulai = widget.tglmulai;
     tglorder = widget.tglorder;
     tglakhir = widget.tglakhir;
@@ -181,6 +185,12 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                 children: <Widget>[
                   SizedBox(
                     height: 10,
+                  ),
+                   Text(noOrder1.toString(),
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    height: 3,
                   ),
                   Text(nama1.toString(),
                       style: GoogleFonts.inter(

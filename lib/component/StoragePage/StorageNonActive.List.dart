@@ -29,6 +29,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
       nama,
       nama_customer,
       keterangan,
+      noOrder,
       kode_kontainer,
       nama_kota,
       nama_lokasi,
@@ -155,6 +156,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
                           _openAlertDialog(
                             context,
                             myStorage.idtransaksi_detail,
+                            myStorage.noOrder.toString(),
                             myStorage.kode_kontainer.toString(),
                             myStorage.nama_kota,
                             myStorage.nama,
@@ -189,6 +191,25 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
+                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'No. Order : ',
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14),
+                                            ),
+                                            Text(
+                                              myStorage.noOrder.toString(),
+                                              style: GoogleFonts.inter(
+                                                  fontSize: 14),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -329,7 +350,8 @@ class _StorageNonActive extends State<StorageNonActive1> {
   void _openAlertDialog(
       BuildContext context,
       int idtransaksi_detail,
-      String kode_kontainer,
+      String noOrder,
+      kode_kontainer,
       nama_kota,
       nama,
       nama_lokasi,
@@ -344,7 +366,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
           return AlertDialog(
             content: new Container(
               width: 260.0,
-              height: 300.0,
+              height: 350.0,
               decoration: new BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: const Color(0xFFFFFF),
@@ -366,6 +388,11 @@ class _StorageNonActive extends State<StorageNonActive1> {
                           Divider(),
                           SizedBox(
                             height: 10,
+                          ),
+                          Text("No. Order : " + noOrder.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
                           ),
                           Text("Kode Kontainer : " + kode_kontainer.toString(),
                               style: GoogleFonts.lato(fontSize: 14)),
@@ -575,7 +602,8 @@ class _StorageNonActive extends State<StorageNonActive1> {
   void _alertOpen(
       BuildContext context,
       int idtransaksi_detail,
-      String kode_kontainer,
+      String noorder,
+      kode_kontainer,
       nama_kota,
       nama,
       nama_lokasi,
