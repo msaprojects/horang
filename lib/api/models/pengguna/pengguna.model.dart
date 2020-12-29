@@ -3,9 +3,10 @@ import 'dart:convert';
 class PenggunaModel{
 
   int idpengguna, status;
-  String email, no_hp, password, notification_token, token_mail;
+  String uuid, email, no_hp, password, notification_token, token_mail;
 
   PenggunaModel({
+    this.uuid,
     this.idpengguna = 0,
     this.status = 0,
     this.email,
@@ -18,6 +19,7 @@ class PenggunaModel{
   factory PenggunaModel.fromJson(Map<String, dynamic> map){
     return PenggunaModel(
       idpengguna: map["idpengguna"],
+      uuid: map["uuid"],
       status: map["status"],
       email: map["email"],
       no_hp: map["no_hp"],
@@ -30,6 +32,7 @@ class PenggunaModel{
   Map<String, dynamic> toJson(){
     return{
       "idpengguna": idpengguna,
+      "uuid": uuid,
       "status": status,
       "email": email,
       "no_hp": no_hp,
@@ -41,7 +44,7 @@ class PenggunaModel{
 
   @override
   String toString() {
-    return 'PenggunaModel{idpengguna: $idpengguna, status: $status, email: $email, no_hp: $no_hp, password: $password, notification_token: $notification_token, token_mail: $token_mail}';
+    return 'PenggunaModel{idpengguna: $idpengguna, uuid: $uuid, status: $status, email: $email, no_hp: $no_hp, password: $password, notification_token: $notification_token, token_mail: $token_mail}';
   }
 }
 
