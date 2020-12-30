@@ -17,10 +17,13 @@ class BodyWelcomePage extends StatefulWidget {
 }
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
+  var pin;
   bool _showbutton = false;
   cekToken() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var access_token = sp.getString("access_token");
+    pin = sp.getString("pin");
+    print("PINNYA ADA NGG $pin");
     print("MASUK CEK TOKEN $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
@@ -28,23 +31,27 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         _showbutton = true;
         Timer(
             Duration(seconds: 4),
-            () => Navigator.push(
+            () => Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => LoginPage())));
       });
     } else {
       _showbutton = false;
-      if(Platform.isIOS){
+      if (Platform.isIOS) {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LoginPage(),
             ));
-      }else if (Platform.isAndroid){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Pinauth(),
-            ));
+      } else if (Platform.isAndroid) {
+        if (pin != null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Pinauth(),
+              ));
+        } else {
+          return true;
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -135,69 +136,69 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    SvgPicture.asset(
+                    Image.asset(
                       "assets/image/logogudang.png",
                       height: 150,
                       width: 150,
                     ),
                     _buildTextFieldEmail(), //textbox username (email / no hp)
                     _buildTextFieldPassword(), //textbox password
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0),
-                          child: Container(
-                              child: Row(
-                            children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Reset(
-                                                tipe: "ResendEmail",
-                                                // resendemail: Forgot_Password,
-                                              )));
-                                },
-                                child: new Text(
-                                  "Resend Email",
-                                  style: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Reset(
-                                                // resetpass: Forgot_Password,
-                                                tipe: "ResetPassword",
-                                              )));
-                                },
-                                child: new Text(
-                                  "Reset Password",
-                                  style: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          )),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //   children: <Widget>[
+                    //     Padding(
+                    //       padding: EdgeInsets.only(left: 0, right: 0),
+                    //       child: Container(
+                    //           child: Row(
+                    //         children: <Widget>[
+                    //           InkWell(
+                    //             onTap: () {
+                    //               Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                       builder: (context) => Reset(
+                    //                             tipe: "ResendEmail",
+                    //                             // resendemail: Forgot_Password,
+                    //                           )));
+                    //             },
+                    //             child: new Text(
+                    //               "Resend Email",
+                    //               style: GoogleFonts.lato(
+                    //                   fontSize: 14,
+                    //                   fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //           SizedBox(
+                    //             width: 30,
+                    //           ),
+                    //           InkWell(
+                    //             onTap: () {
+                    //               Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                       builder: (context) => Reset(
+                    //                             // resetpass: Forgot_Password,
+                    //                             tipe: "ResetPassword",
+                    //                           )));
+                    //             },
+                    //             child: new Text(
+                    //               "Reset Password",
+                    //               style: GoogleFonts.lato(
+                    //                   fontSize: 14,
+                    //                   fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       )),
+                    //     )
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       width: size.width * 0.8,
@@ -231,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                             print("kane $encrypt");
                             print("///---///" + email + "///---///" + password);
                             PenggunaModel pengguna = PenggunaModel(
-                                uuid: uid,
+                                // uuid: uid,
                                 email: email,
                                 password: password,
                                 status: 0,
@@ -275,46 +276,83 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    // Container(
-                    //   height: 100,
-                    //   // width: 100,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       Column(
-                    //         children: [
-                    //           Image.asset(
-                    //             'assets/image/emails.png',
-                    //             height: 70,
-                    //             width: 70,
-                    //           ),
-                    //           Text(
-                    //             "Resend",
-                    //             style: GoogleFonts.lato(fontSize: 10),
-                    //           )
-                    //         ],
-                    //       ),
-                    //       VerticalDivider(
-                    //         indent: 15,
-                    //         endIndent: 15,
-                    //         thickness: 0.5,
-                    //         color: Colors.black26,
-                    //       ),
-                    //       Column(
-                    //         children: [
-                    //           Image.asset(
-                    //             'assets/image/revision.png',
-                    //             width: 70,
-                    //             height: 70,
-                    //           ),
-                    //           Text(
-                    //             "Reset",
-                    //             style: GoogleFonts.lato(fontSize: 10),
-                    //           )
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
+                    Row(children: <Widget>[
+                      Expanded(
+                          child: Divider(
+                        thickness: 1,
+                        indent: 20,
+                        endIndent: 12,
+                      )),
+                      Text(
+                        "Ada masalah login ?",
+                        style: GoogleFonts.lato(),
+                      ),
+                      Expanded(
+                          child: Divider(
+                        thickness: 1,
+                        indent: 12,
+                        endIndent: 20,
+                      )),
+                    ]),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(29),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Reset(
+                                            tipe: "ResendEmail",
+                                            // resendemail: Forgot_Password,
+                                          )));
+                            },
+                            child: Text(
+                              "RESEND EMAIL",
+                              style: GoogleFonts.lato(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            color: Colors.purple[100],
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 30),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(29),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Reset(
+                                            // resetpass: Forgot_Password,
+                                            tipe: "ResetPassword",
+                                          )));
+                            },
+                            child: Text("RESET PASSWORD",
+                                style: GoogleFonts.lato(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
+                            color: Colors.purple[100],
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 25),
+                          ),
+                        )
+                      ],
+                    )
+                    // SizedBox(
+                    //   height: 10,
                     // ),
                   ],
                 ),
