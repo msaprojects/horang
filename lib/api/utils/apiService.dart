@@ -85,7 +85,8 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: PostProdukModelToJson(data),
     );
-    response.body;
+    // response.body;
+    print(response.statusCode.toString()+" -- "+response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -157,8 +158,9 @@ class ApiService {
   Future<List<HistoryModel>> listHistory(String token) async {
     final response = await client
         .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
-    print("TOKEN HISTORY : "+token);
+    // print(response.statusCode.toString()+" - TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
+      print("masuk"+response.body);
       return HistoryFromJson(response.body);
     } else {
       return null;

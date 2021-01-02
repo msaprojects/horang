@@ -41,6 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
+            print('history cek token '+value.toString()+" -- "+access_token);
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
