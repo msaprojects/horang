@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Token{
-  int idcustomer, pin;
+  num idcustomer, pin;
   String message, access_token, refresh_token, nama_customer;
 
   Token({

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -25,10 +27,37 @@ class _RegistrasiState extends State<RegistrasiPage> {
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerPasswordRetype = TextEditingController();
 
+  String uniqueId = "Unknown";
+
   void _toggle() {
     setState(() {
       _obsecureText = !_obsecureText;
       _obsecureText1 = !_obsecureText1;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    String platformImei;
+    String idunique;
+
+    try {
+      platformImei =
+      await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+      List<String> multiImei = await ImeiPlugin.getImeiMulti();
+      print(multiImei);
+      idunique = await ImeiPlugin.getId();
+    } on PlatformException {
+      uniqueId = 'gagal mendapatkan mac UUID';
+    }
+    if (!mounted) return;
+    setState(() {
+      uniqueId = idunique;
     });
   }
 
@@ -104,12 +133,15 @@ class _RegistrasiState extends State<RegistrasiPage> {
                             } else {
                               setState(() => _isLoading = true);
                               PenggunaModel pengguna = PenggunaModel(
+                                  uuid: uniqueId,
                                   email: email,
-                                  no_hp: nohp,
                                   password: password,
+                                  no_hp: nohp,
                                   status: 0,
                                   notification_token: "0",
-                                  token_mail: "0");
+                                  token_mail: "0",
+                                  keterangan: "Uji Coba");
+                              print("REGISTRASI : "+pengguna.toString());
                               _apiService.signup(pengguna).then((isSuccess) {
                                 if (isSuccess) {
                                   _controllerEmail.clear();

@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -17,7 +15,6 @@ import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:crypto/crypto.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -27,9 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _platformImei = 'Unknown';
   String uniqueId = "Unknown";
-  String macAddress = "Unknown";
 
   LocalAuthentication _auth = LocalAuthentication();
   bool _isLoading = false, _obsecureText = true, _checkbio = false;
@@ -75,14 +70,10 @@ class _LoginPageState extends State<LoginPage> {
       print(multiImei);
       idunique = await ImeiPlugin.getId();
     } on PlatformException {
-      // platformImei = 'failed vetsion';
-      macAddress = 'gagal mendapatkan mac address';
+      uniqueId = 'gagal mendapatkan mac UUID';
     }
     if (!mounted) return;
     setState(() {
-      print("jackmac");
-      // macAddress = _macaddress;
-      _platformImei = platformImei;
       uniqueId = idunique;
     });
   }
@@ -110,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("imeinya : " + _platformImei + "||" + uniqueId);
+    print("UUID : "+uniqueId);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -127,12 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Text(
                       "LOGIN",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
-                    // Text(
-                    //   'andro id $_androidID',
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
                     SizedBox(
                       height: size.height * 0.03,
                     ),
@@ -142,70 +130,14 @@ class _LoginPageState extends State<LoginPage> {
                       width: 150,
                     ),
                     _buildTextFieldEmail(), //textbox username (email / no hp)
-                    _buildTextFieldPassword(), //textbox password
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //   children: <Widget>[
-                    //     Padding(
-                    //       padding: EdgeInsets.only(left: 0, right: 0),
-                    //       child: Container(
-                    //           child: Row(
-                    //         children: <Widget>[
-                    //           InkWell(
-                    //             onTap: () {
-                    //               Navigator.push(
-                    //                   context,
-                    //                   MaterialPageRoute(
-                    //                       builder: (context) => Reset(
-                    //                             tipe: "ResendEmail",
-                    //                             // resendemail: Forgot_Password,
-                    //                           )));
-                    //             },
-                    //             child: new Text(
-                    //               "Resend Email",
-                    //               style: GoogleFonts.lato(
-                    //                   fontSize: 14,
-                    //                   fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //           SizedBox(
-                    //             width: 30,
-                    //           ),
-                    //           InkWell(
-                    //             onTap: () {
-                    //               Navigator.push(
-                    //                   context,
-                    //                   MaterialPageRoute(
-                    //                       builder: (context) => Reset(
-                    //                             // resetpass: Forgot_Password,
-                    //                             tipe: "ResetPassword",
-                    //                           )));
-                    //             },
-                    //             child: new Text(
-                    //               "Reset Password",
-                    //               style: GoogleFonts.lato(
-                    //                   fontSize: 14,
-                    //                   fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       )),
-                    //     )
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
+                    _buildTextFieldPassword(), //
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       width: size.width * 0.8,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(29),
                         child: FlatButton(
-                          child: Text("LOGIN"), // button login
+                          child: Text(uniqueId), // button login
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 40),
@@ -222,22 +154,17 @@ class _LoginPageState extends State<LoginPage> {
                             }
                             setState(() => _isLoading = true);
                             String email = _controllerEmail.text.toString();
-                            String uid = uniqueId;
-                            // String email = sha256.convert(bytes1)
-                            // String email = _controllerEmail.text.toString();
                             String password =
                                 _controllerPassword.text.toString();
-                            var bytes1 = utf8.encode(password);
-                            var encrypt = sha256.convert(bytes1);
-                            print("kane $encrypt");
                             print("///---///" + email + "///---///" + password);
                             PenggunaModel pengguna = PenggunaModel(
-                                // uuid: uid,
+                                uuid: uniqueId,
                                 email: email,
                                 password: password,
                                 status: 0,
                                 notification_token: token,
-                                token_mail: "0");
+                                token_mail: "0",
+                                keterangan: "Uji Coba");
                             print("Post to Pengguna : " + pengguna.toString());
                             _apiService.xenditUrl();
                             _apiService.loginIn(pengguna).then((isSuccess) {
@@ -252,9 +179,6 @@ class _LoginPageState extends State<LoginPage> {
                                 errorDialog(context,
                                     "Periksa kembali username dan password anda",
                                     title: "Login Gagal");
-//                              _scaffoldState.currentState.showSnackBar(SnackBar(
-//                                content: Text("${_apiService.responseCode.mMessage}"),
-//                              ));
                               }
                             });
                           },
@@ -276,79 +200,90 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 20,
-                        endIndent: 12,
-                      )),
-                      Text(
-                        "Ada masalah login ?",
-                        style: GoogleFonts.lato(),
-                      ),
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 12,
-                        endIndent: 20,
-                      )),
-                    ]),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(29),
-                          child: FlatButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Reset(
-                                            tipe: "ResendEmail",
-                                            // resendemail: Forgot_Password,
-                                          )));
-                            },
-                            child: Text(
-                              "RESEND EMAIL",
-                              style: GoogleFonts.lato(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            color: Colors.purple[100],
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 30),
-                          ),
+                        FlatButton(
+                          child: Text("Ganti Perangkat"),
+                          color: Colors.deepPurpleAccent,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Reset(
+                                          tipe: "ResetDevice",
+                                        )));
+                          },
                         ),
-                        SizedBox(
-                          width: 10,
+                        FlatButton(
+                          child: Text("Kirim Email Validasi"),
+                          color: Colors.deepPurpleAccent,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Reset(
+                                          tipe: "ResendEmail",
+                                        )));
+                          },
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(29),
-                          child: FlatButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Reset(
-                                            // resetpass: Forgot_Password,
-                                            tipe: "ResetPassword",
-                                          )));
-                            },
-                            child: Text("RESET PASSWORD",
-                                style: GoogleFonts.lato(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
-                            color: Colors.purple[100],
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 25),
-                          ),
-                        )
+                        FlatButton(
+                          child: Text("Reset Password"),
+                          color: Colors.deepPurpleAccent,
+                          textColor: Colors.white,
+                          onPressed: () {},
+                        ),
+                        // ClipRRect(
+                        //   borderRadius: BorderRadius.circular(29),
+                        //   child: FlatButton(
+                        //     onPressed: () {
+                        //       Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => Reset(
+                        //                     tipe: "ResendEmail",
+                        //                     // resendemail: Forgot_Password,
+                        //                   )));
+                        //     },
+                        //     child: Text(
+                        //       "RESEND EMAIL",
+                        //       style: GoogleFonts.lato(
+                        //           fontSize: 12,
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.white),
+                        //     ),
+                        //     color: Colors.purple[100],
+                        //     padding: EdgeInsets.symmetric(
+                        //         vertical: 20, horizontal: 30),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   width: 10,
+                        // ),
+                        // ClipRRect(
+                        //   borderRadius: BorderRadius.circular(29),
+                        //   child: FlatButton(
+                        //     onPressed: () {
+                        //       Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => Reset(
+                        //                     // resetpass: Forgot_Password,
+                        //                     tipe: "ResetPassword",
+                        //                   )));
+                        //     },
+                        //     child: Text("L",
+                        //         style: GoogleFonts.lato(
+                        //             fontSize: 12,
+                        //             fontWeight: FontWeight.bold,
+                        //             color: Colors.white)),
+                        //     color: Colors.purple[100],
+                        //     padding: EdgeInsets.symmetric(
+                        //         vertical: 20, horizontal: 25),
+                        //   ),
+                        // )
                       ],
                     )
                     // SizedBox(

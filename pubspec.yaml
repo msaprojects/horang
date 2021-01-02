@@ -55,7 +55,7 @@ dependencies:
   # get_mac: ^0.0.1
   # android_multiple_identifier: ^1.0.3
   # path_provider: ^1.6.24
-#  firebase_core: ^0.5.2+1
+  firebase_core: ^0.5.2+1
 
 dev_dependencies:
   flutter_test:

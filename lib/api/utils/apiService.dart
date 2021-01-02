@@ -34,7 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  final String baseUrl = "https://server.horang.id:9993/api/";
+  final String baseUrl = "http://192.168.1.207:9992/api/";
   // final String baseUrl = "http://server.horang.id:9992/api/";
   Client client = Client();
   // ResponseCode responseCode;
@@ -157,6 +157,7 @@ class ApiService {
   Future<List<HistoryModel>> listHistory(String token) async {
     final response = await client
         .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
+    print("TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
       return HistoryFromJson(response.body);
     } else {
@@ -423,6 +424,18 @@ class ApiService {
   Future<bool> ResendEmail(Forgot_Password data) async {
     final response = await client.post(
       "$baseUrl/resendemailaktivasi",
+      headers: {"Content-type": "application/json"},
+      body: ForgotPassToJson(data),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  Future<bool> LostDevice(Forgot_Password data) async {
+    final response = await client.post(
+      "$baseUrl/lostdevice",
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );

@@ -1,28 +1,29 @@
 import 'dart:convert';
 
 class Forgot_Password{
-  String email;
+  String email, uuid;
 
   Forgot_Password({
-    this.email
+    this.email,
+    this.uuid
   });
 
   factory Forgot_Password.fromJson(Map<String, dynamic> map){
     return Forgot_Password(
-      email: map['email']
+      email: map['email'],
+        uuid: map['uuid']
     );
   }
   Map<String, dynamic> toJson(){
     return{
-      "email": email
+      "email": email,
+      "uuid": uuid
     };
   }
-
   @override
-  String toString(){
-    return 'Pengguna{email: $email}';
+  String toString() {
+    return 'Forgot_Password{email: $email, uuid: $uuid}';
   }
-
 }
 
 List<Forgot_Password> ForgotPassFromJson(String jsonData){

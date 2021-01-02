@@ -386,7 +386,6 @@ class _ProdukList extends State<ProdukList> {
                   color: Colors.blue,
                   onPressed: () {
                     setState(() {
-                      // print("Val Kota$valKota");
                       FlagCari = 1;
                       _search(context);
                     });
@@ -408,6 +407,7 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
+    print("PRODUK DATA : "+data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),

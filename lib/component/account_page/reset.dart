@@ -1,8 +1,10 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -18,18 +20,34 @@ class Reset extends StatefulWidget {
 class _ResetState extends State<Reset> {
   bool _isLoading = false, _email, _isFieldEmail;
   String emails, tipes, judul;
+  String uniqueId = "Unknown";
   TextEditingController _controlleremail = TextEditingController();
   ApiService _apiService = ApiService();
 
+  Future<void> initPlatformState() async {
+    String platformImei;
+    String idunique;
+
+    try {
+      platformImei =
+          await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+      List<String> multiImei = await ImeiPlugin.getImeiMulti();
+      print(multiImei);
+      idunique = await ImeiPlugin.getId();
+    } on PlatformException {
+      uniqueId = 'gagal mendapatkan mac UUID';
+    }
+    if (!mounted) return;
+    setState(() {
+      uniqueId = idunique;
+    });
+  }
+
   @override
   void initState() {
-    // if (widget.respass != null) {
-    //   _isFieldEmail = true;
-    //   _controlleremail.text = widget.respass.email;
-    // }
-    print("Yuhuuu : " + widget.tipe);
     tipes = widget.tipe;
     super.initState();
+    initPlatformState();
   }
 
   @override
@@ -40,6 +58,8 @@ class _ResetState extends State<Reset> {
       judul = "Reset Password";
     } else if (tipes == "ResetPin") {
       judul = "Reset Pin";
+    } else if (tipes == "ResetDevice") {
+      judul = "Lost Device";
     }
     return Scaffold(
       appBar: AppBar(
@@ -103,8 +123,9 @@ class _ResetState extends State<Reset> {
                         onPressed: () {
                           setState(() => _isLoading = true);
                           Forgot_Password reset = Forgot_Password(
-                              email: _controlleremail.text.toString());
-
+                              email: _controlleremail.text.toString(),
+                              uuid: uniqueId);
+                          print(reset.toString());
                           if (widget.respass == null) {
                             if (tipes == "ResendEmail") {
                               _apiService.ResendEmail(reset).then((isSuccess) {
@@ -120,7 +141,8 @@ class _ResetState extends State<Reset> {
                                         (route) => false);
                                   });
                                 } else {
-                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
+                                  errorDialog(context,
+                                      "Data gagal disimpan, silahkan hubungi admin !");
                                 }
                               });
                             } else if (tipes == "ResetPassword") {
@@ -137,11 +159,8 @@ class _ResetState extends State<Reset> {
                                         (route) => false);
                                   });
                                 } else {
-                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
-                                  // print('gagal');
-                                  // _scaffoldState.currentState.showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text("Submit data gagal")));
+                                  errorDialog(context,
+                                      "Data gagal disimpan, silahkan hubungi admin !");
                                 }
                               });
                             } else if (tipes == "ResetPin") {
@@ -158,10 +177,26 @@ class _ResetState extends State<Reset> {
                                         (route) => false);
                                   });
                                 } else {
-                                  errorDialog(context, "Data gagal disimpan, silahkan hubungi admin !");
-                                  // _scaffoldState.currentState.showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text("Submit data gagal")));
+                                  errorDialog(context,
+                                      "Data gagal disimpan, silahkan hubungi admin !");
+                                }
+                              });
+                            } else if (tipes == "ResetDevice") {
+                              _apiService.LostDevice(reset).then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (isSuccess) {
+                                  successDialog(context,
+                                      "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
+                                      showNeutralButton: false,
+                                      positiveText: "OK", positiveAction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) => false);
+                                  });
+                                } else {
+                                  errorDialog(context,
+                                      "Data gagal disimpan, silahkan hubungi admin !");
                                 }
                               });
                             }

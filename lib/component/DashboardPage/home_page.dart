@@ -103,10 +103,6 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    // print("Hasil token from login : "+refresh_token);
-    print(sp.getString("access_token") +
-        " ---///--- " +
-        sp.getString("refresh_token"));
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
 
     if (idcustomer.toString() == '0') {
