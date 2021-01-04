@@ -34,8 +34,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  final String baseUrl = "http://192.168.1.207:9992/api/";
-  // final String baseUrl = "http://server.horang.id:9992/api/";
+  // final String baseUrl = "http://192.168.1.207:9992/api/";
+  final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;

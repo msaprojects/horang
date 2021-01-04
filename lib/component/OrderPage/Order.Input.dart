@@ -34,7 +34,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   bool asuransi = true;
   int asuransie = 1;
   int minimaldeposit = 3; //query dari setting minimal hari deposit
-  double nomasuransi;
+  num nomasuransi;
   var email_asuransi;
   double nomdeclarebarang = 0.00;
 
@@ -86,6 +86,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void getAsuransi() async {
     final response = await http.get(ApiService().urlasuransi,
         headers: {"Authorization": "BEARER ${access_token}"});
+    print("Get Id asuransi : "+response.body);
     // setState(() {
     nomasuransi = json.decode(response.body)[0]['nilai'];
     email_asuransi = json.decode(response.body)[0]['email_asuransi'];
@@ -105,7 +106,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   var access_token, refresh_token, idcustomer, nama_customer, idlokasi = 0;
 
   String hitungall(String harga, String durasi, int boolasuransi,
-      double asuransi, String nominalbaranginput, String ceksaldopoint) {
+      num asuransi, String nominalbaranginput, String ceksaldopoint) {
     if (boolasuransi == 0) asuransi = 0;
 
     total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
@@ -628,7 +629,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   cekDeposit(BuildContext context) {
     infoDialog(context,
-        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
+        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"+idasuransi.toString(),
         showNeutralButton: false, positiveText: "Ok", positiveAction: () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
