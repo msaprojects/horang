@@ -7,6 +7,7 @@ import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
@@ -116,7 +117,8 @@ class _OtpScreenState extends State<OtpScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Home(),
+              builder: (context) => StorageHandler(),
+              // builder: (context) => Home(),
             ));
       } else {
         print('Moh. Salah');

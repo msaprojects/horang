@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
+import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/component/account_page/AccountChecker.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
@@ -137,7 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(29),
                         child: FlatButton(
-                          child: Text(uniqueId), // button login
+                          // child: Text(uniqueId), // button login
+                          child: Text("MASUK"), // button login
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 40),
@@ -173,7 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Home()));
+                                        // builder: (context) => Home()));
+                                        builder: (context) => StorageHandler()));
                               } else {
                                 print("Login Gagal");
                                 errorDialog(context,
