@@ -28,13 +28,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
   // final oCcy = new NumberFormat("#,##0.00", "id_ID");
   bool isLoading = false;
   ApiService _apiService = ApiService();
-  var kapasitas, harga, alamat, vKeterangan, idjenis_produk, gambar1;
+  var kapasitas,
+      harga,
+      alamat,
+      vKeterangan,
+      idjenis_produk,
+      gambar1,
+      idvouchers;
   var hasilperhitungan = "0", tambahasuransi = "0";
   int jumlah_sewas;
   bool asuransi = true;
+  int flagsuransi = 0;
   int asuransie = 1;
   int minimaldeposit = 3; //query dari setting minimal hari deposit
   num nomasuransi;
+
   var email_asuransi;
   double nomdeclarebarang = 0.00;
 
@@ -42,6 +50,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   List<dynamic> _dataAsuransi = List();
 
   TextEditingController _controllerIdAsuransi;
+  String getVoucher = "Pilih Voucher", voucherKode = "", idvcr;
   DateTime dtAwal, dtAkhir, _date, _date2;
   var tglAwal,
       tglAkhir,
@@ -52,7 +61,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       ceksaldo = 0,
       kondisisaldo,
       hargaxhari,
-      saldodepositkurangnominaldeposit;
+      saldodepositkurangnominaldeposit,
+      nominalvoucher = "0",
+      kodevvoucher;
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
@@ -61,6 +72,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         headers: {"Authorization": "BEARER ${access_token}"});
     ceksaldo = json.decode(response.body)[0]['saldo'];
   }
+
+  bool tekanvoucher = false;
 
   int diffInDays(tglAwal, tglAkhir) {
     return ((tglAkhir.difference(tglAwal) -
@@ -86,7 +99,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void getAsuransi() async {
     final response = await http.get(ApiService().urlasuransi,
         headers: {"Authorization": "BEARER ${access_token}"});
-    print("Get Id asuransi : "+response.body);
+    print("Get Id asuransi : " + response.body);
     // setState(() {
     nomasuransi = json.decode(response.body)[0]['nilai'];
     email_asuransi = json.decode(response.body)[0]['email_asuransi'];
@@ -97,7 +110,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         asuransie,
         nomasuransi,
         _nominalbarang.text.toString(),
-        ceksaldo.toString());
+        ceksaldo.toString(),
+        nominalvoucher);
     // });
   }
 
@@ -105,8 +119,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
   bool isSuccess = false;
   var access_token, refresh_token, idcustomer, nama_customer, idlokasi = 0;
 
-  String hitungall(String harga, String durasi, int boolasuransi,
-      num asuransi, String nominalbaranginput, String ceksaldopoint) {
+  String hitungall(String harga, String durasi, int boolasuransi, num asuransi,
+      String nominalbaranginput, String ceksaldopoint, String NominalVoucher) {
     if (boolasuransi == 0) asuransi = 0;
 
     total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
@@ -116,7 +130,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
     return ((double.parse(harga) * double.parse(durasi)) +
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
             minimaldeposit * double.parse(harga) -
-            double.parse(ceksaldopoint))
+            double.parse(ceksaldopoint) -
+            double.parse(NominalVoucher))
         .toStringAsFixed(2);
   }
 
@@ -165,6 +180,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   void initState() {
+    tekanvoucher = !tekanvoucher;
     nomasuransi = 0.0;
     asuransie = 1;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
@@ -189,7 +205,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         asuransie,
         nomasuransi,
         _nominalbarang.text.toString(),
-        ceksaldo.toString());
+        ceksaldo.toString(),
+        nominalvoucher);
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
@@ -202,7 +219,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
               asuransie,
               nomasuransi,
               "0",
-              ceksaldo.toString());
+              ceksaldo.toString(),
+              nominalvoucher);
         else
           hasilperhitungan = hitungall(
               harga.toString(),
@@ -210,7 +228,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
               asuransie,
               nomasuransi,
               _nominalbarang.text.toString(),
-              ceksaldo.toString());
+              ceksaldo.toString(),
+              nominalvoucher);
       });
     });
     super.initState();
@@ -224,7 +243,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   Widget build(BuildContext context) {
-    print("IDASURANSI : " + idasuransi.toString() + email_asuransi.toString());
+    nominalvoucher = getVoucher.toString();
+    kodevvoucher = voucherKode.toString();
+    idvcr = idvouchers.toString();
+    // print("kopiapi $nominalvoucher" + "$kodevvoucher --" + "$idvcr");
+    // print("IDASURANSI : " + idasuransi.toString() + email_asuransi.toString());
     var media = MediaQuery.of(context);
     getSaldo();
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
@@ -428,7 +451,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 asuransie,
                                                 nomasuransi,
                                                 _nominalbarang.text.toString(),
-                                                ceksaldo.toString());
+                                                ceksaldo.toString(),
+                                                nominalvoucher);
                                           } else {
                                             asuransie = 0;
                                             hasilperhitungan = hitungall(
@@ -437,7 +461,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 asuransie,
                                                 nomasuransi,
                                                 _nominalbarang.text.toString(),
-                                                ceksaldo.toString());
+                                                ceksaldo.toString(),
+                                                nominalvoucher);
                                           }
                                         });
                                       },
@@ -449,15 +474,128 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   ],
                                 ),
                               ),
+                              GestureDetector(
+                                onTap: () {
+                                  print("vamossss!!!");
+                                  setState(() {});
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.50,
+                                          decoration: new BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: new BorderRadius.only(
+                                              topLeft:
+                                                  const Radius.circular(25.0),
+                                              topRight:
+                                                  const Radius.circular(25.0),
+                                            ),
+                                          ),
+                                          child: SafeArea(
+                                              child: FutureBuilder(
+                                                  future:
+                                                      _apiService.listVoucher(
+                                                          access_token),
+                                                  builder: (context,
+                                                      AsyncSnapshot<
+                                                              List<Voucher>>
+                                                          snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      return Center(
+                                                        child: Text(
+                                                            "Something wrong with message: ${snapshot.error.toString()}"),
+                                                      );
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.done) {
+                                                      List<Voucher> vclist =
+                                                          snapshot.data;
+                                                      print(
+                                                          "datavvvoucher : ${snapshot.data}");
+                                                      return _buildListvoucher(
+                                                          vclist);
+                                                    }
+                                                  }))));
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 30, right: 30, top: 5),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      enabled: false,
+                                      hintText: "$getVoucher - $voucherKode",
+                                      border: const OutlineInputBorder(),
+                                    ),
+                                    // controller: _keteranganbarang,
+                                    // onChanged: (value) {
+                                    //   print("tes nom barang sss " +
+                                    //       _nominalbarang.toString());
+                                    //   bool isFieldValid =
+                                    //       value.trim().isNotEmpty;
+                                    //   if (isFieldValid != _fieldnominalbarang) {
+                                    //     setState(() =>
+                                    //         _fieldnominalbarang = isFieldValid);
+                                    //   }
+                                    // },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
                               Container(
                                 padding: const EdgeInsets.only(
                                     left: 30, right: 30, top: 5),
-                                child: TextField(
+                                child: TextFormField(
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      decimal: true),
                                   decoration: InputDecoration(
+                                    labelText: 'Total Nominal Barang',
+                                    hintText: 'Masukkan Total Nominal Barang',
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  controller: _nominalbarang,
+                                  inputFormatters: <TextInputFormatter>[
+                                    // ignore: deprecated_member_use
+                                    WhitelistingTextInputFormatter.digitsOnly,
+                                  ],
+                                  onChanged: (value) {
+                                    print("tes nom barang sss " +
+                                        _nominalbarang.toString());
+                                    bool isFieldValid = value.trim().isNotEmpty;
+                                    if (isFieldValid != _fieldnominalbarang) {
+                                      setState(() =>
+                                          _fieldnominalbarang = isFieldValid);
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 30, right: 30, top: 5),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Keterangan',
                                     hintText: 'Masukkan Keterangan Barang',
                                     border: const OutlineInputBorder(),
                                   ),
                                   keyboardType: TextInputType.multiline,
+                                  maxLines: 3,
                                   controller: _keteranganbarang,
                                   onChanged: (value) {
                                     bool isFieldValid = value.trim().isNotEmpty;
@@ -468,33 +606,93 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   },
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 30, right: 30, top: 5),
-                                child: TextField(
-                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                  decoration: InputDecoration(
-                                    hintText: 'Masukkan Total Nominal Barang',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  controller: _nominalbarang,
-                                  
-                                  inputFormatters: <TextInputFormatter>[
-                                    
-                                    // ignore: deprecated_member_use
-                                    WhitelistingTextInputFormatter.digitsOnly, 
-                                    
-                                  ],
-                                  onChanged: (value) {
-                                    print("tes nom barang sss "+ _nominalbarang.toString());
-                                    bool isFieldValid = value.trim().isNotEmpty;
-                                    if (isFieldValid != _fieldnominalbarang) {
-                                      setState(() =>
-                                          _fieldnominalbarang = isFieldValid);
-                                    }
-                                  },
-                                ),
-                              ),
+                              // Container(
+                              //   padding: const EdgeInsets.only(left: 30),
+                              //   child: Row(
+                              //     children: [
+                              //       FlatButton(
+                              //         color: Colors.orange,
+                              //         child: Text("Cek Voucher"),
+                              //         onPressed: () {
+                              //           setState(() {});
+                              //           showModalBottomSheet(
+                              //               context: context,
+                              //               isScrollControlled: true,
+                              //               backgroundColor: Colors.transparent,
+                              //               builder: (context) => Container(
+                              //                   height: MediaQuery.of(context)
+                              //                           .size
+                              //                           .height *
+                              //                       0.50,
+                              //                   decoration: new BoxDecoration(
+                              //                     color: Colors.white,
+                              //                     borderRadius:
+                              //                         new BorderRadius.only(
+                              //                       topLeft:
+                              //                           const Radius.circular(
+                              //                               25.0),
+                              //                       topRight:
+                              //                           const Radius.circular(
+                              //                               25.0),
+                              //                     ),
+                              //                   ),
+                              //                   child: SafeArea(
+                              //                       child: FutureBuilder(
+                              //                           future: _apiService
+                              //                               .listVoucher(
+                              //                                   access_token),
+                              //                           builder: (context,
+                              //                               AsyncSnapshot<
+                              //                                       List<
+                              //                                           Voucher>>
+                              //                                   snapshot) {
+                              //                             if (snapshot
+                              //                                 .hasError) {
+                              //                               return Center(
+                              //                                 child: Text(
+                              //                                     "Something wrong with message: ${snapshot.error.toString()}"),
+                              //                               );
+                              //                             } else if (snapshot
+                              //                                     .connectionState ==
+                              //                                 ConnectionState
+                              //                                     .waiting) {
+                              //                               return Center(
+                              //                                   child:
+                              //                                       CircularProgressIndicator());
+                              //                             } else if (snapshot
+                              //                                     .connectionState ==
+                              //                                 ConnectionState
+                              //                                     .done) {
+                              //                               List<Voucher>
+                              //                                   vclist =
+                              //                                   snapshot.data;
+                              //                               return _buildListvoucher(
+                              //                                   vclist);
+                              //                             }
+                              //                           }))));
+                              //           // setState(() {
+                              //           //   print("YUU" +
+                              //           //       valasuransi +
+                              //           //       " - " +
+                              //           //       harga +
+                              //           //       " - " +
+                              //           //       jumlah_sewas.toString());
+                              //           //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
+                              //           //                                      print("BISA YOK BISA! :"+perhitungan.toString());
+                              //           // }
+                              //           // );
+                              //         },
+                              //       ),
+                              //       SizedBox(
+                              //         width: 50,
+                              //       ),
+                              //       Text(getVoucher,
+                              //           style: GoogleFonts.lato(
+                              //               fontSize: 14,
+                              //               fontWeight: FontWeight.bold))
+                              //     ],
+                              //   ),
+                              // ),
                             ],
                           ),
                         )
@@ -554,7 +752,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     asuransie,
                                     nomasuransi,
                                     _nominalbarang.text.toString(),
-                                    ceksaldo.toString());
+                                    ceksaldo.toString(),
+                                    nominalvoucher);
                               } else {
                                 asuransie = 0;
                                 nomasuransi = 0;
@@ -564,7 +763,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     asuransie,
                                     nomasuransi,
                                     _nominalbarang.text.toString(),
-                                    ceksaldo.toString());
+                                    ceksaldo.toString(),
+                                    nominalvoucher);
                               }
                               getSaldo();
                               // if (ceksaldo == null) {
@@ -629,16 +829,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   cekDeposit(BuildContext context) {
     infoDialog(context,
-        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?"+idasuransi.toString(),
+        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
         showNeutralButton: false, positiveText: "Ok", positiveAction: () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
             flagasuransi: asuransie,
-            flagvoucher: 0,
+            flagvoucher: flagsuransi,
             idlokasi: idlokasi,
             idjenis_produk: idjenis_produk,
-            idvoucher: 0,
+            idvoucher: idvcr,
             idasuransi: idasuransi,
             harga: harga,
             jumlah_sewa: jumlah_sewas.toString(),
@@ -650,6 +850,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
             alamat: alamat,
             keterangan_barang: _keteranganbarang.text.toString(),
             nominal_barang: _nominalbarang.text.toString(),
+            nominal_voucher: nominalvoucher,
+            kodvoucher: kodevvoucher,
             total_harga: hasilperhitungan.toString(),
             total_asuransi: total_asuransi.toString(),
             totalharixharga: totalhariharga.toString(),
@@ -686,6 +888,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idjenis_produk: idjenis_produk,
                           idvoucher: 0,
                           idasuransi: idasuransi,
+                          nominal_voucher: nominalvoucher.toString(),
                           harga: harga,
                           jumlah_sewa: jumlah_sewas.toString(),
                           tanggal_mulai: tglAwal,
@@ -743,22 +946,49 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 margin: EdgeInsets.all(8),
                 height: 70,
                 width: MediaQuery.of(context).size.width * 0.5,
-                child: Card(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: [
-                        Container(
-                            width: 50,
-                            height: 100,
-                            child: Image.network(voucherlist.gambar)),
-                        Column(
-                          children: [
-                            Text(voucherlist.kode_voucher.toString()),
-                            Text(voucherlist.nominal.toString()),
-                          ],
-                        ),
-                      ],
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (tekanvoucher) {
+                        getVoucher = voucherlist.nominal.toString();
+                        voucherKode = voucherlist.kode_voucher.toString();
+                        idvouchers = voucherlist.idvoucher;
+                        flagsuransi = 1;
+                        print("adalah $flagsuransi");
+                        // print("kang ndut ${voucherlist.nominal}");
+                        // print("kang ndut ${voucherlist.kode_voucher}");
+                        Navigator.pop(context);
+                      }
+                    });
+                  },
+                  // onTap: () {
+                  //   print("coba");
+                  // },
+                  child: Card(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Row(
+                        children: [
+                          Container(
+                              width: 50,
+                              height: 100,
+                              child: Image.network(voucherlist.gambar)),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            children: [
+                              Text(voucherlist.kode_voucher.toString()),
+                              Text(voucherlist.nominal.toString()),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.info_outline), onPressed: () {})
+                        ],
+                      ),
                     ),
                   ),
                 ),

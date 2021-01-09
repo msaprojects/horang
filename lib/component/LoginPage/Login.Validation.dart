@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("UUID : "+uniqueId);
+    print("UUID : " + uniqueId);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -117,20 +117,20 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "LOGIN",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                      "Login",
+                      style: GoogleFonts.lato(
+                          fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Image.asset(
-                      "assets/image/logogudang.png",
-                      height: 150,
-                      width: 150,
-                    ),
+                    // Image.asset(
+                    //   "assets/image/logogudang.png",
+                    //   height: 150,
+                    //   width: 150,
+                    // ),
                     _buildTextFieldEmail(), //textbox username (email / no hp)
-                    _buildTextFieldPassword(), //
+                    _buildTextFieldPassword(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
                       width: size.width * 0.8,
@@ -185,6 +185,168 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ada masalah login ? ",
+                          style: GoogleFonts.lato(fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _popUpTroble(context);
+                          },
+                          child: Text(
+                            "Klik disini",
+                            style: GoogleFonts.lato(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(
+                          child: Divider(
+                        thickness: 1,
+                        indent: 30,
+                        endIndent: 12,
+                      )),
+                      Text(
+                        "Atau",
+                        style: GoogleFonts.lato(),
+                      ),
+                      Expanded(
+                          child: Divider(
+                        thickness: 1,
+                        indent: 12,
+                        endIndent: 30,
+                      )),
+                    ]),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Container(
+                    //       width: 100,
+                    //       height: 70,
+                    //       child: FlatButton(
+                    //         height: 50,
+                    //         child: Flexible(child: Text("Ganti Perangkat")),
+                    //         color: Colors.deepPurpleAccent,
+                    //         textColor: Colors.white,
+                    //         onPressed: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => Reset(
+                    //                         tipe: "ResetDevice",
+                    //                       )));
+                    //         },
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 3,
+                    //     ),
+                    //     Container(
+                    //       width: 100,
+                    //       height: 70,
+                    //       child: FlatButton(
+                    //         child:
+                    //             Flexible(child: Text("Kirim Email Validasi")),
+                    //         color: Colors.deepPurpleAccent,
+                    //         textColor: Colors.white,
+                    //         onPressed: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => Reset(
+                    //                         tipe: "ResendEmail",
+                    //                       )));
+                    //         },
+                    //       ),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 3,
+                    //     ),
+                    //     Container(
+                    //       width: 100,
+                    //       height: 70,
+                    //       child: FlatButton(
+                    //         child: Flexible(child: Text("Reset Password")),
+                    //         color: Colors.deepPurpleAccent,
+                    //         textColor: Colors.white,
+                    //         onPressed: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => Reset(
+                    //                         // resetpass: Forgot_Password,
+                    //                         tipe: "ResetPassword",
+                    //                       )));
+                    //         },
+                    //       ),
+                    //     ),
+                    //     // ClipRRect(
+                    //     //   borderRadius: BorderRadius.circular(29),
+                    //     //   child: FlatButton(
+                    //     //     onPressed: () {
+                    //     //       Navigator.push(
+                    //     //           context,
+                    //     //           MaterialPageRoute(
+                    //     //               builder: (context) => Reset(
+                    //     //                     tipe: "ResendEmail",
+                    //     //                     // resendemail: Forgot_Password,
+                    //     //                   )));
+                    //     //     },
+                    //     //     child: Text(
+                    //     //       "RESEND EMAIL",
+                    //     //       style: GoogleFonts.lato(
+                    //     //           fontSize: 12,
+                    //     //           fontWeight: FontWeight.bold,
+                    //     //           color: Colors.white),
+                    //     //     ),
+                    //     //     color: Colors.purple[100],
+                    //     //     padding: EdgeInsets.symmetric(
+                    //     //         vertical: 20, horizontal: 30),
+                    //     //   ),
+                    //     // ),
+                    //     // SizedBox(
+                    //     //   width: 10,
+                    //     // ),
+                    //     // ClipRRect(
+                    //     //   borderRadius: BorderRadius.circular(29),
+                    //     //   child: FlatButton(
+                    //     //     onPressed: () {
+                    //     //       Navigator.push(
+                    //     //           context,
+                    //     //           MaterialPageRoute(
+                    //     //               builder: (context) => Reset(
+                    //     //                     // resetpass: Forgot_Password,
+                    //     //                     tipe: "ResetPassword",
+                    //     //                   )));
+                    //     //     },
+                    //     //     child: Text("L",
+                    //     //         style: GoogleFonts.lato(
+                    //     //             fontSize: 12,
+                    //     //             fontWeight: FontWeight.bold,
+                    //     //             color: Colors.white)),
+                    //     //     color: Colors.purple[100],
+                    //     //     padding: EdgeInsets.symmetric(
+                    //     //         vertical: 20, horizontal: 25),
+                    //     //   ),
+                    //     // )
+                    //   ],
+                    // ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     AccountChecker(
                       press: () {
                         Navigator.pushReplacement(
@@ -197,98 +359,6 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          child: Text("Ganti Perangkat"),
-                          color: Colors.deepPurpleAccent,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Reset(
-                                          tipe: "ResetDevice",
-                                        )));
-                          },
-                        ),
-                        FlatButton(
-                          child: Text("Kirim Email Validasi"),
-                          color: Colors.deepPurpleAccent,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Reset(
-                                          tipe: "ResendEmail",
-                                        )));
-                          },
-                        ),
-                        FlatButton(
-                          child: Text("Reset Password"),
-                          color: Colors.deepPurpleAccent,
-                          textColor: Colors.white,
-                          onPressed: () {},
-                        ),
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(29),
-                        //   child: FlatButton(
-                        //     onPressed: () {
-                        //       Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (context) => Reset(
-                        //                     tipe: "ResendEmail",
-                        //                     // resendemail: Forgot_Password,
-                        //                   )));
-                        //     },
-                        //     child: Text(
-                        //       "RESEND EMAIL",
-                        //       style: GoogleFonts.lato(
-                        //           fontSize: 12,
-                        //           fontWeight: FontWeight.bold,
-                        //           color: Colors.white),
-                        //     ),
-                        //     color: Colors.purple[100],
-                        //     padding: EdgeInsets.symmetric(
-                        //         vertical: 20, horizontal: 30),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 10,
-                        // ),
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(29),
-                        //   child: FlatButton(
-                        //     onPressed: () {
-                        //       Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (context) => Reset(
-                        //                     // resetpass: Forgot_Password,
-                        //                     tipe: "ResetPassword",
-                        //                   )));
-                        //     },
-                        //     child: Text("L",
-                        //         style: GoogleFonts.lato(
-                        //             fontSize: 12,
-                        //             fontWeight: FontWeight.bold,
-                        //             color: Colors.white)),
-                        //     color: Colors.purple[100],
-                        //     padding: EdgeInsets.symmetric(
-                        //         vertical: 20, horizontal: 25),
-                        //   ),
-                        // )
-                      ],
-                    )
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
                   ],
                 ),
               ),
@@ -372,4 +442,119 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+void _popUpTroble(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: new Container(
+            width: 250,
+            height: 350,
+            decoration: new BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: const Color(0xFFFFFF),
+              borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Opsi Pilihan...",
+                              style: GoogleFonts.lato(fontSize: 14),
+                            ),
+                            IconButton(
+                                iconSize: 14,
+                                icon: Icon(
+                                  Icons.close_outlined,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Lost Device",
+                          style: GoogleFonts.lato(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                          "Lost Device digunakan ketika anda menginstall ulang aplikasi atau ganti perangkat.",
+                          style: GoogleFonts.lato(fontSize: 12)),
+                      Container(
+                          width: 900,
+                          child: FlatButton(
+                              color: Colors.red[900],
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Reset(
+                                              tipe: "ResetDevice",
+                                            )));
+                              },
+                              child: Text(
+                                'Lost Device',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ))),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text("Reset Password",
+                          style: GoogleFonts.lato(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                          "Reset Password digunakan ketika anda lupa password ataupun ingin mengubah password yang sudah diset.",
+                          style: GoogleFonts.lato(fontSize: 12)),
+                      Container(
+                          width: 900,
+                          child: FlatButton(
+                              color: Colors.blue,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Reset(
+                                              // resetpass: Forgot_Password,
+                                              tipe: "ResetPassword",
+                                            )));
+                              },
+                              child: Text(
+                                'Reset Password',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ))),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      });
 }

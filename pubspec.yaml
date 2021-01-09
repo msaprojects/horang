@@ -50,6 +50,8 @@ dependencies:
   intl: ^0.16.1
   imei_plugin: ^1.2.0
   pull_to_refresh: ^1.6.3
+  # scoped_model: ^1.0.1
+  # flutter_socket_io: ^0.6.0
   # device_info: ^0.4.2+4
   # mobile_number: ^1.0.3
   # get_mac: ^0.0.1

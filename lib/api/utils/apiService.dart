@@ -109,7 +109,8 @@ class ApiService {
   //LOAD VOUCHER
   Future<List<Voucher>> listVoucher(String token) async {
     final response = await client
-        .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
+        .get("$baseUrl/voucherbelumterpakai", headers: {"Authorization": "BEARER ${token}"});
+        // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
     } else {
@@ -441,7 +442,9 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    if (response.statusCode == 200) {
+    print("sstsbody ${response.body}");
+    print("sstscode ${response.statusCode}");
+    if (response.statusCode == 201) {
       return true;
     } else {
       return false;

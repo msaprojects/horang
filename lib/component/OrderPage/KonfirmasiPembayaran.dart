@@ -18,8 +18,11 @@ class Dummy1 extends StatefulWidget {
       jumlah_sewa,
       idvoucher,
       idasuransi,
+      nominal_asuransii,
       idpayment_gateway,
       nominal_barang,
+      nomvoucher,
+      kodevoucher,
       harga,
       token,
       tanggal_mulai,
@@ -35,11 +38,14 @@ class Dummy1 extends StatefulWidget {
       this.idlokasi,
       this.jumlah_sewa,
       this.idasuransi,
+      this.nominal_asuransii,
       this.idvoucher,
       this.idpayment_gateway,
       this.total_harga,
       this.harga,
       this.nominal_barang,
+      this.nomvoucher,
+      this.kodevoucher,
       this.deposit_tambah,
       this.deposit_pakai,
       this.deposit_minimum,
@@ -66,10 +72,13 @@ class _Dummy1State extends State<Dummy1> {
       deposit_pakai,
       deposit_minimum,
       jumlah_sewa,
-      idvoucher,
+      idvouchers,
       idasuransi,
       idpayment_gateway,
       nominal_barang,
+      nominal_asuransi,
+      snomvoucher,
+      skodevoucher,
       harga,
       token,
       tanggal_mulai,
@@ -87,8 +96,11 @@ class _Dummy1State extends State<Dummy1> {
     tanggal_akhir = widget.tanggal_akhir;
     idlokasi = widget.idlokasi;
     idjenis_produk = widget.idjenis_produk;
-    idvoucher = widget.idvoucher;
+    idvouchers = widget.idvoucher;
     idasuransi = widget.idasuransi;
+    nominal_asuransi = widget.nominal_asuransii;
+    snomvoucher = widget.nomvoucher;
+    skodevoucher = widget.kodevoucher;
     total_harga = widget.total_harga;
     idlokasi = widget.idlokasi;
     deposit_tambah = widget.deposit_tambah;
@@ -109,7 +121,7 @@ class _Dummy1State extends State<Dummy1> {
         idlokasi: idlokasi,
         jumlah_sewa: int.parse(jumlah_sewa),
         idasuransi: idasuransi,
-        idvoucher: idvoucher,
+        idvoucher: idvouchers,
         idpayment_gateway: idpayment_gateway,
         total_harga: double.parse(total_harga),
         harga: harga,
@@ -132,7 +144,7 @@ class _Dummy1State extends State<Dummy1> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    KonfirmasiOrderDetail(idorder: idorder)));
+                    KonfirmasiOrderDetail(idorder: idorder, nomVoucher: snomvoucher, asuransi: nominal_asuransi,)));
       } else {
         if (idorder == -1) {
           errorDialog(context, "Kontainer tidak tersedia",
@@ -242,7 +254,7 @@ class _Dummy1State extends State<Dummy1> {
             SizedBox(
               height: 15,
             ),
-            Text("Metode Pembayaran",
+            Text("Metode Pembayaran $snomvoucher $idvouchers",
                 style: GoogleFonts.inter(
                     fontSize: 14, fontWeight: FontWeight.bold)),
             SizedBox(

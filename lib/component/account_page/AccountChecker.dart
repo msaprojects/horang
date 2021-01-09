@@ -17,7 +17,7 @@ class AccountChecker extends StatelessWidget {
       children: <Widget>[
         Text(
           login ? "Belum Punya Akun ?" : "Sudah Punya Akun ?",
-          style: TextStyle(color: primaryColor),
+          style: TextStyle(color: primaryColor, fontSize: 14),
         ),
         GestureDetector(
           onTap: press,

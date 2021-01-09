@@ -18,8 +18,11 @@ class KonfirmPayment extends StatefulWidget {
       jumlah_sewa,
       idvoucher,
       idasuransi,
+      nominal_asuransi,
       idpayment_gateway,
       nominal_barang,
+      nomvoucher,
+      kodevoucher,
       harga,
       tanggal_mulai,
       tanggal_akhir,
@@ -35,6 +38,7 @@ class KonfirmPayment extends StatefulWidget {
       this.idasuransi,
       this.idvoucher,
       this.harga,
+      this.nominal_asuransi,
       this.idpayment_gateway,
       this.deposit_tambah,
       this.deposit_pakai,
@@ -42,6 +46,8 @@ class KonfirmPayment extends StatefulWidget {
       this.tanggal_mulai,
       this.keterangan_barang,
       this.nominal_barang,
+      this.nomvoucher,
+      this.kodevoucher,
       this.total_harga,
       this.email_asuransi,
       this.tanggal_akhir,
@@ -65,8 +71,11 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       jumlah_sewa,
       idvoucher,
       idasuransi,
+      nominal_asuransi,
       idpayment_gateway,
       nominal_barang,
+      snomvucher,
+      skodevoucher,
       harga,
       tanggal_mulai,
       tanggal_akhir,
@@ -137,11 +146,14 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     tanggal_akhir = widget.tanggal_akhir;
     keterangan_barang = widget.keterangan_barang;
     nominal_barang = widget.nominal_barang;
+    snomvucher = widget.nomvoucher;
+    skodevoucher = widget.kodevoucher;
     total_harga = widget.total_harga;
     deposit_tambah = widget.deposit_tambah;
     deposit_pakai = widget.deposit_pakai;
     deposit_minimum = widget.deposit_minimum;
     email_asuransi = widget.email_asuransi;
+    nominal_asuransi = widget.nominal_asuransi;
     flagasuransi = widget.flagasuransi;
     flagvoucher = widget.flagvoucher;
     super.initState();
@@ -173,7 +185,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             Expanded(
                 child: Column(
               children: [
-                Text("Masukkan nomor yang terdaftar di OVO",
+                Text("Masukkan nomor yang terdaftar di OVO $snomvucher $idvoucher",
                     textAlign: TextAlign.left,
                     style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold, fontSize: 14)),
@@ -251,33 +263,46 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   }
 
   OrderConfirmation(BuildContext context, String notelp) {
-    infoDialog(
-        context, "pastikan nomor $notelp ini sudah terdaftar di ewallet!",
-        showNeutralButton: false, positiveText: "Ok", positiveAction: () {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => Dummy1(
-                  flagasuransi: flagasuransi,
-                  flagvoucher: flagvoucher,
-                  idjenis_produk: idjenis_produk,
-                  idlokasi: idlokasi,
-                  jumlah_sewa: jumlah_sewa,
-                  idasuransi: idasuransi,
-                  idvoucher: idvoucher,
-                  idpayment_gateway: idpayment_gateway,
-                  total_harga: total_harga,
-                  harga: harga,
-                  nominal_barang: nominal_barang,
-                  deposit_tambah: deposit_tambah,
-                  deposit_pakai: deposit_pakai,
-                  deposit_minimum: deposit_minimum,
-                  token: access_token,
-                  tanggal_mulai: tanggal_mulai,
-                  tanggal_akhir: tanggal_akhir,
-                  keterangan_barang: keterangan_barang,
-                  email_asuransi: email_asuransi,
-                  no_ovo: _noOvo.text.toString())));
-    });
+    // print("cek1");
+    // print(notelp);
+    if (notelp == "") {
+      print("cek2");
+      return infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
+    } else {
+      // print("cek3");
+      return infoDialog(
+          context, "pastikan nomor $notelp ini sudah terdaftar di ewallet $snomvucher $idvoucher!",
+          showNeutralButton: false,
+          negativeAction: (){}, 
+          negativeText: "Batal",
+          positiveText: "Ok", positiveAction: () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => Dummy1(
+                    flagasuransi: flagasuransi,
+                    flagvoucher: flagvoucher,
+                    idjenis_produk: idjenis_produk,
+                    idlokasi: idlokasi,
+                    jumlah_sewa: jumlah_sewa,
+                    idasuransi: idasuransi,
+                    idvoucher: idvoucher,
+                    nomvoucher: snomvucher,
+                    idpayment_gateway: idpayment_gateway,
+                    total_harga: total_harga,
+                    harga: harga,
+                    nominal_barang: nominal_barang,
+                    nominal_asuransii: nominal_asuransi,
+                    deposit_tambah: deposit_tambah,
+                    deposit_pakai: deposit_pakai,
+                    deposit_minimum: deposit_minimum,
+                    token: access_token,
+                    tanggal_mulai: tanggal_mulai,
+                    tanggal_akhir: tanggal_akhir,
+                    keterangan_barang: keterangan_barang,
+                    email_asuransi: email_asuransi,
+                    no_ovo: _noOvo.text.toString())));
+      });
+    }
   }
 }

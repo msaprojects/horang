@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class Voucher{
-  int idvoucher, jumlah_voucher;
-  int persentase, nominal;
+  int idvoucher;
+  num persentase, nominal,  jumlah_voucher;
   String keterangan, gambar, kode_voucher;
 
   Voucher({

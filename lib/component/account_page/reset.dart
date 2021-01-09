@@ -182,9 +182,16 @@ class _ResetState extends State<Reset> {
                                 }
                               });
                             } else if (tipes == "ResetDevice") {
+                              print('reset device');
                               _apiService.LostDevice(reset).then((isSuccess) {
                                 setState(() => _isLoading = false);
-                                if (isSuccess) {
+                                print("rest..device1");
+                                if (!isSuccess) {
+                                  print("rest..device3");
+                                  errorDialog(context,
+                                      "Data gagal disimpan, silahkan hubungi admin !");
+                                } else {
+                                  print("rest..device2");
                                   successDialog(context,
                                       "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
                                       showNeutralButton: false,
@@ -194,9 +201,6 @@ class _ResetState extends State<Reset> {
                                             builder: (context) => LoginPage()),
                                         (route) => false);
                                   });
-                                } else {
-                                  errorDialog(context,
-                                      "Data gagal disimpan, silahkan hubungi admin !");
                                 }
                               });
                             }

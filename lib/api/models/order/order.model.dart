@@ -8,7 +8,6 @@ class OrderProduk {
       deposit_pakai,
       deposit_minimum,
       jumlah_sewa,
-      idvoucher,
       idasuransi,
       idpayment_gateway,
       nominal_barang,
@@ -17,6 +16,7 @@ class OrderProduk {
       flagvoucher;
 
   String token,
+  idvoucher,
       tanggal_mulai,
       tanggal_akhir,
       keterangan_barang,

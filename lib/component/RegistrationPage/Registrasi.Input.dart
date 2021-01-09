@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/utils/constant_color.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 
@@ -48,7 +50,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
 
     try {
       platformImei =
-      await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+          await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
       List<String> multiImei = await ImeiPlugin.getImeiMulti();
       print(multiImei);
       idunique = await ImeiPlugin.getId();
@@ -65,119 +67,142 @@ class _RegistrasiState extends State<RegistrasiPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      key: _scaffoldState,
-      appBar: AppBar(
-        backgroundColor: Colors.grey[100],
-        // iconTheme: IconThemeData(color: Colors.red),
-        title: Text(
-          "Registrasi",
-          style: TextStyle(color: Colors.black),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()));
-          },
-        ),
-      ),
       body: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _buildTextFieldEmail(),
-                  _buildTextFieldNoHp(),
-                  _buildTextFieldPassword(),
-                  _buildTextFieldPasswordRetype(),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    width: size.width * 0.8,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(29),
-                      child: FlatButton(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                        onPressed: () async {
-                          if (_fieldEmail == null ||
-                              _fieldNo_Hp == null ||
-                              _fieldPassword == null ||
-                              !_fieldEmail ||
-                              !_fieldNo_Hp ||
-                              !_fieldPassword) {
-                            _scaffoldState.currentState.showSnackBar(SnackBar(
-                                content: Text("Pastikan semua kolom terisi!")));
-                            return;
-                          } else {
-                            String email = _controllerEmail.text.toString();
-                            String nohp = _controllerNohp.text.toString();
-                            String password =
-                                _controllerPassword.text.toString();
-                            String retypepassword =
-                                _controllerPasswordRetype.text.toString();
-                            //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
-                            if (password != retypepassword) {
+        child: Container(
+          padding: EdgeInsets.only(top: 80),
+          width: double.infinity,
+          height: size.height,
+          key: _scaffoldState,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Registrasi",
+                      style: GoogleFonts.lato(
+                          fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _buildTextFieldEmail(),
+                    _buildTextFieldNoHp(),
+                    _buildTextFieldPassword(),
+                    _buildTextFieldPasswordRetype(),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      width: size.width * 0.8,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(29),
+                        child: FlatButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 40),
+                          onPressed: () async {
+                            if (_fieldEmail == null ||
+                                _fieldNo_Hp == null ||
+                                _fieldPassword == null ||
+                                !_fieldEmail ||
+                                !_fieldNo_Hp ||
+                                !_fieldPassword) {
                               _scaffoldState.currentState.showSnackBar(SnackBar(
-                                content:
-                                    Text("Password dan Retyp anda tidak sama"),
-                              ));
-//                              return;
+                                  content:
+                                      Text("Pastikan semua kolom terisi!")));
+                              return;
                             } else {
-                              setState(() => _isLoading = true);
-                              PenggunaModel pengguna = PenggunaModel(
-                                  uuid: uniqueId,
-                                  email: email,
-                                  password: password,
-                                  no_hp: nohp,
-                                  status: 0,
-                                  notification_token: "0",
-                                  token_mail: "0",
-                                  keterangan: "Uji Coba");
-                              print("REGISTRASI : "+pengguna.toString());
-                              _apiService.signup(pengguna).then((isSuccess) {
-                                if (isSuccess) {
-                                  _controllerEmail.clear();
-                                  _controllerNohp.clear();
-                                  _controllerPassword.clear();
-                                  _controllerPasswordRetype.clear();
-                                  showAlertDialog(context);
-                                } else {
-                                  _scaffoldState.currentState
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                        "${_apiService.responseCode}"),
-                                  ));
-                                }
-                              });
+                              String email = _controllerEmail.text.toString();
+                              String nohp = _controllerNohp.text.toString();
+                              String password =
+                                  _controllerPassword.text.toString();
+                              String retypepassword =
+                                  _controllerPasswordRetype.text.toString();
+                              //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
+                              if (password != retypepassword) {
+                                _scaffoldState.currentState
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Password dan Retyp anda tidak sama"),
+                                ));
+//                              return;
+                              } else {
+                                setState(() => _isLoading = true);
+                                PenggunaModel pengguna = PenggunaModel(
+                                    uuid: uniqueId,
+                                    email: email,
+                                    password: password,
+                                    no_hp: nohp,
+                                    status: 0,
+                                    notification_token: "0",
+                                    token_mail: "0",
+                                    keterangan: "Uji Coba");
+                                print("REGISTRASI : " + pengguna.toString());
+                                _apiService.signup(pengguna).then((isSuccess) {
+                                  if (isSuccess) {
+                                    _controllerEmail.clear();
+                                    _controllerNohp.clear();
+                                    _controllerPassword.clear();
+                                    _controllerPasswordRetype.clear();
+                                    showAlertDialog(context);
+                                  } else {
+                                    _scaffoldState.currentState
+                                        .showSnackBar(SnackBar(
+                                      content:
+                                          Text("${_apiService.responseCode}"),
+                                    ));
+                                  }
+                                });
+                              }
+                              return;
                             }
-                            return;
-                          }
-                        },
-                        child: Text(
-                          "Simpan".toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.white,
+                          },
+                          child: Text(
+                            "Simpan",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
+                          color: primaryColor,
                         ),
-                        color: Colors.orange[600],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                  )
-                ],
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Anda tidak menerima email ? ",
+                            style: GoogleFonts.lato(),
+                          ),
+                          GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                "Kirim email ulang",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue[900]),
+                              ))
+                        ]),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Image.asset(
+                  "assets/image/login_bottom.png",
+                  width: size.width * 0.4,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
