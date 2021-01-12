@@ -19,72 +19,52 @@ class BodyWelcomePage extends StatefulWidget {
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
   var pin;
+  var access_token;
   bool _showbutton = false;
+
   cekToken() async {
+
     SharedPreferences sp = await SharedPreferences.getInstance();
-    var access_token = sp.getString("access_token");
+    access_token = sp.getString("access_token");
     pin = sp.getString("pin");
     print("PINNYA ADA NGG $pin");
     print("MASUK CEK TOKEN $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    if (access_token != null) {
-      _showbutton = false;
+    if (access_token == null) {
+      print("how can i get this ?");
+      return false;
+    } else {
+      print("noob1");
       if (Platform.isIOS) {
+        print("noob2");
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LoginPage(),
             ));
-      } else if (Platform.isAndroid) {
-        if (pin != null) {
+      } else if (Platform.isAndroid && access_token != null) {
+        print("noob3");
+        if (pin != null && access_token != null) {
+          print("noob4");
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => Pinauth(),
               ));
-        } else {
-          return true;
         }
       }
     }
   }
-  //   if (access_token == null) {
-  //     setState(() {
-  //       _showbutton = true;
-  //       Timer(
-  //           Duration(seconds: 4),
-  //           () => Navigator.pushReplacement(
-  //               context, MaterialPageRoute(builder: (context) => LoginPage())));
-  //     });
-  //   } else {
-  //     _showbutton = false;
-  //     if (Platform.isIOS) {
-  //       Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => LoginPage(),
-  //           ));
-  //     } else if (Platform.isAndroid) {
-  //       if (pin != null) {
-  //         Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => Pinauth(),
-  //             ));
-  //       } else {
-  //         return true;
-  //       }
-  //     }
-  //   }
-  // }
 
   @override
   void initState() {
+    print("iam gift to you $access_token");
     cekToken();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("object11 $access_token");
     // Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -149,10 +129,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
                     }),
               ),
             ],

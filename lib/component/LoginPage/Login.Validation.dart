@@ -25,6 +25,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String uniqueId = "Unknown";
+  String deviceId = "";
 
   LocalAuthentication _auth = LocalAuthentication();
   bool _isLoading = false, _obsecureText = true, _checkbio = false;
@@ -59,18 +60,27 @@ class _LoginPageState extends State<LoginPage> {
     initPlatformState();
   }
 
-  Future<void> initPlatformState() async {
+  // Future<void> initPlatformState() async {
+    Future initPlatformState() async {
     String platformImei;
     String idunique;
 
-    try {
-      platformImei =
-          await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
-      List<String> multiImei = await ImeiPlugin.getImeiMulti();
-      print(multiImei);
-      idunique = await ImeiPlugin.getId();
-    } on PlatformException {
-      uniqueId = 'gagal mendapatkan mac UUID';
+    // try {
+    //   platformImei =
+    //       await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+    //   List<String> multiImei = await ImeiPlugin.getImeiMulti();
+    //   print(multiImei);
+    //   idunique = await ImeiPlugin.getId();
+    // } on PlatformException {
+    //   uniqueId = 'gagal mendapatkan mac UUID';
+    // }
+    DeviceInfoPlugin deviceinfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceinfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceinfo.androidInfo;
+      return androidDeviceInfo.androidId;
     }
     if (!mounted) return;
     setState(() {
@@ -185,6 +195,20 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    Text(
+                      '$deviceId',
+                      // ignore: deprecated_member_use
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                    FlatButton(
+                        onPressed: () {
+                          initPlatformState().then((ids) {
+                            setState(() {
+                              deviceId = ids;
+                            });
+                          });
+                        },
+                        child: Text("Tekan disini aja UUID nya")),
                     SizedBox(
                       height: 10,
                     ),
