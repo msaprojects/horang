@@ -96,6 +96,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       _fieldnominalbarang,
       _fieldketerangan;
 
+  cleartextinputnominal(){
+    _nominalbarang.clear();
+  }
+
   void getAsuransi() async {
     final response = await http.get(ApiService().urlasuransi,
         headers: {"Authorization": "BEARER ${access_token}"});
@@ -559,6 +563,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 padding: const EdgeInsets.only(
                                     left: 30, right: 30, top: 5),
                                 child: TextFormField(
+                                  onTap: (){
+                                    if (_nominalbarang.text == "0") {
+                                      cleartextinputnominal();
+                                    }
+                                  },
                                   keyboardType: TextInputType.numberWithOptions(
                                       decimal: true),
                                   decoration: InputDecoration(
@@ -572,7 +581,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     WhitelistingTextInputFormatter.digitsOnly,
                                   ],
                                   onChanged: (value) {
-                                    print("tes nom barang sss " +
+                                    print("tes nom barang sssk " +
                                         _nominalbarang.toString());
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != _fieldnominalbarang) {

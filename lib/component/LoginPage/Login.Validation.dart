@@ -61,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Future<void> initPlatformState() async {
-    Future initPlatformState() async {
-    String platformImei;
-    String idunique;
+  Future initPlatformState() async {
+    // String platformImei;
+    // String idunique;
 
     // try {
     //   platformImei =
@@ -82,10 +82,10 @@ class _LoginPageState extends State<LoginPage> {
       AndroidDeviceInfo androidDeviceInfo = await deviceinfo.androidInfo;
       return androidDeviceInfo.androidId;
     }
-    if (!mounted) return;
-    setState(() {
-      uniqueId = idunique;
-    });
+    // if (!mounted) return;
+    // setState(() {
+    //   uniqueId = idunique;
+    // });
   }
 
   void getDataFcm(Map<String, dynamic> message) {
@@ -147,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(29),
                         child: FlatButton(
-                          child: Text(uniqueId), // button login
+                          // child: Text(uniqueId), // button login
+                          child: Text("LOGIN", style: GoogleFonts.lato(),), // button login
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 40),
@@ -162,13 +163,19 @@ class _LoginPageState extends State<LoginPage> {
                               ));
 //                            return;
                             }
+                            initPlatformState().then((ids) {
+                              setState(() {
+                                deviceId = ids;
+                              });
+                            });
+                            
                             setState(() => _isLoading = true);
                             String email = _controllerEmail.text.toString();
                             String password =
                                 _controllerPassword.text.toString();
-                            print("///---///" + email + "///---///" + password);
+                            print("///---///" + email + "///---///" + password + "-----kuy" + deviceId);
                             PenggunaModel pengguna = PenggunaModel(
-                                uuid: uniqueId,
+                                uuid: deviceId,
                                 email: email,
                                 password: password,
                                 status: 0,
@@ -190,25 +197,26 @@ class _LoginPageState extends State<LoginPage> {
                                     "Periksa kembali username dan password anda",
                                     title: "Login Gagal");
                               }
-                            });
+                            }
+                            );
                           },
                         ),
                       ),
                     ),
-                    Text(
-                      '$deviceId',
-                      // ignore: deprecated_member_use
-                      style: Theme.of(context).textTheme.display1,
-                    ),
-                    FlatButton(
-                        onPressed: () {
-                          initPlatformState().then((ids) {
-                            setState(() {
-                              deviceId = ids;
-                            });
-                          });
-                        },
-                        child: Text("Tekan disini aja UUID nya")),
+                    // Text(
+                    //   '$deviceId',
+                    //   // ignore: deprecated_member_use
+                    //   style: Theme.of(context).textTheme.display1,
+                    // ),
+                    // FlatButton(
+                    //     onPressed: () {
+                    //       initPlatformState().then((ids) {
+                    //         setState(() {
+                    //           deviceId = ids;
+                    //         });
+                    //       });
+                    //     },
+                    //     child: Text("Tekan disini aja UUID nya")),
                     SizedBox(
                       height: 10,
                     ),

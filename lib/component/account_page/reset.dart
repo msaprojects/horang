@@ -21,26 +21,36 @@ class _ResetState extends State<Reset> {
   bool _isLoading = false, _email, _isFieldEmail;
   String emails, tipes, judul;
   String uniqueId = "Unknown";
+  String deviceId = "";
   TextEditingController _controlleremail = TextEditingController();
   ApiService _apiService = ApiService();
 
-  Future<void> initPlatformState() async {
+  // Future<void> initPlatformState() async {
+  Future initPlatformState() async {
     String platformImei;
     String idunique;
 
-    try {
-      platformImei =
-          await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
-      List<String> multiImei = await ImeiPlugin.getImeiMulti();
-      print(multiImei);
-      idunique = await ImeiPlugin.getId();
-    } on PlatformException {
-      uniqueId = 'gagal mendapatkan mac UUID';
+    DeviceInfoPlugin deviceinfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceinfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceinfo.androidInfo;
+      return androidDeviceInfo.androidId;
     }
-    if (!mounted) return;
-    setState(() {
-      uniqueId = idunique;
-    });
+    // try {
+    //   platformImei =
+    //       await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
+    //   List<String> multiImei = await ImeiPlugin.getImeiMulti();
+    //   print(multiImei);
+    //   idunique = await ImeiPlugin.getId();
+    // } on PlatformException {
+    //   uniqueId = 'gagal mendapatkan mac UUID';
+    // }
+    // if (!mounted) return;
+    // setState(() {
+    //   uniqueId = idunique;
+    // });
   }
 
   @override
@@ -122,10 +132,15 @@ class _ResetState extends State<Reset> {
                         ),
                         onPressed: () {
                           setState(() => _isLoading = true);
+                          initPlatformState().then((ids) {
+                            setState(() {
+                              deviceId = ids;
+                            });
+                          });
                           Forgot_Password reset = Forgot_Password(
                               email: _controlleremail.text.toString(),
-                              uuid: uniqueId);
-                          print(reset.toString());
+                              uuid: deviceId);
+                          print(reset.toString() + "ssdevice" + deviceId);
                           if (widget.respass == null) {
                             if (tipes == "ResendEmail") {
                               _apiService.ResendEmail(reset).then((isSuccess) {
