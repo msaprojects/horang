@@ -96,7 +96,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       _fieldnominalbarang,
       _fieldketerangan;
 
-  cleartextinputnominal(){
+  cleartextinputnominal() {
     _nominalbarang.clear();
   }
 
@@ -109,13 +109,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
     email_asuransi = json.decode(response.body)[0]['email_asuransi'];
     idasuransi = json.decode(response.body)[0]['idasuransi'];
     hasilperhitungan = hitungall(
-        harga.toString(),
-        jumlah_sewas.toString(),
-        asuransie,
-        nomasuransi,
-        _nominalbarang.text.toString(),
-        ceksaldo.toString(),
-        nominalvoucher);
+      nominalvoucher,
+      harga.toString(),
+      jumlah_sewas.toString(),
+      asuransie,
+      nomasuransi,
+      _nominalbarang.text.toString(),
+      ceksaldo.toString(),
+    );
     // });
   }
 
@@ -123,8 +124,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
   bool isSuccess = false;
   var access_token, refresh_token, idcustomer, nama_customer, idlokasi = 0;
 
-  String hitungall(String harga, String durasi, int boolasuransi, num asuransi,
-      String nominalbaranginput, String ceksaldopoint, String NominalVoucher) {
+  String hitungall(
+      String nominalVoucher,
+      String harga,
+      String durasi,
+      int boolasuransi,
+      num asuransi,
+      String nominalbaranginput,
+      String ceksaldopoint) {
     if (boolasuransi == 0) asuransi = 0;
 
     total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
@@ -135,7 +142,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             ((asuransi / 100) * double.parse(nominalbaranginput)) +
             minimaldeposit * double.parse(harga) -
             double.parse(ceksaldopoint) -
-            double.parse(NominalVoucher))
+            double.parse(nominalVoucher))
         .toStringAsFixed(2);
   }
 
@@ -204,13 +211,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
     jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     hasilperhitungan = hitungall(
+        nominalvoucher,
         harga.toString(),
         jumlah_sewas.toString(),
         asuransie,
         nomasuransi,
         _nominalbarang.text.toString(),
         ceksaldo.toString(),
-        nominalvoucher);
+        );
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
@@ -218,22 +226,24 @@ class _FormDetailOrder extends State<FormInputOrder> {
         print("Nominal Point : " + ceksaldo.toString());
         if (_nominalbarang.text == "")
           hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              nomasuransi,
-              "0",
-              ceksaldo.toString(),
-              nominalvoucher);
+            nominalvoucher,
+            harga.toString(),
+            jumlah_sewas.toString(),
+            asuransie,
+            nomasuransi,
+            "0",
+            ceksaldo.toString(),
+          );
         else
           hasilperhitungan = hitungall(
-              harga.toString(),
-              jumlah_sewas.toString(),
-              asuransie,
-              nomasuransi,
-              _nominalbarang.text.toString(),
-              ceksaldo.toString(),
-              nominalvoucher);
+            nominalvoucher,
+            harga.toString(),
+            jumlah_sewas.toString(),
+            asuransie,
+            nomasuransi,
+            _nominalbarang.text.toString(),
+            ceksaldo.toString(),
+          );
       });
     });
     super.initState();
@@ -247,11 +257,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   @override
   Widget build(BuildContext context) {
-    nominalvoucher = getVoucher.toString();
     kodevvoucher = voucherKode.toString();
     idvcr = idvouchers.toString();
-    // print("kopiapi $nominalvoucher" + "$kodevvoucher --" + "$idvcr");
-    // print("IDASURANSI : " + idasuransi.toString() + email_asuransi.toString());
+    nominalvoucher = getVoucher;
+    print("suara surabaya $nominalvoucher");
     var media = MediaQuery.of(context);
     getSaldo();
     new WillPopScope(child: new Scaffold(), onWillPop: _willPopCallback);
@@ -450,23 +459,25 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           if (asuransi == true) {
                                             asuransie = 1;
                                             hasilperhitungan = hitungall(
-                                                harga.toString(),
-                                                jumlah_sewas.toString(),
-                                                asuransie,
-                                                nomasuransi,
-                                                _nominalbarang.text.toString(),
-                                                ceksaldo.toString(),
-                                                nominalvoucher);
+                                              nominalvoucher,
+                                              harga.toString(),
+                                              jumlah_sewas.toString(),
+                                              asuransie,
+                                              nomasuransi,
+                                              _nominalbarang.text.toString(),
+                                              ceksaldo.toString(),
+                                            );
                                           } else {
                                             asuransie = 0;
                                             hasilperhitungan = hitungall(
-                                                harga.toString(),
-                                                jumlah_sewas.toString(),
-                                                asuransie,
-                                                nomasuransi,
-                                                _nominalbarang.text.toString(),
-                                                ceksaldo.toString(),
-                                                nominalvoucher);
+                                              nominalvoucher,
+                                              harga.toString(),
+                                              jumlah_sewas.toString(),
+                                              asuransie,
+                                              nomasuransi,
+                                              _nominalbarang.text.toString(),
+                                              ceksaldo.toString(),
+                                            );
                                           }
                                         });
                                       },
@@ -563,7 +574,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 padding: const EdgeInsets.only(
                                     left: 30, right: 30, top: 5),
                                 child: TextFormField(
-                                  onTap: (){
+                                  onTap: () {
                                     if (_nominalbarang.text == "0") {
                                       cleartextinputnominal();
                                     }
@@ -615,93 +626,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   },
                                 ),
                               ),
-                              // Container(
-                              //   padding: const EdgeInsets.only(left: 30),
-                              //   child: Row(
-                              //     children: [
-                              //       FlatButton(
-                              //         color: Colors.orange,
-                              //         child: Text("Cek Voucher"),
-                              //         onPressed: () {
-                              //           setState(() {});
-                              //           showModalBottomSheet(
-                              //               context: context,
-                              //               isScrollControlled: true,
-                              //               backgroundColor: Colors.transparent,
-                              //               builder: (context) => Container(
-                              //                   height: MediaQuery.of(context)
-                              //                           .size
-                              //                           .height *
-                              //                       0.50,
-                              //                   decoration: new BoxDecoration(
-                              //                     color: Colors.white,
-                              //                     borderRadius:
-                              //                         new BorderRadius.only(
-                              //                       topLeft:
-                              //                           const Radius.circular(
-                              //                               25.0),
-                              //                       topRight:
-                              //                           const Radius.circular(
-                              //                               25.0),
-                              //                     ),
-                              //                   ),
-                              //                   child: SafeArea(
-                              //                       child: FutureBuilder(
-                              //                           future: _apiService
-                              //                               .listVoucher(
-                              //                                   access_token),
-                              //                           builder: (context,
-                              //                               AsyncSnapshot<
-                              //                                       List<
-                              //                                           Voucher>>
-                              //                                   snapshot) {
-                              //                             if (snapshot
-                              //                                 .hasError) {
-                              //                               return Center(
-                              //                                 child: Text(
-                              //                                     "Something wrong with message: ${snapshot.error.toString()}"),
-                              //                               );
-                              //                             } else if (snapshot
-                              //                                     .connectionState ==
-                              //                                 ConnectionState
-                              //                                     .waiting) {
-                              //                               return Center(
-                              //                                   child:
-                              //                                       CircularProgressIndicator());
-                              //                             } else if (snapshot
-                              //                                     .connectionState ==
-                              //                                 ConnectionState
-                              //                                     .done) {
-                              //                               List<Voucher>
-                              //                                   vclist =
-                              //                                   snapshot.data;
-                              //                               return _buildListvoucher(
-                              //                                   vclist);
-                              //                             }
-                              //                           }))));
-                              //           // setState(() {
-                              //           //   print("YUU" +
-                              //           //       valasuransi +
-                              //           //       " - " +
-                              //           //       harga +
-                              //           //       " - " +
-                              //           //       jumlah_sewas.toString());
-                              //           //                                      int perhitungan = (harga.toString()*jumlah_sewas)*(1+(valasuransi/100));
-                              //           //                                      print("BISA YOK BISA! :"+perhitungan.toString());
-                              //           // }
-                              //           // );
-                              //         },
-                              //       ),
-                              //       SizedBox(
-                              //         width: 50,
-                              //       ),
-                              //       Text(getVoucher,
-                              //           style: GoogleFonts.lato(
-                              //               fontSize: 14,
-                              //               fontWeight: FontWeight.bold))
-                              //     ],
-                              //   ),
-                              // ),
                             ],
                           ),
                         )
@@ -756,24 +680,26 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               if (asuransi == true) {
                                 asuransie = 1;
                                 hasilperhitungan = hitungall(
-                                    harga.toString(),
-                                    jumlah_sewas.toString(),
-                                    asuransie,
-                                    nomasuransi,
-                                    _nominalbarang.text.toString(),
-                                    ceksaldo.toString(),
-                                    nominalvoucher);
+                                  nominalvoucher,
+                                  harga.toString(),
+                                  jumlah_sewas.toString(),
+                                  asuransie,
+                                  nomasuransi,
+                                  _nominalbarang.text.toString(),
+                                  ceksaldo.toString(),
+                                );
                               } else {
                                 asuransie = 0;
                                 nomasuransi = 0;
                                 hasilperhitungan = hitungall(
-                                    harga.toString(),
-                                    jumlah_sewas.toString(),
-                                    asuransie,
-                                    nomasuransi,
-                                    _nominalbarang.text.toString(),
-                                    ceksaldo.toString(),
-                                    nominalvoucher);
+                                  nominalvoucher,
+                                  harga.toString(),
+                                  jumlah_sewas.toString(),
+                                  asuransie,
+                                  nomasuransi,
+                                  _nominalbarang.text.toString(),
+                                  ceksaldo.toString(),
+                                );
                               }
                               getSaldo();
                               // if (ceksaldo == null) {
@@ -839,9 +765,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
   cekDeposit(BuildContext context) {
     infoDialog(context,
         "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
-        showNeutralButton: false, positiveText: "Ok", positiveAction: () {
+        showNeutralButton: false, 
+        negativeText: "Batal",
+        negativeAction: (){},
+        positiveText: "Ok", positiveAction: () {
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
+          .push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
             flagasuransi: asuransie,
             flagvoucher: flagsuransi,

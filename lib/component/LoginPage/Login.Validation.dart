@@ -148,7 +148,10 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(29),
                         child: FlatButton(
                           // child: Text(uniqueId), // button login
-                          child: Text("LOGIN", style: GoogleFonts.lato(),), // button login
+                          child: Text(
+                            "LOGIN",
+                            style: GoogleFonts.lato(),
+                          ), // button login
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 40),
@@ -166,39 +169,43 @@ class _LoginPageState extends State<LoginPage> {
                             initPlatformState().then((ids) {
                               setState(() {
                                 deviceId = ids;
+                                setState(() => _isLoading = true);
+                                String email = _controllerEmail.text.toString();
+                                String password =
+                                    _controllerPassword.text.toString();
+                                print("///---///" +
+                                    email +
+                                    "///---///" +
+                                    password +
+                                    "-----kuy" +
+                                    deviceId);
+                                PenggunaModel pengguna = PenggunaModel(
+                                    uuid: deviceId,
+                                    email: email,
+                                    password: password,
+                                    status: 0,
+                                    notification_token: token,
+                                    token_mail: "0",
+                                    keterangan: "Uji Coba");
+                                print("Post to Pengguna : " +
+                                    pengguna.toString());
+                                _apiService.xenditUrl();
+                                _apiService.loginIn(pengguna).then((isSuccess) {
+                                  setState(() => _isLoading = false);
+                                  if (isSuccess) {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Home()));
+                                  } else {
+                                    print("Login Gagal");
+                                    errorDialog(context,
+                                        "Periksa kembali username dan password anda",
+                                        title: "Login Gagal");
+                                  }
+                                });
                               });
                             });
-                            
-                            setState(() => _isLoading = true);
-                            String email = _controllerEmail.text.toString();
-                            String password =
-                                _controllerPassword.text.toString();
-                            print("///---///" + email + "///---///" + password + "-----kuy" + deviceId);
-                            PenggunaModel pengguna = PenggunaModel(
-                                uuid: deviceId,
-                                email: email,
-                                password: password,
-                                status: 0,
-                                notification_token: token,
-                                token_mail: "0",
-                                keterangan: "Uji Coba");
-                            print("Post to Pengguna : " + pengguna.toString());
-                            _apiService.xenditUrl();
-                            _apiService.loginIn(pengguna).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Home()));
-                              } else {
-                                print("Login Gagal");
-                                errorDialog(context,
-                                    "Periksa kembali username dan password anda",
-                                    title: "Login Gagal");
-                              }
-                            }
-                            );
                           },
                         ),
                       ),

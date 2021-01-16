@@ -131,95 +131,110 @@ class _ResetState extends State<Reset> {
                           style: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {
-                          setState(() => _isLoading = true);
                           initPlatformState().then((ids) {
                             setState(() {
                               deviceId = ids;
+                              Forgot_Password reset = Forgot_Password(
+                                  email: _controlleremail.text.toString(),
+                                  uuid: deviceId);
+                              print(reset.toString() + "ssdevice" + deviceId);
+                              if (widget.respass == null) {
+                                if (tipes == "ResendEmail") {
+                                  _apiService.ResendEmail(reset)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess && deviceId != "") {
+                                      successDialog(context,
+                                          "Resend email berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                          showNeutralButton: false,
+                                          positiveText: "Ok",
+                                          positiveAction: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()),
+                                                (route) => false);
+                                      });
+                                    } else {
+                                      errorDialog(context,
+                                          "Data gagal disimpan, silahkan hubungi admin !");
+                                    }
+                                  });
+                                } else if (tipes == "ResetPassword") {
+                                  _apiService.ForgetPass(reset)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      successDialog(context,
+                                          "Reset password berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                          showNeutralButton: false,
+                                          positiveText: "Ok",
+                                          positiveAction: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()),
+                                                (route) => false);
+                                      });
+                                    } else {
+                                      errorDialog(context,
+                                          "Data gagal disimpan, silahkan hubungi admin !");
+                                    }
+                                  });
+                                } else if (tipes == "ResetPin") {
+                                  _apiService.ForgetPin(reset)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      successDialog(context,
+                                          "Reset Pin berhasil dilakukan, cek email anda untuk verifikasi data !",
+                                          showNeutralButton: false,
+                                          positiveText: "Ok",
+                                          positiveAction: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()),
+                                                (route) => false);
+                                      });
+                                    } else {
+                                      errorDialog(context,
+                                          "Data gagal disimpan, silahkan hubungi admin !");
+                                    }
+                                  });
+                                } else if (tipes == "ResetDevice") {
+                                  print('reset device');
+                                  _apiService.LostDevice(reset)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    print("rest..device1");
+                                    if (!isSuccess) {
+                                      print("rest..device3");
+                                      errorDialog(context,
+                                          "Data gagal disimpan, silahkan hubungi admin !");
+                                    } else {
+                                      print("rest..device2");
+                                      successDialog(context,
+                                          "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
+                                          showNeutralButton: false,
+                                          positiveText: "OK",
+                                          positiveAction: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()),
+                                                (route) => false);
+                                      });
+                                    }
+                                  });
+                                }
+                              }
                             });
                           });
-                          Forgot_Password reset = Forgot_Password(
-                              email: _controlleremail.text.toString(),
-                              uuid: deviceId);
-                          print(reset.toString() + "ssdevice" + deviceId);
-                          if (widget.respass == null) {
-                            if (tipes == "ResendEmail") {
-                              _apiService.ResendEmail(reset).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  successDialog(context,
-                                      "Resend email berhasil dilakukan, cek email anda untuk verifikasi data !",
-                                      showNeutralButton: false,
-                                      positiveText: "Ok", positiveAction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()),
-                                        (route) => false);
-                                  });
-                                } else {
-                                  errorDialog(context,
-                                      "Data gagal disimpan, silahkan hubungi admin !");
-                                }
-                              });
-                            } else if (tipes == "ResetPassword") {
-                              _apiService.ForgetPass(reset).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  successDialog(context,
-                                      "Reset password berhasil dilakukan, cek email anda untuk verifikasi data !",
-                                      showNeutralButton: false,
-                                      positiveText: "Ok", positiveAction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()),
-                                        (route) => false);
-                                  });
-                                } else {
-                                  errorDialog(context,
-                                      "Data gagal disimpan, silahkan hubungi admin !");
-                                }
-                              });
-                            } else if (tipes == "ResetPin") {
-                              _apiService.ForgetPin(reset).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  successDialog(context,
-                                      "Reset Pin berhasil dilakukan, cek email anda untuk verifikasi data !",
-                                      showNeutralButton: false,
-                                      positiveText: "Ok", positiveAction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()),
-                                        (route) => false);
-                                  });
-                                } else {
-                                  errorDialog(context,
-                                      "Data gagal disimpan, silahkan hubungi admin !");
-                                }
-                              });
-                            } else if (tipes == "ResetDevice") {
-                              print('reset device');
-                              _apiService.LostDevice(reset).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                print("rest..device1");
-                                if (!isSuccess) {
-                                  print("rest..device3");
-                                  errorDialog(context,
-                                      "Data gagal disimpan, silahkan hubungi admin !");
-                                } else {
-                                  print("rest..device2");
-                                  successDialog(context,
-                                      "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
-                                      showNeutralButton: false,
-                                      positiveText: "OK", positiveAction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()),
-                                        (route) => false);
-                                  });
-                                }
-                              });
-                            }
-                          }
                         }),
                   )
                 ],

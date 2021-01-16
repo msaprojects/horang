@@ -52,12 +52,32 @@ class _ProdukList extends State<ProdukList> {
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
       rtanggalAkhir;
+  String selectedTgl = 'Tap to select date';
   String _selectedDate;
   String _dateCount;
   String _range;
   String _rangeCount;
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
+
+  void mainz() {
+    // var re = RegExp(r'(?<=forklift)(.*)(?=forklift)');
+    // String str = 'forklift';
+    // var hasil = re.firstMatch(str).toString().toLowerCase();
+    // print("hey dude"+hasil.toString());
+    // if(hasil !=null) print("come on"+hasil.group().toString());
+
+    const str = "";
+    const start = "forklift";
+    const end = "forklift";
+
+    final startIndex = str.indexOf(start);
+    final endIndex = str.indexOf(end, startIndex + start.length);
+
+    print(
+        "chicken dinner" + str.substring(startIndex + start.length, endIndex));
+  }
+
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
 
@@ -78,6 +98,134 @@ class _ProdukList extends State<ProdukList> {
 
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
+
+  void cariForklift() {
+    const str = 'forklift';
+    const awal = 'forklift';
+    const akhir = 'forklift';
+
+    final awalIndex = str.indexOf(awal);
+    final akhirIndex = str.indexOf(akhir, awalIndex + awal.length);
+    print("susu bendera" + str.substring(awalIndex + awal.length, akhirIndex));
+  }
+
+  Future<void> selectTanggal(BuildContext contexts) async {
+    final DateTime d = await showDatePicker(
+      context: contexts,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2099),
+    );
+    if (d != null)
+      setState(() {
+        selectedTgl = new DateFormat.yMMMMd("en_US").format(d);
+      });
+  }
+
+  Future _popUpTroble(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new Container(
+              width: 250,
+              height: 350,
+              decoration: new BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: const Color(0xFFFFFF),
+                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Opsi Pilihan...",
+                                style: GoogleFonts.lato(fontSize: 14),
+                              ),
+                              IconButton(
+                                  iconSize: 14,
+                                  icon: Icon(
+                                    Icons.close_outlined,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Pilih Tanggal",
+                            style: GoogleFonts.lato(
+                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            InkWell(
+                              child: Text(selectedTgl,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Color(0xFF000000))),
+                              onTap: () {
+                                selectTanggal(context);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.calendar_today),
+                              tooltip: 'Tap to open date picker',
+                              onPressed: () {
+                                selectTanggal(context);
+                              },
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.calendar_today),
+                              tooltip: 'Tap to open date picker',
+                              onPressed: () {
+                                selectTanggal(context);
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                            width: 900,
+                            child: FlatButton(
+                                color: Colors.red[900],
+                                onPressed: () {},
+                                child: Text(
+                                  'Lost Device',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
   void _cekKoneksi() async {
     connectivityStream = await Connectivity()
@@ -223,7 +371,6 @@ class _ProdukList extends State<ProdukList> {
     print("HMMM : $access_token");
     _cekKoneksi();
     super.initState();
-    // print("Hasil Val Kota"+valKota);
   }
 
   @override
@@ -272,7 +419,7 @@ class _ProdukList extends State<ProdukList> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(),
+                    // Container(),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: MediaQuery.of(context).size.height * 0.1,
@@ -407,7 +554,7 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("PRODUK DATA : "+data.toString());
+    print("PRODUK DATA : " + data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -503,16 +650,28 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
-                                            // print("tanggal awal adalah" + _tanggalAwal);
-                                            Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return FormInputOrder(
-                                                jenisProduk: jenisProduk,
-                                                tglawal12: _tanggalAwal,
-                                                tglakhir12: _tanggalAkhir,
-                                              );
-                                            }));
+                                            String haizz = "Forklift";
+                                            print(haizz.toString().split(" "));
+                                            print("XX : ${jenisProduk.kapasitas.toString().split(" ")}");
+                                            var test = jenisProduk.kapasitas.toString().split(" ");
+                                            print("XX@ : "+test[0].toString());
+                                            // print("XX : "+test.toString().indexOf('Forklift'));
+                                            // if (jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0) {
+                                              if (jenisProduk.kapasitas.toString().split(" ").indexOf("forklift")>0) {
+                                              return print("hello mama");
+                                            } else {
+                                              print("zzzz ${jenisProduk.kapasitas}");
+                                              print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
+                                            }
+                                            // Navigator.push(context,
+                                            //     MaterialPageRoute(
+                                            //         builder: (context) {
+                                            //   return FormInputOrder(
+                                            //     jenisProduk: jenisProduk,
+                                            //     tglawal12: _tanggalAwal,
+                                            //     tglakhir12: _tanggalAkhir,
+                                            //   );
+                                            // }));
                                           }
                                         },
                                         child: Column(
