@@ -49,7 +49,12 @@ dependencies:
   firebase_messaging: ^7.0.3
   intl: ^0.16.1
   imei_plugin: ^1.2.0
+<<<<<<< Updated upstream
   pull_to_refresh: ^1.6.3
+=======
+  flutter_datetime_picker: ^1.4.0
+  # pull_to_refresh: ^1.6.3
+>>>>>>> Stashed changes
   # scoped_model: ^1.0.1
   # flutter_socket_io: ^0.6.0
   # device_info: ^0.4.2+4

@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -58,6 +60,12 @@ class _ProdukList extends State<ProdukList> {
   String _rangeCount;
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
+<<<<<<< Updated upstream
+=======
+  String _date = "Not set";
+  String _time = "Not set";
+
+>>>>>>> Stashed changes
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
 
@@ -79,6 +87,213 @@ class _ProdukList extends State<ProdukList> {
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
 
+<<<<<<< Updated upstream
+=======
+  // Future<void> selectTanggal(BuildContext contexts) async {
+  //   final DateTime d = await showDatePicker(
+  //     context: contexts,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2099),
+  //   );
+  //   if (d != null)
+  //     setState(() {
+  //       selectedTgl = new DateFormat.yMMMMd("en_US").format(d);
+  //     });
+  // }
+
+  Future _popUpTroble(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            content: Text(
+                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FlatButton(
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                          theme: DatePickerTheme(containerHeight: 210.0),
+                          showTitleActions: true,
+                          minTime: DateTime.now(),
+                          maxTime: DateTime(2099, 12, 31), onConfirm: (date) {
+                        print('confirm $date');
+                        _date = '${date.year} - ${date.month} - ${date.day}';
+                        setState(() {});
+                      }, currentTime: DateTime.now(), locale: LocaleType.id);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.date_range,
+                                  size: 18.0,
+                                  color: Colors.teal,
+                                ),
+                                Text(
+                                  "$_date",
+                                  style: GoogleFonts.lato(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            "  Change",
+                            style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white10,
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget getDateRangePicker() {
+    return Container(
+        height: 250,
+        child: Card(
+            child: SfDateRangePicker(
+          view: DateRangePickerView.month,
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: selectionChanged,
+        )));
+  }
+
+  void selectionChanged(DateRangePickerSelectionChangedArgs args) {
+    _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
+
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
+      setState(() {});
+    });
+  }
+
+  // Future _popUpTroble(BuildContext context) {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           content: new Container(
+  //             width: 250,
+  //             height: 350,
+  //             decoration: new BoxDecoration(
+  //               shape: BoxShape.rectangle,
+  //               color: const Color(0xFFFFFF),
+  //               borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+  //             ),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.stretch,
+  //               children: [
+  //                 Container(
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Container(
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Text(
+  //                               "Opsi Pilihan...",
+  //                               style: GoogleFonts.lato(fontSize: 14),
+  //                             ),
+  //                             IconButton(
+  //                                 iconSize: 14,
+  //                                 icon: Icon(
+  //                                   Icons.close_outlined,
+  //                                 ),
+  //                                 onPressed: () {
+  //                                   Navigator.pop(context);
+  //                                 }),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Divider(
+  //                         thickness: 1,
+  //                       ),
+  //                       SizedBox(
+  //                         height: 10,
+  //                       ),
+  //                       Text("Pilih Tanggal",
+  //                           style: GoogleFonts.lato(
+  //                               fontSize: 14, fontWeight: FontWeight.bold)),
+  //                       SizedBox(
+  //                         height: 5,
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                         children: <Widget>[
+  //                           InkWell(
+  //                             child: Text(selectedTgl,
+  //                                 textAlign: TextAlign.center,
+  //                                 style: TextStyle(color: Color(0xFF000000))),
+  //                             onTap: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                           IconButton(
+  //                             icon: Icon(Icons.calendar_today),
+  //                             tooltip: 'Tap to open date picker',
+  //                             onPressed: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                         children: <Widget>[
+  //                           IconButton(
+  //                             icon: Icon(Icons.calendar_today),
+  //                             tooltip: 'Tap to open date picker',
+  //                             onPressed: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       Container(
+  //                           width: 900,
+  //                           child: FlatButton(
+  //                               color: Colors.red[900],
+  //                               onPressed: () {},
+  //                               child: Text(
+  //                                 'Lost Device',
+  //                                 style: GoogleFonts.inter(
+  //                                     fontSize: 14,
+  //                                     color: Colors.white,
+  //                                     fontWeight: FontWeight.bold),
+  //                               ))),
+  //                     ],
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
+
+>>>>>>> Stashed changes
   void _cekKoneksi() async {
     connectivityStream = await Connectivity()
         .onConnectivityChanged
@@ -503,6 +718,7 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
+<<<<<<< Updated upstream
                                             // print("tanggal awal adalah" + _tanggalAwal);
                                             Navigator.push(context,
                                                 MaterialPageRoute(
@@ -513,6 +729,27 @@ class _ProdukList extends State<ProdukList> {
                                                 tglakhir12: _tanggalAkhir,
                                               );
                                             }));
+=======
+                                            if (jenisProduk.kapasitas
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains('forklift')) {
+                                              // return print("hello mama");
+                                              _popUpTroble(context);
+                                            } else {
+                                              // print("zzzz ${jenisProduk.kapasitas}");
+                                              // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return FormInputOrder(
+                                                  jenisProduk: jenisProduk,
+                                                  tglawal12: _tanggalAwal,
+                                                  tglakhir12: _tanggalAkhir,
+                                                );
+                                              }));
+                                            }
+>>>>>>> Stashed changes
                                           }
                                         },
                                         child: Column(
