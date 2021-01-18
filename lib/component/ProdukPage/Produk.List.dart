@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -52,38 +54,21 @@ class _ProdukList extends State<ProdukList> {
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
       rtanggalAkhir;
-  String selectedTgl = 'Tap to select date';
   String _selectedDate;
   String _dateCount;
   String _range;
   String _rangeCount;
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
-
-  void mainz() {
-    // var re = RegExp(r'(?<=forklift)(.*)(?=forklift)');
-    // String str = 'forklift';
-    // var hasil = re.firstMatch(str).toString().toLowerCase();
-    // print("hey dude"+hasil.toString());
-    // if(hasil !=null) print("come on"+hasil.group().toString());
-
-    const str = "";
-    const start = "forklift";
-    const end = "forklift";
-
-    final startIndex = str.indexOf(start);
-    final endIndex = str.indexOf(end, startIndex + start.length);
-
-    print(
-        "chicken dinner" + str.substring(startIndex + start.length, endIndex));
-  }
+  String _date = "Not set";
+  String _time = "Not set";
 
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
 
   String mmtext = DateFormat.yMMMd().format(DateTime.now());
   String aatext =
-      DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
+  DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
   var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
@@ -99,133 +84,195 @@ class _ProdukList extends State<ProdukList> {
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
 
-  void cariForklift() {
-    const str = 'forklift';
-    const awal = 'forklift';
-    const akhir = 'forklift';
-
-    final awalIndex = str.indexOf(awal);
-    final akhirIndex = str.indexOf(akhir, awalIndex + awal.length);
-    print("susu bendera" + str.substring(awalIndex + awal.length, akhirIndex));
-  }
-
-  Future<void> selectTanggal(BuildContext contexts) async {
-    final DateTime d = await showDatePicker(
-      context: contexts,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2099),
-    );
-    if (d != null)
-      setState(() {
-        selectedTgl = new DateFormat.yMMMMd("en_US").format(d);
-      });
-  }
-
   Future _popUpTroble(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: new Container(
-              width: 250,
-              height: 350,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            title: Text("Sesi Anda Berakhir!"),
+            content: Text(
+                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Opsi Pilihan...",
-                                style: GoogleFonts.lato(fontSize: 14),
-                              ),
-                              IconButton(
-                                  iconSize: 14,
-                                  icon: Icon(
-                                    Icons.close_outlined,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                            ],
+                  FlatButton(
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                          theme: DatePickerTheme(containerHeight: 210.0),
+                          showTitleActions: true,
+                          minTime: DateTime.now(),
+                          maxTime: DateTime(2099, 12, 31), onConfirm: (date) {
+                            print('confirm $date');
+                            _date = '${date.year} - ${date.month} - ${date.day}';
+                            setState(() {});
+                          }, currentTime: DateTime.now(), locale: LocaleType.id);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.date_range,
+                                  size: 18.0,
+                                  color: Colors.teal,
+                                ),
+                                Text(
+                                  "$_date",
+                                  style: GoogleFonts.lato(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(
-                          thickness: 1,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text("Pilih Tanggal",
-                            style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            InkWell(
-                              child: Text(selectedTgl,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Color(0xFF000000))),
-                              onTap: () {
-                                selectTanggal(context);
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              tooltip: 'Tap to open date picker',
-                              onPressed: () {
-                                selectTanggal(context);
-                              },
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              tooltip: 'Tap to open date picker',
-                              onPressed: () {
-                                selectTanggal(context);
-                              },
-                            ),
-                          ],
-                        ),
-                        Container(
-                            width: 900,
-                            child: FlatButton(
-                                color: Colors.red[900],
-                                onPressed: () {},
-                                child: Text(
-                                  'Lost Device',
-                                  style: GoogleFonts.inter(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ))),
-                      ],
+                          Text(
+                            "  Change",
+                            style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                    color: Colors.white10,
+                  ),
                 ],
               ),
-            ),
+            ],
           );
         });
   }
+
+  Widget getDateRangePicker() {
+    return Container(
+        height: 250,
+        child: Card(
+            child: SfDateRangePicker(
+              view: DateRangePickerView.month,
+              selectionMode: DateRangePickerSelectionMode.single,
+              onSelectionChanged: selectionChanged,
+            )));
+  }
+
+  void selectionChanged(DateRangePickerSelectionChangedArgs args) {
+    _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
+
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
+      setState(() {});
+    });
+  }
+
+  // Future _popUpTroble(BuildContext context) {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           content: new Container(
+  //             width: 250,
+  //             height: 350,
+  //             decoration: new BoxDecoration(
+  //               shape: BoxShape.rectangle,
+  //               color: const Color(0xFFFFFF),
+  //               borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+  //             ),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.stretch,
+  //               children: [
+  //                 Container(
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Container(
+  //                         child: Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             Text(
+  //                               "Opsi Pilihan...",
+  //                               style: GoogleFonts.lato(fontSize: 14),
+  //                             ),
+  //                             IconButton(
+  //                                 iconSize: 14,
+  //                                 icon: Icon(
+  //                                   Icons.close_outlined,
+  //                                 ),
+  //                                 onPressed: () {
+  //                                   Navigator.pop(context);
+  //                                 }),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       Divider(
+  //                         thickness: 1,
+  //                       ),
+  //                       SizedBox(
+  //                         height: 10,
+  //                       ),
+  //                       Text("Pilih Tanggal",
+  //                           style: GoogleFonts.lato(
+  //                               fontSize: 14, fontWeight: FontWeight.bold)),
+  //                       SizedBox(
+  //                         height: 5,
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                         children: <Widget>[
+  //                           InkWell(
+  //                             child: Text(selectedTgl,
+  //                                 textAlign: TextAlign.center,
+  //                                 style: TextStyle(color: Color(0xFF000000))),
+  //                             onTap: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                           IconButton(
+  //                             icon: Icon(Icons.calendar_today),
+  //                             tooltip: 'Tap to open date picker',
+  //                             onPressed: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                         children: <Widget>[
+  //                           IconButton(
+  //                             icon: Icon(Icons.calendar_today),
+  //                             tooltip: 'Tap to open date picker',
+  //                             onPressed: () {
+  //                               selectTanggal(context);
+  //                             },
+  //                           ),
+  //                         ],
+  //                       ),
+  //                       Container(
+  //                           width: 900,
+  //                           child: FlatButton(
+  //                               color: Colors.red[900],
+  //                               onPressed: () {},
+  //                               child: Text(
+  //                                 'Lost Device',
+  //                                 style: GoogleFonts.inter(
+  //                                     fontSize: 14,
+  //                                     color: Colors.white,
+  //                                     fontWeight: FontWeight.bold),
+  //                               ))),
+  //                     ],
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 
   void _cekKoneksi() async {
     connectivityStream = await Connectivity()
@@ -266,10 +313,10 @@ class _ProdukList extends State<ProdukList> {
 
   int diffInDays(DateTime akhir, DateTime awal) {
     return ((akhir.difference(awal) -
-                    Duration(hours: akhir.hour) +
-                    Duration(hours: awal.hour))
-                .inHours /
-            24)
+        Duration(hours: akhir.hour) +
+        Duration(hours: awal.hour))
+        .inHours /
+        24)
         .round();
   }
 
@@ -293,7 +340,7 @@ class _ProdukList extends State<ProdukList> {
         }
 
         if (diffInDays(
-                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+            DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
             5) {
           // dateValidation(context, _date2 = _date1.add(Duration(days: 5)));
           warningDialog(
@@ -325,31 +372,31 @@ class _ProdukList extends State<ProdukList> {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
-            isSuccess = value;
-            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-            if (!isSuccess) {
-              _apiService
-                  .refreshToken(refresh_token)
-                  .then((value) => setState(() {
-                        var newtoken = value;
-                        //setting access_token dari refresh_token
-                        if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
-                          access_token = newtoken;
-                        } else {
-                          showAlertDialog(context);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => false);
-                        }
-                      }));
+        isSuccess = value;
+        //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+        if (!isSuccess) {
+          _apiService
+              .refreshToken(refresh_token)
+              .then((value) => setState(() {
+            var newtoken = value;
+            //setting access_token dari refresh_token
+            if (newtoken != "") {
+              sp.setString("access_token", newtoken);
+              access_token = newtoken;
+            } else {
+              showAlertDialog(context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          LoginPage()),
+                      (Route<dynamic> route) => false);
             }
           }));
+        }
+      }));
       getcomboProduk();
     }
   }
@@ -371,6 +418,7 @@ class _ProdukList extends State<ProdukList> {
     print("HMMM : $access_token");
     _cekKoneksi();
     super.initState();
+    // print("Hasil Val Kota"+valKota);
   }
 
   @override
@@ -419,7 +467,7 @@ class _ProdukList extends State<ProdukList> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Container(),
+                    Container(),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: MediaQuery.of(context).size.height * 0.1,
@@ -491,31 +539,31 @@ class _ProdukList extends State<ProdukList> {
                     ),
                     a == true
                         ? new Container(
-                            child: Column(
-                            children: [
-                              SfDateRangePicker(
-                                minDate: DateTime(sekarang.year, sekarang.month,
-                                    sekarang.day),
-                                onSelectionChanged: _onSelectionChanged,
-                                selectionMode:
-                                    DateRangePickerSelectionMode.range,
-                                initialSelectedRange:
-                                    PickerDateRange(_date1, _date2),
+                        child: Column(
+                          children: [
+                            SfDateRangePicker(
+                              minDate: DateTime(sekarang.year, sekarang.month,
+                                  sekarang.day),
+                              onSelectionChanged: _onSelectionChanged,
+                              selectionMode:
+                              DateRangePickerSelectionMode.range,
+                              initialSelectedRange:
+                              PickerDateRange(_date1, _date2),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(
+                                  right: 16, left: 16, bottom: 16),
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                'Note : Minimum Pesanan 5 Hari',
+                                style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.italic),
+                                textAlign: TextAlign.end,
                               ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    right: 16, left: 16, bottom: 16),
-                                alignment: Alignment.topRight,
-                                child: Text(
-                                  'Note : Minimum Pesanan 5 Hari',
-                                  style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontStyle: FontStyle.italic),
-                                  textAlign: TextAlign.end,
-                                ),
-                              )
-                            ],
-                          ))
+                            )
+                          ],
+                        ))
                         : new Container(),
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
@@ -554,7 +602,7 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("PRODUK DATA : " + data.toString());
+    print("PRODUK DATA : "+data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -564,7 +612,7 @@ class _ProdukList extends State<ProdukList> {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                  // "8Something wrong with message: ${snapshot.error.toString()}"
+                // "8Something wrong with message: ${snapshot.error.toString()}"
                   "Harap pilih tanggal dan kota yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -650,33 +698,30 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
-                                            String haizz = "Forklift";
-                                            print(haizz.toString().split(" "));
-                                            print("XX : ${jenisProduk.kapasitas.toString().split(" ")}");
-                                            var test = jenisProduk.kapasitas.toString().split(" ");
-                                            print("XX@ : "+test[0].toString());
-                                            // print("XX : "+test.toString().indexOf('Forklift'));
-                                            // if (jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0) {
-                                              if (jenisProduk.kapasitas.toString().split(" ").indexOf("forklift")>0) {
-                                              return print("hello mama");
+                                            if (jenisProduk.kapasitas
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains('forklift')) {
+                                              // return print("hello mama");
+                                              _popUpTroble(context);
                                             } else {
-                                              print("zzzz ${jenisProduk.kapasitas}");
-                                              print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
+                                              // print("zzzz ${jenisProduk.kapasitas}");
+                                              // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return FormInputOrder(
+                                                          jenisProduk: jenisProduk,
+                                                          tglawal12: _tanggalAwal,
+                                                          tglakhir12: _tanggalAkhir,
+                                                        );
+                                                      }));
                                             }
-                                            // Navigator.push(context,
-                                            //     MaterialPageRoute(
-                                            //         builder: (context) {
-                                            //   return FormInputOrder(
-                                            //     jenisProduk: jenisProduk,
-                                            //     tglawal12: _tanggalAwal,
-                                            //     tglakhir12: _tanggalAkhir,
-                                            //   );
-                                            // }));
                                           }
                                         },
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
                                               children: <Widget>[
@@ -686,15 +731,15 @@ class _ProdukList extends State<ProdukList> {
                                                   child: Container(
                                                     child: Container(
                                                       height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.4,
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                          0.4,
                                                       width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.4,
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                          0.4,
                                                       decoration: BoxDecoration(
                                                           image: DecorationImage(
                                                               fit: BoxFit
@@ -712,9 +757,9 @@ class _ProdukList extends State<ProdukList> {
                                                       style: GoogleFonts.inter(
                                                           fontSize: 14,
                                                           color:
-                                                              Colors.grey[800],
+                                                          Colors.grey[800],
                                                           fontWeight:
-                                                              FontWeight.bold),
+                                                          FontWeight.bold),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -740,9 +785,9 @@ class _ProdukList extends State<ProdukList> {
                                                           fontSize: 15,
                                                           color: Colors.green,
                                                           fontWeight:
-                                                              FontWeight.bold),
+                                                          FontWeight.bold),
                                                       overflow:
-                                                          TextOverflow.fade,
+                                                      TextOverflow.fade,
                                                     ),
                                                   ],
                                                 ),
@@ -756,8 +801,8 @@ class _ProdukList extends State<ProdukList> {
                                                   left: 16, right: 16),
                                               child: Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                MainAxisAlignment
+                                                    .spaceBetween,
                                                 children: <Widget>[
                                                   Row(
                                                     children: <Widget>[
@@ -823,7 +868,7 @@ class _ProdukList extends State<ProdukList> {
               Text("Pilih Kota",
                   textAlign: TextAlign.end,
                   style:
-                      GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+                  GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
             ],
           )),
       value: valKota,
@@ -833,11 +878,11 @@ class _ProdukList extends State<ProdukList> {
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(
               borderSide:
-                  const BorderSide(color: Colors.transparent, width: 0.0),
+              const BorderSide(color: Colors.transparent, width: 0.0),
               borderRadius: BorderRadius.circular(5.0)),
           isDense: true,
           contentPadding:
-              const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
+          const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
       items: _dataKota.map((item) {
         return DropdownMenuItem(
           // child: Text(item['nama_kota']),
