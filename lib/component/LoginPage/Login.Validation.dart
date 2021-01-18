@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,12 +10,9 @@ import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/AccountChecker.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
-import 'package:imei_plugin/imei_plugin.dart';
-import 'package:local_auth/local_auth.dart';
-
-final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,10 +20,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String uniqueId = "Unknown";
-  String deviceId = "";
-
-  LocalAuthentication _auth = LocalAuthentication();
   bool _isLoading = false, _obsecureText = true, _checkbio = false;
   ApiService _apiService = ApiService();
   bool _fieldEmail, _fieldPassword;
@@ -40,12 +32,9 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
-  bool isSubscribed = false;
   String token;
-  static String dataName = '';
-  static String dataAge = '';
+  var iddevice;
 
   //FIREBASE
   final firebaseMessaging = FirebaseMessaging();
@@ -55,68 +44,14 @@ class _LoginPageState extends State<LoginPage> {
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
-    super.initState();
-    print("jackmac111");
-    initPlatformState();
   }
-
-  // Future<void> initPlatformState() async {
-  Future initPlatformState() async {
-    // String platformImei;
-    // String idunique;
-
-    // try {
-    //   platformImei =
-    //       await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
-    //   List<String> multiImei = await ImeiPlugin.getImeiMulti();
-    //   print(multiImei);
-    //   idunique = await ImeiPlugin.getId();
-    // } on PlatformException {
-    //   uniqueId = 'gagal mendapatkan mac UUID';
-    // }
-    DeviceInfoPlugin deviceinfo = DeviceInfoPlugin();
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      IosDeviceInfo iosDeviceInfo = await deviceinfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor;
-    } else {
-      AndroidDeviceInfo androidDeviceInfo = await deviceinfo.androidInfo;
-      return androidDeviceInfo.androidId;
-    }
-    // if (!mounted) return;
-    // setState(() {
-    //   uniqueId = idunique;
-    // });
-  }
-
-  void getDataFcm(Map<String, dynamic> message) {
-    String name = '';
-    String age = '';
-    if (Platform.isIOS) {
-      name = message['name'];
-      age = message['age'];
-    } else if (Platform.isAndroid) {
-      var data = message['data'];
-      name = data['name'];
-      age = data['age'];
-    }
-    if (name.isNotEmpty && age.isNotEmpty) {
-      setState(() {
-        dataName = name;
-        dataAge = age;
-      });
-    }
-    debugPrint('getDataFcm: name: $name & age: $age');
-  }
-  //END FIREBASE
 
   @override
   Widget build(BuildContext context) {
-    print("UUID : " + uniqueId);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          key: _scaffoldState,
           width: double.infinity,
           height: size.height,
           child: Stack(
@@ -134,12 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    // Image.asset(
-                    //   "assets/image/logogudang.png",
-                    //   height: 150,
-                    //   width: 150,
-                    // ),
-                    _buildTextFieldEmail(), //textbox username (email / no hp)
+                    _buildTextFieldEmail(),
                     _buildTextFieldPassword(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
@@ -147,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(29),
                         child: FlatButton(
-                          // child: Text(uniqueId), // button login
                           child: Text(
                             "LOGIN",
                             style: GoogleFonts.lato(),
@@ -157,73 +86,51 @@ class _LoginPageState extends State<LoginPage> {
                               vertical: 20, horizontal: 40),
                           color: primaryColor,
                           onPressed: () {
+                            GetDeviceID().getDeviceID(context).then((ids) {
+                              setState(() {
+                                iddevice = ids;
+                              });
+                            });
                             if (_fieldEmail == null ||
                                 _fieldPassword == null ||
                                 !_fieldEmail ||
                                 !_fieldPassword) {
-                              _scaffoldState.currentState.showSnackBar(SnackBar(
-                                content: Text("Harap isi Semua Kolom"),
-                              ));
-//                            return;
-                            }
-                            initPlatformState().then((ids) {
+                              warningDialog(
+                                  context, "Pastikan Semua Kolom Terisi!");
+                            } else {
                               setState(() {
-                                deviceId = ids;
-                                setState(() => _isLoading = true);
-                                String email = _controllerEmail.text.toString();
-                                String password =
-                                    _controllerPassword.text.toString();
-                                print("///---///" +
-                                    email +
-                                    "///---///" +
-                                    password +
-                                    "-----kuy" +
-                                    deviceId);
-                                PenggunaModel pengguna = PenggunaModel(
-                                    uuid: deviceId,
-                                    email: email,
-                                    password: password,
-                                    status: 0,
-                                    notification_token: token,
-                                    token_mail: "0",
-                                    keterangan: "Uji Coba");
-                                print("Post to Pengguna : " +
-                                    pengguna.toString());
-                                _apiService.xenditUrl();
-                                _apiService.loginIn(pengguna).then((isSuccess) {
-                                  setState(() => _isLoading = false);
-                                  if (isSuccess) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Home()));
-                                  } else {
-                                    print("Login Gagal");
-                                    errorDialog(context,
-                                        "Periksa kembali username dan password anda",
-                                        title: "Login Gagal");
-                                  }
-                                });
+                                print("IDDEVICE : " + iddevice.toString());
+                                _isLoading = true;
                               });
-                            });
+                              String email = _controllerEmail.text.toString();
+                              String password =
+                                  _controllerPassword.text.toString();
+                              PenggunaModel pengguna = PenggunaModel(
+                                  uuid: iddevice,
+                                  email: email,
+                                  password: password,
+                                  status: 0,
+                                  notification_token: token,
+                                  token_mail: "0",
+                                  keterangan: "Uji Coba");
+                              _apiService.loginIn(pengguna).then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (isSuccess) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Home()));
+                                } else {
+                                  warningDialog(context,
+                                      "${_apiService.responseCode.mMessage}",
+                                      title: "Warning!");
+                                }
+                              });
+                            }
                           },
                         ),
                       ),
                     ),
-                    // Text(
-                    //   '$deviceId',
-                    //   // ignore: deprecated_member_use
-                    //   style: Theme.of(context).textTheme.display1,
-                    // ),
-                    // FlatButton(
-                    //     onPressed: () {
-                    //       initPlatformState().then((ids) {
-                    //         setState(() {
-                    //           deviceId = ids;
-                    //         });
-                    //       });
-                    //     },
-                    //     child: Text("Tekan disini aja UUID nya")),
                     SizedBox(
                       height: 10,
                     ),
@@ -269,120 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                         endIndent: 30,
                       )),
                     ]),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Container(
-                    //       width: 100,
-                    //       height: 70,
-                    //       child: FlatButton(
-                    //         height: 50,
-                    //         child: Flexible(child: Text("Ganti Perangkat")),
-                    //         color: Colors.deepPurpleAccent,
-                    //         textColor: Colors.white,
-                    //         onPressed: () {
-                    //           Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Reset(
-                    //                         tipe: "ResetDevice",
-                    //                       )));
-                    //         },
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 3,
-                    //     ),
-                    //     Container(
-                    //       width: 100,
-                    //       height: 70,
-                    //       child: FlatButton(
-                    //         child:
-                    //             Flexible(child: Text("Kirim Email Validasi")),
-                    //         color: Colors.deepPurpleAccent,
-                    //         textColor: Colors.white,
-                    //         onPressed: () {
-                    //           Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Reset(
-                    //                         tipe: "ResendEmail",
-                    //                       )));
-                    //         },
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 3,
-                    //     ),
-                    //     Container(
-                    //       width: 100,
-                    //       height: 70,
-                    //       child: FlatButton(
-                    //         child: Flexible(child: Text("Reset Password")),
-                    //         color: Colors.deepPurpleAccent,
-                    //         textColor: Colors.white,
-                    //         onPressed: () {
-                    //           Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => Reset(
-                    //                         // resetpass: Forgot_Password,
-                    //                         tipe: "ResetPassword",
-                    //                       )));
-                    //         },
-                    //       ),
-                    //     ),
-                    //     // ClipRRect(
-                    //     //   borderRadius: BorderRadius.circular(29),
-                    //     //   child: FlatButton(
-                    //     //     onPressed: () {
-                    //     //       Navigator.push(
-                    //     //           context,
-                    //     //           MaterialPageRoute(
-                    //     //               builder: (context) => Reset(
-                    //     //                     tipe: "ResendEmail",
-                    //     //                     // resendemail: Forgot_Password,
-                    //     //                   )));
-                    //     //     },
-                    //     //     child: Text(
-                    //     //       "RESEND EMAIL",
-                    //     //       style: GoogleFonts.lato(
-                    //     //           fontSize: 12,
-                    //     //           fontWeight: FontWeight.bold,
-                    //     //           color: Colors.white),
-                    //     //     ),
-                    //     //     color: Colors.purple[100],
-                    //     //     padding: EdgeInsets.symmetric(
-                    //     //         vertical: 20, horizontal: 30),
-                    //     //   ),
-                    //     // ),
-                    //     // SizedBox(
-                    //     //   width: 10,
-                    //     // ),
-                    //     // ClipRRect(
-                    //     //   borderRadius: BorderRadius.circular(29),
-                    //     //   child: FlatButton(
-                    //     //     onPressed: () {
-                    //     //       Navigator.push(
-                    //     //           context,
-                    //     //           MaterialPageRoute(
-                    //     //               builder: (context) => Reset(
-                    //     //                     // resetpass: Forgot_Password,
-                    //     //                     tipe: "ResetPassword",
-                    //     //                   )));
-                    //     //     },
-                    //     //     child: Text("L",
-                    //     //         style: GoogleFonts.lato(
-                    //     //             fontSize: 12,
-                    //     //             fontWeight: FontWeight.bold,
-                    //     //             color: Colors.white)),
-                    //     //     color: Colors.purple[100],
-                    //     //     padding: EdgeInsets.symmetric(
-                    //     //         vertical: 20, horizontal: 25),
-                    //     //   ),
-                    //     // )
-                    //   ],
-                    // ),
                     SizedBox(
                       height: 20,
                     ),

@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +7,7 @@ import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 
@@ -29,7 +31,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerPasswordRetype = TextEditingController();
 
-  String uniqueId = "Unknown";
+  var iddevice;
 
   void _toggle() {
     setState(() {
@@ -38,30 +40,15 @@ class _RegistrasiState extends State<RegistrasiPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    String platformImei;
-    String idunique;
-
-    try {
-      platformImei =
-          await ImeiPlugin.getImei(shouldShowRequestPermissionRationale: false);
-      List<String> multiImei = await ImeiPlugin.getImeiMulti();
-      print(multiImei);
-      idunique = await ImeiPlugin.getId();
-    } on PlatformException {
-      uniqueId = 'gagal mendapatkan mac UUID';
-    }
-    if (!mounted) return;
-    setState(() {
-      uniqueId = idunique;
-    });
-  }
+  // @override
+  // void initState() {
+  //   GetDeviceID().getDeviceID(context).then((ids) {
+  //     setState(() {
+  //       iddevice = ids;
+  //     });
+  //   });
+  //   print("IDDEVICE : " + iddevice.toString());
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +95,8 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                 !_fieldEmail ||
                                 !_fieldNo_Hp ||
                                 !_fieldPassword) {
-                              _scaffoldState.currentState.showSnackBar(SnackBar(
-                                  content:
-                                      Text("Pastikan semua kolom terisi!")));
+                              warningDialog(
+                                  context, "Pastikan Semua Kolom Terisi!");
                               return;
                             } else {
                               String email = _controllerEmail.text.toString();
@@ -121,16 +107,22 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                   _controllerPasswordRetype.text.toString();
                               //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
                               if (password != retypepassword) {
-                                _scaffoldState.currentState
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                      "Password dan Retyp anda tidak sama"),
-                                ));
-//                              return;
+                                warningDialog(context,
+                                    "Pastikan Password yang anda masukkan sama");
                               } else {
-                                setState(() => _isLoading = true);
+                                setState(() {
+                                  _isLoading = true;
+                                  GetDeviceID()
+                                      .getDeviceID(context)
+                                      .then((ids) {
+                                    setState(() {
+                                      iddevice = ids;
+                                    });
+                                  });
+                                  print("IDDEVICE : " + iddevice.toString());
+                                });
                                 PenggunaModel pengguna = PenggunaModel(
-                                    uuid: uniqueId,
+                                    uuid: iddevice,
                                     email: email,
                                     password: password,
                                     no_hp: nohp,
@@ -138,20 +130,27 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                     notification_token: "0",
                                     token_mail: "0",
                                     keterangan: "Uji Coba");
-                                print("REGISTRASI : " + pengguna.toString());
+                                print("Registrasi Value : " +
+                                    pengguna.toString());
                                 _apiService.signup(pengguna).then((isSuccess) {
                                   if (isSuccess) {
                                     _controllerEmail.clear();
                                     _controllerNohp.clear();
                                     _controllerPassword.clear();
                                     _controllerPasswordRetype.clear();
-                                    showAlertDialog(context);
+                                    successDialog(context,
+                                        "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()),
+                                          (route) => false);
+                                    });
                                   } else {
-                                    _scaffoldState.currentState
-                                        .showSnackBar(SnackBar(
-                                      content:
-                                          Text("${_apiService.responseCode}"),
-                                    ));
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
                                   }
                                 });
                               }
@@ -204,15 +203,6 @@ class _RegistrasiState extends State<RegistrasiPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Expanded buildDivider() {
-    return Expanded(
-      child: Divider(
-        color: Colors.black,
-        height: 30,
       ),
     );
   }
@@ -319,28 +309,5 @@ class _RegistrasiState extends State<RegistrasiPage> {
         },
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Registrasi Berhasil!"),
-      content: Text(
-          "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 }

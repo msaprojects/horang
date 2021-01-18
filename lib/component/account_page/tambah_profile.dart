@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:commons/commons.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -160,36 +161,48 @@ class _TambahProfileState extends State<TambahProfile> {
                                 !_isFieldNamaLengkap ||
                                 !_isFieldAlamat ||
                                 !_isFieldNoKtp) {
-                              _scaffoldState.currentState.showSnackBar(
-                                SnackBar(
-                                  content: Text("Kolom Tidak Boleh Kosong"),
-                                ),
-                              );
+                              warningDialog(
+                                  context, "Pastikan Semua Kolom Terisi");
                               return;
+                            } else {
+                              warningDialog(context,
+                                  "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
+                                  showNeutralButton: false,
+                                  negativeText: "Periksa Kembali",
+                                  negativeAction: () {},
+                                  positiveText: "OK", positiveAction: () {
+                                setState(() => _isLoading = true);
+                                Customers data = Customers(
+                                  namacustomer:
+                                      _controllerNamaLengkap.text.toString(),
+                                  noktp: _controllerNoKtp.text.toString(),
+                                  alamat: _controllerAlamat.text.toString(),
+                                  token: access_token,
+                                  blacklist: "0",
+                                  idkota: int.parse(valKota),
+                                );
+                                print("Tambah Customer : " + data.toString());
+                                _apiService.TambahCustomer(data)
+                                    .then((isSuccess) {
+                                  setState(() => _isLoading = false);
+                                  if (isSuccess) {
+                                    _controllerNamaLengkap.clear();
+                                    _controllerNoKtp.clear();
+                                    _controllerAlamat.clear();
+                                    successDialog(context,
+                                        "Profil anda berhasil disimpan",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Keluarr();
+                                    });
+                                    // Keluarr();
+                                  } else {
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
+                                  }
+                                });
+                              });
                             }
-                            setState(() => _isLoading = true);
-                            Customers data = Customers(
-                              namacustomer:
-                                  _controllerNamaLengkap.text.toString(),
-                              noktp: _controllerNoKtp.text.toString(),
-                              alamat: _controllerAlamat.text.toString(),
-                              token: access_token,
-                              blacklist: "0",
-                              idkota: int.parse(valKota),
-                            );
-                            print("Tambah Customer : "+data.toString());
-                            _apiService.TambahCustomer(data)
-                                .then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                Keluarr();
-                              } else {
-                                _scaffoldState.currentState
-                                    .showSnackBar(SnackBar(
-                                  content: Text("Data Gagal Disimpan"),
-                                ));
-                              }
-                            });
                           });
                         },
                         color: Colors.blue,
@@ -264,15 +277,12 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   Widget _buildKomboKota(String kotaaaa) {
-    // List<dynamic> _dataKota = List();
-    print("buildkombokota : $_dataKota");
     _controlleridkota = TextEditingController(text: kotaaaa);
     return DropdownButtonFormField(
       hint: Text("Pilih Kota"),
       value: valKota,
       items: _dataKota.map((item) {
         return DropdownMenuItem(
-          // child: Text(item['nama_kota']),
           child: Text("${item['nama_kota']}"),
           value: item['idkota'].toString(),
         );
@@ -280,30 +290,28 @@ class _TambahProfileState extends State<TambahProfile> {
       onChanged: (value) {
         setState(() {
           valKota = value.toString();
-          print("damn" + value.toString());
         });
       },
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {},
-    );
-
-    AlertDialog alert = AlertDialog(
-      title: Text("Data Berhasil Disimpan"),
-      content: Text("Peringatan"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    showDialog(
+  Future showAlertDialog(BuildContext context) {
+    return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return alert;
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            content: Text(
+                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
         });
   }
 }

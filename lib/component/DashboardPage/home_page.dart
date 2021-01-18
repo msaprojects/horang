@@ -47,7 +47,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   final scaffoldState = GlobalKey<ScaffoldState>();
-  final firebaseMessaging = FirebaseMessaging();
   final controllerTopic = TextEditingController();
 
   bool isSubscribed = false;
@@ -55,42 +54,6 @@ class _HomePageState extends State<HomePage> {
   static String dataName = '';
   static String dataAge = '';
   var ceksaldo;
-
-  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-  //   debugPrint('onBackgroundMessage: $message');
-  //   if (message.containsKey('onMessage')) {
-  //     String name = '';
-  //     String age = '';
-  //     if (Platform.isIOS) {
-  //       name = message['title'];
-  //       age = message['body'];
-  //     } else if (Platform.isAndroid) {
-  //       var data = message['onMessage'];
-  //       name = data['title'];
-  //       age = data['body'];
-  //     }
-  //     dataName = name;
-  //     dataAge = age;
-  //     debugPrint('onBackgroundMessage: title: $name & body: $age');
-  //   }
-  //   return null;
-  // }
-  // void _onRefresh() async {
-  //   await Future.delayed(Duration(milliseconds: 1000));
-  //   _refreshController.refreshCompleted();
-  //   setState(() {
-  //     getSaldo();
-  //   });
-  // }
-
-  // void _onloading() async {
-  //   await Future.delayed(Duration(milliseconds: 1000));
-  //   // cekToken();
-  //   if (mounted) {
-  //     setState(() {});
-  //     _refreshController.loadComplete();
-  //   }
-  // }
 
   getSaldo() async {
     final response = await http.get(ApiService().urlceksaldo,
@@ -184,31 +147,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getSaldo();
-    // firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     debugPrint('onMessage: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onBackgroundMessage: onBackgroundMessage,
-    //   onResume: (Map<String, dynamic> message) async {
-    //     debugPrint('onResume: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     debugPrint('onLaunch: $message');
-    //     getDataFcm(message);
-    //   },
-    // );
-    // firebaseMessaging.requestNotificationPermissions(
-    //   const IosNotificationSettings(
-    //       sound: true, badge: true, alert: true, provisional: true),
-    // );
-    // firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-    //   debugPrint('Settings registered: $settings');
-    // });
     cekToken();
     super.initState();
   }
+
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
@@ -216,36 +158,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => Future.value(true),
-      child: 
-      // SmartRefresher(
-      //   enablePullDown: true,
-      //   enablePullUp: false,
-      //   header: WaterDropHeader(),
-      //   footer: CustomFooter(
-      //     builder: (BuildContext context, LoadStatus mode) {
-      //       Widget body;
-      //       if (mode == LoadStatus.idle) {
-      //         body = Text("pull up load");
-      //       } else if (mode == LoadStatus.loading) {
-      //         body = CupertinoActivityIndicator();
-      //       } else if (mode == LoadStatus.failed) {
-      //         body = Text("Load Failed!Click retry!");
-      //       } else if (mode == LoadStatus.canLoading) {
-      //         body = Text("release to load more");
-      //       } else {
-      //         body = Text("No more Data");
-      //       }
-      //     },
-      //   ),
-      //   controller: _refreshController,
-      //   onRefresh: _onRefresh,
-      //   onLoading: _onloading,
-      RefreshIndicator(
+      child: RefreshIndicator(
         onRefresh: refreshData,
         child: SingleChildScrollView(
           physics: ScrollPhysics(),
@@ -472,36 +389,6 @@ class _HomePageState extends State<HomePage> {
                 height: 10,
                 color: Colors.grey[300],
               ),
-              ////////////////// SESI PRODUK ////////////////////////
-              // Container(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Padding(
-              //         padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-              //         child: Text(
-              //           'Pilihan Produk',
-              //           style: mTitleStyle,
-              //         ),
-              //       ),
-              //       Padding(
-              //         padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-              //         child: SelectableText(
-              //           "See All...",
-              //           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              //           onTap: () {
-              //             Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) => ProdukList()));
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // ProdukDashboard(),
-              ////////////////// END SESI PRODUK ////////////////////////
-
               /////////////////// SESI LATEST ORDER ////////////////////
               Container(
                 child: Row(
@@ -574,25 +461,5 @@ class _HomePageState extends State<HomePage> {
     } else {
       return 'Malam kak';
     }
-  }
-
-  void getDataFcm(Map<String, dynamic> message) {
-    String name = '';
-    String age = '';
-    if (Platform.isIOS) {
-      name = message['name'];
-      age = message['age'];
-    } else if (Platform.isAndroid) {
-      var data = message['data'];
-      name = data['name'];
-      age = data['age'];
-    }
-    if (name.isNotEmpty && age.isNotEmpty) {
-      setState(() {
-        dataName = name;
-        dataAge = age;
-      });
-    }
-    debugPrint('getDataFcm: name: $name & age: $age');
   }
 }
