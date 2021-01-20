@@ -109,49 +109,51 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                 warningDialog(context,
                                     "Pastikan Password yang anda masukkan sama");
                               } else {
-                                setState(() {
-                                  _isLoading = true;
-                                  GetDeviceID()
-                                      .getDeviceID(context)
-                                      .then((ids) {
-                                    setState(() {
-                                      iddevice = ids;
+                                // setState(() {
+                                //   _isLoading = true;
+                                GetDeviceID().getDeviceID(context).then((ids) {
+                                  setState(() {
+                                    iddevice = ids;
+                                    PenggunaModel pengguna = PenggunaModel(
+                                        uuid: iddevice,
+                                        email: email,
+                                        password: password,
+                                        no_hp: nohp,
+                                        status: 0,
+                                        notification_token: "0",
+                                        token_mail: "0",
+                                        keterangan: "Uji Coba");
+                                    print("Registrasi Value : " +
+                                        pengguna.toString());
+                                    _apiService
+                                        .signup(pengguna)
+                                        .then((isSuccess) {
+                                      if (isSuccess) {
+                                        _controllerEmail.clear();
+                                        _controllerNohp.clear();
+                                        _controllerPassword.clear();
+                                        _controllerPasswordRetype.clear();
+                                        successDialog(context,
+                                            "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                            showNeutralButton: false,
+                                            positiveText: "OK",
+                                            positiveAction: () {
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginPage()),
+                                                  (route) => false);
+                                        });
+                                      } else {
+                                        errorDialog(context,
+                                            "${_apiService.responseCode.mMessage}");
+                                      }
                                     });
                                   });
-                                  print("IDDEVICE : " + iddevice.toString());
                                 });
-                                PenggunaModel pengguna = PenggunaModel(
-                                    uuid: iddevice,
-                                    email: email,
-                                    password: password,
-                                    no_hp: nohp,
-                                    status: 0,
-                                    notification_token: "0",
-                                    token_mail: "0",
-                                    keterangan: "Uji Coba");
-                                print("Registrasi Value : " +
-                                    pengguna.toString());
-                                _apiService.signup(pengguna).then((isSuccess) {
-                                  if (isSuccess) {
-                                    _controllerEmail.clear();
-                                    _controllerNohp.clear();
-                                    _controllerPassword.clear();
-                                    _controllerPasswordRetype.clear();
-                                    successDialog(context,
-                                        "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
-                                        showNeutralButton: false,
-                                        positiveText: "OK", positiveAction: () {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LoginPage()),
-                                          (route) => false);
-                                    });
-                                  } else {
-                                    errorDialog(context,
-                                        "${_apiService.responseCode.mMessage}");
-                                  }
-                                });
+                                // print("IDDEVICE : " + iddevice.toString());
+                                // });
                               }
                               return;
                             }
