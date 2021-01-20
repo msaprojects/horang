@@ -89,44 +89,47 @@ class _LoginPageState extends State<LoginPage> {
                             GetDeviceID().getDeviceID(context).then((ids) {
                               setState(() {
                                 iddevice = ids;
-                              });
-                            });
-                            if (_fieldEmail == null ||
-                                _fieldPassword == null ||
-                                !_fieldEmail ||
-                                !_fieldPassword) {
-                              warningDialog(
-                                  context, "Pastikan Semua Kolom Terisi!");
-                            } else {
-                              setState(() {
-                                print("IDDEVICE : " + iddevice.toString());
-                                _isLoading = true;
-                              });
-                              String email = _controllerEmail.text.toString();
-                              String password =
-                                  _controllerPassword.text.toString();
-                              PenggunaModel pengguna = PenggunaModel(
-                                  uuid: iddevice,
-                                  email: email,
-                                  password: password,
-                                  status: 0,
-                                  notification_token: token,
-                                  token_mail: "0",
-                                  keterangan: "Uji Coba");
-                              _apiService.loginIn(pengguna).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Home()));
+                                if (_fieldEmail == null ||
+                                    _fieldPassword == null ||
+                                    !_fieldEmail ||
+                                    !_fieldPassword) {
+                                  warningDialog(
+                                      context, "Pastikan Semua Kolom Terisi!");
                                 } else {
-                                  warningDialog(context,
-                                      "${_apiService.responseCode.mMessage}",
-                                      title: "Warning!");
+                                  setState(() {
+                                    print("IDDEVICE : " + iddevice.toString());
+                                    _isLoading = true;
+                                  });
+                                  String email =
+                                      _controllerEmail.text.toString();
+                                  String password =
+                                      _controllerPassword.text.toString();
+                                  PenggunaModel pengguna = PenggunaModel(
+                                      uuid: iddevice,
+                                      email: email,
+                                      password: password,
+                                      status: 0,
+                                      notification_token: token,
+                                      token_mail: "0",
+                                      keterangan: "Uji Coba");
+                                  _apiService
+                                      .loginIn(pengguna)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Home()));
+                                    } else {
+                                      warningDialog(context,
+                                          "${_apiService.responseCode.mMessage}",
+                                          title: "Warning!");
+                                    }
+                                  });
                                 }
                               });
-                            }
+                            });
                           },
                         ),
                       ),

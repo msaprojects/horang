@@ -7,6 +7,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
+import 'package:horang/component/account_page/reset.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,15 +61,16 @@ class _ProdukList extends State<ProdukList> {
   String _rangeCount;
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
-  String _date = "Not set";
-  String _time = "Not set";
+  var _date = "Not set";
+  var _time = "Not set";
+  var _timeFinish = "Not set";
 
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
 
   String mmtext = DateFormat.yMMMd().format(DateTime.now());
   String aatext =
-  DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
+      DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
   var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
@@ -84,69 +86,312 @@ class _ProdukList extends State<ProdukList> {
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
 
-  Future _popUpTroble(BuildContext context) {
+  Future _popUpTroble(BuildContext context, var jenispro) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Sesi Anda Berakhir!"),
-            content: Text(
-                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-            actions: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              title: Column(
                 children: [
-                  FlatButton(
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                          theme: DatePickerTheme(containerHeight: 210.0),
-                          showTitleActions: true,
-                          minTime: DateTime.now(),
-                          maxTime: DateTime(2099, 12, 31), onConfirm: (date) {
-                            print('confirm $date');
-                            _date = '${date.year} - ${date.month} - ${date.day}';
-                            setState(() {});
-                          }, currentTime: DateTime.now(), locale: LocaleType.id);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.date_range,
-                                  size: 18.0,
-                                  color: Colors.teal,
-                                ),
-                                Text(
-                                  "$_date",
-                                  style: GoogleFonts.lato(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0),
-                                ),
-                              ],
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Opsi Pilihan...",
+                            style: GoogleFonts.lato(fontSize: 14)),
+                        IconButton(
+                            iconSize: 14,
+                            icon: Icon(
+                              Icons.close_outlined,
                             ),
-                          ),
-                          Text(
-                            "  Change",
-                            style: TextStyle(
-                                color: Colors.teal,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                        ],
-                      ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ],
                     ),
-                    color: Colors.white10,
                   ),
+                  Divider(
+                    thickness: 1,
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  Text(
+                      "Pilih tanggal dan jam sewa terlebih dahulu sebelum anda melakukan sewa Forklift ini.",
+                      style: GoogleFonts.lato(fontSize: 12)),
                 ],
               ),
-            ],
-          );
+              content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Tanggal Sewa : ",
+                            style: GoogleFonts.lato(fontSize: 14),
+                            textAlign: TextAlign.left,
+                          )),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        elevation: 3.0,
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              theme: DatePickerTheme(
+                                containerHeight: 210.0,
+                              ),
+                              showTitleActions: true,
+                              minTime: DateTime(2000, 1, 1),
+                              maxTime: DateTime(2999, 12, 31),
+                              onConfirm: (date) {
+                            print('confirm $date');
+                            _date =
+                                '${date.year} - ${date.month} - ${date.day}';
+                            setState(() {});
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.id);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 50.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.date_range,
+                                          size: 18.0,
+                                          color: Colors.teal,
+                                        ),
+                                        Text(
+                                          " $_date",
+                                          style: TextStyle(
+                                              color: Colors.teal,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                "Ganti",
+                                style: TextStyle(
+                                    color: Colors.teal,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Jam Mulai : ",
+                                style: GoogleFonts.lato(fontSize: 14),
+                                textAlign: TextAlign.left,
+                              )),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Jam Selesai : ",
+                                style: GoogleFonts.lato(fontSize: 14),
+                                textAlign: TextAlign.left,
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // Align(
+                          //     alignment: Alignment.topLeft,
+                          //     child: Text(
+                          //       "Jam Mulai : ",
+                          //       style: GoogleFonts.lato(fontSize: 14),
+                          //       textAlign: TextAlign.left,
+                          //     )),
+                          // SizedBox(
+                          //   height: 7,
+                          // ),
+                          Column(
+                            children: [
+                              RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                elevation: 4.0,
+                                onPressed: () {
+                                  DatePicker.showTimePicker(context,
+                                      theme: DatePickerTheme(
+                                        containerHeight: 210.0,
+                                      ),
+                                      showTitleActions: true,
+                                      onConfirm: (time) {
+                                    print('confirm $time');
+                                    _time = '${time.hour}.${time.minute}';
+                                    setState(() {});
+                                  },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.id);
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 70.0,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Container(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  " $_time",
+                                                  style: TextStyle(
+                                                      color: Colors.teal,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18.0),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "Ganti",
+                                        style: TextStyle(
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            elevation: 4.0,
+                            onPressed: () {
+                              DatePicker.showTimePicker(context,
+                                  theme: DatePickerTheme(
+                                    containerHeight: 210.0,
+                                  ),
+                                  showTitleActions: true, onConfirm: (time) {
+                                print('confirm $time');
+                                _timeFinish = '${time.hour}.${time.minute}';
+                                print('confirmzzzzzz $_timeFinish');
+                                setState(() {});
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.id);
+                              setState(() {});
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
+                                              " $_timeFinish",
+                                              style: TextStyle(
+                                                  color: Colors.teal,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18.0),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Text(
+                                    "Ganti",
+                                    style: TextStyle(
+                                        color: Colors.teal,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          width: 900,
+                          child: FlatButton(
+                              color: Colors.red[900],
+                              onPressed: () {
+                                print("jaszzzs");
+                                print(_date);
+                                print(_time);
+                                print(_timeFinish);
+                                if (_date == "Not set" || _time == "Not set" || _timeFinish == "Not set") {
+                                  infoDialog(context, "Pilih tanggal dan durasi sewa terlebih dahulu !");
+                                  // if (_time.toInt() > _timeFinish.toInt()) {
+                                    
+                                  // }
+                                } else {
+                                  Navigator.push(
+                                    context, MaterialPageRoute(builder: (context){
+                                      return FormInputOrder(
+                                        jenisProduk: jenispro,
+                                        tglawalforklift: _date,
+                                        jamawal: _time,
+                                        jamakhir: _timeFinish,
+                                      );
+                                    }));
+                                }
+                              },
+                              child: Text(
+                                'Lanjutkan',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ))),
+                    ],
+                  );
+                },
+              ));
         });
   }
 
@@ -155,10 +400,10 @@ class _ProdukList extends State<ProdukList> {
         height: 250,
         child: Card(
             child: SfDateRangePicker(
-              view: DateRangePickerView.month,
-              selectionMode: DateRangePickerSelectionMode.single,
-              onSelectionChanged: selectionChanged,
-            )));
+          view: DateRangePickerView.month,
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: selectionChanged,
+        )));
   }
 
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -168,111 +413,6 @@ class _ProdukList extends State<ProdukList> {
       setState(() {});
     });
   }
-
-  // Future _popUpTroble(BuildContext context) {
-  //   return showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           content: new Container(
-  //             width: 250,
-  //             height: 350,
-  //             decoration: new BoxDecoration(
-  //               shape: BoxShape.rectangle,
-  //               color: const Color(0xFFFFFF),
-  //               borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-  //             ),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.stretch,
-  //               children: [
-  //                 Container(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       Container(
-  //                         child: Row(
-  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                           children: [
-  //                             Text(
-  //                               "Opsi Pilihan...",
-  //                               style: GoogleFonts.lato(fontSize: 14),
-  //                             ),
-  //                             IconButton(
-  //                                 iconSize: 14,
-  //                                 icon: Icon(
-  //                                   Icons.close_outlined,
-  //                                 ),
-  //                                 onPressed: () {
-  //                                   Navigator.pop(context);
-  //                                 }),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                       Divider(
-  //                         thickness: 1,
-  //                       ),
-  //                       SizedBox(
-  //                         height: 10,
-  //                       ),
-  //                       Text("Pilih Tanggal",
-  //                           style: GoogleFonts.lato(
-  //                               fontSize: 14, fontWeight: FontWeight.bold)),
-  //                       SizedBox(
-  //                         height: 5,
-  //                       ),
-  //                       Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                         children: <Widget>[
-  //                           InkWell(
-  //                             child: Text(selectedTgl,
-  //                                 textAlign: TextAlign.center,
-  //                                 style: TextStyle(color: Color(0xFF000000))),
-  //                             onTap: () {
-  //                               selectTanggal(context);
-  //                             },
-  //                           ),
-  //                           IconButton(
-  //                             icon: Icon(Icons.calendar_today),
-  //                             tooltip: 'Tap to open date picker',
-  //                             onPressed: () {
-  //                               selectTanggal(context);
-  //                             },
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                         children: <Widget>[
-  //                           IconButton(
-  //                             icon: Icon(Icons.calendar_today),
-  //                             tooltip: 'Tap to open date picker',
-  //                             onPressed: () {
-  //                               selectTanggal(context);
-  //                             },
-  //                           ),
-  //                         ],
-  //                       ),
-  //                       Container(
-  //                           width: 900,
-  //                           child: FlatButton(
-  //                               color: Colors.red[900],
-  //                               onPressed: () {},
-  //                               child: Text(
-  //                                 'Lost Device',
-  //                                 style: GoogleFonts.inter(
-  //                                     fontSize: 14,
-  //                                     color: Colors.white,
-  //                                     fontWeight: FontWeight.bold),
-  //                               ))),
-  //                     ],
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       });
-  // }
 
   void _cekKoneksi() async {
     connectivityStream = await Connectivity()
@@ -313,10 +453,10 @@ class _ProdukList extends State<ProdukList> {
 
   int diffInDays(DateTime akhir, DateTime awal) {
     return ((akhir.difference(awal) -
-        Duration(hours: akhir.hour) +
-        Duration(hours: awal.hour))
-        .inHours /
-        24)
+                    Duration(hours: akhir.hour) +
+                    Duration(hours: awal.hour))
+                .inHours /
+            24)
         .round();
   }
 
@@ -340,7 +480,7 @@ class _ProdukList extends State<ProdukList> {
         }
 
         if (diffInDays(
-            DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
             5) {
           // dateValidation(context, _date2 = _date1.add(Duration(days: 5)));
           warningDialog(
@@ -372,31 +512,31 @@ class _ProdukList extends State<ProdukList> {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
-        isSuccess = value;
-        //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-        if (!isSuccess) {
-          _apiService
-              .refreshToken(refresh_token)
-              .then((value) => setState(() {
-            var newtoken = value;
-            //setting access_token dari refresh_token
-            if (newtoken != "") {
-              sp.setString("access_token", newtoken);
-              access_token = newtoken;
-            } else {
-              showAlertDialog(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          LoginPage()),
-                      (Route<dynamic> route) => false);
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LoginPage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
             }
           }));
-        }
-      }));
       getcomboProduk();
     }
   }
@@ -539,31 +679,31 @@ class _ProdukList extends State<ProdukList> {
                     ),
                     a == true
                         ? new Container(
-                        child: Column(
-                          children: [
-                            SfDateRangePicker(
-                              minDate: DateTime(sekarang.year, sekarang.month,
-                                  sekarang.day),
-                              onSelectionChanged: _onSelectionChanged,
-                              selectionMode:
-                              DateRangePickerSelectionMode.range,
-                              initialSelectedRange:
-                              PickerDateRange(_date1, _date2),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                  right: 16, left: 16, bottom: 16),
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                'Note : Minimum Pesanan 5 Hari',
-                                style: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic),
-                                textAlign: TextAlign.end,
+                            child: Column(
+                            children: [
+                              SfDateRangePicker(
+                                minDate: DateTime(sekarang.year, sekarang.month,
+                                    sekarang.day),
+                                onSelectionChanged: _onSelectionChanged,
+                                selectionMode:
+                                    DateRangePickerSelectionMode.range,
+                                initialSelectedRange:
+                                    PickerDateRange(_date1, _date2),
                               ),
-                            )
-                          ],
-                        ))
+                              Container(
+                                padding: EdgeInsets.only(
+                                    right: 16, left: 16, bottom: 16),
+                                alignment: Alignment.topRight,
+                                child: Text(
+                                  'Note : Minimum Pesanan 5 Hari',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontStyle: FontStyle.italic),
+                                  textAlign: TextAlign.end,
+                                ),
+                              )
+                            ],
+                          ))
                         : new Container(),
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
@@ -602,7 +742,7 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("PRODUK DATA : "+data.toString());
+    print("PRODUK DATA : " + data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -612,7 +752,7 @@ class _ProdukList extends State<ProdukList> {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                // "8Something wrong with message: ${snapshot.error.toString()}"
+                  // "8Something wrong with message: ${snapshot.error.toString()}"
                   "Harap pilih tanggal dan kota yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -703,25 +843,25 @@ class _ProdukList extends State<ProdukList> {
                                                 .toLowerCase()
                                                 .contains('forklift')) {
                                               // return print("hello mama");
-                                              _popUpTroble(context);
+                                              _popUpTroble(context, jenisProduk.kapasitas);
                                             } else {
                                               // print("zzzz ${jenisProduk.kapasitas}");
                                               // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
-                                                        return FormInputOrder(
-                                                          jenisProduk: jenisProduk,
-                                                          tglawal12: _tanggalAwal,
-                                                          tglakhir12: _tanggalAkhir,
-                                                        );
-                                                      }));
+                                                return FormInputOrder(
+                                                  jenisProduk: jenisProduk,
+                                                  tglawal12: _tanggalAwal,
+                                                  tglakhir12: _tanggalAkhir,
+                                                );
+                                              }));
                                             }
                                           }
                                         },
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
                                               children: <Widget>[
@@ -731,15 +871,15 @@ class _ProdukList extends State<ProdukList> {
                                                   child: Container(
                                                     child: Container(
                                                       height:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                          0.4,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.4,
                                                       width:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                          0.4,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.4,
                                                       decoration: BoxDecoration(
                                                           image: DecorationImage(
                                                               fit: BoxFit
@@ -757,9 +897,9 @@ class _ProdukList extends State<ProdukList> {
                                                       style: GoogleFonts.inter(
                                                           fontSize: 14,
                                                           color:
-                                                          Colors.grey[800],
+                                                              Colors.grey[800],
                                                           fontWeight:
-                                                          FontWeight.bold),
+                                                              FontWeight.bold),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -785,9 +925,9 @@ class _ProdukList extends State<ProdukList> {
                                                           fontSize: 15,
                                                           color: Colors.green,
                                                           fontWeight:
-                                                          FontWeight.bold),
+                                                              FontWeight.bold),
                                                       overflow:
-                                                      TextOverflow.fade,
+                                                          TextOverflow.fade,
                                                     ),
                                                   ],
                                                 ),
@@ -801,8 +941,8 @@ class _ProdukList extends State<ProdukList> {
                                                   left: 16, right: 16),
                                               child: Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: <Widget>[
                                                   Row(
                                                     children: <Widget>[
@@ -868,7 +1008,7 @@ class _ProdukList extends State<ProdukList> {
               Text("Pilih Kota",
                   textAlign: TextAlign.end,
                   style:
-                  GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+                      GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
             ],
           )),
       value: valKota,
@@ -878,11 +1018,11 @@ class _ProdukList extends State<ProdukList> {
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(
               borderSide:
-              const BorderSide(color: Colors.transparent, width: 0.0),
+                  const BorderSide(color: Colors.transparent, width: 0.0),
               borderRadius: BorderRadius.circular(5.0)),
           isDense: true,
           contentPadding:
-          const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
+              const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
       items: _dataKota.map((item) {
         return DropdownMenuItem(
           // child: Text(item['nama_kota']),
