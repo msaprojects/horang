@@ -17,14 +17,8 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputOrder extends StatefulWidget {
   JenisProduk jenisProduk;
-  var tglawal12, tglakhir12, tglawalforklift, jamawal, jamakhir;
-  FormInputOrder(
-      {this.jenisProduk,
-      this.tglawal12,
-      this.tglakhir12,
-      this.tglawalforklift,
-      this.jamawal,
-      this.jamakhir});
+  var tglawal12, tglakhir12;
+  FormInputOrder({this.jenisProduk, this.tglawal12, this.tglakhir12});
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -40,9 +34,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vKeterangan,
       idjenis_produk,
       gambar1,
-      idvouchers,
-      jamawal1,
-      jamakhir1;
+      idvouchers;
   var hasilperhitungan = "0", tambahasuransi = "0";
   int jumlah_sewas;
   bool asuransi = true;
@@ -213,31 +205,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vKeterangan = widget.jenisProduk.keterangan;
       idlokasi = widget.jenisProduk.idlokasi;
       gambar1 = widget.jenisProduk.gambar;
-    } else if (widget.jenisProduk.kapasitas.toString().toLowerCase().contains('forklift')) {
-      jamawal1 = widget.jamawal.toString();
-      jamakhir1 = widget.jamakhir.toString();
-      idjenis_produk = widget.jenisProduk.idjenis_produk;
-      kapasitas = widget.jenisProduk.kapasitas.toString();
-      harga = widget.jenisProduk.harga;
-      alamat = widget.jenisProduk.nama_lokasi;
-      vKeterangan = widget.jenisProduk.keterangan;
-      idlokasi = widget.jenisProduk.idlokasi;
-      gambar1 = widget.jenisProduk.gambar;
     }
     tglAwal = widget.tglawal12.toString();
     tglAkhir = widget.tglakhir12.toString();
-    
     jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     hasilperhitungan = hitungall(
-      nominalvoucher,
-      harga.toString(),
-      jumlah_sewas.toString(),
-      asuransie,
-      nomasuransi,
-      _nominalbarang.text.toString(),
-      ceksaldo.toString(),
-    );
+        nominalvoucher,
+        harga.toString(),
+        jumlah_sewas.toString(),
+        asuransie,
+        nomasuransi,
+        _nominalbarang.text.toString(),
+        ceksaldo.toString(),
+        );
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
@@ -784,11 +765,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
   cekDeposit(BuildContext context) {
     infoDialog(context,
         "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
-        showNeutralButton: false,
+        showNeutralButton: false, 
         negativeText: "Batal",
-        negativeAction: () {},
+        negativeAction: (){},
         positiveText: "Ok", positiveAction: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
             flagasuransi: asuransie,
             flagvoucher: flagsuransi,

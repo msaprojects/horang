@@ -28,7 +28,12 @@ class _ResetState extends State<Reset> {
   @override
   void initState() {
     tipes = widget.tipe;
-    // print("IDDEVICEEE : " + iddevice.toString());
+    GetDeviceID().getDeviceID(context).then((ids) {
+      setState(() {
+        iddevice = ids;
+      });
+    });
+    print("IDDEVICEEE : " + iddevice.toString());
   }
 
   @override
@@ -104,113 +109,97 @@ class _ResetState extends State<Reset> {
                           style: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {
-                          GetDeviceID().getDeviceID(context).then((ids) {
-                            setState(() {
-                              iddevice = ids;
-                              var getEmail = _controlleremail.text.toString();
-                              if (getEmail == null || getEmail == "") {
-                                warningDialog(
-                                    context, "Pastikan Semua Kolom Terisi!");
-                              } else {
-                                Forgot_Password reset = Forgot_Password(
-                                    email: _controlleremail.text.toString(),
-                                    uuid: iddevice);
-                                if (widget.respass == null) {
-                                  if (tipes == "ResendEmail") {
-                                    _apiService.ResendEmail(reset)
-                                        .then((isSuccess) {
-                                      if (isSuccess && iddevice != "") {
-                                        successDialog(context,
-                                            "Email Berhasil dikirim, Harap verifikasi terlebih dahulu",
-                                            showNeutralButton: false,
-                                            positiveText: "OK",
-                                            positiveAction: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginPage()),
-                                                  (route) => false);
-                                        });
-                                      } else {
-                                        errorDialog(context,
-                                            "${_apiService.responseCode.mMessage}");
-                                      }
+                          setState(() {
+                            print("IDDEVICE : " + iddevice.toString());
+                            _isLoading = false;
+                          });
+                          var getEmail = _controlleremail.text.toString();
+                          if (getEmail == null || getEmail == "") {
+                            warningDialog(
+                                context, "Pastikan Semua Kolom Terisi!");
+                          } else {
+                            Forgot_Password reset = Forgot_Password(
+                                email: _controlleremail.text.toString(),
+                                uuid: iddevice);
+                            if (widget.respass == null) {
+                              if (tipes == "ResendEmail") {
+                                _apiService.ResendEmail(reset)
+                                    .then((isSuccess) {
+                                  if (isSuccess && iddevice != "") {
+                                    successDialog(context,
+                                        "Email Berhasil dikirim, Harap verifikasi terlebih dahulu",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()),
+                                          (route) => false);
                                     });
-                                  } else if (tipes == "ResetPassword") {
-                                    _apiService.ForgetPass(reset)
-                                        .then((isSuccess) {
-                                      setState(() => _isLoading = false);
-                                      if (isSuccess) {
-                                        successDialog(context,
-                                            "Reset password berhasil dilakukan, cek email anda untuk verifikasi",
-                                            showNeutralButton: false,
-                                            positiveText: "OK",
-                                            positiveAction: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginPage()),
-                                                  (route) => false);
-                                        });
-                                      } else {
-                                        errorDialog(context,
-                                            "${_apiService.responseCode.mMessage}");
-                                      }
+                                  } else {
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
+                                  }
+                                });
+                              } else if (tipes == "ResetPassword") {
+                                _apiService.ForgetPass(reset).then((isSuccess) {
+                                  setState(() => _isLoading = false);
+                                  if (isSuccess) {
+                                    successDialog(context,
+                                        "Reset password berhasil dilakukan, cek email anda untuk verifikasi",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()),
+                                          (route) => false);
                                     });
-                                  } else if (tipes == "ResetPin") {
-                                    _apiService.ForgetPin(reset)
-                                        .then((isSuccess) {
-                                      if (isSuccess) {
-                                        successDialog(context,
-                                            "Reset Pin berhasil dilakukan, cek email anda untuk verifikasi data",
-                                            showNeutralButton: false,
-                                            positiveText: "OK",
-                                            positiveAction: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginPage()),
-                                                  (route) => false);
-                                        });
-                                      } else {
-                                        errorDialog(context,
-                                            "${_apiService.responseCode.mMessage}");
-                                      }
+                                  } else {
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
+                                  }
+                                });
+                              } else if (tipes == "ResetPin") {
+                                _apiService.ForgetPin(reset).then((isSuccess) {
+                                  if (isSuccess) {
+                                    successDialog(context,
+                                        "Reset Pin berhasil dilakukan, cek email anda untuk verifikasi data",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()),
+                                          (route) => false);
                                     });
-                                  } else if (tipes == "ResetDevice") {
-                                    print('reset device');
-                                    _apiService.LostDevice(reset)
-                                        .then((isSuccess) {
-                                      if (!isSuccess) {
-                                        errorDialog(context,
-                                            "${_apiService.responseCode.mMessage}");
-                                      } else {
-                                        successDialog(context,
-                                            "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
-                                            showNeutralButton: false,
-                                            positiveText: "OK",
-                                            positiveAction: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          WelcomePage()),
-                                                  (route) => false);
-                                        });
-                                      }
+                                  } else {
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
+                                  }
+                                });
+                              } else if (tipes == "ResetDevice") {
+                                print('reset device');
+                                _apiService.LostDevice(reset).then((isSuccess) {
+                                  if (!isSuccess) {
+                                    errorDialog(context,
+                                        "${_apiService.responseCode.mMessage}");
+                                  } else {
+                                    successDialog(context,
+                                        "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
+                                        showNeutralButton: false,
+                                        positiveText: "OK", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  WelcomePage()),
+                                          (route) => false);
                                     });
                                   }
-                                }
+                                });
                               }
-                            });
-                          });
-                          // setState(() {
-                          //   print("IDDEVICE : " + iddevice.toString());
-                          //   _isLoading = false;
-                          // });
+                            }
+                          }
                         }),
                   )
                 ],
