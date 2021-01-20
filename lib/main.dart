@@ -8,6 +8,7 @@ import 'package:horang/component/Dummy/dummypin2.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:imei_plugin/imei_plugin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -23,6 +24,7 @@ class MyHttpOverride extends HttpOverrides {
 
 // void main() => runApp(MyApp());
 void main() {
+  SharedPreferences.setMockInitialValues({});
   HttpOverrides.global = new MyHttpOverride();
   runApp(new MyApp());
 }

@@ -167,8 +167,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           print("cek debug 6");
                           warningDialog(context,
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
-                              title: "Sesi anda berakhir 1!"
-                              ,
+                              title: "Sesi anda berakhir 1!",
                               showNeutralButton: false, positiveAction: () {
                             // _deleteAppDir();
                             // _deleteCacheDir();

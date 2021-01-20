@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,11 +13,8 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
-// import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-// final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -194,7 +190,6 @@ class _HomePageState extends State<HomePage> {
                                     Flexible(
                                       child: Text(
                                         "${ucapan()}, $nama_customer",
-                                        // ucapan(),
                                         style: GoogleFonts.inter(
                                             color: Colors.white, fontSize: 14),
                                       ),
@@ -256,13 +251,6 @@ class _HomePageState extends State<HomePage> {
                                             );
                                           }
                                         }),
-                                    // Text(
-                                    //   ceksaldo.toString(),
-                                    //   style: GoogleFonts.inter(
-                                    //       color: Colors.white,
-                                    //       fontSize: 35,
-                                    //       fontWeight: FontWeight.bold),
-                                    // ),
                                     SizedBox(
                                       height: 2,
                                     ),
@@ -279,7 +267,6 @@ class _HomePageState extends State<HomePage> {
                               EdgeInsets.only(top: 200, left: 20, right: 20),
                           height: 100,
                           width: MediaQuery.of(context).size.width * 2.0,
-                          // width: MediaQuery.of(context).size.width * 0.8,
                           child: Center(
                             child: Card(
                               child: Row(
@@ -353,21 +340,6 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         'Kontainer Aktif',
                         style: mTitleStyle,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                      child: SelectableText(
-                        "",
-                        // "See All...",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StorageActive()));
-                        },
                       ),
                     ),
                   ],
