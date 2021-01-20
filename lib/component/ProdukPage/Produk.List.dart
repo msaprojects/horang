@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -68,7 +68,7 @@ class _ProdukList extends State<ProdukList> {
 
   String mmtext = DateFormat.yMMMd().format(DateTime.now());
   String aatext =
-  DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
+      DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 5)));
   var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
@@ -97,17 +97,17 @@ class _ProdukList extends State<ProdukList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FlatButton(
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                          theme: DatePickerTheme(containerHeight: 210.0),
-                          showTitleActions: true,
-                          minTime: DateTime.now(),
-                          maxTime: DateTime(2099, 12, 31), onConfirm: (date) {
-                            print('confirm $date');
-                            _date = '${date.year} - ${date.month} - ${date.day}';
-                            setState(() {});
-                          }, currentTime: DateTime.now(), locale: LocaleType.id);
-                    },
+                    // onPressed: () {
+                    //   DatePicker.showDatePicker(context,
+                    //       theme: DatePickerTheme(containerHeight: 210.0),
+                    //       showTitleActions: true,
+                    //       minTime: DateTime.now(),
+                    //       maxTime: DateTime(2099, 12, 31), onConfirm: (date) {
+                    //         print('confirm $date');
+                    //         _date = '${date.year} - ${date.month} - ${date.day}';
+                    //         setState(() {});
+                    //       }, currentTime: DateTime.now(), locale: LocaleType.id);
+                    // },
                     child: Container(
                       alignment: Alignment.center,
                       height: 50.0,
@@ -155,10 +155,10 @@ class _ProdukList extends State<ProdukList> {
         height: 250,
         child: Card(
             child: SfDateRangePicker(
-              view: DateRangePickerView.month,
-              selectionMode: DateRangePickerSelectionMode.single,
-              onSelectionChanged: selectionChanged,
-            )));
+          view: DateRangePickerView.month,
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: selectionChanged,
+        )));
   }
 
   void selectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -313,10 +313,10 @@ class _ProdukList extends State<ProdukList> {
 
   int diffInDays(DateTime akhir, DateTime awal) {
     return ((akhir.difference(awal) -
-        Duration(hours: akhir.hour) +
-        Duration(hours: awal.hour))
-        .inHours /
-        24)
+                    Duration(hours: akhir.hour) +
+                    Duration(hours: awal.hour))
+                .inHours /
+            24)
         .round();
   }
 
@@ -340,7 +340,7 @@ class _ProdukList extends State<ProdukList> {
         }
 
         if (diffInDays(
-            DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
             5) {
           // dateValidation(context, _date2 = _date1.add(Duration(days: 5)));
           warningDialog(
@@ -372,31 +372,31 @@ class _ProdukList extends State<ProdukList> {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
-        isSuccess = value;
-        //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-        if (!isSuccess) {
-          _apiService
-              .refreshToken(refresh_token)
-              .then((value) => setState(() {
-            var newtoken = value;
-            //setting access_token dari refresh_token
-            if (newtoken != "") {
-              sp.setString("access_token", newtoken);
-              access_token = newtoken;
-            } else {
-              showAlertDialog(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          LoginPage()),
-                      (Route<dynamic> route) => false);
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LoginPage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
             }
           }));
-        }
-      }));
       getcomboProduk();
     }
   }
@@ -539,31 +539,31 @@ class _ProdukList extends State<ProdukList> {
                     ),
                     a == true
                         ? new Container(
-                        child: Column(
-                          children: [
-                            SfDateRangePicker(
-                              minDate: DateTime(sekarang.year, sekarang.month,
-                                  sekarang.day),
-                              onSelectionChanged: _onSelectionChanged,
-                              selectionMode:
-                              DateRangePickerSelectionMode.range,
-                              initialSelectedRange:
-                              PickerDateRange(_date1, _date2),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                  right: 16, left: 16, bottom: 16),
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                'Note : Minimum Pesanan 5 Hari',
-                                style: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic),
-                                textAlign: TextAlign.end,
+                            child: Column(
+                            children: [
+                              SfDateRangePicker(
+                                minDate: DateTime(sekarang.year, sekarang.month,
+                                    sekarang.day),
+                                onSelectionChanged: _onSelectionChanged,
+                                selectionMode:
+                                    DateRangePickerSelectionMode.range,
+                                initialSelectedRange:
+                                    PickerDateRange(_date1, _date2),
                               ),
-                            )
-                          ],
-                        ))
+                              Container(
+                                padding: EdgeInsets.only(
+                                    right: 16, left: 16, bottom: 16),
+                                alignment: Alignment.topRight,
+                                child: Text(
+                                  'Note : Minimum Pesanan 5 Hari',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontStyle: FontStyle.italic),
+                                  textAlign: TextAlign.end,
+                                ),
+                              )
+                            ],
+                          ))
                         : new Container(),
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
@@ -602,7 +602,7 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("PRODUK DATA : "+data.toString());
+    print("PRODUK DATA : " + data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -612,7 +612,7 @@ class _ProdukList extends State<ProdukList> {
             print(snapshot.error.toString());
             return Center(
               child: Text(
-                // "8Something wrong with message: ${snapshot.error.toString()}"
+                  // "8Something wrong with message: ${snapshot.error.toString()}"
                   "Harap pilih tanggal dan kota yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -710,18 +710,18 @@ class _ProdukList extends State<ProdukList> {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
-                                                        return FormInputOrder(
-                                                          jenisProduk: jenisProduk,
-                                                          tglawal12: _tanggalAwal,
-                                                          tglakhir12: _tanggalAkhir,
-                                                        );
-                                                      }));
+                                                return FormInputOrder(
+                                                  jenisProduk: jenisProduk,
+                                                  tglawal12: _tanggalAwal,
+                                                  tglakhir12: _tanggalAkhir,
+                                                );
+                                              }));
                                             }
                                           }
                                         },
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             Row(
                                               children: <Widget>[
@@ -731,15 +731,15 @@ class _ProdukList extends State<ProdukList> {
                                                   child: Container(
                                                     child: Container(
                                                       height:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                          0.4,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.4,
                                                       width:
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                          0.4,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.4,
                                                       decoration: BoxDecoration(
                                                           image: DecorationImage(
                                                               fit: BoxFit
@@ -757,9 +757,9 @@ class _ProdukList extends State<ProdukList> {
                                                       style: GoogleFonts.inter(
                                                           fontSize: 14,
                                                           color:
-                                                          Colors.grey[800],
+                                                              Colors.grey[800],
                                                           fontWeight:
-                                                          FontWeight.bold),
+                                                              FontWeight.bold),
                                                     ),
                                                     SizedBox(
                                                       height: 5,
@@ -785,9 +785,9 @@ class _ProdukList extends State<ProdukList> {
                                                           fontSize: 15,
                                                           color: Colors.green,
                                                           fontWeight:
-                                                          FontWeight.bold),
+                                                              FontWeight.bold),
                                                       overflow:
-                                                      TextOverflow.fade,
+                                                          TextOverflow.fade,
                                                     ),
                                                   ],
                                                 ),
@@ -801,8 +801,8 @@ class _ProdukList extends State<ProdukList> {
                                                   left: 16, right: 16),
                                               child: Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: <Widget>[
                                                   Row(
                                                     children: <Widget>[
@@ -868,7 +868,7 @@ class _ProdukList extends State<ProdukList> {
               Text("Pilih Kota",
                   textAlign: TextAlign.end,
                   style:
-                  GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+                      GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
             ],
           )),
       value: valKota,
@@ -878,11 +878,11 @@ class _ProdukList extends State<ProdukList> {
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(
               borderSide:
-              const BorderSide(color: Colors.transparent, width: 0.0),
+                  const BorderSide(color: Colors.transparent, width: 0.0),
               borderRadius: BorderRadius.circular(5.0)),
           isDense: true,
           contentPadding:
-          const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
+              const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
       items: _dataKota.map((item) {
         return DropdownMenuItem(
           // child: Text(item['nama_kota']),
