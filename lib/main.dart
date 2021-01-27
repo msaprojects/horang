@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       if (Platform.isIOS) {
         name = message['name'];
         age = message['age'];
+        print("NOTIF : " + name + age);
       } else if (Platform.isAndroid) {
         var data = message['data'];
         name = data['name'];

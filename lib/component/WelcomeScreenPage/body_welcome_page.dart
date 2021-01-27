@@ -18,34 +18,26 @@ class BodyWelcomePage extends StatefulWidget {
 }
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
-  var pin;
-  var access_token;
+  var pin = '';
+  var access_token = '';
   bool _showbutton = false;
 
   cekToken() async {
-
     SharedPreferences sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     pin = sp.getString("pin");
-    print("PINNYA ADA NGG $pin");
-    print("MASUK CEK TOKEN $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      print("how can i get this ?");
       return false;
     } else {
-      print("noob1");
       if (Platform.isIOS) {
-        print("noob2");
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => LoginPage(),
             ));
       } else if (Platform.isAndroid && access_token != null) {
-        print("noob3");
         if (pin != null && access_token != null) {
-          print("noob4");
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -58,7 +50,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
-    print("iam gift to you $access_token");
     cekToken();
   }
 

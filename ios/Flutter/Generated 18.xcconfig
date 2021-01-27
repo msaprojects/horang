@@ -1,0 +1,14 @@
+// This is a generated file; do not edit or check into version control.
+FLUTTER_ROOT=/Users/cvdtc/Developer/flutter
+FLUTTER_APPLICATION_PATH=/Users/cvdtc/Documents/PROJECT/GUDANGPROJECT/horang
+FLUTTER_TARGET=/Users/cvdtc/Documents/PROJECT/GUDANGPROJECT/horang/lib/main.dart
+FLUTTER_BUILD_DIR=build
+SYMROOT=${SOURCE_ROOT}/../build/ios
+FLUTTER_BUILD_NAME=1.26.0
+FLUTTER_BUILD_NUMBER=2
+DART_DEFINES=FLUTTER_WEB_AUTO_DETECT%3Dtrue
+DART_OBFUSCATION=false
+EXTRA_FRONT_END_OPTIONS=--no-sound-null-safety
+TRACK_WIDGET_CREATION=true
+TREE_SHAKE_ICONS=false
+PACKAGE_CONFIG=/Users/cvdtc/Documents/PROJECT/GUDANGPROJECT/horang/.dart_tool/package_config.json

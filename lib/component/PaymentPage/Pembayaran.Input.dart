@@ -673,7 +673,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
-            height: MediaQuery.of(context).size.height * .70,
+            height: MediaQuery.of(context).size.height * 100,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -708,34 +708,34 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.payment,
-                          color: Colors.red,
-                          size: 100,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: Text(
-                              "Anda akan melakukan pembayaran menggunakan $namaprovider $snomvoucher $idvouchers",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.inter(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Text(
-                                "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku $stotal_asuransi",
-                                textAlign: TextAlign.left,
-                                style: GoogleFonts.inter(
-                                    height: 1.5, fontSize: 14))),
-                        SizedBox(
-                          height: 5,
-                        ),
+                        // Icon(
+                        //   Icons.payment,
+                        //   color: Colors.red,
+                        //   size: 100,
+                        // ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
+                        // Center(
+                        //   child: Text(
+                        //       "Anda akan melakukan pembayaran menggunakan $namaprovider $snomvoucher $idvouchers",
+                        //       textAlign: TextAlign.center,
+                        //       style: GoogleFonts.inter(
+                        //           fontSize: 16, fontWeight: FontWeight.bold)),
+                        // ),
+                        // SizedBox(
+                        //   height: 5,
+                        // ),
+                        // Padding(
+                        //     padding: EdgeInsets.only(left: 10, right: 10),
+                        //     child: Text(
+                        //         "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku $stotal_asuransi",
+                        //         textAlign: TextAlign.left,
+                        //         style: GoogleFonts.inter(
+                        //             height: 1.5, fontSize: 14))),
+                        // SizedBox(
+                        //   height: 5,
+                        // ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,

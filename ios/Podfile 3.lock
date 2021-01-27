@@ -82,7 +82,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.11)
+  - PromisesObjC (1.2.10)
   - Protobuf (3.14.0)
   - Reachability (3.2)
   - share (0.0.1):
@@ -166,7 +166,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   FirebaseInstanceID: bd3ffc24367f901a43c063b36c640b345a4a5dd1
   FirebaseMessaging: 5eca4ef173de76253352511aafef774caa1cba2a
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   get_version: 2bc18c4e26a265571662cab5d38f8b50dc8c1c77
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
@@ -176,7 +176,7 @@ SPEC CHECKSUMS:
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
@@ -184,6 +184,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 3a28483e7e9b1168695fd9ba393ae62e55208391
+PODFILE CHECKSUM: 9619267bf3e5cf31e51040f006e6a21e35a8a1b6
 
 COCOAPODS: 1.10.0

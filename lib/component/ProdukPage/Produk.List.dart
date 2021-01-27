@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:http/http.dart' as http;
@@ -140,23 +139,23 @@ class _ProdukList extends State<ProdukList> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                         elevation: 3.0,
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              theme: DatePickerTheme(
-                                containerHeight: 210.0,
-                              ),
-                              showTitleActions: true,
-                              minTime: DateTime(2000, 1, 1),
-                              maxTime: DateTime(2999, 12, 31),
-                              onConfirm: (date) {
-                            print('confirm $date');
-                            _date =
-                                '${date.year} - ${date.month} - ${date.day}';
-                            setState(() {});
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.id);
-                        },
+                        // onPressed: () {
+                        //   DatePicker.showDatePicker(context,
+                        //       theme: DatePickerTheme(
+                        //         containerHeight: 210.0,
+                        //       ),
+                        //       showTitleActions: true,
+                        //       minTime: DateTime(2000, 1, 1),
+                        //       maxTime: DateTime(2999, 12, 31),
+                        //       onConfirm: (date) {
+                        //     print('confirm $date');
+                        //     _date =
+                        //         '${date.year} - ${date.month} - ${date.day}';
+                        //     setState(() {});
+                        //   },
+                        //       currentTime: DateTime.now(),
+                        //       locale: LocaleType.id);
+                        // },
                         child: Container(
                           alignment: Alignment.center,
                           height: 50.0,
@@ -241,21 +240,21 @@ class _ProdukList extends State<ProdukList> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0)),
                                 elevation: 4.0,
-                                onPressed: () {
-                                  DatePicker.showTimePicker(context,
-                                      theme: DatePickerTheme(
-                                        containerHeight: 210.0,
-                                      ),
-                                      showTitleActions: true,
-                                      onConfirm: (time) {
-                                    print('confirm $time');
-                                    _time = '${time.hour}.${time.minute}';
-                                    setState(() {});
-                                  },
-                                      currentTime: DateTime.now(),
-                                      locale: LocaleType.id);
-                                  setState(() {});
-                                },
+                                // onPressed: () {
+                                //   DatePicker.showTimePicker(context,
+                                //       theme: DatePickerTheme(
+                                //         containerHeight: 210.0,
+                                //       ),
+                                //       showTitleActions: true,
+                                //       onConfirm: (time) {
+                                //     print('confirm $time');
+                                //     _time = '${time.hour}.${time.minute}';
+                                //     setState(() {});
+                                //   },
+                                //       currentTime: DateTime.now(),
+                                //       locale: LocaleType.id);
+                                //   setState(() {});
+                                // },
                                 child: Container(
                                   alignment: Alignment.center,
                                   height: 70.0,
@@ -299,21 +298,21 @@ class _ProdukList extends State<ProdukList> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0)),
                             elevation: 4.0,
-                            onPressed: () {
-                              DatePicker.showTimePicker(context,
-                                  theme: DatePickerTheme(
-                                    containerHeight: 210.0,
-                                  ),
-                                  showTitleActions: true, onConfirm: (time) {
-                                print('confirm $time');
-                                _timeFinish = '${time.hour}.${time.minute}';
-                                print('confirmzzzzzz $_timeFinish');
-                                setState(() {});
-                              },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.id);
-                              setState(() {});
-                            },
+                            // onPressed: () {
+                            //   DatePicker.showTimePicker(context,
+                            //       theme: DatePickerTheme(
+                            //         containerHeight: 210.0,
+                            //       ),
+                            //       showTitleActions: true, onConfirm: (time) {
+                            //     print('confirm $time');
+                            //     _timeFinish = '${time.hour}.${time.minute}';
+                            //     print('confirmzzzzzz $_timeFinish');
+                            //     setState(() {});
+                            //   },
+                            //       currentTime: DateTime.now(),
+                            //       locale: LocaleType.id);
+                            //   setState(() {});
+                            // },
                             child: Container(
                               alignment: Alignment.center,
                               height: 70.0,
@@ -364,21 +363,24 @@ class _ProdukList extends State<ProdukList> {
                                 print(_date);
                                 print(_time);
                                 print(_timeFinish);
-                                if (_date == "Not set" || _time == "Not set" || _timeFinish == "Not set") {
-                                  infoDialog(context, "Pilih tanggal dan durasi sewa terlebih dahulu !");
+                                if (_date == "Not set" ||
+                                    _time == "Not set" ||
+                                    _timeFinish == "Not set") {
+                                  infoDialog(context,
+                                      "Pilih tanggal dan durasi sewa terlebih dahulu !");
                                   // if (_time.toInt() > _timeFinish.toInt()) {
-                                    
+
                                   // }
                                 } else {
-                                  Navigator.push(
-                                    context, MaterialPageRoute(builder: (context){
-                                      return FormInputOrder(
-                                        jenisProduk: jenispro,
-                                        tglawalforklift: _date,
-                                        jamawal: _time,
-                                        jamakhir: _timeFinish,
-                                      );
-                                    }));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return FormInputOrder(
+                                      jenisProduk: jenispro,
+                                      tglawalforklift: _date,
+                                      jamawal: _time,
+                                      jamakhir: _timeFinish,
+                                    );
+                                  }));
                                 }
                               },
                               child: Text(
@@ -843,7 +845,8 @@ class _ProdukList extends State<ProdukList> {
                                                 .toLowerCase()
                                                 .contains('forklift')) {
                                               // return print("hello mama");
-                                              _popUpTroble(context, jenisProduk.kapasitas);
+                                              _popUpTroble(context,
+                                                  jenisProduk.kapasitas);
                                             } else {
                                               // print("zzzz ${jenisProduk.kapasitas}");
                                               // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");

@@ -86,7 +86,6 @@ class ApiService {
       body: PostProdukModelToJson(data),
     );
     // response.body;
-    print(response.statusCode.toString()+" -- "+response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -98,7 +97,6 @@ class ApiService {
   Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
     final response = await client.get("$baseUrl/orderdet/$idorder",
         headers: {"Authorization": "BEARER ${token}"});
-        print("cek idorder diapi $idorder");
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
     } else {
@@ -108,9 +106,9 @@ class ApiService {
 
   //LOAD VOUCHER
   Future<List<Voucher>> listVoucher(String token) async {
-    final response = await client
-        .get("$baseUrl/voucherbelumterpakai", headers: {"Authorization": "BEARER ${token}"});
-        // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
+    final response = await client.get("$baseUrl/voucherbelumterpakai",
+        headers: {"Authorization": "BEARER ${token}"});
+    // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
     } else {
@@ -161,7 +159,6 @@ class ApiService {
         .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
     // print(response.statusCode.toString()+" - TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
-      print("masuk"+response.body);
       return HistoryFromJson(response.body);
     } else {
       return null;
@@ -306,7 +303,6 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
-    print("cek pin111 ${response.body}");
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -436,14 +432,13 @@ class ApiService {
       return false;
     }
   }
+
   Future<bool> LostDevice(Forgot_Password data) async {
     final response = await client.post(
       "$baseUrl/lostdevice",
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    print("sstsbody ${response.body}");
-    print("sstscode ${response.statusCode}");
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -461,7 +456,6 @@ class ApiService {
   Future<bool> checkingToken(String token) async {
     final response = await client.get("$baseUrl/ceklogin",
         headers: {"Authorization": "BEARER ${token}"});
-        print("cek cheking token ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
     } else {

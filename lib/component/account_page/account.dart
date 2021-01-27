@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/component/account_page/ubah_profile.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,7 +40,7 @@ class _AccountState extends State<Account> {
   void getlistaprofile() async {
     final response = await http.get(ApiService().urlgetlist,
         headers: {"Authorization": "BEARER ${access_token}"});
-        nmcust = json.decode(response.body)[0]['nama_customer'];
+    nmcust = json.decode(response.body)[0]['nama_customer'];
   }
 
   cekToken() async {
@@ -105,7 +105,7 @@ class _AccountState extends State<Account> {
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => LoginPage()));
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => WelcomePage()),
             (route) => false);
       }
     }
@@ -228,13 +228,11 @@ class _AccountState extends State<Account> {
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
                     Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Home(
-                                          initIndexHome: 0,
-                                        )
-                                    ));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Home(
+                                  initIndexHome: 0,
+                                )));
                   },
                 ),
               ),
@@ -253,11 +251,11 @@ class _AccountState extends State<Account> {
                 ),
               ),
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             Center(
-              child: Text(
-                "Version 1.1.0.2 Debug"
-              ),
+              child: Text("Version 1.1.0.2 Debug"),
             )
           ],
         ));

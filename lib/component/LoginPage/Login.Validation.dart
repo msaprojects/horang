@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final controllerTopic = TextEditingController();
-  String token;
-  var iddevice;
+  String token = "";
+  var iddevice = "";
 
   //FIREBASE
   final firebaseMessaging = FirebaseMessaging();
