@@ -213,7 +213,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vKeterangan = widget.jenisProduk.keterangan;
       idlokasi = widget.jenisProduk.idlokasi;
       gambar1 = widget.jenisProduk.gambar;
-    } else if (widget.jenisProduk.kapasitas.toString().toLowerCase().contains('forklift')) {
+    } else if (widget.jenisProduk.kapasitas
+        .toString()
+        .toLowerCase()
+        .contains('forklift')) {
       jamawal1 = widget.jamawal.toString();
       jamakhir1 = widget.jamakhir.toString();
       idjenis_produk = widget.jenisProduk.idjenis_produk;
@@ -226,7 +229,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     }
     tglAwal = widget.tglawal12.toString();
     tglAkhir = widget.tglakhir12.toString();
-    
+
     jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     hasilperhitungan = hitungall(
@@ -310,7 +313,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     )),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 32, right: 32, top: 16),
+                    margin: EdgeInsets.only(left: 30, right: 32, top: 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -350,10 +353,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             )
                           ],
                         ),
-                        IconButton(
-                          icon: Icon(Icons.navigation),
-                          onPressed: () {},
-                        )
+                        // IconButton(
+                        //   icon: Icon(Icons.navigation),
+                        //   onPressed: () {},
+                        // )
                       ],
                     ),
                   ),
@@ -682,7 +685,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 SizedBox(width: 10),
                 Container(
                   alignment: Alignment.center,
-                  width: 160,
+                  width: 130,
                   height: 100,
                   // margin: EdgeInsets.only(top: 3),
                   child: OutlineButton(
@@ -914,6 +917,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         // print("kang ndut ${voucherlist.nominal}");
                         // print("kang ndut ${voucherlist.kode_voucher}");
                         Navigator.pop(context);
+                        if (double.parse(voucherlist.nominal.toString()) >
+                            hasilperhitungan.toDouble()) {
+                          return infoDialog(
+                            context,
+                            "Maaf, nominal voucher melebihi jumlah total pembayaran.",
+                          );
+                        }
                       }
                     });
                   },

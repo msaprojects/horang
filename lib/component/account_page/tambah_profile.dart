@@ -122,96 +122,191 @@ class _TambahProfileState extends State<TambahProfile> {
               Navigator.pop(context);
             }),
       ),
-      body: Stack(
-        children: <Widget>[
-          Padding(
-            // padding: EdgeInsets.all(16.0),
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                _buildTextFieldName(),
-                _buildTextFieldKtp(),
-                _buildTextFieldAlamat(),
-                Container(
-                  // padding: EdgeInsets.all(0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _buildKomboKota(valKota.toString()),
-                      Text("kamu memilih kota $valKota"),
-                    ],
+      // body: Stack(
+      //   children: <Widget>[
+      //     Padding(
+      //       // padding: EdgeInsets.all(16.0),
+      //       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.stretch,
+      //         children: <Widget>[
+      //           _buildTextFieldName(),
+      //           _buildTextFieldKtp(),
+      //           _buildTextFieldAlamat(),
+      //           Container(
+      //             // padding: EdgeInsets.all(0.0),
+      //             child: Column(
+      //               crossAxisAlignment: CrossAxisAlignment.stretch,
+      //               children: <Widget>[
+      //                 _buildKomboKota(valKota.toString()),
+      //                 Text("kamu memilih kota $valKota"),
+      //               ],
+      body: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              // padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  _buildTextFieldName(),
+                  SizedBox(height: 10),
+                  _buildTextFieldKtp(),
+                  SizedBox(height: 10),
+                  _buildTextFieldAlamat(),
+                  SizedBox(height: 10),
+                  Container(
+                    // padding: EdgeInsets.all(0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        _buildKomboKota(valKota.toString()),
+                        Text("kamu memilih kota $valKota"),
+                      ],
+                    ),
                   ),
-                ),
+                //   ),
+                // ),
+                // Padding(
+                //     padding: const EdgeInsets.only(top: 8.0),
+                //     child: Container(
+                //       width: 500,
+                //       height: 50,
+                //       child: FlatButton(
+                //         child: Text(
+                //           "Simpan",
+                //           style: TextStyle(color: Colors.white),
+                //         ),
+                //         onPressed: () {
+                //           setState(() {
+                //             if (_isFieldNamaLengkap == null ||
+                //                 _isFieldAlamat == null ||
+                //                 _isFieldNoKtp == null ||
+                //                 !_isFieldNamaLengkap ||
+                //                 !_isFieldAlamat ||
+                //                 !_isFieldNoKtp) {
+                //               warningDialog(
+                //                   context, "Pastikan Semua Kolom Terisi");
+                //               return;
+                //             } else {
+                //               warningDialog(context,
+                //                   "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
+                //                   showNeutralButton: false,
+                //                   negativeText: "Periksa Kembali",
+                //                   negativeAction: () {},
+                //                   positiveText: "OK", positiveAction: () {
+                //                 setState(() => _isLoading = true);
+                //                 Customers data = Customers(
+                //                   namacustomer:
+                //                       _controllerNamaLengkap.text.toString(),
+                //                   noktp: _controllerNoKtp.text.toString(),
+                //                   alamat: _controllerAlamat.text.toString(),
+                //                   token: access_token,
+                //                   blacklist: "0",
+                //                   idkota: int.parse(valKota),
+                //                 );
+                //                 print("Tambah Customer : " + data.toString());
+                //                 _apiService.TambahCustomer(data)
+                //                     .then((isSuccess) {
+                //                   setState(() => _isLoading = false);
+                //                   if (isSuccess) {
+                //                     _controllerNamaLengkap.clear();
+                //                     _controllerNoKtp.clear();
+                //                     _controllerAlamat.clear();
+                //                     successDialog(context,
+                //                         "Profil anda berhasil disimpan",
+                //                         showNeutralButton: false,
+                //                         positiveText: "OK", positiveAction: () {
+                //                       Keluarr();
+                //                     });
+                //                     // Keluarr();
+                //                   } else {
+                //                     errorDialog(context,
+                //                         "${_apiService.responseCode.mMessage}");
+                //                   }
                 Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Container(
-                      width: 500,
-                      height: 50,
-                      child: FlatButton(
-                        child: Text(
-                          "Simpan",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            if (_isFieldNamaLengkap == null ||
-                                _isFieldAlamat == null ||
-                                _isFieldNoKtp == null ||
-                                !_isFieldNamaLengkap ||
-                                !_isFieldAlamat ||
-                                !_isFieldNoKtp) {
-                              warningDialog(
-                                  context, "Pastikan Semua Kolom Terisi");
-                              return;
-                            } else {
-                              warningDialog(context,
-                                  "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
-                                  showNeutralButton: false,
-                                  negativeText: "Periksa Kembali",
-                                  negativeAction: () {},
-                                  positiveText: "OK", positiveAction: () {
-                                setState(() => _isLoading = true);
-                                Customers data = Customers(
-                                  namacustomer:
-                                      _controllerNamaLengkap.text.toString(),
-                                  noktp: _controllerNoKtp.text.toString(),
-                                  alamat: _controllerAlamat.text.toString(),
-                                  token: access_token,
-                                  blacklist: "0",
-                                  idkota: int.parse(valKota),
-                                );
-                                print("Tambah Customer : " + data.toString());
-                                _apiService.TambahCustomer(data)
-                                    .then((isSuccess) {
-                                  setState(() => _isLoading = false);
-                                  if (isSuccess) {
-                                    _controllerNamaLengkap.clear();
-                                    _controllerNoKtp.clear();
-                                    _controllerAlamat.clear();
-                                    successDialog(context,
-                                        "Profil anda berhasil disimpan",
-                                        showNeutralButton: false,
-                                        positiveText: "OK", positiveAction: () {
-                                      Keluarr();
-                                    });
-                                    // Keluarr();
-                                  } else {
-                                    errorDialog(context,
-                                        "${_apiService.responseCode.mMessage}");
-                                  }
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Container(
+                        width: 500,
+                        height: 50,
+                        child: FlatButton(
+                          child: Text(
+                            "Simpan",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (_isFieldNamaLengkap == null ||
+                                  _isFieldAlamat == null ||
+                                  _isFieldNoKtp == null ||
+                                  !_isFieldNamaLengkap ||
+                                  !_isFieldAlamat ||
+                                  !_isFieldNoKtp) {
+                                warningDialog(
+                                    context, "Pastikan Semua Kolom Terisi");
+                                return;
+                              } else {
+                                warningDialog(context,
+                                    "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
+                                    showNeutralButton: false,
+                                    negativeText: "Periksa Kembali",
+                                    negativeAction: () {},
+                                    positiveText: "OK", positiveAction: () {
+                                  setState(() => _isLoading = true);
+                                  Customers data = Customers(
+                                    namacustomer:
+                                        _controllerNamaLengkap.text.toString(),
+                                    noktp: _controllerNoKtp.text.toString(),
+                                    alamat: _controllerAlamat.text.toString(),
+                                    token: access_token,
+                                    blacklist: "0",
+                                    idkota: int.parse(valKota),
+                                  );
+                                  print("Tambah Customer : " + data.toString());
+                                  _apiService.TambahCustomer(data)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      _controllerNamaLengkap.clear();
+                                      _controllerNoKtp.clear();
+                                      _controllerAlamat.clear();
+                                      successDialog(context,
+                                          "Profil anda berhasil disimpan",
+                                          showNeutralButton: false,
+                                          positiveText: "OK",
+                                          positiveAction: () {
+                                        Keluarr();
+                                      });
+                                      // Keluarr();
+                                    } else {
+                                      errorDialog(context,
+                                          "${_apiService.responseCode.mMessage}");
+                                    }
+                                  });
                                 });
-                              });
-                            }
-                          });
-                        },
-                        color: Colors.blue,
-                      ),
-                    ))
-              ],
+              //                   });
+              //                 });
+              //               }
+              //             });
+              //           },
+              //           color: Colors.blue,
+              //         ),
+              //       ))
+              // ],
+               }
+                            });
+                          },
+                          color: Colors.blue,
+                        ),
+                      ))
+                ],
+              ),
             ),
-          ),
-        ],
+        //   ),
+        // ],
+         ],
+        ),
       ),
     );
   }
@@ -260,6 +355,7 @@ class _TambahProfileState extends State<TambahProfile> {
     return TextFormField(
       controller: _controllerAlamat,
       keyboardType: TextInputType.text,
+      maxLines: 2,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: "Alamat",

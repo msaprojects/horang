@@ -141,6 +141,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                             nominal: voucher.nominal,
                             gambar: voucher.gambar,
                             keterangan: voucher.keterangan,
+                            kode_voucher: voucher.kode_voucher,
                           );
                         }));
                       },

@@ -154,22 +154,21 @@ class _StorageActive extends State<StorageActive1>
                             duration: Duration(seconds: 10),
                           ));
                         } else {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      KonfirmasiLog(
-                                        kode_kontainer: myStorage.kode_kontainer,
-                                        nama_kota: myStorage.nama_kota,
-                                        noOrder: myStorage.noOrder,
-                                        // idtransaksi_detail: ,
-                                        idtransaksi_detail: myStorage.idtransaksi_detail,
-                                        idtransaksi: myStorage.idtransaksi,
-                                        nama: myStorage.nama,
-                                        tglmulai: myStorage.tanggal_mulai,
-                                        tglakhir: myStorage.tanggal_akhir,
-                                        tglorder: myStorage.tanggal_order,
-                                        keterangan: myStorage.keterangan,
-                                      )));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => KonfirmasiLog(
+                                    kode_kontainer: myStorage.kode_kontainer,
+                                    nama_kota: myStorage.nama_kota,
+                                    noOrder: myStorage.noOrder,
+                                    // idtransaksi_detail: ,
+                                    idtransaksi_detail:
+                                        myStorage.idtransaksi_detail,
+                                    idtransaksi: myStorage.idtransaksi,
+                                    nama: myStorage.nama,
+                                    tglmulai: myStorage.tanggal_mulai,
+                                    tglakhir: myStorage.tanggal_akhir,
+                                    tglorder: myStorage.tanggal_order,
+                                    keterangan: myStorage.keterangan,
+                                  )));
                           // _openAlertDialog(
                           //   context,
                           //   myStorage.idtransaksi_detail,
@@ -208,10 +207,12 @@ class _StorageActive extends State<StorageActive1>
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),
                                             ),
-                                            Text(
-                                              myStorage.noOrder.toString(),
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
+                                            Flexible(
+                                              child: Text(
+                                                myStorage.noOrder.toString(),
+                                                style: GoogleFonts.inter(
+                                                    fontSize: 14),
+                                              ),
                                             ),
                                           ],
                                         ),

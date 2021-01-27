@@ -40,6 +40,8 @@ class MyHttpOverride extends HttpOverrides {
 class _ProdukList extends State<ProdukList> {
   bool a = false;
   DateTime dtAwal, dtAkhir, _date1, _date2;
+  String _times =
+      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3))).toString();
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
   String string = DateFormat.yMMMd().add_Hm().format(DateTime.now());
@@ -60,9 +62,86 @@ class _ProdukList extends State<ProdukList> {
   String _rangeCount;
   String _tanggalAwal, _tanggalAkhir;
   String _pTanggalAkhir = "";
-  var _date = "Not set";
-  var _time = "Not set";
-  var _timeFinish = "Not set";
+  double height;
+  double width;
+  // var _date = "Not set";
+  // var _time = "Not set";
+  // var _timeFinish = "Not set";
+  String setTime = "",
+      setTimeSelesai = "",
+      setDate = "",
+      hour = "",
+      minutes = "",
+      time = "";
+  String dateTime;
+  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime selectedDate = DateTime.now();
+  var selectedTime = TimeOfDay.now();
+  var selectedTimeSelesai =
+      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)));
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController timeControllerSelesai = TextEditingController();
+
+  Future<Null> selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2900));
+    if (picked != null)
+      setState(() {
+        selectedDate = picked;
+        // dateController.text = DateFormat.yMd().format(selectedDate);
+        dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+  }
+
+  Future<Null> selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+        context: context,
+        initialTime: selectedTime,
+        initialEntryMode: TimePickerEntryMode.input,
+        builder: (BuildContext context, Widget child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child,
+          );
+        });
+    if (picked != null && picked != selectedTime)
+      setState(() {
+        selectedTime = picked;
+        hour = selectedTime.hour.toString();
+        minutes = selectedTime.minute.toString();
+        time = hour + '.' + minutes;
+        timeController.text = time;
+        selectedTime = picked;
+        // timeValue = picked.format(context);
+        selectedTime = picked.replacing(hour: picked.hourOfPeriod);
+        // timeController.text = formatDate(
+        //     DateTime(2000, 01, 1, selectedTime.hour, selectedTime.minute),
+        //     [HH, ':', mm]).toString();
+      });
+  }
+
+  Future<Null> selectTimeSelesai(BuildContext context) async {
+    final TimeOfDay picked1 = await showTimePicker(
+      context: context,
+      initialTime: selectedTimeSelesai,
+    );
+    if (picked1 != null)
+      setState(() {
+        selectedTimeSelesai = picked1;
+        hour = selectedTimeSelesai.hour.toString();
+        minutes = selectedTimeSelesai.minute.toString();
+        time = hour + '.' + minutes;
+        timeControllerSelesai.text = time;
+        selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
+        // timeControllerSelesai.text = formatDate(
+        //     DateTime(2000, 01, 1, selectedTimeSelesai.hour, selectedTimeSelesai.minute),
+        //     [hh, ':', nn, " ", am]).toString();
+      });
+  }
 
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
@@ -85,7 +164,10 @@ class _ProdukList extends State<ProdukList> {
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
 
-  Future _popUpTroble(BuildContext context, var jenispro) {
+  Future _popUpTroble(BuildContext context, jenispro) {
+    dateTime = DateFormat.yMd().format(DateTime.now());
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -135,220 +217,125 @@ class _ProdukList extends State<ProdukList> {
                       SizedBox(
                         height: 7,
                       ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                        elevation: 3.0,
-                        // onPressed: () {
-                        //   DatePicker.showDatePicker(context,
-                        //       theme: DatePickerTheme(
-                        //         containerHeight: 210.0,
-                        //       ),
-                        //       showTitleActions: true,
-                        //       minTime: DateTime(2000, 1, 1),
-                        //       maxTime: DateTime(2999, 12, 31),
-                        //       onConfirm: (date) {
-                        //     print('confirm $date');
-                        //     _date =
-                        //         '${date.year} - ${date.month} - ${date.day}';
-                        //     setState(() {});
-                        //   },
-                        //       currentTime: DateTime.now(),
-                        //       locale: LocaleType.id);
-                        // },
+                      InkWell(
+                        onTap: () {
+                          selectDate(context);
+                        },
                         child: Container(
-                          alignment: Alignment.center,
-                          height: 50.0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    child: Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.date_range,
-                                          size: 18.0,
-                                          color: Colors.teal,
-                                        ),
-                                        Text(
-                                          " $_date",
-                                          style: TextStyle(
-                                              color: Colors.teal,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18.0),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Text(
-                                "Ganti",
-                                style: TextStyle(
-                                    color: Colors.teal,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0),
-                              ),
-                            ],
+                          width: width / 1.5,
+                          height: height / 14,
+                          decoration: BoxDecoration(color: Colors.grey[200]),
+                          child: TextFormField(
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            enabled: false,
+                            keyboardType: TextInputType.text,
+                            controller: dateController,
+                            onSaved: (String val) {
+                              setDate = val;
+                            },
+                            decoration: InputDecoration(
+                                disabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                contentPadding: EdgeInsets.only(top: 0.0)),
                           ),
                         ),
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Jam Mulai : ",
-                                style: GoogleFonts.lato(fontSize: 14),
-                                textAlign: TextAlign.left,
-                              )),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Jam Selesai : ",
-                                style: GoogleFonts.lato(fontSize: 14),
-                                textAlign: TextAlign.left,
-                              )),
-                        ],
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Align(
-                          //     alignment: Alignment.topLeft,
-                          //     child: Text(
-                          //       "Jam Mulai : ",
-                          //       style: GoogleFonts.lato(fontSize: 14),
-                          //       textAlign: TextAlign.left,
-                          //     )),
-                          // SizedBox(
-                          //   height: 7,
-                          // ),
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                elevation: 4.0,
-                                // onPressed: () {
-                                //   DatePicker.showTimePicker(context,
-                                //       theme: DatePickerTheme(
-                                //         containerHeight: 210.0,
-                                //       ),
-                                //       showTitleActions: true,
-                                //       onConfirm: (time) {
-                                //     print('confirm $time');
-                                //     _time = '${time.hour}.${time.minute}';
-                                //     setState(() {});
-                                //   },
-                                //       currentTime: DateTime.now(),
-                                //       locale: LocaleType.id);
-                                //   setState(() {});
-                                // },
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Jam Mulai : ",
+                                    style: GoogleFonts.lato(fontSize: 14),
+                                    textAlign: TextAlign.left,
+                                  )),
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Jam Selesai : ",
+                                    style: GoogleFonts.lato(fontSize: 14),
+                                    textAlign: TextAlign.left,
+                                  )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  selectTime(context);
+                                },
                                 child: Container(
+                                  width: width / 3.2,
+                                  height: height / 14,
                                   alignment: Alignment.center,
-                                  height: 70.0,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            child: Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  " $_time",
-                                                  style: TextStyle(
-                                                      color: Colors.teal,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18.0),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Text(
-                                        "Ganti",
-                                        style: TextStyle(
-                                            color: Colors.teal,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18.0),
-                                      ),
-                                    ],
+                                  decoration:
+                                      BoxDecoration(color: Colors.grey[200]),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                    onSaved: (String val) {
+                                      setTime = val;
+                                      print("jam awalnya -> " + setTime);
+                                    },
+                                    enabled: false,
+                                    keyboardType: TextInputType.text,
+                                    controller: timeController,
+                                    decoration: InputDecoration(
+                                        disabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        // labelText: 'Time',
+                                        contentPadding: EdgeInsets.all(5)),
                                   ),
                                 ),
-                                color: Colors.white,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  selectTimeSelesai(context);
+                                },
+                                child: Container(
+                                  width: width / 3.2,
+                                  height: height / 14,
+                                  alignment: Alignment.center,
+                                  decoration:
+                                      BoxDecoration(color: Colors.grey[200]),
+                                  child: TextFormField(
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                    onSaved: (String val1) {
+                                      setTimeSelesai = val1;
+                                      print("jam selesainya -> " +
+                                          setTimeSelesai);
+                                    },
+                                    enabled: false,
+                                    keyboardType: TextInputType.text,
+                                    controller: timeControllerSelesai,
+                                    decoration: InputDecoration(
+                                        disabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide.none),
+                                        // labelText: 'Time',
+                                        contentPadding: EdgeInsets.all(5)),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
-                            elevation: 4.0,
-                            // onPressed: () {
-                            //   DatePicker.showTimePicker(context,
-                            //       theme: DatePickerTheme(
-                            //         containerHeight: 210.0,
-                            //       ),
-                            //       showTitleActions: true, onConfirm: (time) {
-                            //     print('confirm $time');
-                            //     _timeFinish = '${time.hour}.${time.minute}';
-                            //     print('confirmzzzzzz $_timeFinish');
-                            //     setState(() {});
-                            //   },
-                            //       currentTime: DateTime.now(),
-                            //       locale: LocaleType.id);
-                            //   setState(() {});
-                            // },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 70.0,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Row(
-                                          children: <Widget>[
-                                            Text(
-                                              " $_timeFinish",
-                                              style: TextStyle(
-                                                  color: Colors.teal,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18.0),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Text(
-                                    "Ganti",
-                                    style: TextStyle(
-                                        color: Colors.teal,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            color: Colors.white,
-                          )
                         ],
                       ),
                       SizedBox(
@@ -359,29 +346,28 @@ class _ProdukList extends State<ProdukList> {
                           child: FlatButton(
                               color: Colors.red[900],
                               onPressed: () {
-                                print("jaszzzs");
-                                print(_date);
-                                print(_time);
-                                print(_timeFinish);
-                                if (_date == "Not set" ||
-                                    _time == "Not set" ||
-                                    _timeFinish == "Not set") {
-                                  infoDialog(context,
-                                      "Pilih tanggal dan durasi sewa terlebih dahulu !");
-                                  // if (_time.toInt() > _timeFinish.toInt()) {
+                                print(selectedDate
+                                    .format(format: 'yyyy-MM-dd')
+                                    .toString());
+                                print(selectedTime.format(context));
+                                print(selectedTimeSelesai.format(context));
+                                print(jenispro);
+                                // if (selectedTime.format(context) > selectedTimeSelesai.format(context)) {
 
-                                  // }
-                                } else {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return FormInputOrder(
-                                      jenisProduk: jenispro,
-                                      tglawalforklift: _date,
-                                      jamawal: _time,
-                                      jamakhir: _timeFinish,
-                                    );
-                                  }));
-                                }
+                                // }
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return FormInputOrder(
+                                    jenisProduk: jenispro,
+                                    // jensprod: jenispro.toString(),
+                                    tglawalforklift: selectedDate
+                                        .format(format: 'yyyy-MM-dd')
+                                        .toString(),
+                                    jamawal: selectedTime.format(context),
+                                    jamakhir:
+                                        selectedTimeSelesai.format(context),
+                                  );
+                                }));
                               },
                               child: Text(
                                 'Lanjutkan',
@@ -557,7 +543,13 @@ class _ProdukList extends State<ProdukList> {
     _tanggalAkhir = _date2.toString();
     // ttanggalAwal = widget.tanggalAwal;
     // ttanggalAkhir = widget.tanggalAkhir;
-    print("HMMM : $access_token");
+    // print("HMMM : $access_token");
+    dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    timeController.text = "${DateTime.now().hour}.${DateTime.now().minute}";
+    timeControllerSelesai.text = selectedTimeSelesai.toString();
+    // timeControllerSelesai.text = "${TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)))}";
+
+    // selectedTimeSelesai;
     _cekKoneksi();
     super.initState();
     // print("Hasil Val Kota"+valKota);
@@ -652,23 +644,27 @@ class _ProdukList extends State<ProdukList> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(
-                                  // string,
-                                  // sDate.toString(),
-                                  mmtext,
-                                  style: GoogleFonts.lato(
-                                      fontSize: 16,
-                                      color: Colors.grey[800],
-                                      fontWeight: FontWeight.bold),
+                                Flexible(
+                                  child: Text(
+                                    // string,
+                                    // sDate.toString(),
+                                    mmtext,
+                                    style: GoogleFonts.lato(
+                                        fontSize: 15,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                                 Icon(Icons.arrow_forward_rounded),
-                                Text(
-                                  // fDate.toString(),
-                                  aatext,
-                                  style: GoogleFonts.lato(
-                                      fontSize: 16,
-                                      color: Colors.grey[800],
-                                      fontWeight: FontWeight.bold),
+                                Flexible(
+                                  child: Text(
+                                    // fDate.toString(),
+                                    aatext,
+                                    style: GoogleFonts.lato(
+                                        fontSize: 15,
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ],
                             ),
@@ -845,10 +841,15 @@ class _ProdukList extends State<ProdukList> {
                                                 .toLowerCase()
                                                 .contains('forklift')) {
                                               // return print("hello mama");
-                                              _popUpTroble(context,
-                                                  jenisProduk.kapasitas);
+                                              _popUpTroble(
+                                                  context,
+                                                  jenisProduk.kapasitas
+                                                      .toString());
                                             } else {
-                                              // print("zzzz ${jenisProduk.kapasitas}");
+                                              print("kanez" +
+                                                  jenisProduk.toString());
+                                              // print(
+                                              //     "tglawal ${_tanggalAwal} + ${_tanggalAkhir}");
                                               // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
                                               Navigator.push(context,
                                                   MaterialPageRoute(

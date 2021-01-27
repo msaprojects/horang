@@ -408,32 +408,35 @@ class _HomePageState extends State<HomePage> {
               ),
               /////////////////// SESI LATEST ORDER ////////////////////
               Container(
+                 padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, top: 24),
-                      child: Text(
-                        'Latest Order',
-                        style: mTitleStyle,
-                      ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: 16, top: 24),
+                    //   child: Text(
+                    //     'Latest Order',
+                    //     style: mTitleStyle,
+                    //   ),
+                    // ),
+                    Text(
+                      'Latest Order',
+                      style: mTitleStyle,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 160, top: 24),
-                      child: SelectableText(
-                        "See All...",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      // StorageHandler(
-                                      //       initialIndex: 2,
-                                      //     )
-                                      HistoryPage()));
-                        },
-                      ),
+                    SelectableText(
+                      "See All...",
+                      style: TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    // StorageHandler(
+                                    //       initialIndex: 2,
+                                    //     )
+                                    HistoryPage()));
+                      },
                     ),
                   ],
                 ),

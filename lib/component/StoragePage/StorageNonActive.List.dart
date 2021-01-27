@@ -191,7 +191,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                         Row(
+                                        Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: <Widget>[
@@ -200,10 +200,12 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),
                                             ),
-                                            Text(
-                                              myStorage.noOrder.toString(),
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
+                                            Flexible(
+                                              child: Text(
+                                                myStorage.noOrder.toString(),
+                                                style: GoogleFonts.inter(
+                                                    fontSize: 14),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -624,9 +626,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
             title: Text("Konfirmasi Action" + idtransaksi_detail.toString()),
             content: Text("Apakah anda ingin membuka kontainer ini ?"),
             actions: [
-              FlatButton(
-                  onPressed: () {  },
-                  child: Text("Ya, Setuju")),
+              FlatButton(onPressed: () {}, child: Text("Ya, Setuju")),
               cancelButton
             ],
           );

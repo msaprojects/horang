@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -227,12 +228,15 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Home(
-                                  initIndexHome: 0,
-                                )));
+                     infoDialog(
+                      context, 
+                      "Maaf, fitur masih dalam proses pengembangan !");
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => Home(
+                    //               initIndexHome: 0,
+                    //             )));
                   },
                 ),
               ),

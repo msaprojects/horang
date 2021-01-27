@@ -54,151 +54,167 @@ class _RegistrasiState extends State<RegistrasiPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 80),
-          width: double.infinity,
-          height: size.height,
-          key: _scaffoldState,
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        child: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                // color: Colors.red,
+              ),
+              Container(
+                // padding: EdgeInsets.only(top: 50),
+                width: double.infinity,
+                height: size.height,
+                key: _scaffoldState,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: <Widget>[
-                    Text(
-                      "Registrasi",
-                      style: GoogleFonts.lato(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _buildTextFieldEmail(),
-                    _buildTextFieldNoHp(),
-                    _buildTextFieldPassword(),
-                    _buildTextFieldPasswordRetype(),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      width: size.width * 0.8,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(29),
-                        child: FlatButton(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 40),
-                          onPressed: () async {
-                            if (_fieldEmail == null ||
-                                _fieldNo_Hp == null ||
-                                _fieldPassword == null ||
-                                !_fieldEmail ||
-                                !_fieldNo_Hp ||
-                                !_fieldPassword) {
-                              warningDialog(
-                                  context, "Pastikan Semua Kolom Terisi!");
-                              return;
-                            } else {
-                              String email = _controllerEmail.text.toString();
-                              String nohp = _controllerNohp.text.toString();
-                              String password =
-                                  _controllerPassword.text.toString();
-                              String retypepassword =
-                                  _controllerPasswordRetype.text.toString();
-                              //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
-                              if (password != retypepassword) {
-                                warningDialog(context,
-                                    "Pastikan Password yang anda masukkan sama");
-                              } else {
-                                // setState(() {
-                                //   _isLoading = true;
-                                GetDeviceID().getDeviceID(context).then((ids) {
-                                  setState(() {
-                                    iddevice = ids;
-                                    PenggunaModel pengguna = PenggunaModel(
-                                        uuid: iddevice,
-                                        email: email,
-                                        password: password,
-                                        no_hp: nohp,
-                                        status: 0,
-                                        notification_token: "0",
-                                        token_mail: "0",
-                                        keterangan: "Uji Coba");
-                                    print("Registrasi Value : " +
-                                        pengguna.toString());
-                                    _apiService
-                                        .signup(pengguna)
-                                        .then((isSuccess) {
-                                      if (isSuccess) {
-                                        _controllerEmail.clear();
-                                        _controllerNohp.clear();
-                                        _controllerPassword.clear();
-                                        _controllerPasswordRetype.clear();
-                                        successDialog(context,
-                                            "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
-                                            showNeutralButton: false,
-                                            positiveText: "OK",
-                                            positiveAction: () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginPage()),
-                                                  (route) => false);
-                                        });
-                                      } else {
-                                        errorDialog(context,
-                                            "${_apiService.responseCode.mMessage}");
-                                      }
-                                    });
-                                  });
-                                });
-                                // print("IDDEVICE : " + iddevice.toString());
-                                // });
-                              }
-                              return;
-                            }
-                          },
-                          child: Text(
-                            "Simpan",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          color: primaryColor,
-                        ),
-                      ),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            "Anda tidak menerima email ? ",
-                            style: GoogleFonts.lato(),
+                            "Registrasi",
+                            style: GoogleFonts.lato(
+                                fontSize: 25, fontWeight: FontWeight.bold),
                           ),
-                          GestureDetector(
-                              onTap: () {},
-                              child: Text(
-                                "Kirim email ulang",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue[900]),
-                              ))
-                        ]),
-                    SizedBox(
-                      height: 10,
+                          SizedBox(
+                            height: 20,
+                          ),
+                          _buildTextFieldEmail(),
+                          _buildTextFieldNoHp(),
+                          _buildTextFieldPassword(),
+                          _buildTextFieldPasswordRetype(),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            width: size.width * 0.8,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(29),
+                              child: FlatButton(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 40),
+                                onPressed: () async {
+                                  if (_fieldEmail == null ||
+                                      _fieldNo_Hp == null ||
+                                      _fieldPassword == null ||
+                                      !_fieldEmail ||
+                                      !_fieldNo_Hp ||
+                                      !_fieldPassword) {
+                                    warningDialog(context,
+                                        "Pastikan Semua Kolom Terisi!");
+                                    return;
+                                  } else {
+                                    String email =
+                                        _controllerEmail.text.toString();
+                                    String nohp =
+                                        _controllerNohp.text.toString();
+                                    String password =
+                                        _controllerPassword.text.toString();
+                                    String retypepassword =
+                                        _controllerPasswordRetype.text
+                                            .toString();
+                                    //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
+                                    if (password != retypepassword) {
+                                      warningDialog(context,
+                                          "Pastikan Password yang anda masukkan sama");
+                                    } else {
+                                      // setState(() {
+                                      //   _isLoading = true;
+                                      GetDeviceID()
+                                          .getDeviceID(context)
+                                          .then((ids) {
+                                        setState(() {
+                                          iddevice = ids;
+                                          PenggunaModel pengguna =
+                                              PenggunaModel(
+                                                  uuid: iddevice,
+                                                  email: email,
+                                                  password: password,
+                                                  no_hp: nohp,
+                                                  status: 0,
+                                                  notification_token: "0",
+                                                  token_mail: "0",
+                                                  keterangan: "Uji Coba");
+                                          print("Registrasi Value : " +
+                                              pengguna.toString());
+                                          _apiService
+                                              .signup(pengguna)
+                                              .then((isSuccess) {
+                                            if (isSuccess) {
+                                              _controllerEmail.clear();
+                                              _controllerNohp.clear();
+                                              _controllerPassword.clear();
+                                              _controllerPasswordRetype.clear();
+                                              successDialog(context,
+                                                  "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                                  showNeutralButton: false,
+                                                  positiveText: "OK",
+                                                  positiveAction: () {
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                LoginPage()),
+                                                        (route) => false);
+                                              });
+                                            } else {
+                                              errorDialog(context,
+                                                  "${_apiService.responseCode.mMessage}");
+                                            }
+                                          });
+                                        });
+                                      });
+                                      // print("IDDEVICE : " + iddevice.toString());
+                                      // });
+                                    }
+                                    return;
+                                  }
+                                },
+                                child: Text(
+                                  "Simpan",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                color: primaryColor,
+                              ),
+                            ),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Anda tidak menerima email ? ",
+                                  style: GoogleFonts.lato(),
+                                ),
+                                GestureDetector(
+                                    onTap: () {},
+                                    child: Text(
+                                      "Kirim email ulang",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue[900]),
+                                    ))
+                              ]),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                          )
+                        ],
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                    )
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Image.asset(
+                        "assets/image/login_bottom.png",
+                        width: size.width * 0.4,
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Image.asset(
-                  "assets/image/login_bottom.png",
-                  width: size.width * 0.4,
                 ),
               ),
             ],
