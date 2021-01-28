@@ -134,7 +134,7 @@ class _ProdukList extends State<ProdukList> {
         selectedTimeSelesai = picked1;
         hour = selectedTimeSelesai.hour.toString();
         minutes = selectedTimeSelesai.minute.toString();
-        time = hour + '.' + minutes;
+        time = hour+ '.' + minutes;
         timeControllerSelesai.text = time;
         selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
         // timeControllerSelesai.text = formatDate(
@@ -164,7 +164,7 @@ class _ProdukList extends State<ProdukList> {
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
 
-  Future _popUpTroble(BuildContext context, jenispro) {
+  Future _popUpTroble(BuildContext context, var jenispro) {
     dateTime = DateFormat.yMd().format(DateTime.now());
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
@@ -836,15 +836,15 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
+                                            print("exxx ${jenisProduk.kapasitas}");
                                             if (jenisProduk.kapasitas
                                                 .toString()
                                                 .toLowerCase()
                                                 .contains('forklift')) {
-                                              // return print("hello mama");
                                               _popUpTroble(
                                                   context,
-                                                  jenisProduk.kapasitas
-                                                      .toString());
+                                                  jenisProduk);
+                                                      
                                             } else {
                                               print("kanez" +
                                                   jenisProduk.toString());

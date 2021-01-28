@@ -76,8 +76,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Center(
-            child: Text(
-                "4wrong with message: ${snapshot.error.toString()}"),
+            child: Text("4wrong with message: ${snapshot.error.toString()}"),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -107,7 +106,10 @@ class _VoucherDashboard extends State<VoucherDashboard> {
     return Column(
       children: <Widget>[
         Container(
-          child: Text("Promo", style: mTitleStyle,),
+          child: Text(
+            "Promo",
+            style: mTitleStyle,
+          ),
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(bottom: 10),
         ),
@@ -121,39 +123,37 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             pagination: new SwiperPagination(
               alignment: Alignment.bottomCenter,
               builder: new DotSwiperPaginationBuilder(
-                color: Colors.grey, activeColor: Colors.red),
+                  color: Colors.grey, activeColor: Colors.red),
             ),
-            control: new SwiperControl(
-              color: Color(0xff38547C)
-            ),
+            control: new SwiperControl(color: Color(0xff38547C)),
             loop: false,
             autoplay: true,
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
               Voucher voucher = dataIndex[index];
+              print("ezzdd"+voucher.toString());
               return Container(
-                  child: Container(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return VoucherDetail(
-                            nominal: voucher.nominal,
-                            gambar: voucher.gambar,
-                            keterangan: voucher.keterangan,
-                            kode_voucher: voucher.kode_voucher,
-                          );
-                        }));
-                      },
-                    ),
-                    decoration: BoxDecoration(
-                      // borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                          image: NetworkImage(voucher.gambar),
-                          fit: BoxFit.cover),
-                    ),
+                child: Container(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return VoucherDetail(
+                          nominal: voucher.nominal,
+                          gambar: voucher.gambar,
+                          keterangan: voucher.keterangan,
+                          kode_voucher: voucher.kode_voucher,
+                        );
+                      }));
+                    },
                   ),
-                );
+                  decoration: BoxDecoration(
+                    // borderRadius: BorderRadius.circular(8),
+                    image: DecorationImage(
+                        image: NetworkImage(voucher.gambar), fit: BoxFit.cover),
+                  ),
+                ),
+              );
             },
             itemCount: dataIndex.length,
           ),

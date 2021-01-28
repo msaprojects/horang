@@ -42,7 +42,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       gambar1,
       idvouchers,
       jamawal1,
-      jamakhir1;
+      jamakhir1,
+      tglawalforklift1,
+      valueawal,
+      valueakhir;
   var hasilperhitungan = "0", tambahasuransi = "0";
   int jumlah_sewas;
   bool asuransi = true;
@@ -205,32 +208,40 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
     getSaldo();
-    if (widget.jenisProduk != null) {
-      idjenis_produk = widget.jenisProduk.idjenis_produk;
-      kapasitas = widget.jenisProduk.kapasitas;
-      harga = widget.jenisProduk.harga;
-      alamat = widget.jenisProduk.nama_lokasi;
-      vKeterangan = widget.jenisProduk.keterangan;
-      idlokasi = widget.jenisProduk.idlokasi;
-      gambar1 = widget.jenisProduk.gambar;
-    } else if (widget.jenisProduk.kapasitas
+    // if (widget.jenisProduk != null) {
+    //   idjenis_produk = widget.jenisProduk.idjenis_produk;
+    //   kapasitas = widget.jenisProduk.kapasitas;
+    //   harga = widget.jenisProduk.harga;
+    //   alamat = widget.jenisProduk.nama_lokasi;
+    //   vKeterangan = widget.jenisProduk.keterangan;
+    //   idlokasi = widget.jenisProduk.idlokasi;
+    //   gambar1 = widget.jenisProduk.gambar;
+    // } else
+
+    idjenis_produk = widget.jenisProduk.idjenis_produk;
+    kapasitas = widget.jenisProduk.kapasitas.toString();
+    harga = widget.jenisProduk.harga;
+    alamat = widget.jenisProduk.nama_lokasi;
+    vKeterangan = widget.jenisProduk.keterangan;
+    idlokasi = widget.jenisProduk.idlokasi;
+    gambar1 = widget.jenisProduk.gambar;
+    if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
         .contains('forklift')) {
+      tglawalforklift1 = widget.tglawalforklift.toString();
       jamawal1 = widget.jamawal.toString();
       jamakhir1 = widget.jamakhir.toString();
-      idjenis_produk = widget.jenisProduk.idjenis_produk;
-      kapasitas = widget.jenisProduk.kapasitas.toString();
-      harga = widget.jenisProduk.harga;
-      alamat = widget.jenisProduk.nama_lokasi;
-      vKeterangan = widget.jenisProduk.keterangan;
-      idlokasi = widget.jenisProduk.idlokasi;
-      gambar1 = widget.jenisProduk.gambar;
-    }
-    tglAwal = widget.tglawal12.toString();
-    tglAkhir = widget.tglakhir12.toString();
-
-    jumlah_sewas =
+      valueawal = tglawalforklift1+" : "+ jamawal1;
+      valueakhir = tglawalforklift1+" : "+jamakhir1;
+      // print("SAMA ? "+kapasitas.toLowerCase().contains('forklift'));
+    } else {
+      
+      tglAwal = widget.tglawal12.toString();
+      tglAkhir = widget.tglakhir12.toString();
+       valueawal = tglAwal;
+      valueakhir = tglAkhir;
+          jumlah_sewas =
         diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     hasilperhitungan = hitungall(
       nominalvoucher,
@@ -241,6 +252,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
       _nominalbarang.text.toString(),
       ceksaldo.toString(),
     );
+    }
+    // print("VALUES : " +
+    //     idjenis_produk.toString() +
+    //     kapasitas +
+    //     harga.toString() +
+    //     alamat +
+    //     vKeterangan +
+    //     idlokasi.toString() +
+    //     gambar1 +
+    //     tglawalforklift1 +
+    //     jamawal1 +
+    //     jamakhir1);
+
+
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
@@ -383,7 +408,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(tglAwal,
+                                    Text(valueawal,
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
@@ -395,7 +420,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(tglAkhir,
+                                    Text(valueakhir,
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),

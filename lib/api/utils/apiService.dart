@@ -106,7 +106,7 @@ class ApiService {
 
   //LOAD VOUCHER
   Future<List<Voucher>> listVoucher(String token) async {
-    final response = await client.get("$baseUrl/voucherbelumterpakai",
+    final response = await client.get("$baseUrl/voucher",
         headers: {"Authorization": "BEARER ${token}"});
     // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {

@@ -24,7 +24,11 @@ class MyHttpOverride extends HttpOverrides {
 
 // void main() => runApp(MyApp());
 void main() {
-  SharedPreferences.setMockInitialValues({});
+  // SharedPreferences.setMockInitialValues({});
+    if (Platform.isIOS) {
+    // ignore: invalid_use_of_visible_for_testing_member
+    SharedPreferences.setMockInitialValues({});  
+  }
   HttpOverrides.global = new MyHttpOverride();
   runApp(new MyApp());
 }
