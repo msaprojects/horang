@@ -76,6 +76,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				0566DD4B250C9110004C837F /* GoogleService-Info.plist */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -112,7 +113,6 @@
 		DEE42BA681F7712392360872 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0566DD4B250C9110004C837F /* GoogleService-Info.plist */,
 				843D746208FCEFA712FB178C /* Pods_Runner.framework */,
 			);
 			name = Frameworks;

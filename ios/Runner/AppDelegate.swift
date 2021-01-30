@@ -8,10 +8,9 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
      GeneratedPluginRegistrant.register(with: self)
-     if #available(iOS 10.0, *){
+      if #available(iOS 10.0, *){
          UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
      }
-    // FirebaseApp.configure()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

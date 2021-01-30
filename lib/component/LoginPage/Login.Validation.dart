@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
+import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/AccountChecker.dart';
@@ -43,7 +44,33 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
+          print("Ini Tokennya : " + token);
         }));
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        debugPrint('onMessage: $message');
+        // getDataFcm(message);
+        successDialog(context, message['notification']['body'],
+            title: message['notification']['title']);
+      },
+
+      // ,
+      // onBackgroundMessage: onBackgroundMessage,
+      onResume: (Map<String, dynamic> message) async {
+        debugPrint('onResume: $message');
+        // getDataFcm(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        debugPrint('onLaunch: $message');
+        // getDataFcm(message);
+      },
+    );
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
   }
 
   @override
