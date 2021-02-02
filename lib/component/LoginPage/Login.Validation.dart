@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -46,22 +47,30 @@ class _LoginPageState extends State<LoginPage> {
           this.token = token;
           print("Ini Tokennya : " + token);
         }));
+    print("HMM : " + Platform.operatingSystem == 'ios');
+
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
         // getDataFcm(message);
-        successDialog(context, message['body'], title: message['title']);
+        print("OS : " + Platform.operatingSystem);
+        if (Platform.isIOS) {
+          print('HMM : ' + Platform.operatingSystem == 'ios');
+          successDialog(context, message['alert']['body'],
+              title: message['alert']['title']);
+        } else if (Platform.isAndroid) {
+          successDialog(context, message['notification']['body'],
+              title: message['notification']['title']);
+        }
       },
-
-      // ,
       // onBackgroundMessage: onBackgroundMessage,
       onResume: (Map<String, dynamic> message) async {
         debugPrint('onResume: $message');
-        // getDataFcm(message);
+        getDataFcm(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         debugPrint('onLaunch: $message');
-        // getDataFcm(message);
+        getDataFcm(message);
       },
     );
     firebaseMessaging.requestNotificationPermissions(
@@ -71,6 +80,20 @@ class _LoginPageState extends State<LoginPage> {
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
+  }
+
+  void getDataFcm(Map<String, dynamic> message) {
+    String name = '';
+    String age = '';
+    if (Platform.isIOS) {
+      name = message['title'];
+      age = message['body'];
+    } else if (Platform.isAndroid) {
+      var data = message['notification'];
+      name = data['title'];
+      age = data['body'];
+    }
+    debugPrint('getDataFcm: name: $name & age: $age');
   }
 
   @override
