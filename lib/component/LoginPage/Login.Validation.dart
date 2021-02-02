@@ -50,8 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
         // getDataFcm(message);
-        successDialog(context, message['notification']['body'],
-            title: message['notification']['title']);
+        successDialog(context, message['body'], title: message['title']);
       },
 
       // ,
@@ -66,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: false));
     firebaseMessaging.onIosSettingsRegistered
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
