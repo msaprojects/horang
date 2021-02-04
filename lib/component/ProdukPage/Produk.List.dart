@@ -40,8 +40,6 @@ class MyHttpOverride extends HttpOverrides {
 class _ProdukList extends State<ProdukList> {
   bool a = false;
   DateTime dtAwal, dtAkhir, _date1, _date2;
-  String _times =
-      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3))).toString();
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
   String string = DateFormat.yMMMd().add_Hm().format(DateTime.now());
@@ -79,6 +77,10 @@ class _ProdukList extends State<ProdukList> {
   var selectedTime = TimeOfDay.now();
   var selectedTimeSelesai =
       TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)));
+
+  var sixtyninetyninehundredthousand =
+      DateTime.now().add(new Duration(hours: 3));
+
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   TextEditingController timeControllerSelesai = TextEditingController();
@@ -108,7 +110,7 @@ class _ProdukList extends State<ProdukList> {
             child: child,
           );
         });
-    if (picked != null && picked != selectedTime)
+    if (picked != null)
       setState(() {
         selectedTime = picked;
         hour = selectedTime.hour.toString();
@@ -116,8 +118,7 @@ class _ProdukList extends State<ProdukList> {
         time = hour + '.' + minutes;
         timeController.text = time;
         selectedTime = picked;
-        // timeValue = picked.format(context);
-        selectedTime = picked.replacing(hour: picked.hourOfPeriod);
+        // selectedTime = picked.replacing(hour: picked.hourOfPeriod);
         // timeController.text = formatDate(
         //     DateTime(2000, 01, 1, selectedTime.hour, selectedTime.minute),
         //     [HH, ':', mm]).toString();
@@ -126,20 +127,28 @@ class _ProdukList extends State<ProdukList> {
 
   Future<Null> selectTimeSelesai(BuildContext context) async {
     final TimeOfDay picked1 = await showTimePicker(
-      context: context,
-      initialTime: selectedTimeSelesai,
-    );
+        context: context,
+        initialTime: selectedTimeSelesai,
+        initialEntryMode: TimePickerEntryMode.input,
+        builder: (BuildContext context, Widget child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child,
+          );
+        });
     if (picked1 != null)
       setState(() {
         selectedTimeSelesai = picked1;
         hour = selectedTimeSelesai.hour.toString();
         minutes = selectedTimeSelesai.minute.toString();
-        time = hour+ '.' + minutes;
+        time = hour + '.' + minutes;
         timeControllerSelesai.text = time;
-        selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
+        // selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
         // timeControllerSelesai.text = formatDate(
-        //     DateTime(2000, 01, 1, selectedTimeSelesai.hour, selectedTimeSelesai.minute),
-        //     [hh, ':', nn, " ", am]).toString();
+        //     DateTime(2019, 10, 1, selectedTimeSelesai.hour,
+        //         selectedTimeSelesai.minute),
+        //     // [hh, ':', nn, " ", am]
+        //     [HH, ':', mm]).toString();
       });
   }
 
@@ -290,7 +299,7 @@ class _ProdukList extends State<ProdukList> {
                                     textAlign: TextAlign.center,
                                     onSaved: (String val) {
                                       setTime = val;
-                                      print("jam awalnya -> " + setTime);
+                                      // print("jam awalnya -> " + setTime);
                                     },
                                     enabled: false,
                                     keyboardType: TextInputType.text,
@@ -346,19 +355,18 @@ class _ProdukList extends State<ProdukList> {
                           child: FlatButton(
                               color: Colors.red[900],
                               onPressed: () {
-                                print(selectedDate
-                                    .format(format: 'yyyy-MM-dd')
-                                    .toString());
-                                print(selectedTime.format(context));
-                                print(selectedTimeSelesai.format(context));
-                                print(jenispro);
-                                // if (selectedTime.format(context) > selectedTimeSelesai.format(context)) {
+                                // print(selectedDate
+                                //     .format(format: 'yyyy-MM-dd')
+                                //     .toString());
+                                // print(selectedTime.format(context));
+                                // print(selectedTimeSelesai.format(context));
+                                // print(jenispro);
 
-                                // }
-                                Navigator.push(context,
+                                Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (context) {
                                   return FormInputOrder(
                                     jenisProduk: jenispro,
+
                                     // jensprod: jenispro.toString(),
                                     tglawalforklift: selectedDate
                                         .format(format: 'yyyy-MM-dd')
@@ -545,11 +553,13 @@ class _ProdukList extends State<ProdukList> {
     // ttanggalAkhir = widget.tanggalAkhir;
     // print("HMMM : $access_token");
     dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    timeController.text = "${DateTime.now().hour}.${DateTime.now().minute}";
-    timeControllerSelesai.text = selectedTimeSelesai.toString();
-    // timeControllerSelesai.text = "${TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)))}";
-
-    // selectedTimeSelesai;
+    // timeController.text = "${DateTime.now().hour}.${DateTime.now().minute}";
+    timeController.text =
+        DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
+    timeControllerSelesai.text =
+        sixtyninetyninehundredthousand.hour.toString() +
+            "." +
+            DateTime.now().minute.toString();
     _cekKoneksi();
     super.initState();
     // print("Hasil Val Kota"+valKota);
@@ -836,15 +846,14 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
-                                            print("exxx ${jenisProduk.kapasitas}");
+                                            print(
+                                                "exxx ${jenisProduk.kapasitas}");
                                             if (jenisProduk.kapasitas
                                                 .toString()
                                                 .toLowerCase()
                                                 .contains('forklift')) {
                                               _popUpTroble(
-                                                  context,
-                                                  jenisProduk);
-                                                      
+                                                  context, jenisProduk);
                                             } else {
                                               print("kanez" +
                                                   jenisProduk.toString());
