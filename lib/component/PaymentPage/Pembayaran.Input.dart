@@ -3,14 +3,10 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
-import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
-import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +30,8 @@ class FormInputPembayaran extends StatefulWidget {
       alamat,
       keterangan_barang,
       nominal_voucher,
+      minimum_transaksi,
+      persentase_voucher,
       kodvoucher,
       nominal_barang,
       total_harga,
@@ -60,6 +58,8 @@ class FormInputPembayaran extends StatefulWidget {
       this.alamat,
       this.keterangan_barang,
       this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
       this.kodvoucher,
       this.nominal_barang,
       this.total_harga,
@@ -202,27 +202,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     email_asuransi = widget.email_asuransi;
     cekToken();
     // stotal_harga = ReusableClasses().PerhitunganOrder(persentasevoucher, minimumtransaksi, boolasuransi, boolvoucher, nominalVoucher, harga, durasi, nominalbaranginput, ceksaldopoint, minimaldeposit, asuransi)
-  }
-
-  String hitungall(
-      String harga,
-      String durasi,
-      int boolasuransi,
-      double asuransi,
-      String nominalbaranginput,
-      String nomdeposit,
-      String ceksaldopoint,
-      String nomAsuransi) {
-    if (boolasuransi == 0) asuransi = 0;
-    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-        ((asuransi / 100) * double.parse(nominalbaranginput)) +
-        double.parse(nomdeposit) * double.parse(harga));
-    return ((double.parse(harga) * double.parse(durasi)) +
-            ((asuransi / 100) * double.parse(nominalbaranginput)) +
-            double.parse(nomdeposit) * double.parse(harga) -
-            double.parse(ceksaldopoint) -
-            double.parse(nomAsuransi))
-        .toStringAsFixed(2);
   }
 
   @override

@@ -185,16 +185,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Ada masalah login ? ",
-                          style: GoogleFonts.lato(fontSize: 14),
+                          "Ada masalah login ?",
+                          style: GoogleFonts.lato(fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
+                        SizedBox(width: 5),
                         GestureDetector(
                           onTap: () {
                             _popUpTroble(context);
@@ -202,47 +203,11 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Klik disini",
                             style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 30,
-                        endIndent: 12,
-                      )),
-                      Text(
-                        "Atau",
-                        style: GoogleFonts.lato(),
-                      ),
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 12,
-                        endIndent: 30,
-                      )),
-                    ]),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    AccountChecker(
-                      press: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return RegistrasiPage();
-                            },
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),

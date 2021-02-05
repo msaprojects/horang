@@ -23,7 +23,7 @@ import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
-import 'package:horang/api/models/voucher/voucher.controller.dart';
+import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/models/xendit.model.dart';
 import 'package:http/http.dart' show Client;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,7 +105,7 @@ class ApiService {
   }
 
   //LOAD VOUCHER
-  Future<List<Voucher>> listVoucher(String token) async {
+  Future<List<VoucherModel>> listVoucher(String token) async {
     final response = await client
         .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:horang/api/models/voucher/voucher.controller.dart';
+import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
@@ -72,7 +72,8 @@ class _VoucherDashboard extends State<VoucherDashboard> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _apiService.listVoucher(access_token),
-      builder: (BuildContext context, AsyncSnapshot<List<Voucher>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<VoucherModel>> snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Center(
@@ -83,7 +84,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
-          List<Voucher> voucher = snapshot.data;
+          List<VoucherModel> voucher = snapshot.data;
           return _listPromo(voucher);
         } else {
           return Center(
@@ -94,7 +95,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
     );
   }
 
-  Widget _listPromo(List<Voucher> dataIndex) {
+  Widget _listPromo(List<VoucherModel> dataIndex) {
 //    print("Yuhuu.. ${nama_customer}");
     if (idcustomer == "0") {
       nama = email;
@@ -130,7 +131,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             autoplay: true,
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
-              Voucher voucher = dataIndex[index];
+              VoucherModel voucher = dataIndex[index];
               return Container(
                 child: Container(
                   child: GestureDetector(
