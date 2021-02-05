@@ -9,6 +9,7 @@ import 'package:horang/api/models/voucher/voucher.controller.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -47,15 +48,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
       valueawal,
       valueakhir;
   var hasilperhitungan = "0", tambahasuransi = "0";
-  int jumlah_sewas;
-  bool asuransi = true;
+  int jumlah_sewas, jumlah_sewas1;
+  bool boolasuransi = true, boolvoucher = false;
+  num persentasevoucher = 0;
   int flagsuransi = 0;
   int asuransie = 1;
   int minimaldeposit = 3; //query dari setting minimal hari deposit
   num nomasuransi;
-
   var email_asuransi;
-  double nomdeclarebarang = 0.00;
+  double nomdeclarebarang = 0.00, minimumtransaksi = 0;
 
   var Value, title, valasuransi;
   List<dynamic> _dataAsuransi = List();
@@ -95,6 +96,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
         .round();
   }
 
+  int diffInTime(tglAwal, tglAkhir) {
+    return ((tglAkhir.difference(tglAwal) -
+                Duration(hours: tglAwal.hour) +
+                Duration(hours: tglAkhir.hour))
+            .inHours)
+        .round();
+  }
+
   TextEditingController _durasiorder = TextEditingController();
   TextEditingController _vouchervalue = TextEditingController();
   TextEditingController _keteranganbarang = TextEditingController();
@@ -119,43 +128,67 @@ class _FormDetailOrder extends State<FormInputOrder> {
     nomasuransi = json.decode(response.body)[0]['nilai'];
     email_asuransi = json.decode(response.body)[0]['email_asuransi'];
     idasuransi = json.decode(response.body)[0]['idasuransi'];
-    hasilperhitungan = hitungall(
-      nominalvoucher,
-      harga.toString(),
-      jumlah_sewas.toString(),
-      asuransie,
-      nomasuransi,
-      _nominalbarang.text.toString(),
-      ceksaldo.toString(),
-    );
+    hitungsemua;
+    // hasilperhitungan = hitungall(
+    //   nominalvoucher,
+    //   harga.toString(),
+    //   jumlah_sewas.toString(),
+    //   asuransie,
+    //   nomasuransi,
+    //   _nominalbarang.text.toString(),
+    //   ceksaldo.toString(),
+    // );
     // });
   }
 
   SharedPreferences sp;
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, nama_customer, idlokasi = 0;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      nama_customer,
+      idlokasi = 0,
+      nominalbarangs = 0;
 
-  String hitungall(
-      String nominalVoucher,
-      String harga,
-      String durasi,
-      int boolasuransi,
-      num asuransi,
-      String nominalbaranginput,
-      String ceksaldopoint) {
-    if (boolasuransi == 0) asuransi = 0;
+  String hitungsemua;
+  //  ReusableClasses().PerhitunganOrder(
+  //       persentasevoucher,
+  //       minimumtransaksi,
+  //       boolasuransi,
+  //       boolvoucher,
+  //       nominalvoucher,
+  //       harga.toString(),
+  //       // durasi,
+  //       jumlah_sewas.toString(),
+  //       // nominalbaranginput,
+  //       _nominalbarang.text.toString(),
+  //       // ceksaldopoint,
+  //       ceksaldo.toString(),
+  //       minimaldeposit,
+  //       // asuransi
+  //       asuransie);
 
-    total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
-    totalhariharga = (int.parse(harga) * int.parse(durasi));
-    totaldeposit = minimaldeposit * int.parse(harga);
+  // String hitungall(
+  //     String nominalVoucher,
+  //     String harga,
+  //     String durasi,
+  //     int boolasuransi,
+  //     num asuransi,
+  //     String nominalbaranginput,
+  //     String ceksaldopoint) {
+  //   if (boolasuransi == 0) asuransi = 0;
 
-    return ((double.parse(harga) * double.parse(durasi)) +
-            ((asuransi / 100) * double.parse(nominalbaranginput)) +
-            minimaldeposit * double.parse(harga) -
-            double.parse(ceksaldopoint) -
-            double.parse(nominalVoucher))
-        .toStringAsFixed(2);
-  }
+  //   total_asuransi = (asuransi / 100) * double.parse(nominalbaranginput);
+  //   totalhariharga = (int.parse(harga) * int.parse(durasi));
+  //   totaldeposit = minimaldeposit * int.parse(harga);
+
+  //   return ((double.parse(harga) * double.parse(durasi)) +
+  //           ((asuransi / 100) * double.parse(nominalbaranginput)) +
+  //           minimaldeposit * double.parse(harga) -
+  //           double.parse(ceksaldopoint) -
+  //           double.parse(nominalVoucher))
+  //       .toStringAsFixed(2);
+  // }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -208,15 +241,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     getAsuransi();
     getSaldo();
-    // if (widget.jenisProduk != null) {
-    //   idjenis_produk = widget.jenisProduk.idjenis_produk;
-    //   kapasitas = widget.jenisProduk.kapasitas;
-    //   harga = widget.jenisProduk.harga;
-    //   alamat = widget.jenisProduk.nama_lokasi;
-    //   vKeterangan = widget.jenisProduk.keterangan;
-    //   idlokasi = widget.jenisProduk.idlokasi;
-    //   gambar1 = widget.jenisProduk.gambar;
-    // } else
 
     idjenis_produk = widget.jenisProduk.idjenis_produk;
     kapasitas = widget.jenisProduk.kapasitas.toString();
@@ -225,72 +249,157 @@ class _FormDetailOrder extends State<FormInputOrder> {
     vKeterangan = widget.jenisProduk.keterangan;
     idlokasi = widget.jenisProduk.idlokasi;
     gambar1 = widget.jenisProduk.gambar;
+
+    tglawalforklift1 = widget.tglawalforklift.toString();
+    jamawal1 = widget.jamawal.toString();
+    jamakhir1 = widget.jamakhir.toString();
+    tglAwal = widget.tglawal12.toString();
+    tglAkhir = widget.tglakhir12.toString();
+
+    // print('mohon doanya $tglAwal, $tglAkhir');
+
+    // hitungsemua = ReusableClasses().PerhitunganOrder(
+    //     persentasevoucher,
+    //     minimumtransaksi,
+    //     boolasuransi,
+    //     boolvoucher,
+    //     nominalvoucher.toString(),
+    //     harga.toString(),
+    //     jumlah_sewas.toString(),
+    //     nominalbarangs.toString(),
+    //     ceksaldo.toString(),
+    //     minimaldeposit,
+    //     asuransie);
+    // print("Perhitungan  : " + hitungsemua.toString());
     if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
         .contains('forklift')) {
-      tglawalforklift1 = widget.tglawalforklift.toString();
-      jamawal1 = widget.jamawal.toString();
-      jamakhir1 = widget.jamakhir.toString();
-      valueawal = tglawalforklift1+" : "+ jamawal1;
-      valueakhir = tglawalforklift1+" : "+jamakhir1;
+      valueawal = tglawalforklift1 + " " + jamawal1;
+      valueakhir = tglawalforklift1 + " " + jamakhir1;
+      // tglawalforklift1;
+      // valueTglAwal;
+      // valueTglAkhir;
+      // jumlah_sewas;
+      // hasilperhitungan = hitungsemua;
+      jumlah_sewas =
+          diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          persentasevoucher,
+          minimumtransaksi,
+          boolasuransi,
+          boolvoucher,
+          nominalvoucher.toString(),
+          harga.toString(),
+          jumlah_sewas.toString(),
+          nominalbarangs.toString(),
+          ceksaldo.toString(),
+          minimaldeposit,
+          asuransie);
+      print("Perhitungan  : " + hitungsemua.toString());
+      // hitungall(
+      //   nominalvoucher,
+      //   harga.toString(),
+      //   jumlah_sewas.toString(),
+      //   asuransie,
+      //   nomasuransi,
+      //   _nominalbarang.text.toString(),
+      //   ceksaldo.toString(),
+      // );
       // print("SAMA ? "+kapasitas.toLowerCase().contains('forklift'));
     } else {
-      
-      tglAwal = widget.tglawal12.toString();
-      tglAkhir = widget.tglakhir12.toString();
-       valueawal = tglAwal;
+      valueawal = tglAwal;
       valueakhir = tglAkhir;
-          jumlah_sewas =
-        diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
-    hasilperhitungan = hitungall(
-      nominalvoucher,
-      harga.toString(),
-      jumlah_sewas.toString(),
-      asuransie,
-      nomasuransi,
-      _nominalbarang.text.toString(),
-      ceksaldo.toString(),
-    );
-    }
-    // print("VALUES : " +
-    //     idjenis_produk.toString() +
-    //     kapasitas +
-    //     harga.toString() +
-    //     alamat +
-    //     vKeterangan +
-    //     idlokasi.toString() +
-    //     gambar1 +
-    //     tglawalforklift1 +
-    //     jamawal1 +
-    //     jamakhir1);
+      jumlah_sewas =
+          diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
+      print("MMMWWWW");
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          persentasevoucher,
+          minimumtransaksi,
+          boolasuransi,
+          boolvoucher,
+          nominalvoucher.toString(),
+          harga.toString(),
+          jumlah_sewas.toString(),
+          nominalbarangs.toString(),
+          ceksaldo.toString(),
+          minimaldeposit,
+          asuransie);
+      print("Perhitungan  : " + hitungsemua.toString());
+      // valueawal = tglAwal;
+      // valueakhir = tglAkhir;
+      // tglAwal;
+      // tglAkhir;
 
+      // hasilperhitungan = hitungsemua;
+      // hasilperhitungan = hitungs
+      // hitungall(
+      //   nominalvoucher,
+      //   harga.toString(),
+      //   jumlah_sewas.toString(),
+      //   asuransie,
+      //   nomasuransi,
+      //   _nominalbarang.text.toString(),
+      //   ceksaldo.toString(),
+      // );
+    }
 
     _nominalbarang.addListener(() {
       setState(() {
         getAsuransi();
         getSaldo();
-        print("Nominal Point : " + ceksaldo.toString());
-        if (_nominalbarang.text == "")
-          hasilperhitungan = hitungall(
-            nominalvoucher,
-            harga.toString(),
-            jumlah_sewas.toString(),
-            asuransie,
-            nomasuransi,
-            "0",
-            ceksaldo.toString(),
-          );
-        else
-          hasilperhitungan = hitungall(
-            nominalvoucher,
-            harga.toString(),
-            jumlah_sewas.toString(),
-            asuransie,
-            nomasuransi,
-            _nominalbarang.text.toString(),
-            ceksaldo.toString(),
-          );
+        print("Nominal Point zz : " + ceksaldo.toString());
+        if (_nominalbarang.text == "") {
+          nominalbarangs = 0;
+          hitungsemua = ReusableClasses().PerhitunganOrder(
+              persentasevoucher,
+              minimumtransaksi,
+              boolasuransi,
+              boolvoucher,
+              nominalvoucher,
+              harga.toString(),
+              jumlah_sewas.toString(),
+              nominalbarangs,
+              ceksaldo.toString(),
+              minimaldeposit,
+              asuransie);
+          print("Perhitungan xxzzz  : " + hitungsemua.toString());
+        }
+        // hasilperhitungan = hitungall(
+        //   nominalvoucher,
+        //   harga.toString(),
+        //   jumlah_sewas.toString(),
+        //   asuransie,
+        //   nomasuransi,
+        //   "0",
+        //   ceksaldo.toString(),
+        // );
+        else {
+          nominalbarangs = int.parse(_nominalbarang.text);
+          hitungsemua = ReusableClasses().PerhitunganOrder(
+              persentasevoucher,
+              minimumtransaksi,
+              boolasuransi,
+              boolvoucher,
+              nominalvoucher,
+              harga.toString(),
+              jumlah_sewas.toString(),
+              _nominalbarang.text,
+              ceksaldo.toString(),
+              minimaldeposit,
+              asuransie);
+          print("Perhitungan xx  : " + hitungsemua.toString());
+        }
+
+        // hasilperhitungan = hitungall(
+        //   nominalvoucher,
+        //   harga.toString(),
+        //   jumlah_sewas.toString(),
+        //   asuransie,
+        //   nomasuransi,
+        //   _nominalbarang.text.toString(),
+        //   ceksaldo.toString(),
+        // );
       });
     });
     super.initState();
@@ -499,32 +608,58 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 child: Row(
                                   children: <Widget>[
                                     Checkbox(
-                                      value: asuransi,
+                                      value: boolasuransi,
                                       onChanged: (bool asuransii) {
                                         setState(() {
-                                          asuransi = asuransii;
-                                          if (asuransi == true) {
+                                          boolasuransi = asuransii;
+                                          if (boolasuransi == true) {
                                             asuransie = 1;
-                                            hasilperhitungan = hitungall(
-                                              nominalvoucher,
-                                              harga.toString(),
-                                              jumlah_sewas.toString(),
-                                              asuransie,
-                                              nomasuransi,
-                                              _nominalbarang.text.toString(),
-                                              ceksaldo.toString(),
-                                            );
+                                            hitungsemua = ReusableClasses()
+                                                .PerhitunganOrder(
+                                                    persentasevoucher,
+                                                    minimumtransaksi,
+                                                    boolasuransi,
+                                                    boolvoucher,
+                                                    nominalvoucher,
+                                                    harga.toString(),
+                                                    jumlah_sewas.toString(),
+                                                    _nominalbarang.text,
+                                                    ceksaldo.toString(),
+                                                    minimaldeposit,
+                                                    asuransie);
+                                            // hasilperhitungan = hitungall(
+                                            //   nominalvoucher,
+                                            //   harga.toString(),
+                                            //   jumlah_sewas.toString(),
+                                            //   asuransie,
+                                            //   nomasuransi,
+                                            //   _nominalbarang.text.toString(),
+                                            //   ceksaldo.toString(),
+                                            // );
                                           } else {
                                             asuransie = 0;
-                                            hasilperhitungan = hitungall(
-                                              nominalvoucher,
-                                              harga.toString(),
-                                              jumlah_sewas.toString(),
-                                              asuransie,
-                                              nomasuransi,
-                                              _nominalbarang.text.toString(),
-                                              ceksaldo.toString(),
-                                            );
+                                            hitungsemua = ReusableClasses()
+                                                .PerhitunganOrder(
+                                                    persentasevoucher,
+                                                    minimumtransaksi,
+                                                    boolasuransi,
+                                                    boolvoucher,
+                                                    nominalvoucher,
+                                                    harga.toString(),
+                                                    jumlah_sewas.toString(),
+                                                    _nominalbarang.text,
+                                                    ceksaldo.toString(),
+                                                    minimaldeposit,
+                                                    asuransie);
+                                            // hasilperhitungan = hitungall(
+                                            //   nominalvoucher,
+                                            //   harga.toString(),
+                                            //   jumlah_sewas.toString(),
+                                            //   asuransie,
+                                            //   nomasuransi,
+                                            //   _nominalbarang.text.toString(),
+                                            //   ceksaldo.toString(),
+                                            // );
                                           }
                                         });
                                       },
@@ -701,7 +836,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       SizedBox(
                         height: 3,
                       ),
-                      Text(rupiah(hasilperhitungan),
+                      Text(rupiah(hitungsemua),
                           style: GoogleFonts.lato(
                               fontSize: 18, fontWeight: FontWeight.bold))
                     ],
@@ -724,29 +859,55 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           ? errorDialog(context,
                               "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
                           : setState(() {
-                              if (asuransi == true) {
+                              if (boolasuransi == true) {
                                 asuransie = 1;
-                                hasilperhitungan = hitungall(
-                                  nominalvoucher,
-                                  harga.toString(),
-                                  jumlah_sewas.toString(),
-                                  asuransie,
-                                  nomasuransi,
-                                  _nominalbarang.text.toString(),
-                                  ceksaldo.toString(),
-                                );
+                                hitungsemua = ReusableClasses()
+                                    .PerhitunganOrder(
+                                        persentasevoucher,
+                                        minimumtransaksi,
+                                        boolasuransi,
+                                        boolvoucher,
+                                        nominalvoucher,
+                                        harga.toString(),
+                                        jumlah_sewas.toString(),
+                                        _nominalbarang.text,
+                                        ceksaldo.toString(),
+                                        minimaldeposit,
+                                        asuransie);
+                                // hasilperhitungan = hitungall(
+                                //   nominalvoucher,
+                                //   harga.toString(),
+                                //   jumlah_sewas.toString(),
+                                //   asuransie,
+                                //   nomasuransi,
+                                //   _nominalbarang.text.toString(),
+                                //   ceksaldo.toString(),
+                                // );
                               } else {
                                 asuransie = 0;
                                 nomasuransi = 0;
-                                hasilperhitungan = hitungall(
-                                  nominalvoucher,
-                                  harga.toString(),
-                                  jumlah_sewas.toString(),
-                                  asuransie,
-                                  nomasuransi,
-                                  _nominalbarang.text.toString(),
-                                  ceksaldo.toString(),
-                                );
+                                hitungsemua = ReusableClasses()
+                                    .PerhitunganOrder(
+                                        persentasevoucher,
+                                        minimumtransaksi,
+                                        boolasuransi,
+                                        boolvoucher,
+                                        nominalvoucher,
+                                        harga.toString(),
+                                        jumlah_sewas.toString(),
+                                        _nominalbarang.text,
+                                        ceksaldo.toString(),
+                                        minimaldeposit,
+                                        asuransie);
+                                // hasilperhitungan = hitungall(
+                                //   nominalvoucher,
+                                //   harga.toString(),
+                                //   jumlah_sewas.toString(),
+                                //   asuransie,
+                                //   nomasuransi,
+                                //   _nominalbarang.text.toString(),
+                                //   ceksaldo.toString(),
+                                // );
                               }
                               getSaldo();
                               // if (ceksaldo == null) {
@@ -934,7 +1095,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   onTap: () {
                     setState(() {
                       if (tekanvoucher) {
-                        getVoucher = voucherlist.nominal.toString();
+                        getVoucher = voucherlist.minNominal.toString();
                         voucherKode = voucherlist.kode_voucher.toString();
                         idvouchers = voucherlist.idvoucher;
                         flagsuransi = 1;
@@ -942,8 +1103,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         // print("kang ndut ${voucherlist.nominal}");
                         // print("kang ndut ${voucherlist.kode_voucher}");
                         Navigator.pop(context);
-                        if (double.parse(voucherlist.nominal.toString()) >
-                            hasilperhitungan.toDouble()) {
+                        if (double.parse(voucherlist.minNominal.toString()) >
+                            hitungsemua.toDouble()) {
                           return infoDialog(
                             context,
                             "Maaf, nominal voucher melebihi jumlah total pembayaran.",
@@ -970,7 +1131,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           Column(
                             children: [
                               Text(voucherlist.kode_voucher.toString()),
-                              Text(voucherlist.nominal.toString()),
+                              Text(voucherlist.minNominal.toString()),
                             ],
                           ),
                           SizedBox(

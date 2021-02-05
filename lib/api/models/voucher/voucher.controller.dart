@@ -2,46 +2,52 @@ import 'dart:convert';
 
 class Voucher{
   int idvoucher;
-  num persentase, nominal,  jumlah_voucher;
-  String keterangan, gambar, kode_voucher;
+  num persentase, minNominal,  jumlah_voucher, nomPresentase;
+  String keterangan, gambar, kode_voucher, expVoucher;
 
   Voucher({
     this.idvoucher = 0,
+    this.kode_voucher,
     this.jumlah_voucher = 0,
     this.persentase = 0,
-    this.nominal = 0,
+    this.nomPresentase,
+    this.minNominal = 0,
     this.keterangan,
     this.gambar="",
-    this.kode_voucher
+    this.expVoucher
   });
 
   factory Voucher.fromJson(Map<String, dynamic> map){
     return Voucher(
       idvoucher: map["idvoucher"],
-        jumlah_voucher: map["jumlah_voucher"],
+      kode_voucher: map["kode_voucher"],
+      jumlah_voucher: map["jumlah_voucher"],
       persentase: map["persentase"],
-      nominal: map["nominal"],
+      nomPresentase: map["nominal_presentase"],
+      minNominal: map["min_nominal"],
       keterangan: map["keterangan"],
       gambar: map["gambar"],
-      kode_voucher: map["kode_voucher"]
+      expVoucher: map["expired_voucher"]
     );
   }
 
   Map<String, dynamic> toJson(){
     return {
       "idvoucher": idvoucher,
+      "kode_voucher": kode_voucher,
       "jumlah_voucher": jumlah_voucher,
       "persentase": persentase,
-      "nominal": nominal,
+      "nominal_presentase": nomPresentase,
+      "min_nominal": minNominal,
       "keterangan": keterangan,
       "gambar": gambar,
-      "kode_voucher": kode_voucher
+      "expired_voucher": expVoucher
     };
   }
 
   @override
   String toString(){
-    return 'Voucher{idvoucher: $idvoucher, jumlah_voucher: $jumlah_voucher, persentase: $persentase, nominal: $nominal, keterangan: $keterangan, gambar: $gambar, kode_voucher: $kode_voucher}';
+    return 'Voucher{idvoucher: $idvoucher, kode_voucher: $kode_voucher, jumlah_voucher: $jumlah_voucher, persentase: $persentase, nominal_presentase: $nomPresentase, min_nominal: $minNominal, keterangan: $keterangan, gambar: $gambar, expired_voucher: $expVoucher}';
   }
 
 }

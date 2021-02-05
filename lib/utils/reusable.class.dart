@@ -1,6 +1,6 @@
 class ReusableClasses {
   PerhitunganOrder(
-    double persentasevoucher,
+    num persentasevoucher,
     double minimumtransaksi,
     bool boolasuransi,
     bool boolvoucher,

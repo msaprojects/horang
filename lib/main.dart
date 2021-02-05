@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/Dummy/dummypin.dart';
 import 'package:horang/component/Dummy/dummypin2.dart';
+import 'package:horang/component/OrderPage/Order.Input.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:imei_plugin/imei_plugin.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // home: ProdukList(),
       home: WelcomePage(),
+      // home: ProdukList(),
     );
   }
 }
