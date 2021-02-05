@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
+import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/AccountChecker.dart';
@@ -43,7 +45,55 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
+          print("Ini Tokennya : " + token);
         }));
+    print("HMM : " + Platform.operatingSystem == 'ios');
+
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        debugPrint('onMessage: $message');
+        // getDataFcm(message);
+        print("OS : " + Platform.operatingSystem);
+        if (Platform.isIOS) {
+          print('HMM : ' + Platform.operatingSystem == 'ios');
+          successDialog(context, message['alert']['body'],
+              title: message['alert']['title']);
+        } else if (Platform.isAndroid) {
+          successDialog(context, message['notification']['body'],
+              title: message['notification']['title']);
+        }
+      },
+      // onBackgroundMessage: onBackgroundMessage,
+      onResume: (Map<String, dynamic> message) async {
+        debugPrint('onResume: $message');
+        getDataFcm(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        debugPrint('onLaunch: $message');
+        getDataFcm(message);
+      },
+    );
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: false));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
+
+  void getDataFcm(Map<String, dynamic> message) {
+    String name = '';
+    String age = '';
+    if (Platform.isIOS) {
+      name = message['title'];
+      age = message['body'];
+    } else if (Platform.isAndroid) {
+      var data = message['notification'];
+      name = data['title'];
+      age = data['body'];
+    }
+    debugPrint('getDataFcm: name: $name & age: $age');
   }
 
   @override

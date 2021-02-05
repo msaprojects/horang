@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    print("kazzzz"+access_token);
+    print("kazzzz" + access_token);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
 
     if (idcustomer.toString() == '0') {
@@ -142,56 +142,56 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  final firebaseMessaging = FirebaseMessaging();
+  // final firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     getSaldo();
     cekToken();
     super.initState();
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        debugPrint('onMessage home page: $message');
-        getDataFcm(message);
-      },
-      onBackgroundMessage: onBackgroundMessage,
-      onResume: (Map<String, dynamic> message) async {
-        debugPrint('onResume: $message');
-        getDataFcm(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        debugPrint('onLaunch: $message');
-        getDataFcm(message);
-      },
-    );
-    firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(
-          sound: true, badge: true, alert: true, provisional: true),
-    );
-    firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      debugPrint('Settings registered: $settings');
-    });
+    // firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     debugPrint('onMessage home page: $message');
+    //     getDataFcm(message);
+    //   },
+    //   onBackgroundMessage: onBackgroundMessage,
+    //   onResume: (Map<String, dynamic> message) async {
+    //     debugPrint('onResume: $message');
+    //     getDataFcm(message);
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     debugPrint('onLaunch: $message');
+    //     getDataFcm(message);
+    //   },
+    // );
+    // firebaseMessaging.requestNotificationPermissions(
+    //   const IosNotificationSettings(
+    //       sound: true, badge: true, alert: true, provisional: true),
+    // );
+    // firebaseMessaging.onIosSettingsRegistered.listen((settings) {
+    //   debugPrint('Settings registered: $settings');
+    // });
   }
 
-  static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-    debugPrint('onBackgroundMessage: $message');
-    if (message.containsKey('data')) {
-      String name = '';
-      String age = '';
-      if (Platform.isIOS) {
-        name = message['name'];
-        age = message['age'];
-        print("NOTIF : " + name + age);
-      } else if (Platform.isAndroid) {
-        var data = message['data'];
-        name = data['name'];
-        age = data['age'];
-      }
-      dataName = name;
-      dataAge = age;
-      debugPrint('onBackgroundMessage: name: $name & age: $age');
-    }
-    return null;
-  }
+  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
+  //   debugPrint('onBackgroundMessage: $message');
+  //   if (message.containsKey('data')) {
+  //     String name = '';
+  //     String age = '';
+  //     if (Platform.isIOS) {
+  //       name = message['name'];
+  //       age = message['age'];
+  //       print("NOTIF : " + name + age);
+  //     } else if (Platform.isAndroid) {
+  //       var data = message['data'];
+  //       name = data['name'];
+  //       age = data['age'];
+  //     }
+  //     dataName = name;
+  //     dataAge = age;
+  //     debugPrint('onBackgroundMessage: name: $name & age: $age');
+  //   }
+  //   return null;
+  // }
 
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
@@ -409,7 +409,7 @@ class _HomePageState extends State<HomePage> {
               ),
               /////////////////// SESI LATEST ORDER ////////////////////
               Container(
-                 padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -426,8 +426,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SelectableText(
                       "See All...",
-                      style: TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {
                         Navigator.push(
                             context,
@@ -484,23 +484,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void getDataFcm(Map<String, dynamic> message) {
-    String name = '';
-    String age = '';
-    if (Platform.isIOS) {
-      name = message['name'];
-      age = message['age'];
-    } else if (Platform.isAndroid) {
-      var data = message['data'];
-      name = data['name'];
-      age = data['age'];
-    }
-    if (name.isNotEmpty && age.isNotEmpty) {
-      setState(() {
-        dataName = name;
-        dataAge = age;
-      });
-    }
-    debugPrint('getDataFcm: name: $name & age: $age');
-  }
+//   void getDataFcm(Map<String, dynamic> message) {
+//     String name = '';
+//     String age = '';
+//     if (Platform.isIOS) {
+//       name = message['name'];
+//       age = message['age'];
+//     } else if (Platform.isAndroid) {
+//       var data = message['data'];
+//       name = data['name'];
+//       age = data['age'];
+//     }
+//     if (name.isNotEmpty && age.isNotEmpty) {
+//       setState(() {
+//         dataName = name;
+//         dataAge = age;
+//       });
+//     }
+//     debugPrint('getDataFcm: name: $name & age: $age');
+//   }
 }

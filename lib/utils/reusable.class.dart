@@ -1,5 +1,4 @@
 class ReusableClasses {
-  // ignore: non_constant_identifier_names
   PerhitunganOrder(
     num persentasevoucher,
     double minimumtransaksi,

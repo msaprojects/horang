@@ -50,8 +50,6 @@ dependencies:
   intl: ^0.16.1
   imei_plugin: ^1.2.0
   flutter_time_picker_spinner: ^1.0.6+1
-  # flutter_datetime_picker: ^1.4.0
-  firebase_core: ^0.5.2+1
 
 dev_dependencies:
   flutter_test:

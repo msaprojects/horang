@@ -131,7 +131,6 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
               Voucher voucher = dataIndex[index];
-              print("ezzdd"+voucher.toString());
               return Container(
                 child: Container(
                   child: GestureDetector(

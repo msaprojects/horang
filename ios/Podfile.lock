@@ -82,7 +82,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.11)
+  - PromisesObjC (1.2.12)
   - Protobuf (3.14.0)
   - Reachability (3.2)
   - share (0.0.1):
@@ -176,7 +176,7 @@ SPEC CHECKSUMS:
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
@@ -184,6 +184,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 3a28483e7e9b1168695fd9ba393ae62e55208391
+PODFILE CHECKSUM: a743990c01db8adbbc95aa339f4a89faeacb499d
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

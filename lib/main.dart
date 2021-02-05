@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,9 +27,9 @@ class MyHttpOverride extends HttpOverrides {
 // void main() => runApp(MyApp());
 void main() {
   // SharedPreferences.setMockInitialValues({});
-    if (Platform.isIOS) {
+  if (Platform.isIOS) {
     // ignore: invalid_use_of_visible_for_testing_member
-    SharedPreferences.setMockInitialValues({});  
+    SharedPreferences.setMockInitialValues({});
   }
   HttpOverrides.global = new MyHttpOverride();
   runApp(new MyApp());
@@ -84,19 +85,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    firebaseMessaging
+        .getToken()
+        .then((value) => print("Ini Tokennya2 : " + value));
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
-        getDataFcm(message);
+        // getDataFcm(message);
+        successDialog(context, message['notification']['body'],
+            title: message['notification']['title']);
       },
-      onBackgroundMessage: onBackgroundMessage,
       onResume: (Map<String, dynamic> message) async {
         debugPrint('onResume: $message');
-        getDataFcm(message);
+        // getDataFcm(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         debugPrint('onLaunch: $message');
-        getDataFcm(message);
+        // getDataFcm(message);
       },
     );
     firebaseMessaging.requestNotificationPermissions(
