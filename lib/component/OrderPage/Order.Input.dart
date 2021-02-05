@@ -533,6 +533,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
+                                    SizedBox(width: 10),
+                                    Text(
+                                        "( " +
+                                            jumlah_sewas.toString() +
+                                            " Hari )",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                               ),
@@ -627,15 +635,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                     ceksaldo.toString(),
                                                     minimaldeposit,
                                                     asuransie);
-                                            // hasilperhitungan = hitungall(
-                                            //   nominalvoucher,
-                                            //   harga.toString(),
-                                            //   jumlah_sewas.toString(),
-                                            //   asuransie,
-                                            //   nomasuransi,
-                                            //   _nominalbarang.text.toString(),
-                                            //   ceksaldo.toString(),
-                                            // );
                                           } else {
                                             asuransie = 0;
                                             hitungsemua = ReusableClasses()
@@ -651,15 +650,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                     ceksaldo.toString(),
                                                     minimaldeposit,
                                                     asuransie);
-                                            // hasilperhitungan = hitungall(
-                                            //   nominalvoucher,
-                                            //   harga.toString(),
-                                            //   jumlah_sewas.toString(),
-                                            //   asuransie,
-                                            //   nomasuransi,
-                                            //   _nominalbarang.text.toString(),
-                                            //   ceksaldo.toString(),
-                                            // );
                                           }
                                         });
                                       },
@@ -735,17 +725,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       hintText: "$getVoucher - $voucherKode",
                                       border: const OutlineInputBorder(),
                                     ),
-                                    // controller: _keteranganbarang,
-                                    // onChanged: (value) {
-                                    //   print("tes nom barang sss " +
-                                    //       _nominalbarang.toString());
-                                    //   bool isFieldValid =
-                                    //       value.trim().isNotEmpty;
-                                    //   if (isFieldValid != _fieldnominalbarang) {
-                                    //     setState(() =>
-                                    //         _fieldnominalbarang = isFieldValid);
-                                    //   }
-                                    // },
                                   ),
                                 ),
                               ),
@@ -874,15 +853,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         ceksaldo.toString(),
                                         minimaldeposit,
                                         asuransie);
-                                // hasilperhitungan = hitungall(
-                                //   nominalvoucher,
-                                //   harga.toString(),
-                                //   jumlah_sewas.toString(),
-                                //   asuransie,
-                                //   nomasuransi,
-                                //   _nominalbarang.text.toString(),
-                                //   ceksaldo.toString(),
-                                // );
                               } else {
                                 asuransie = 0;
                                 nomasuransi = 0;
@@ -899,20 +869,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         ceksaldo.toString(),
                                         minimaldeposit,
                                         asuransie);
-                                // hasilperhitungan = hitungall(
-                                //   nominalvoucher,
-                                //   harga.toString(),
-                                //   jumlah_sewas.toString(),
-                                //   asuransie,
-                                //   nomasuransi,
-                                //   _nominalbarang.text.toString(),
-                                //   ceksaldo.toString(),
-                                // );
                               }
-                              getSaldo();
-                              // if (ceksaldo == null) {
-                              //   ceksaldo = 0;
-                              // }
                               hargaxhari = harga * 3;
                               if (ceksaldo >= hargaxhari) {
                                 saldodepositkurangnominaldeposit = 0;
@@ -922,9 +879,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 saldodepositkurangnominaldeposit =
                                     hargaxhari - ceksaldo;
                                 kondisisaldo =
-                                    "Saldo anda sekarang $ceksaldo minimum deposit $hargaxhari, kurang " +
-                                        saldodepositkurangnominaldeposit
-                                            .toString();
+                                    "Saldo anda sekarang ${rupiah(ceksaldo)}, minimum deposit $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga)} total ${rupiah(hargaxhari)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
                                 cekDeposit(context);
                               }
                             });
@@ -971,8 +926,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    infoDialog(context,
-        "Hai, maaf $kondisisaldo, apakah anda setuju menambah nominal deposit?",
+    warningDialog(context, "Hai, maaf $kondisisaldo ",
         showNeutralButton: false,
         negativeText: "Batal",
         negativeAction: () {},
@@ -1113,9 +1067,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       }
                     });
                   },
-                  // onTap: () {
-                  //   print("coba");
-                  // },
                   child: Card(
                     child: Container(
                       padding: EdgeInsets.only(left: 10),

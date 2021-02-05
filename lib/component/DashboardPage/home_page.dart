@@ -1,21 +1,16 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
-import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -27,8 +22,6 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
-  // RefreshController _refreshController =
-  //     RefreshController(initialRefresh: false);
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -46,17 +39,10 @@ class _HomePageState extends State<HomePage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
 
-  bool isSubscribed = false;
   String token = '';
-  static String dataName = '';
-  static String dataAge = '';
   var ceksaldo;
 
-  getSaldo() async {
-    final response = await http.get(ApiService().urlceksaldo,
-        headers: {"Authorization": "BEARER ${access_token}"});
-    return jsonDecode(response.body);
-  }
+  // final firebaseMessaging = FirebaseMessaging();
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -65,51 +51,9 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    print("kazzzz" + access_token);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-
-    if (idcustomer.toString() == '0') {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Peringatan'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text('Data profile anda belum lengkap.'),
-                    Text('Harap melengkapi data anda terlebih dahulu !'),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                Row(
-                  children: <Widget>[
-                    FlatButton(
-                      child: Text("Lengkapi"),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    TambahProfile()),
-                            (Route<dynamic> route) => false);
-                      },
-                    ),
-                    FlatButton(
-                      child: Text("Batalkan"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            );
-          });
-    }
-
     if (access_token == null) {
-      showAlertDialog(context);
+      // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
           (Route<dynamic> route) => false);
@@ -118,7 +62,6 @@ class _HomePageState extends State<HomePage> {
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
-              print("tahun baru false");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
@@ -128,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          // showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -138,65 +81,20 @@ class _HomePageState extends State<HomePage> {
                       }));
             }
           }));
-      getSaldo();
     }
   }
 
-  // final firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
-    getSaldo();
     cekToken();
+    ReusableClasses().getSaldo(access_token);
     super.initState();
-    // firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     debugPrint('onMessage home page: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onBackgroundMessage: onBackgroundMessage,
-    //   onResume: (Map<String, dynamic> message) async {
-    //     debugPrint('onResume: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     debugPrint('onLaunch: $message');
-    //     getDataFcm(message);
-    //   },
-    // );
-    // firebaseMessaging.requestNotificationPermissions(
-    //   const IosNotificationSettings(
-    //       sound: true, badge: true, alert: true, provisional: true),
-    // );
-    // firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-    //   debugPrint('Settings registered: $settings');
-    // });
   }
-
-  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-  //   debugPrint('onBackgroundMessage: $message');
-  //   if (message.containsKey('data')) {
-  //     String name = '';
-  //     String age = '';
-  //     if (Platform.isIOS) {
-  //       name = message['name'];
-  //       age = message['age'];
-  //       print("NOTIF : " + name + age);
-  //     } else if (Platform.isAndroid) {
-  //       var data = message['data'];
-  //       name = data['name'];
-  //       age = data['age'];
-  //     }
-  //     dataName = name;
-  //     dataAge = age;
-  //     debugPrint('onBackgroundMessage: name: $name & age: $age');
-  //   }
-  //   return null;
-  // }
 
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
-      getSaldo();
+      ReusableClasses().getSaldo(access_token);
     });
   }
 
@@ -266,7 +164,8 @@ class _HomePageState extends State<HomePage> {
                                       height: 10,
                                     ),
                                     FutureBuilder(
-                                        future: getSaldo(),
+                                        future: ReusableClasses()
+                                            .getSaldo(access_token),
                                         builder: (context, snapshot) {
                                           if (snapshot.hasData) {
                                             var saldoadatidak =
@@ -328,7 +227,8 @@ class _HomePageState extends State<HomePage> {
                                               size: 30),
                                           onPressed: () {
                                             setState(() {
-                                              getSaldo();
+                                              ReusableClasses()
+                                                  .getSaldo(access_token);
                                             });
                                           }),
                                       Text(
@@ -413,13 +313,6 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: 16, top: 24),
-                    //   child: Text(
-                    //     'Latest Order',
-                    //     style: mTitleStyle,
-                    //   ),
-                    // ),
                     Text(
                       'Latest Order',
                       style: mTitleStyle,
@@ -483,24 +376,4 @@ class _HomePageState extends State<HomePage> {
       return 'Malam kak';
     }
   }
-
-//   void getDataFcm(Map<String, dynamic> message) {
-//     String name = '';
-//     String age = '';
-//     if (Platform.isIOS) {
-//       name = message['name'];
-//       age = message['age'];
-//     } else if (Platform.isAndroid) {
-//       var data = message['data'];
-//       name = data['name'];
-//       age = data['age'];
-//     }
-//     if (name.isNotEmpty && age.isNotEmpty) {
-//       setState(() {
-//         dataName = name;
-//         dataAge = age;
-//       });
-//     }
-//     debugPrint('getDataFcm: name: $name & age: $age');
-//   }
 }

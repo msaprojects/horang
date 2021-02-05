@@ -163,19 +163,18 @@ class _AccountState extends State<Account> {
                 child: ListTile(
                   leading: Icon(Icons.person),
                   title: Text(
-                    "Lengkapi Profile",
+                    "Lengkapi Profile " + idcustomer.toString(),
                     style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                   ),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   //onTap: () {routing();}),
                   onTap: () {
-                    if (idcustomer == 0) {
+                    if (idcustomer == "0") {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => TambahProfile()));
                     } else {
-                      print("icust'epiro pak " + nama_customer.toString());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -228,9 +227,8 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
-                     infoDialog(
-                      context, 
-                      "Maaf, fitur masih dalam proses pengembangan !");
+                    infoDialog(context,
+                        "Maaf, fitur masih dalam proses pengembangan !");
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(

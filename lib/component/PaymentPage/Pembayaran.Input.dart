@@ -10,6 +10,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiOrder.Detail.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -199,17 +200,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     stotalpointdeposit = widget.totalpointdeposit;
     sdeposit = widget.deposit;
     email_asuransi = widget.email_asuransi;
-//    }
     cekToken();
-    hitungall(
-        sharga.toString(),
-        jumlah_sewa,
-        flagasuransi,
-        double.parse(stotal_asuransi),
-        snominal_barang,
-        stotaldeposit,
-        stotalpointdeposit,
-        snomvoucher);
+    // stotal_harga = ReusableClasses().PerhitunganOrder(persentasevoucher, minimumtransaksi, boolasuransi, boolvoucher, nominalVoucher, harga, durasi, nominalbaranginput, ceksaldopoint, minimaldeposit, asuransi)
   }
 
   String hitungall(

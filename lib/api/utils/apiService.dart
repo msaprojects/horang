@@ -106,8 +106,8 @@ class ApiService {
 
   //LOAD VOUCHER
   Future<List<Voucher>> listVoucher(String token) async {
-    final response = await client.get("$baseUrl/voucher",
-        headers: {"Authorization": "BEARER ${token}"});
+    final response = await client
+        .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
@@ -207,6 +207,7 @@ class ApiService {
     var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
+    print('Value Login ' + test.toString());
     if (response.statusCode == 200) {
 //      Share Preference
       SharedPreferences sp = await SharedPreferences.getInstance();
