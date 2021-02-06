@@ -89,11 +89,42 @@ class OrderProduk {
         email_asuransi: map["email_asuransi"],
         deposit: map["deposit"],
         persentase_asuransi: map["persentase_asuransi"],
-        saldodepositkurangnominaldeposit: map["saldodepositkurangnominaldeposit"]);
+        saldodepositkurangnominaldeposit:
+            map["saldodepositkurangnominaldeposit"]);
   }
 
   Map<String, dynamic> toJson() {
-    return {};
+    return {
+      "flagasuransi": flagasuransi,
+      "flagvoucher": flagvoucher,
+      "idlokasi": idlokasi,
+      "idjenis_produk": idjenis_produk,
+      "idvoucher": idvoucher,
+      "idasuransi": idasuransi,
+      "idpayment_gateway": idpayment_gateway,
+      "harga": harga,
+      "jumlah_sewa": jumlah_sewa,
+      "valuesewaawal": valuesewaawal,
+      "valuesewaakhir": valuesewaakhir,
+      "tanggal_berakhir_polis": tanggal_berakhir_polis,
+      "nomor_polis": nomor_polis,
+      "kapasitas": kapasitas,
+      "alamat": alamat,
+      "keterangan_barang": keterangan_barang,
+      "nominal_barang": nominal_barang,
+      "nominal_voucher": nominal_voucher,
+      "minimum_transaksi": minimum_transaksi,
+      "persentase_voucher": persentase_voucher,
+      "total_harga": total_harga,
+      "total_asuransi": total_asuransi,
+      "totalharixharga": totalharixharga,
+      "totaldeposit": totaldeposit,
+      "totalpointdeposit": totalpointdeposit,
+      "email_asuransi": email_asuransi,
+      "deposit": deposit,
+      "persentase_asuransi": persentase_asuransi,
+      "saldodepositkurangnominaldeposit": saldodepositkurangnominaldeposit,
+    };
   }
 
   @override

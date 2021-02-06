@@ -154,7 +154,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     keterangan = widget.jenisProduk.keterangan;
     idlokasi = widget.jenisProduk.idlokasi;
     produkimage = widget.jenisProduk.gambar;
-    print("ezzz"+ idjenis_produk.toString());
+    print("ezzz" + idjenis_produk.toString());
     if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
@@ -168,7 +168,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
       valueakhir = tglawalforklift1 + " " + jamakhir1;
       vdurasi_sewa =
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
-
     } else {
       minimaldeposit = 3;
       vsatuan_sewa = " hari )";
@@ -179,15 +178,18 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
+    totalhariharga = vdurasi_sewa * harga_sewa;
+    print("Total hari : " + totalhariharga.toString());
 
     _nominalbarang.addListener(() {
       setState(() {
         hitungsemuaFunction();
-        total_asuransi = (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
+        total_asuransi =
+            (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
       });
     });
     hitungsemuaFunction();
-    
+
     super.initState();
   }
 //END INITSTATE
@@ -634,62 +636,85 @@ class _FormDetailOrder extends State<FormInputOrder> {
         positiveText: "OK", positiveAction: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-            flagasuransi: flagasuransi,
-            flagvoucher: flagvoucher,
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            idvoucher: idvoucher,
-            idasuransi: idasuransi,
-            harga: harga_sewa,
-            jumlah_sewa: vdurasi_sewa,
-            valuesewaawal: valueawal,
-            valuesewaakhir: valueakhir,
-            tanggal_berakhir_polis: "DATE(NOW())",
-            nomor_polis: "Belum Diisi",
-            kapasitas: kapasitas,
-            alamat: alamat,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: vnominalvoucher,
-            minimum_transaksi: vminimumtransaksi,
-            persentase_voucher: vpersentasevoucher,
-            total_harga: hitungsemua.toString(),
-            total_asuransi: total_asuransi.toString(),
-            totalharixharga: totalhariharga.toString(),
-            totaldeposit: hargaxhari.toString(),
-            totalpointdeposit: ceksaldo.toString(),
-            email_asuransi: email_asuransi.toString(),
-            deposit: saldodepositkurangnominaldeposit.toString(),
-            persentase_asuransi: nomasuransi.toString(),
-            );
+          flagasuransi: flagasuransi,
+          flagvoucher: flagvoucher,
+          idlokasi: idlokasi,
+          idjenis_produk: idjenis_produk,
+          idvoucher: idvoucher,
+          idasuransi: idasuransi,
+          harga: harga_sewa,
+          jumlah_sewa: vdurasi_sewa,
+          valuesewaawal: valueawal,
+          valuesewaakhir: valueakhir,
+          tanggal_berakhir_polis: "DATE(NOW())",
+          nomor_polis: "Belum Diisi",
+          kapasitas: kapasitas,
+          alamat: alamat,
+          keterangan_barang: _keteranganbarang.text.toString(),
+          nominal_barang: _nominalbarang.text.toString(),
+          nominal_voucher: vnominalvoucher,
+          minimum_transaksi: vminimumtransaksi,
+          persentase_voucher: vpersentasevoucher,
+          total_harga: hitungsemua.toString(),
+          total_asuransi: total_asuransi.toString(),
+          totalharixharga: totalhariharga.toString(),
+          totaldeposit: hargaxhari.toString(),
+          totalpointdeposit: ceksaldo.toString(),
+          email_asuransi: email_asuransi.toString(),
+          deposit: saldodepositkurangnominaldeposit.toString(),
+          persentase_asuransi: nomasuransi.toString(),
+        );
       }));
-      print("hazazazza : "+ 
-      flagasuransi.toString() + "_-_" +
-            flagvoucher.toString() + "_-_" +
-            idlokasi.toString() + "_-_" +
-            idjenis_produk.toString() + "_-_" +
-            idvoucher.toString() + "_-_" +
-            idasuransi.toString() + "_-_" +
-            harga_sewa.toString() + "_-_" +
-            vdurasi_sewa.toString() + "_-_" +
-            valueawal.toString() + "_-_" +
-            valueakhir.toString() + "_-_" +
-            "DATE(NOW())" +
-            "Belum Diisi" +
-             kapasitas.toString() + "_-_" +
-            alamat.toString() + "_-_" +
-            _keteranganbarang.text.toString() + "_-_" +
-            _nominalbarang.text.toString()+ "_-_" +
-            vnominalvoucher.toString() + "_-_" +
-            vminimumtransaksi.toString() + "_-_" +
-            vpersentasevoucher.toString() + "_-_" +
-            hitungsemua.toString() + "_-_" +
-            total_asuransi.toString() + "_-_" +
-            totalhariharga.toString() + "_-_" +
-            hargaxhari.toString() + "_-_" +
-            ceksaldo.toString() + "_-_" +
-            email_asuransi.toString() + "_-_" +
-            saldodepositkurangnominaldeposit.toString());
+      print("hazazazza : " +
+          flagasuransi.toString() +
+          "_-_" +
+          flagvoucher.toString() +
+          "_-_" +
+          idlokasi.toString() +
+          "_-_" +
+          idjenis_produk.toString() +
+          "_-_" +
+          idvoucher.toString() +
+          "_-_" +
+          idasuransi.toString() +
+          "_-_" +
+          harga_sewa.toString() +
+          "_-_" +
+          vdurasi_sewa.toString() +
+          "_-_" +
+          valueawal.toString() +
+          "_-_" +
+          valueakhir.toString() +
+          "_-_" +
+          "DATE(NOW())" +
+          "Belum Diisi" +
+          kapasitas.toString() +
+          "_-_" +
+          alamat.toString() +
+          "_-_" +
+          _keteranganbarang.text.toString() +
+          "_-_" +
+          _nominalbarang.text.toString() +
+          "_-_" +
+          vnominalvoucher.toString() +
+          "_-_" +
+          vminimumtransaksi.toString() +
+          "_-_" +
+          vpersentasevoucher.toString() +
+          "_-_" +
+          hitungsemua.toString() +
+          "_-_" +
+          total_asuransi.toString() +
+          "_-_" +
+          totalhariharga.toString() +
+          "_-_" +
+          hargaxhari.toString() +
+          "_-_" +
+          ceksaldo.toString() +
+          "_-_" +
+          email_asuransi.toString() +
+          "_-_" +
+          saldodepositkurangnominaldeposit.toString());
     });
   }
 
