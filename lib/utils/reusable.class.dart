@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 
 class ReusableClasses {
   PerhitunganOrder(
-    num persentasevoucher,
-    double minimumtransaksi,
+    var persentasevoucher,
+    var minimumtransaksi,
     bool boolasuransi,
     bool boolvoucher,
     var nominalVoucher,
@@ -18,20 +18,26 @@ class ReusableClasses {
     var durasi,
     var nominalbaranginput,
     var ceksaldopoint,
-    num minimaldeposit,
+    var minimaldeposit,
     num asuransi,
   ) {
     var hasilperhitungan;
-    if (boolasuransi == false) asuransi = 0;
+    if (boolasuransi == false) asuransi = 0.0;
     if (boolvoucher == false) {
+      minimumtransaksi = 0.0;
+      persentasevoucher = 0.0;
+      nominalVoucher = 0.0;
       hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
               ((asuransi / 100) * double.parse(nominalbaranginput)) +
               minimaldeposit * double.parse(harga) -
               double.parse(ceksaldopoint))
           .toStringAsFixed(2);
     } else {
-      if ((double.parse(durasi) * double.parse(harga)) >= minimumtransaksi) {
-        if ((persentasevoucher * double.parse(harga) * double.parse(durasi)) >=
+      if ((double.parse(durasi) * double.parse(harga)) >=
+          double.parse(minimumtransaksi)) {
+        if ((double.parse(persentasevoucher) *
+                double.parse(harga) *
+                double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
           hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
                   ((asuransi / 100) * double.parse(nominalbaranginput)) +
@@ -140,7 +146,7 @@ class ReusableClasses {
   getSaldo(String access_token) async {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
-    num saldo = jsonDecode(response.body);
-    return saldo;
+    return jsonDecode(response.body);
+    // return saldo;
   }
 }

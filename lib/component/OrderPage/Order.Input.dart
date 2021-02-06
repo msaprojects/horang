@@ -51,7 +51,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       tglawalforklift1,
       valueawal,
       valueakhir,
-      hasilperhitungan = "0",
+      hasilperhitungan,
       email_asuransi,
       getVoucher = "Pilih Voucher",
       tglAwal,
@@ -59,7 +59,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       total_asuransi,
       totalhariharga,
       totaldeposit,
-      ceksaldo,
+      ceksaldo = 0,
       kondisisaldo,
       hargaxhari,
       saldodepositkurangnominaldeposit,
@@ -78,7 +78,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       harga_sewa,
       vpersentasevoucher = 0,
       minimaldeposit = 3,
-      nomasuransi,
+      nomasuransi = 0,
       idvoucher;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
@@ -161,6 +161,47 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
+    // hitungsemua = ReusableClasses().PerhitunganOrder(
+    //     vpersentasevoucher,
+    //     vminimumtransaksi,
+    //     flagasuransi,
+    //     flagvoucher,
+    //     vnominalvoucher,
+    //     harga_sewa,
+    //     vdurasi_sewa,
+    //     double.parse(_nominalbarang.text),
+    //     ceksaldo,
+    //     minimaldeposit,
+    //     nomasuransi);
+    print("CHECKING VALUE : " +
+        vpersentasevoucher.toString() +
+        vminimumtransaksi.toString() +
+        flagasuransi.toString() +
+        flagvoucher.toString() +
+        vnominalvoucher.toString() +
+        harga_sewa.toString() +
+        vdurasi_sewa.toString() +
+        _nominalbarang.text.toString() +
+        ceksaldo.toString() +
+        minimaldeposit.toString() +
+        nomasuransi.toString());
+
+    _nominalbarang.addListener(() {
+      setState(() {
+        hitungsemua = ReusableClasses().PerhitunganOrder(
+            vpersentasevoucher.toString(),
+            vminimumtransaksi.toString(),
+            flagasuransi,
+            flagvoucher,
+            vnominalvoucher.toString(),
+            harga_sewa.toString(),
+            vdurasi_sewa.toString(),
+            _nominalbarang.text,
+            ceksaldo.toString(),
+            minimaldeposit.toString(),
+            nomasuransi);
+      });
+    });
     super.initState();
   }
 //END INITSTATE
@@ -256,7 +297,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 padding: const EdgeInsets.only(
                                     bottom: 8, left: 30, top: 8),
                                 child: Text(
-                                  "Durasi Sewa " + ceksaldo.toString(),
+                                  "Durasi Sewa ",
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
@@ -802,7 +843,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           }));
     }
     getAsuransi();
-    ceksaldo = ReusableClasses().getSaldo(access_token);
+    // ceksaldo = ReusableClasses().getSaldo(access_token);
   }
 }
 
