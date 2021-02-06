@@ -142,26 +142,26 @@ class _Dummy1State extends State<Dummy1> {
       didpayment_gateway= widget.idpayment_gateway;
       dno_ovo = widget.no_ovo;
     OrderProduk orderProduk = OrderProduk(
-        idjenis_produk: idjenis_produk,
-        idlokasi: idlokasi,
-        jumlah_sewa: int.parse(jumlah_sewa),
-        idasuransi: idasuransi,
-        idvoucher: idvouchers,
-        idpayment_gateway: idpayment_gateway,
-        total_harga: double.parse(total_harga),
-        harga: harga,
-        nominal_barang: double.parse(nominal_barang),
-        deposit_tambah: double.parse(deposit_tambah),
-        deposit_pakai: double.parse(deposit_pakai),
-        deposit_minimum: double.parse(deposit_minimum),
-        token: token,
-        tanggal_mulai: tanggal_mulai,
-        tanggal_akhir: tanggal_akhir,
-        keterangan_barang: keterangan_barang,
-        no_ovo: no_ovo,
-        email_asuransi: email_asuransi,
-        flagasuransi: flagasuransi,
-        flagvoucher: flagvoucher);
+        idjenis_produk: didjenis_produk,
+        idlokasi: didlokasi,
+        jumlah_sewa: int.parse(djumlah_sewa),
+        idasuransi: didasuransi,
+        idvoucher: didvoucher,
+        idpayment_gateway: didpayment_gateway,
+        total_harga: double.parse(dtotal_harga),
+        harga: dharga,
+        nominal_barang: double.parse(dnominal_barang),
+        // deposit_tambah: double.parse(deposit_tambah),
+        // deposit_pakai: double.parse(deposit_pakai),
+        // deposit_minimum: double.parse(deposit_minimum),
+        // token: token,
+        valuesewaawal: dvaluesewaawal,
+        valuesewaakhir: dvaluesewaakhir,
+        keterangan_barang: dketerangan_barang,
+        // no_ovo: dno_ovo,
+        email_asuransi: demail_asuransi,
+        flagasuransi: dflagasuransi,
+        flagvoucher: dflagvoucher);
     print("SEND TO ORDER : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
@@ -170,8 +170,8 @@ class _Dummy1State extends State<Dummy1> {
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiOrderDetail(
                       idorder: idorder,
-                      nomVoucher: snomvoucher,
-                      asuransi: nominal_asuransi,
+                      nomVoucher: dnominal_voucher,
+                      asuransi: dtotal_asuransi
                     )));
       } else {
         if (idorder == -1) {
@@ -236,7 +236,7 @@ class _Dummy1State extends State<Dummy1> {
                         Text("Total Bayar",
                             style: GoogleFonts.inter(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text(rupiah(total_harga),
+                        Text(rupiah(dtotal_harga),
                             style: GoogleFonts.inter(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -261,7 +261,7 @@ class _Dummy1State extends State<Dummy1> {
                               ),
                               Text(
                                   "Menunggu pembayaran Sebesar " +
-                                      rupiah(total_harga),
+                                      rupiah(dtotal_harga),
                                   style: GoogleFonts.inter(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold)),
@@ -282,7 +282,7 @@ class _Dummy1State extends State<Dummy1> {
             SizedBox(
               height: 15,
             ),
-            Text("Metode Pembayaran $snomvoucher $idvouchers",
+            Text("Metode Pembayaran ",
                 style: GoogleFonts.inter(
                     fontSize: 14, fontWeight: FontWeight.bold)),
             SizedBox(

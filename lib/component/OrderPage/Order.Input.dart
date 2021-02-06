@@ -179,36 +179,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
-<<<<<<< Updated upstream
-=======
-    totalhariharga =vdurasi_sewa * harga_sewa;
-    print("Total hari : "+totalhariharga.toString());
-
-    // hitungsemua = ReusableClasses().PerhitunganOrder(
-    //     vpersentasevoucher,
-    //     vminimumtransaksi,
-    //     flagasuransi,
-    //     flagvoucher,
-    //     vnominalvoucher,
-    //     harga_sewa,
-    //     vdurasi_sewa,
-    //     double.parse(_nominalbarang.text),
-    //     ceksaldo,
-    //     minimaldeposit,
-    //     nomasuransi);
-    print("CHECKING VALUE : " +
-        vpersentasevoucher.toString() +
-        vminimumtransaksi.toString() +
-        flagasuransi.toString() +
-        flagvoucher.toString() +
-        vnominalvoucher.toString() +
-        harga_sewa.toString() +
-        vdurasi_sewa.toString() +
-        _nominalbarang.text.toString() +
-        ceksaldo.toString() +
-        minimaldeposit.toString() +
-        nomasuransi.toString());
->>>>>>> Stashed changes
 
     _nominalbarang.addListener(() {
       setState(() {

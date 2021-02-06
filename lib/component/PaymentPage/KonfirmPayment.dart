@@ -297,7 +297,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       return infoDialog(
           context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
           showNeutralButton: false,
-          negativeAction: (){}, 
+          negativeAction: () {},
           negativeText: "Batal",
           positiveText: "Ok", positiveAction: () {
         Navigator.pushReplacement(
@@ -305,48 +305,33 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             MaterialPageRoute(
                 builder: (BuildContext context) => Dummy1(
                     flagasuransi: kflagasuransi,
-                                                    flagvoucher: kflagvoucher,
-                                                    idlokasi: kidlokasi,
-                                                    idjenis_produk:
-                                                        kidjenis_produk,
-                                                    idvoucher: kidvoucher,
-                                                    idasuransi: kidasuransi,
-                                                    harga: kharga,
-                                                    jumlah_sewa: kjumlah_sewa,
-                                                    valuesewaawal:
-                                                        kvaluesewaawal,
-                                                    valuesewaakhir:
-                                                        kvaluesewaakhir,
-                                                    tanggal_berakhir_polis:
-                                                        ktanggal_berakhir_polis,
-                                                    nomor_polis: knomor_polis,
-                                                    kapasitas: kkapasitas,
-                                                    alamat: kalamat,
-                                                    keterangan_barang:
-                                                        kketerangan_barang,
-                                                    nominal_barang:
-                                                        knominal_barang,
-                                                    nominal_voucher:
-                                                        knominal_voucher,
-                                                    minimum_transaksi:
-                                                        kminimum_transaksi,
-                                                    persentase_voucher:
-                                                        kpersentase_voucher,
-                                                    total_harga: ktotal_harga,
-                                                    total_asuransi:
-                                                        ktotal_asuransi,
-                                                    totalharixharga:
-                                                        ktotalharixharga,
-                                                    totaldeposit: ktotaldeposit,
-                                                    totalpointdeposit:
-                                                        ktotalpointdeposit,
-                                                    email_asuransi:
-                                                        kemail_asuransi,
-                                                    deposit: kdeposit,
-                                                    persentase_asuransi:
-                                                        kpersentase_asuransi,
-                                                    idpayment_gateway:
-                                                        kidpayment_gateway,
+                    flagvoucher: kflagvoucher,
+                    idlokasi: kidlokasi,
+                    idjenis_produk: kidjenis_produk,
+                    idvoucher: kidvoucher,
+                    idasuransi: kidasuransi,
+                    harga: kharga,
+                    jumlah_sewa: kjumlah_sewa,
+                    valuesewaawal: kvaluesewaawal,
+                    valuesewaakhir: kvaluesewaakhir,
+                    tanggal_berakhir_polis: ktanggal_berakhir_polis,
+                    nomor_polis: knomor_polis,
+                    kapasitas: kkapasitas,
+                    alamat: kalamat,
+                    keterangan_barang: kketerangan_barang,
+                    nominal_barang: knominal_barang,
+                    nominal_voucher: knominal_voucher,
+                    minimum_transaksi: kminimum_transaksi,
+                    persentase_voucher: kpersentase_voucher,
+                    total_harga: ktotal_harga,
+                    total_asuransi: ktotal_asuransi,
+                    totalharixharga: ktotalharixharga,
+                    totaldeposit: ktotaldeposit,
+                    totalpointdeposit: ktotalpointdeposit,
+                    email_asuransi: kemail_asuransi,
+                    deposit: kdeposit,
+                    persentase_asuransi: kpersentase_asuransi,
+                    idpayment_gateway: kidpayment_gateway,
                     no_ovo: _noOvo.text.toString())));
       });
     }
