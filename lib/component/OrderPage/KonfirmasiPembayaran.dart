@@ -9,54 +9,68 @@ import 'package:indonesia/indonesia.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
 class Dummy1 extends StatefulWidget {
-  var idlokasi,
+  var flagasuransi,
+      flagvoucher,
+      idlokasi,
       idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
       idvoucher,
       idasuransi,
-      nominal_asuransii,
-      idpayment_gateway,
-      nominal_barang,
-      nomvoucher,
-      kodevoucher,
       harga,
-      token,
-      tanggal_mulai,
-      tanggal_akhir,
+      jumlah_sewa,
+      valuesewaawal,
+      valuesewaakhir,
+      tanggal_berakhir_polis,
+      nomor_polis,
+      kapasitas,
+      alamat,
       keterangan_barang,
-      no_ovo,
+      nominal_barang,
+      nominal_voucher,
+      minimum_transaksi,
+      persentase_voucher,
+      total_harga,
+      total_asuransi,
+      totalharixharga,
+      totaldeposit,
+      totalpointdeposit,
       email_asuransi,
-      flagasuransi,
-      flagvoucher;
+      deposit,
+      persentase_asuransi,
+      idpayment_gateway,
+      no_ovo;
 
   Dummy1(
-      {this.idjenis_produk,
+      {
+        this.flagasuransi,
+      this.flagvoucher,
       this.idlokasi,
-      this.jumlah_sewa,
-      this.idasuransi,
-      this.nominal_asuransii,
+      this.idjenis_produk,
       this.idvoucher,
-      this.idpayment_gateway,
-      this.total_harga,
+      this.idasuransi,
       this.harga,
-      this.nominal_barang,
-      this.nomvoucher,
-      this.kodevoucher,
-      this.deposit_tambah,
-      this.deposit_pakai,
-      this.deposit_minimum,
-      this.token,
-      this.tanggal_mulai,
-      this.tanggal_akhir,
+      this.jumlah_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.tanggal_berakhir_polis,
+      this.nomor_polis,
+      this.kapasitas,
+      this.alamat,
       this.keterangan_barang,
-      this.no_ovo,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.total_harga,
+      this.total_asuransi,
+      this.totalharixharga,
+      this.totaldeposit,
+      this.totalpointdeposit,
       this.email_asuransi,
-      this.flagasuransi,
-      this.flagvoucher});
+      this.deposit,
+      this.persentase_asuransi,
+      this.idpayment_gateway,
+      this.no_ovo
+      });
   @override
   _Dummy1State createState() => _Dummy1State();
 }
@@ -65,57 +79,68 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _Dummy1State extends State<Dummy1> {
-  var idlokasi,
-      idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
-      idvouchers,
-      idasuransi,
-      idpayment_gateway,
-      nominal_barang,
-      nominal_asuransi,
-      snomvoucher,
-      skodevoucher,
-      harga,
-      token,
-      tanggal_mulai,
-      tanggal_akhir,
-      keterangan_barang,
-      no_ovo,
-      email_asuransi,
-      flagasuransi,
-      flagvoucher;
+  var dflagasuransi,
+      dflagvoucher,
+      didlokasi,
+      didjenis_produk,
+      didvoucher,
+      didasuransi,
+      dharga,
+      djumlah_sewa,
+      dvaluesewaawal,
+      dvaluesewaakhir,
+      dtanggal_berakhir_polis,
+      dnomor_polis,
+      dkapasitas,
+      dalamat,
+      dketerangan_barang,
+      dnominal_barang,
+      dnominal_voucher,
+      dminimum_transaksi,
+      dpersentase_voucher,
+      dtotal_harga,
+      dtotal_asuransi,
+      dtotalharixharga,
+      dtotaldeposit,
+      dtotalpointdeposit,
+      demail_asuransi,
+      ddeposit,
+      dpersentase_asuransi,
+      didpayment_gateway,
+      dno_ovo;
 
   @override
   void initState() {
-    token = widget.token;
-    tanggal_mulai = widget.tanggal_mulai;
-    tanggal_akhir = widget.tanggal_akhir;
-    idlokasi = widget.idlokasi;
-    idjenis_produk = widget.idjenis_produk;
-    idvouchers = widget.idvoucher;
-    idasuransi = widget.idasuransi;
-    nominal_asuransi = widget.nominal_asuransii;
-    snomvoucher = widget.nomvoucher;
-    skodevoucher = widget.kodevoucher;
-    total_harga = widget.total_harga;
-    idlokasi = widget.idlokasi;
-    deposit_tambah = widget.deposit_tambah;
-    deposit_pakai = widget.deposit_pakai;
-    deposit_minimum = widget.deposit_minimum;
-    jumlah_sewa = widget.jumlah_sewa;
-    idpayment_gateway = widget.idpayment_gateway;
-    keterangan_barang = widget.keterangan_barang;
-    nominal_barang = widget.nominal_barang;
-    no_ovo = widget.no_ovo;
-    harga = widget.harga;
-    email_asuransi = widget.email_asuransi;
-    flagasuransi = widget.flagasuransi;
-    flagvoucher = widget.flagvoucher;
-
+    // token = widget.token;
+    dflagasuransi = widget.flagasuransi;
+      dflagvoucher= widget.flagvoucher;
+      didlokasi= widget.idlokasi;
+      didjenis_produk= widget.idjenis_produk;
+      didvoucher= widget.idvoucher;
+      didasuransi= widget.idasuransi;
+      dharga= widget.harga;
+      djumlah_sewa= widget.jumlah_sewa;
+      dvaluesewaawal= widget.valuesewaawal;
+      dvaluesewaakhir= widget.valuesewaakhir;
+      dtanggal_berakhir_polis= widget.tanggal_berakhir_polis;
+      dnomor_polis= widget.nomor_polis;
+      dkapasitas= widget.kapasitas;
+      dalamat= widget.alamat;
+      dketerangan_barang= widget.keterangan_barang;
+      dnominal_barang= widget.nominal_barang;
+      dnominal_voucher= widget.nominal_voucher;
+      dminimum_transaksi= widget.minimum_transaksi;
+      dpersentase_voucher= widget.persentase_voucher;
+      dtotal_harga= widget.total_harga;
+      dtotal_asuransi= widget.total_asuransi;
+      dtotalharixharga= widget.totalharixharga;
+      dtotaldeposit= widget.totaldeposit;
+      dtotalpointdeposit= widget.totalpointdeposit;
+      demail_asuransi= widget.email_asuransi;
+      ddeposit= widget.deposit;
+      dpersentase_asuransi= widget.persentase_asuransi;
+      didpayment_gateway= widget.idpayment_gateway;
+      dno_ovo = widget.no_ovo;
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: idjenis_produk,
         idlokasi: idlokasi,
@@ -143,8 +168,11 @@ class _Dummy1State extends State<Dummy1> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    KonfirmasiOrderDetail(idorder: idorder, nomVoucher: snomvoucher, asuransi: nominal_asuransi,)));
+                builder: (BuildContext context) => KonfirmasiOrderDetail(
+                      idorder: idorder,
+                      nomVoucher: snomvoucher,
+                      asuransi: nominal_asuransi,
+                    )));
       } else {
         if (idorder == -1) {
           errorDialog(context, "Kontainer tidak tersedia",

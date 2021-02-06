@@ -863,12 +863,14 @@ class _ProdukList extends State<ProdukList> {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
+
                                                 return FormInputOrder(
                                                   jenisProduk: jenisProduk,
                                                   tglawal12: _tanggalAwal,
                                                   tglakhir12: _tanggalAkhir,
                                                 );
                                               }));
+                                              print("hey arnold"+jenisProduk.toString());
                                             }
                                           }
                                         },

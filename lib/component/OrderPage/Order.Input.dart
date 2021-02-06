@@ -38,9 +38,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       boolvoucher = false,
       tekanvoucher = false,
       isSuccess = false,
-      flagasuransi = false,
+      flagasuransi = true,
       flagvoucher = false,
-      fieldnominalbarang = false,
+      fieldnominalbarang,
       fieldketeranganbarang = false;
   var kapasitas,
       alamat,
@@ -79,7 +79,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vpersentasevoucher = 0,
       minimaldeposit = 0,
       nomasuransi = 0,
-      idvoucher;
+      idvoucher = 0;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
@@ -117,6 +117,23 @@ class _FormDetailOrder extends State<FormInputOrder> {
     return;
   }
 
+  void hitungsemuaFunction() async {
+    setState(() {
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          vpersentasevoucher.toString(),
+          vminimumtransaksi.toString(),
+          flagasuransi,
+          flagvoucher,
+          vnominalvoucher.toString(),
+          harga_sewa.toString(),
+          vdurasi_sewa.toString(),
+          _nominalbarang.text.toString(),
+          ceksaldo.toString(),
+          minimaldeposit.toString(),
+          nomasuransi.toString());
+    });
+  }
+
   cleartextinputnominal() {
     _nominalbarang.clear();
     _keteranganbarang.clear();
@@ -137,7 +154,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     keterangan = widget.jenisProduk.keterangan;
     idlokasi = widget.jenisProduk.idlokasi;
     produkimage = widget.jenisProduk.gambar;
-
+    print("ezzz"+ idjenis_produk.toString());
     if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
@@ -151,6 +168,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       valueakhir = tglawalforklift1 + " " + jamakhir1;
       vdurasi_sewa =
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
+
     } else {
       minimaldeposit = 3;
       vsatuan_sewa = " hari )";
@@ -161,23 +179,45 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
+<<<<<<< Updated upstream
+=======
+    totalhariharga =vdurasi_sewa * harga_sewa;
+    print("Total hari : "+totalhariharga.toString());
+
+    // hitungsemua = ReusableClasses().PerhitunganOrder(
+    //     vpersentasevoucher,
+    //     vminimumtransaksi,
+    //     flagasuransi,
+    //     flagvoucher,
+    //     vnominalvoucher,
+    //     harga_sewa,
+    //     vdurasi_sewa,
+    //     double.parse(_nominalbarang.text),
+    //     ceksaldo,
+    //     minimaldeposit,
+    //     nomasuransi);
+    print("CHECKING VALUE : " +
+        vpersentasevoucher.toString() +
+        vminimumtransaksi.toString() +
+        flagasuransi.toString() +
+        flagvoucher.toString() +
+        vnominalvoucher.toString() +
+        harga_sewa.toString() +
+        vdurasi_sewa.toString() +
+        _nominalbarang.text.toString() +
+        ceksaldo.toString() +
+        minimaldeposit.toString() +
+        nomasuransi.toString());
+>>>>>>> Stashed changes
 
     _nominalbarang.addListener(() {
       setState(() {
-        hitungsemua = ReusableClasses().PerhitunganOrder(
-            vpersentasevoucher.toString(),
-            vminimumtransaksi.toString(),
-            flagasuransi,
-            flagvoucher,
-            vnominalvoucher.toString(),
-            harga_sewa.toString(),
-            vdurasi_sewa.toString(),
-            _nominalbarang.text,
-            ceksaldo.toString(),
-            minimaldeposit.toString(),
-            nomasuransi);
+        hitungsemuaFunction();
+        total_asuransi = (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
       });
     });
+    hitungsemuaFunction();
+    
     super.initState();
   }
 //END INITSTATE
@@ -387,8 +427,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           boolasuransi = asuransii;
                                           if (boolasuransi == true) {
                                             flagasuransi = true;
+                                            hitungsemuaFunction();
                                           } else {
                                             flagasuransi = false;
+                                            hitungsemuaFunction();
                                           }
                                         });
                                       },
@@ -493,6 +535,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     WhitelistingTextInputFormatter.digitsOnly,
                                   ],
                                   onChanged: (value) {
+                                    print("nominal barangnya adalah : " +
+                                        _nominalbarang.toString());
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != fieldnominalbarang) {
                                       setState(() =>
@@ -571,6 +615,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         borderRadius: BorderRadius.circular(12.0)),
                     color: Colors.green,
                     onPressed: () {
+                      hitungsemuaFunction();
                       _nominalbarang.text.toString() == "0" ||
                               _keteranganbarang.text.toString() == "" ||
                               _nominalbarang.text.toString() == "" ||
@@ -627,8 +672,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
             idasuransi: idasuransi,
             harga: harga_sewa,
             jumlah_sewa: vdurasi_sewa,
-            tanggal_mulai: valueawal,
-            tanggal_akhir: valueakhir,
+            valuesewaawal: valueawal,
+            valuesewaakhir: valueakhir,
             tanggal_berakhir_polis: "DATE(NOW())",
             nomor_polis: "Belum Diisi",
             kapasitas: kapasitas,
@@ -638,14 +683,43 @@ class _FormDetailOrder extends State<FormInputOrder> {
             nominal_voucher: vnominalvoucher,
             minimum_transaksi: vminimumtransaksi,
             persentase_voucher: vpersentasevoucher,
-            total_harga: hasilperhitungan.toString(),
+            total_harga: hitungsemua.toString(),
             total_asuransi: total_asuransi.toString(),
             totalharixharga: totalhariharga.toString(),
-            totaldeposit: totaldeposit.toString(),
+            totaldeposit: hargaxhari.toString(),
             totalpointdeposit: ceksaldo.toString(),
             email_asuransi: email_asuransi.toString(),
-            deposit: saldodepositkurangnominaldeposit.toString());
+            deposit: saldodepositkurangnominaldeposit.toString(),
+            persentase_asuransi: nomasuransi.toString(),
+            );
       }));
+      print("hazazazza : "+ 
+      flagasuransi.toString() + "_-_" +
+            flagvoucher.toString() + "_-_" +
+            idlokasi.toString() + "_-_" +
+            idjenis_produk.toString() + "_-_" +
+            idvoucher.toString() + "_-_" +
+            idasuransi.toString() + "_-_" +
+            harga_sewa.toString() + "_-_" +
+            vdurasi_sewa.toString() + "_-_" +
+            valueawal.toString() + "_-_" +
+            valueakhir.toString() + "_-_" +
+            "DATE(NOW())" +
+            "Belum Diisi" +
+             kapasitas.toString() + "_-_" +
+            alamat.toString() + "_-_" +
+            _keteranganbarang.text.toString() + "_-_" +
+            _nominalbarang.text.toString()+ "_-_" +
+            vnominalvoucher.toString() + "_-_" +
+            vminimumtransaksi.toString() + "_-_" +
+            vpersentasevoucher.toString() + "_-_" +
+            hitungsemua.toString() + "_-_" +
+            total_asuransi.toString() + "_-_" +
+            totalhariharga.toString() + "_-_" +
+            hargaxhari.toString() + "_-_" +
+            ceksaldo.toString() + "_-_" +
+            email_asuransi.toString() + "_-_" +
+            saldodepositkurangnominaldeposit.toString());
     });
   }
 
@@ -676,8 +750,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idasuransi: idasuransi,
                           harga: harga_sewa,
                           jumlah_sewa: vdurasi_sewa,
-                          tanggal_mulai: valueawal,
-                          tanggal_akhir: valueakhir,
+                          valuesewaawal: valueawal,
+                          valuesewaakhir: valueakhir,
                           tanggal_berakhir_polis: "DATE(NOW())",
                           nomor_polis: "Belum Diisi",
                           kapasitas: kapasitas,

@@ -1,4 +1,5 @@
 # This is a generated file; do not edit or check into version control.
+<<<<<<< Updated upstream
 connectivity=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.9+5/
 connectivity_for_web=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.3.1+4/
 connectivity_macos=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+7/
@@ -27,3 +28,33 @@ url_launcher_linux=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dart
 url_launcher_macos=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+9/
 url_launcher_web=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.5+1/
 url_launcher_windows=/Users/macmini/Development/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_windows-0.0.1+3/
+=======
+connectivity=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity-0.4.9+5\\
+connectivity_for_web=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity_for_web-0.3.1+4\\
+connectivity_macos=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity_macos-0.1.0+7\\
+device_info=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\device_info-0.4.2+10\\
+firebase_core=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core-0.5.3\\
+firebase_core_web=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_core_web-0.2.1+1\\
+firebase_messaging=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_messaging-7.0.3\\
+flutter_plugin_android_lifecycle=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_plugin_android_lifecycle-1.0.11\\
+fluttertoast=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\fluttertoast-7.1.4\\
+get_version=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\get_version-0.2.2\\
+imei_plugin=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\imei_plugin-1.2.0\\
+local_auth=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\local_auth-0.6.3+4\\
+package_info=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\package_info-0.4.3+2\\
+path_provider=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider-1.6.24\\
+path_provider_linux=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_linux-0.0.1+2\\
+path_provider_macos=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_macos-0.0.4+6\\
+path_provider_windows=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\path_provider_windows-0.0.4+3\\
+share=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\share-0.6.5+4\\
+shared_preferences=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences-0.5.12+4\\
+shared_preferences_linux=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_linux-0.0.2+4\\
+shared_preferences_macos=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_macos-0.0.1+11\\
+shared_preferences_web=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_web-0.1.2+7\\
+shared_preferences_windows=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_windows-0.0.1+3\\
+url_launcher=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher-5.7.10\\
+url_launcher_linux=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher_linux-0.0.1+4\\
+url_launcher_macos=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher_macos-0.0.1+9\\
+url_launcher_web=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher_web-0.1.5+1\\
+url_launcher_windows=D:\\KERJA\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher_windows-0.0.1+3\\
+>>>>>>> Stashed changes

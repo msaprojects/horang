@@ -9,21 +9,21 @@ import 'package:http/http.dart' as http;
 
 class ReusableClasses {
   PerhitunganOrder(
-    var persentasevoucher,
-    var minimumtransaksi,
+    String persentasevoucher,
+    String minimumtransaksi,
     bool boolasuransi,
     bool boolvoucher,
-    var nominalVoucher,
-    var harga,
-    var durasi,
-    var nominalbaranginput,
-    var ceksaldopoint,
-    var minimaldeposit,
-    num asuransi,
+    String nominalVoucher,
+    String harga,
+    String durasi,
+    String nominalbaranginput,
+    String ceksaldopoint,
+    String minimaldeposit,
+    String asuransi,
   ) {
     var hasilperhitungan;
     num nominalV = 0;
-    if (boolasuransi == false) asuransi = 0.0;
+    if (boolasuransi == false) asuransi = "0";
     if (boolvoucher == false) {
       nominalV = 0;
     } else {
@@ -33,18 +33,18 @@ class ReusableClasses {
                 double.parse(harga) *
                 double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
-          nominalV = nominalVoucher;
+          nominalV = double.parse(nominalVoucher);
         } else {
           nominalV =
-              persentasevoucher * double.parse(harga) * double.parse(durasi);
+              double.parse(persentasevoucher) * double.parse(harga) * double.parse(durasi);
         }
       } else {
         nominalV = 0;
       }
     }
     hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-            ((asuransi / 100) * double.parse(nominalbaranginput)) +
-            minimaldeposit * double.parse(harga) -
+            ((double.parse(asuransi) / 100) * double.parse(nominalbaranginput)) +
+            int.parse(minimaldeposit) * double.parse(harga) -
             double.parse(ceksaldopoint) -
             nominalV)
         .toStringAsFixed(2);
