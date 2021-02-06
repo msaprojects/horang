@@ -93,6 +93,7 @@ class _AccountState extends State<Account> {
     super.initState();
     getlistaprofile();
     cekToken();
+    print("cek pin : $pin");
   }
 
   @override

@@ -131,25 +131,46 @@ class _UbahPinState extends State<UbahPin> {
                     onPressed: () {
                       setState(() {
                         if (pin == "0") {
+                          print("coba 0.1x");
                           // print("cek Tambah pin");
                           TambahPin_model pintambah = TambahPin_model(
                               pin: _controllerPassBaru.text.toString(),
                               token: access_token);
                           if (widget.ubahPin == null) {
-                            _apiService.TambahPin(pintambah).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                successDialog(context,
-                                    "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                    showNeutralButton: false,
-                                    positiveText: "Oke", positiveAction: () {
-                                  Keluarr();
-                                });
-                              } else {
-                                errorDialog(context,
-                                    "Data gagal disimpan, silahkan dicek ulang");
-                              }
-                            });
+                            if (_controllerPassBaru.text !=
+                                _controllerPassBaruRetype.text) {
+                              return warningDialog(context,
+                                  "PIN baru dan Retype PIN tidak sama");
+                            } else if (int.parse(
+                                        _controllerPassBaru.text.toString()) <
+                                    4 &&
+                                int.parse(_controllerPassBaruRetype.text
+                                        .toString()) <
+                                    4) {
+                              return warningDialog(context,
+                                  "PIN baru atau retype pasword kurang dari 4 karakter");
+                            } else {
+                              _apiService.TambahPin(pintambah)
+                                  .then((isSuccess) {
+                                // setState(() => _isLoading = false);
+                                print("alkohol 80% : ${_controllerPassBaru.text.toString()}, $access_token");
+                                if (!isSuccess) {
+                                  print("coba 1x");
+                                  successDialog(context,
+                                      "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                      showNeutralButton: false,
+                                      positiveText: "Oke", 
+                                      positiveAction: () {
+                                    Keluarr();
+                                  });
+                                } 
+                                // else {
+                                //   print("coba 2x");
+                                //   errorDialog(context,
+                                //       "Data gagal disimpan, silahkan dicek ulang");
+                                // }
+                              });
+                            }
                           }
                         } else {
                           Pin_Model pinubah = Pin_Model(

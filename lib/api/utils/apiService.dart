@@ -278,6 +278,8 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: TambahPinToJson(data),
     );
+    print("rssstcode :"+response.statusCode.toString());
+    print("rssstbody :"+response.body);
     if (response.statusCode == 200) {
       return true;
     } else {

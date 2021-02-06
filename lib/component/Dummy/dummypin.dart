@@ -42,7 +42,12 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token, token_notifikasi;
+  var token = "",
+      newtoken = "",
+      access_token,
+      refresh_token,
+      token_notifikasi,
+      pin;
   bool hasError = false,
       isSuccess = true,
       _checkbio = false,
@@ -130,7 +135,8 @@ class _OtpScreenState extends State<OtpScreen> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    print("Jasukeeeeeeeeeeeee $access_token");
+    pin = sp.getString("pin");
+    print("Jasukeeeeeeeeeeeee $access_token, $pin");
 
     if (access_token == null) {
       print("cek debug 1");
@@ -142,6 +148,20 @@ class _OtpScreenState extends State<OtpScreen> {
             MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
             (Route<dynamic> route) => false);
       }, positiveText: "Ok");
+    } else if (pin == "0") {
+      print("cek debug 4.1");
+      infoDialog(context,
+          "Pin anda belum diset, setting terlebih dahulu untuk akses aplikasi",
+          showNeutralButton: false,
+          negativeText: "Tidak Sekarang",
+          negativeAction: () {
+            Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));    
+          },
+          positiveText: "Set Sekarang", positiveAction: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => UbahPin()));
+      });
     } else {
       print("cek debug 2");
       _apiService.checkingToken(access_token).then((value) => setState(() {

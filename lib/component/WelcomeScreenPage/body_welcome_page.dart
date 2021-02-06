@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,8 @@ import 'package:horang/component/Dummy/dummypin.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/pin2.dart';
+import 'package:horang/component/account_page/ubah_pin.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'background_welcome_page.dart';
@@ -43,7 +46,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               MaterialPageRoute(
                 builder: (context) => Pinauth(),
               ));
-        }
+        } 
       }
     }
   }
