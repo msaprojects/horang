@@ -77,7 +77,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vminimumtransaksi = 0,
       harga_sewa,
       vpersentasevoucher = 0,
-      minimaldeposit = 3,
+      minimaldeposit = 0,
       nomasuransi = 0,
       idvoucher;
   DateTime dtAwal, dtAkhir;
@@ -101,9 +101,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   int diffInTime(tglAwal, tglAkhir) {
-    return ((tglAkhir.difference(tglAwal) -
-                Duration(hours: tglAwal.hour) +
-                Duration(hours: tglAkhir.hour))
+    return ((Duration(hours: tglAkhir.hour) - Duration(hours: tglAwal.hour))
             .inHours)
         .round();
   }
@@ -144,7 +142,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         .toString()
         .toLowerCase()
         .contains('forklift')) {
-      vsatuan_sewa = " /Jam";
+      minimaldeposit = 0;
+      vsatuan_sewa = " jam )";
       tglawalforklift1 = widget.tglawalforklift.toString();
       jamawal1 = widget.jamawal.toString();
       jamakhir1 = widget.jamakhir.toString();
@@ -153,7 +152,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     } else {
-      vsatuan_sewa = " /Hari";
+      minimaldeposit = 3;
+      vsatuan_sewa = " hari )";
       tglAwal = widget.tglawal12.toString();
       tglAkhir = widget.tglakhir12.toString();
       valueawal = tglAwal;
@@ -161,30 +161,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
-    // hitungsemua = ReusableClasses().PerhitunganOrder(
-    //     vpersentasevoucher,
-    //     vminimumtransaksi,
-    //     flagasuransi,
-    //     flagvoucher,
-    //     vnominalvoucher,
-    //     harga_sewa,
-    //     vdurasi_sewa,
-    //     double.parse(_nominalbarang.text),
-    //     ceksaldo,
-    //     minimaldeposit,
-    //     nomasuransi);
-    print("CHECKING VALUE : " +
-        vpersentasevoucher.toString() +
-        vminimumtransaksi.toString() +
-        flagasuransi.toString() +
-        flagvoucher.toString() +
-        vnominalvoucher.toString() +
-        harga_sewa.toString() +
-        vdurasi_sewa.toString() +
-        _nominalbarang.text.toString() +
-        ceksaldo.toString() +
-        minimaldeposit.toString() +
-        nomasuransi.toString());
 
     _nominalbarang.addListener(() {
       setState(() {
