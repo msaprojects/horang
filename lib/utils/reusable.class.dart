@@ -22,16 +22,10 @@ class ReusableClasses {
     num asuransi,
   ) {
     var hasilperhitungan;
+    num nominalV = 0;
     if (boolasuransi == false) asuransi = 0.0;
     if (boolvoucher == false) {
-      minimumtransaksi = 0.0;
-      persentasevoucher = 0.0;
-      nominalVoucher = 0.0;
-      hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-              ((asuransi / 100) * double.parse(nominalbaranginput)) +
-              minimaldeposit * double.parse(harga) -
-              double.parse(ceksaldopoint))
-          .toStringAsFixed(2);
+      nominalV = 0;
     } else {
       if ((double.parse(durasi) * double.parse(harga)) >=
           double.parse(minimumtransaksi)) {
@@ -39,30 +33,22 @@ class ReusableClasses {
                 double.parse(harga) *
                 double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
-          hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-                  ((asuransi / 100) * double.parse(nominalbaranginput)) +
-                  minimaldeposit * double.parse(harga) -
-                  double.parse(ceksaldopoint) -
-                  double.parse(nominalVoucher))
-              .toStringAsFixed(2);
+          nominalV = nominalVoucher;
         } else {
-          hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-                  ((asuransi / 100) * double.parse(nominalbaranginput)) +
-                  minimaldeposit * double.parse(harga) -
-                  double.parse(ceksaldopoint) -
-                  (persentasevoucher *
-                      double.parse(harga) *
-                      double.parse(durasi)))
-              .toStringAsFixed(2);
+          nominalV =
+              persentasevoucher * double.parse(harga) * double.parse(durasi);
         }
       } else {
-        hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-                ((asuransi / 100) * double.parse(nominalbaranginput)) +
-                minimaldeposit * double.parse(harga) -
-                double.parse(ceksaldopoint))
-            .toStringAsFixed(2);
+        nominalV = 0;
       }
     }
+    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
+            ((asuransi / 100) * double.parse(nominalbaranginput)) +
+            minimaldeposit * double.parse(harga) -
+            double.parse(ceksaldopoint) -
+            nominalV)
+        .toStringAsFixed(2);
+
     return hasilperhitungan;
   }
 
