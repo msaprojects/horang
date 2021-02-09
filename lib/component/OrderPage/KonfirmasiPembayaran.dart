@@ -21,8 +21,6 @@ class Dummy1 extends StatefulWidget {
       valuesewaakhir,
       tanggal_berakhir_polis,
       nomor_polis,
-      kapasitas,
-      alamat,
       keterangan_barang,
       nominal_barang,
       nominal_voucher,
@@ -37,11 +35,11 @@ class Dummy1 extends StatefulWidget {
       deposit,
       persentase_asuransi,
       idpayment_gateway,
+      saldodepositkurangnominaldeposit,
       no_ovo;
 
   Dummy1(
-      {
-        this.flagasuransi,
+      {this.flagasuransi,
       this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
@@ -53,8 +51,6 @@ class Dummy1 extends StatefulWidget {
       this.valuesewaakhir,
       this.tanggal_berakhir_polis,
       this.nomor_polis,
-      this.kapasitas,
-      this.alamat,
       this.keterangan_barang,
       this.nominal_barang,
       this.nominal_voucher,
@@ -69,8 +65,8 @@ class Dummy1 extends StatefulWidget {
       this.deposit,
       this.persentase_asuransi,
       this.idpayment_gateway,
-      this.no_ovo
-      });
+      this.saldodepositkurangnominaldeposit,
+      this.no_ovo});
   @override
   _Dummy1State createState() => _Dummy1State();
 }
@@ -113,34 +109,32 @@ class _Dummy1State extends State<Dummy1> {
   void initState() {
     // token = widget.token;
     dflagasuransi = widget.flagasuransi;
-      dflagvoucher= widget.flagvoucher;
-      didlokasi= widget.idlokasi;
-      didjenis_produk= widget.idjenis_produk;
-      didvoucher= widget.idvoucher;
-      didasuransi= widget.idasuransi;
-      dharga= widget.harga;
-      djumlah_sewa= widget.jumlah_sewa;
-      dvaluesewaawal= widget.valuesewaawal;
-      dvaluesewaakhir= widget.valuesewaakhir;
-      dtanggal_berakhir_polis= widget.tanggal_berakhir_polis;
-      dnomor_polis= widget.nomor_polis;
-      dkapasitas= widget.kapasitas;
-      dalamat= widget.alamat;
-      dketerangan_barang= widget.keterangan_barang;
-      dnominal_barang= widget.nominal_barang;
-      dnominal_voucher= widget.nominal_voucher;
-      dminimum_transaksi= widget.minimum_transaksi;
-      dpersentase_voucher= widget.persentase_voucher;
-      dtotal_harga= widget.total_harga;
-      dtotal_asuransi= widget.total_asuransi;
-      dtotalharixharga= widget.totalharixharga;
-      dtotaldeposit= widget.totaldeposit;
-      dtotalpointdeposit= widget.totalpointdeposit;
-      demail_asuransi= widget.email_asuransi;
-      ddeposit= widget.deposit;
-      dpersentase_asuransi= widget.persentase_asuransi;
-      didpayment_gateway= widget.idpayment_gateway;
-      dno_ovo = widget.no_ovo;
+    dflagvoucher = widget.flagvoucher;
+    didlokasi = widget.idlokasi;
+    didjenis_produk = widget.idjenis_produk;
+    didvoucher = widget.idvoucher;
+    didasuransi = widget.idasuransi;
+    dharga = widget.harga;
+    djumlah_sewa = widget.jumlah_sewa;
+    dvaluesewaawal = widget.valuesewaawal;
+    dvaluesewaakhir = widget.valuesewaakhir;
+    dtanggal_berakhir_polis = widget.tanggal_berakhir_polis;
+    dnomor_polis = widget.nomor_polis;
+    dketerangan_barang = widget.keterangan_barang;
+    dnominal_barang = widget.nominal_barang;
+    dnominal_voucher = widget.nominal_voucher;
+    dminimum_transaksi = widget.minimum_transaksi;
+    dpersentase_voucher = widget.persentase_voucher;
+    dtotal_harga = widget.total_harga;
+    dtotal_asuransi = widget.total_asuransi;
+    dtotalharixharga = widget.totalharixharga;
+    dtotaldeposit = widget.totaldeposit;
+    dtotalpointdeposit = widget.totalpointdeposit;
+    demail_asuransi = widget.email_asuransi;
+    ddeposit = widget.deposit;
+    dpersentase_asuransi = widget.persentase_asuransi;
+    didpayment_gateway = widget.idpayment_gateway;
+    dno_ovo = widget.no_ovo;
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: didjenis_produk,
         idlokasi: didlokasi,
@@ -169,10 +163,9 @@ class _Dummy1State extends State<Dummy1> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiOrderDetail(
-                      idorder: idorder,
-                      nomVoucher: dnominal_voucher,
-                      asuransi: dtotal_asuransi
-                    )));
+                    idorder: idorder,
+                    nomVoucher: dnominal_voucher,
+                    asuransi: dtotal_asuransi)));
       } else {
         if (idorder == -1) {
           errorDialog(context, "Kontainer tidak tersedia",

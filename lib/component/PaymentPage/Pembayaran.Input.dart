@@ -349,20 +349,20 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
-                                children: <Widget>[Text("Keterangan Barang :")],
+                                children: <Widget>[
+                                  Text("Keterangan Barang : ")
+                                ],
                               ),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                pketerangan_barang,
-                              ),
-                            ),
+                            Flexible(
+                                child: Text(
+                              pketerangan_barang,
+                            )),
                           ],
                         ),
                         SizedBox(

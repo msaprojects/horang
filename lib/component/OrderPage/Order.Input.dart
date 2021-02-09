@@ -67,7 +67,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       access_token,
       refresh_token,
       hitungsemua,
-      vsatuan_sewa = "";
+      vsatuan_sewa = "",
+      namasetting = "",
+      nilaisetting = "";
   num vdurasi_sewa,
       idjenis_produk,
       idcustomer,
@@ -144,6 +146,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   void initState() {
     cekToken();
+    // getSaldo();
+    // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
 
@@ -364,6 +368,52 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               padding: const EdgeInsets.only(left: 38),
                               child: Text(keterangan),
                             )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    bottom: 8, left: 36, top: 8),
+                                child: Text(
+                                  "Jam Operasional",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 38),
+                              child: Text(nilaisetting.toString()),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(left: 38),
+                              child: Text(namasetting.toString()),
+                            ),
                           ],
                         ),
                       ),
@@ -605,7 +655,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 saldodepositkurangnominaldeposit =
                                     hargaxhari - ceksaldo;
                                 kondisisaldo =
-                                    "Saldo anda sekarang ${rupiah(ceksaldo)}, minimum deposit yang ditentukan sebesar $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxhari)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                                    "Saldo anda sekarang ${ceksaldo}, minimum deposit yang ditentukan sebesar $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxhari)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
                                 cekDeposit(context);
                               }
                             });
@@ -888,7 +938,28 @@ class _FormDetailOrder extends State<FormInputOrder> {
           }));
     }
     getAsuransi();
-    // ceksaldo = ReusableClasses().getSaldo(access_token);
+    getSaldo();
+    getSetting(access_token, idlokasi);
+  }
+
+  getSaldo() async {
+    final response = await http.get(ApiService().urlceksaldo,
+        headers: {"Authorization": "BEARER ${access_token}"});
+    ceksaldo = json.decode(response.body)[0]['saldo'];
+    return ceksaldo;
+  }
+
+  getSetting(token, idlokasi) async {
+    final response = await http.post(ApiService().urlsettingbylokasi,
+        headers: {"content-type": "application/json"},
+        body: json.encode({"token": token, "idlokasi": idlokasi}));
+    print("SETTING : " + response.body);
+    namasetting = json.decode(response.body)[0]['kunci'];
+    nilaisetting = json.decode(response.body)[0]['nilai'];
+    print("LOad Setting : " +
+        namasetting.toString() +
+        " - " +
+        nilaisetting.toString());
   }
 }
 

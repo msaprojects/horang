@@ -118,10 +118,6 @@ class _ProdukList extends State<ProdukList> {
         time = hour + '.' + minutes;
         timeController.text = time;
         selectedTime = picked;
-        // selectedTime = picked.replacing(hour: picked.hourOfPeriod);
-        // timeController.text = formatDate(
-        //     DateTime(2000, 01, 1, selectedTime.hour, selectedTime.minute),
-        //     [HH, ':', mm]).toString();
       });
   }
 
@@ -863,14 +859,14 @@ class _ProdukList extends State<ProdukList> {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
-
                                                 return FormInputOrder(
                                                   jenisProduk: jenisProduk,
                                                   tglawal12: _tanggalAwal,
                                                   tglakhir12: _tanggalAkhir,
                                                 );
                                               }));
-                                              print("hey arnold"+jenisProduk.toString());
+                                              print("hey arnold" +
+                                                  jenisProduk.toString());
                                             }
                                           }
                                         },

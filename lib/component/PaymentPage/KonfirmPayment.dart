@@ -316,8 +316,6 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     valuesewaakhir: kvaluesewaakhir,
                     tanggal_berakhir_polis: ktanggal_berakhir_polis,
                     nomor_polis: knomor_polis,
-                    kapasitas: kkapasitas,
-                    alamat: kalamat,
                     keterangan_barang: kketerangan_barang,
                     nominal_barang: knominal_barang,
                     nominal_voucher: knominal_voucher,

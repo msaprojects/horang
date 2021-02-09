@@ -44,12 +44,13 @@ class ApiService {
   List<Customers> get datacus => _data;
 
   //URL MAKER
-  String urlasuransi, urlceksaldo, urllokasi, urlgetlist;
+  String urlasuransi, urlceksaldo, urllokasi, urlgetlist, urlsettingbylokasi;
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
     urllokasi = baseUrl + "lokasi";
     urlgetlist = baseUrl + "customer";
+    urlsettingbylokasi = baseUrl + "lokasisetting";
   }
 
   /////////////////////// LIST /////////////////////////

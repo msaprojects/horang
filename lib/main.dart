@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: WelcomePage(),
-      home: ProdukList(),
+      home: WelcomePage(),
+      // home: ProdukList(),
     );
   }
 }
