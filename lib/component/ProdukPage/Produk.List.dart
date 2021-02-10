@@ -62,9 +62,6 @@ class _ProdukList extends State<ProdukList> {
   String _pTanggalAkhir = "";
   double height;
   double width;
-  // var _date = "Not set";
-  // var _time = "Not set";
-  // var _timeFinish = "Not set";
   String setTime = "",
       setTimeSelesai = "",
       setDate = "",
@@ -139,12 +136,6 @@ class _ProdukList extends State<ProdukList> {
         minutes = selectedTimeSelesai.minute.toString();
         time = hour + '.' + minutes;
         timeControllerSelesai.text = time;
-        // selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
-        // timeControllerSelesai.text = formatDate(
-        //     DateTime(2019, 10, 1, selectedTimeSelesai.hour,
-        //         selectedTimeSelesai.minute),
-        //     // [hh, ':', nn, " ", am]
-        //     [HH, ':', mm]).toString();
       });
   }
 
@@ -351,13 +342,6 @@ class _ProdukList extends State<ProdukList> {
                           child: FlatButton(
                               color: Colors.red[900],
                               onPressed: () {
-                                // print(selectedDate
-                                //     .format(format: 'yyyy-MM-dd')
-                                //     .toString());
-                                // print(selectedTime.format(context));
-                                // print(selectedTimeSelesai.format(context));
-                                // print(jenispro);
-
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (context) {
                                   return FormInputOrder(
@@ -638,22 +622,11 @@ class _ProdukList extends State<ProdukList> {
                             SizedBox(
                               height: 5,
                             ),
-                            // Text(
-                            //   string,
-                            //   mText,
-                            //   style: GoogleFonts.inter(
-                            //     color: Colors.grey[800],
-                            //     fontSize: 18,
-                            //   ),
-                            //   textAlign: TextAlign.left,
-                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Flexible(
                                   child: Text(
-                                    // string,
-                                    // sDate.toString(),
                                     mmtext,
                                     style: GoogleFonts.lato(
                                         fontSize: 15,
@@ -664,7 +637,6 @@ class _ProdukList extends State<ProdukList> {
                                 Icon(Icons.arrow_forward_rounded),
                                 Flexible(
                                   child: Text(
-                                    // fDate.toString(),
                                     aatext,
                                     style: GoogleFonts.lato(
                                         fontSize: 15,

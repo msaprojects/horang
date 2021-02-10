@@ -21,8 +21,8 @@ class FormInputPembayaran extends StatefulWidget {
       idjenis_produk,
       idvoucher,
       idasuransi,
-      harga,
-      jumlah_sewa,
+      harga_sewa,
+      durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
       tanggal_berakhir_polis,
@@ -34,14 +34,14 @@ class FormInputPembayaran extends StatefulWidget {
       nominal_voucher,
       minimum_transaksi,
       persentase_voucher,
-      total_harga,
       total_asuransi,
       totalharixharga,
       totaldeposit,
-      totalpointdeposit,
+      saldopoint,
       email_asuransi,
-      deposit,
-      persentase_asuransi;
+      tambahsaldopoint,
+      persentase_asuransi,
+      minimalsewahari;
 
   FormInputPembayaran(
       {this.flagasuransi,
@@ -50,8 +50,8 @@ class FormInputPembayaran extends StatefulWidget {
       this.idjenis_produk,
       this.idvoucher,
       this.idasuransi,
-      this.harga,
-      this.jumlah_sewa,
+      this.harga_sewa,
+      this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
       this.tanggal_berakhir_polis,
@@ -63,14 +63,14 @@ class FormInputPembayaran extends StatefulWidget {
       this.nominal_voucher,
       this.minimum_transaksi,
       this.persentase_voucher,
-      this.total_harga,
       this.total_asuransi,
       this.totalharixharga,
       this.totaldeposit,
-      this.totalpointdeposit,
+      this.saldopoint,
       this.email_asuransi,
-      this.deposit,
-      this.persentase_asuransi});
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.minimalsewahari});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -96,8 +96,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pidjenis_produk,
       pidvoucher,
       pidasuransi,
-      pharga,
-      pjumlah_sewa,
+      pharga_sewa,
+      pdurasi_sewa,
       pvaluesewaawal,
       pvaluesewaakhir,
       ptanggal_berakhir_polis,
@@ -109,15 +109,15 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pnominal_voucher,
       pminimum_transaksi,
       ppersentase_voucher,
-      ptotal_harga,
       ptotal_asuransi,
       ptotalharixharga,
       ptotaldeposit,
-      ptotalpointdeposit,
+      psaldopoint,
       pemail_asuransi,
-      pdeposit,
+      ptambahsaldopoint,
       ppersentase_asuransi,
-      hitungsemua;
+      hitungsemua,
+      pminimalsewahari;
 
   var hasilperhitungan;
 
@@ -180,8 +180,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     pidjenis_produk = widget.idjenis_produk;
     pidvoucher = widget.idvoucher;
     pidasuransi = widget.idasuransi;
-    pharga = widget.harga;
-    pjumlah_sewa = widget.jumlah_sewa;
+    pharga_sewa = widget.harga_sewa;
+    pdurasi_sewa = widget.durasi_sewa;
     pvaluesewaawal = widget.valuesewaawal;
     pvaluesewaakhir = widget.valuesewaakhir;
     ptanggal_berakhir_polis = widget.tanggal_berakhir_polis;
@@ -193,14 +193,14 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     pnominal_voucher = widget.nominal_voucher;
     pminimum_transaksi = widget.minimum_transaksi;
     ppersentase_voucher = widget.persentase_voucher;
-    ptotal_harga = widget.total_harga;
     ptotal_asuransi = widget.total_asuransi;
     ptotalharixharga = widget.totalharixharga;
     ptotaldeposit = widget.totaldeposit;
-    ptotalpointdeposit = widget.totalpointdeposit;
+    psaldopoint = widget.saldopoint;
     pemail_asuransi = widget.email_asuransi;
-    pdeposit = widget.deposit;
+    ptambahsaldopoint = widget.tambahsaldopoint;
     ppersentase_asuransi = widget.persentase_asuransi;
+    pminimalsewahari = widget.minimalsewahari;
     cekToken();
     hitungsemuaFunction();
   }
@@ -213,11 +213,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           pflagvoucher,
           pflagasuransi,
           pnominal_voucher.toString(),
-          pharga.toString(),
-          pjumlah_sewa.toString(),
+          pharga_sewa.toString(),
+          pdurasi_sewa.toString(),
           pnominal_barang.toString(),
-          ptotalpointdeposit.toString(),
-          pminimum_transaksi.toString(),
+          psaldopoint.toString(),
+          pminimalsewahari.toString(),
           ppersentase_asuransi.toString());
     });
   }
@@ -257,10 +257,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             pkapasitas,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: new Text(
+                          subtitle: new Flexible(
+                              child: Text(
                             palamat,
                             style: TextStyle(color: Colors.black),
-                          ),
+                          )),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -302,7 +303,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text(pvaluesewaakhir,
                                       overflow: TextOverflow.ellipsis),
                                   Text(
-                                    pjumlah_sewa.toString() + " Hari",
+                                    pdurasi_sewa.toString() + " Hari",
                                   ),
                                 ],
                               ),
@@ -322,7 +323,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                rupiah(pharga,
+                                rupiah(pharga_sewa,
                                     separator: ',', trailing: " /hari"),
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
@@ -431,8 +432,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
-                                "-" +
-                                    rupiah(ptotalpointdeposit, separator: ','),
+                                "-" + rupiah(psaldopoint, separator: ','),
                               ),
                             ),
                           ],
@@ -462,9 +462,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[
-                                  Text("Nominal Asuransi : (" +
+                                  Text("Nominal Asuransi (" +
                                       ppersentase_asuransi.toString() +
-                                      ")")
+                                      "%) :")
                                 ],
                               ),
                             ),
@@ -518,7 +518,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(right: 60),
                               child: Text(
-                                rupiah(ptotal_harga),
+                                rupiah(hitungsemua),
                                 style: (TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                               ),
@@ -685,34 +685,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Icon(
-                        //   Icons.payment,
-                        //   color: Colors.red,
-                        //   size: 100,
-                        // ),
-                        // SizedBox(
-                        //   height: 20,
-                        // ),
-                        // Center(
-                        //   child: Text(
-                        //       "Anda akan melakukan pembayaran menggunakan $namaprovider $snomvoucher $idvouchers",
-                        //       textAlign: TextAlign.center,
-                        //       style: GoogleFonts.inter(
-                        //           fontSize: 16, fontWeight: FontWeight.bold)),
-                        // ),
-                        // SizedBox(
-                        //   height: 5,
-                        // ),
-                        // Padding(
-                        //     padding: EdgeInsets.only(left: 10, right: 10),
-                        //     child: Text(
-                        //         "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku $stotal_asuransi",
-                        //         textAlign: TextAlign.left,
-                        //         style: GoogleFonts.inter(
-                        //             height: 1.5, fontSize: 14))),
-                        // SizedBox(
-                        //   height: 5,
-                        // ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -737,8 +709,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         pidjenis_produk,
                                                     idvoucher: pidvoucher,
                                                     idasuransi: pidasuransi,
-                                                    harga: pharga,
-                                                    jumlah_sewa: pjumlah_sewa,
+                                                    harga_sewa: pharga_sewa,
+                                                    durasi_sewa: pdurasi_sewa,
                                                     valuesewaawal:
                                                         pvaluesewaawal,
                                                     valuesewaakhir:
@@ -758,21 +730,22 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         pminimum_transaksi,
                                                     persentase_voucher:
                                                         ppersentase_voucher,
-                                                    total_harga: ptotal_harga,
                                                     total_asuransi:
                                                         ptotal_asuransi,
                                                     totalharixharga:
                                                         ptotalharixharga,
                                                     totaldeposit: ptotaldeposit,
-                                                    totalpointdeposit:
-                                                        ptotalpointdeposit,
+                                                    saldopoint: psaldopoint,
                                                     email_asuransi:
                                                         pemail_asuransi,
-                                                    deposit: pdeposit,
+                                                    tambahsaldopoint:
+                                                        ptambahsaldopoint,
                                                     persentase_asuransi:
                                                         ppersentase_asuransi,
                                                     idpayment_gateway:
-                                                        idpayment)));
+                                                        idpayment,
+                                                    minimalsewahari:
+                                                        pminimalsewahari)));
                                   });
                                 })
                           ],

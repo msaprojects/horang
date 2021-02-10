@@ -4,19 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 
 import 'KonfirmasiOrder.Detail.dart';
 
-class Dummy1 extends StatefulWidget {
+class KonfirmasiPembayaran extends StatefulWidget {
   var flagasuransi,
       flagvoucher,
       idlokasi,
       idjenis_produk,
       idvoucher,
       idasuransi,
-      harga,
-      jumlah_sewa,
+      harga_sewa,
+      durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
       tanggal_berakhir_polis,
@@ -30,23 +31,24 @@ class Dummy1 extends StatefulWidget {
       total_asuransi,
       totalharixharga,
       totaldeposit,
-      totalpointdeposit,
+      saldopoint,
       email_asuransi,
-      deposit,
+      tambahsaldopoint,
       persentase_asuransi,
       idpayment_gateway,
       saldodepositkurangnominaldeposit,
-      no_ovo;
+      no_ovo,
+      minimalsewahari;
 
-  Dummy1(
+  KonfirmasiPembayaran(
       {this.flagasuransi,
       this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
       this.idvoucher,
       this.idasuransi,
-      this.harga,
-      this.jumlah_sewa,
+      this.harga_sewa,
+      this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
       this.tanggal_berakhir_polis,
@@ -60,29 +62,30 @@ class Dummy1 extends StatefulWidget {
       this.total_asuransi,
       this.totalharixharga,
       this.totaldeposit,
-      this.totalpointdeposit,
+      this.saldopoint,
       this.email_asuransi,
-      this.deposit,
+      this.tambahsaldopoint,
       this.persentase_asuransi,
       this.idpayment_gateway,
       this.saldodepositkurangnominaldeposit,
-      this.no_ovo});
+      this.no_ovo,
+      this.minimalsewahari});
   @override
-  _Dummy1State createState() => _Dummy1State();
+  _KonfirmasiPembayaran createState() => _KonfirmasiPembayaran();
 }
 
 ApiService _apiService = ApiService();
 bool isSuccess = false;
 
-class _Dummy1State extends State<Dummy1> {
+class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
   var dflagasuransi,
       dflagvoucher,
       didlokasi,
       didjenis_produk,
       didvoucher,
       didasuransi,
-      dharga,
-      djumlah_sewa,
+      dharga_sewa,
+      ddurasi_sewa,
       dvaluesewaawal,
       dvaluesewaakhir,
       dtanggal_berakhir_polis,
@@ -98,12 +101,31 @@ class _Dummy1State extends State<Dummy1> {
       dtotal_asuransi,
       dtotalharixharga,
       dtotaldeposit,
-      dtotalpointdeposit,
+      dsaldopoint,
       demail_asuransi,
-      ddeposit,
+      dtambahsaldopoint,
       dpersentase_asuransi,
       didpayment_gateway,
-      dno_ovo;
+      dno_ovo,
+      hitungsemua,
+      dminimalsewahari;
+
+  void hitungsemuaFunction() async {
+    setState(() {
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          dpersentase_asuransi.toString(),
+          dminimum_transaksi.toString(),
+          dflagvoucher,
+          dflagasuransi,
+          dnominal_voucher.toString(),
+          dharga_sewa.toString(),
+          ddurasi_sewa.toString(),
+          dnominal_barang.toString(),
+          dsaldopoint.toString(),
+          dminimalsewahari.toString(),
+          dpersentase_asuransi.toString());
+    });
+  }
 
   @override
   void initState() {
@@ -114,8 +136,8 @@ class _Dummy1State extends State<Dummy1> {
     didjenis_produk = widget.idjenis_produk;
     didvoucher = widget.idvoucher;
     didasuransi = widget.idasuransi;
-    dharga = widget.harga;
-    djumlah_sewa = widget.jumlah_sewa;
+    dharga_sewa = widget.harga_sewa;
+    ddurasi_sewa = widget.durasi_sewa;
     dvaluesewaawal = widget.valuesewaawal;
     dvaluesewaakhir = widget.valuesewaakhir;
     dtanggal_berakhir_polis = widget.tanggal_berakhir_polis;
@@ -129,21 +151,22 @@ class _Dummy1State extends State<Dummy1> {
     dtotal_asuransi = widget.total_asuransi;
     dtotalharixharga = widget.totalharixharga;
     dtotaldeposit = widget.totaldeposit;
-    dtotalpointdeposit = widget.totalpointdeposit;
+    dsaldopoint = widget.saldopoint;
     demail_asuransi = widget.email_asuransi;
-    ddeposit = widget.deposit;
+    dtambahsaldopoint = widget.tambahsaldopoint;
     dpersentase_asuransi = widget.persentase_asuransi;
     didpayment_gateway = widget.idpayment_gateway;
     dno_ovo = widget.no_ovo;
+    dminimalsewahari = widget.minimalsewahari;
     OrderProduk orderProduk = OrderProduk(
         idjenis_produk: didjenis_produk,
         idlokasi: didlokasi,
-        jumlah_sewa: int.parse(djumlah_sewa),
+        jumlah_sewa: int.parse(ddurasi_sewa),
         idasuransi: didasuransi,
         idvoucher: didvoucher,
         idpayment_gateway: didpayment_gateway,
         total_harga: double.parse(dtotal_harga),
-        harga: dharga,
+        harga: dharga_sewa,
         nominal_barang: double.parse(dnominal_barang),
         // deposit_tambah: double.parse(deposit_tambah),
         // deposit_pakai: double.parse(deposit_pakai),

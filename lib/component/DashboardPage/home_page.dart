@@ -11,6 +11,7 @@ import 'package:horang/screen/log_aktifitas.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:indonesia/indonesia.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                             var saldoadatidak =
                                                 snapshot.data[0]['saldo'];
                                             return Text(
-                                              saldoadatidak.toString(),
+                                              rupiah(saldoadatidak.toString()),
                                               style: GoogleFonts.inter(
                                                   color: Colors.white,
                                                   fontSize: 35,

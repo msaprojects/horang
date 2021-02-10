@@ -61,7 +61,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       totaldeposit,
       ceksaldo = 0,
       kondisisaldo,
-      hargaxhari,
+      hargaxminimalsewa,
       saldodepositkurangnominaldeposit,
       vkodevoucher,
       access_token,
@@ -146,7 +146,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   void initState() {
     cekToken();
-    // getSaldo();
+    getSaldo();
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
@@ -158,7 +158,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     keterangan = widget.jenisProduk.keterangan;
     idlokasi = widget.jenisProduk.idlokasi;
     produkimage = widget.jenisProduk.gambar;
-    print("ezzz" + idjenis_produk.toString());
     if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
@@ -513,8 +512,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                       List<VoucherModel>
                                                           vclist =
                                                           snapshot.data;
-                                                      print(
-                                                          "datavvvoucher : ${snapshot.data}");
                                                       return _buildListvoucher(
                                                           vclist);
                                                     }
@@ -613,15 +610,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 Container(
                   child: Column(
                     children: [
-                      Text("Total (+ deposit 3 hari)",
+                      Text("Total Pembayaran",
                           style: GoogleFonts.lato(
-                              fontSize: 14, fontWeight: FontWeight.bold)),
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 3,
                       ),
                       Text(rupiah(hitungsemua),
                           style: GoogleFonts.lato(
-                              fontSize: 18, fontWeight: FontWeight.bold))
+                              fontSize: 20, fontWeight: FontWeight.bold))
                     ],
                   ),
                 ),
@@ -646,16 +643,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           ? errorDialog(context,
                               "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
                           : setState(() {
-                              hargaxhari = harga_sewa * minimaldeposit;
-                              if (ceksaldo >= hargaxhari) {
+                              hargaxminimalsewa = harga_sewa * minimaldeposit;
+                              if (ceksaldo >= hargaxminimalsewa) {
                                 saldodepositkurangnominaldeposit = 0;
                                 kondisisaldo = "";
                                 orderConfirmation(context);
                               } else {
                                 saldodepositkurangnominaldeposit =
-                                    hargaxhari - ceksaldo;
+                                    hargaxminimalsewa - ceksaldo;
                                 kondisisaldo =
-                                    "Saldo anda sekarang ${ceksaldo}, minimum deposit yang ditentukan sebesar $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxhari)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                                    "Saldo anda sekarang ${ceksaldo}, minimum deposit yang ditentukan sebesar $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewa)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
                                 cekDeposit(context);
                               }
                             });
@@ -692,8 +689,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
           idjenis_produk: idjenis_produk,
           idvoucher: idvoucher,
           idasuransi: idasuransi,
-          harga: harga_sewa,
-          jumlah_sewa: vdurasi_sewa,
+          harga_sewa: harga_sewa,
+          durasi_sewa: vdurasi_sewa,
           valuesewaawal: valueawal,
           valuesewaakhir: valueakhir,
           tanggal_berakhir_polis: "DATE(NOW())",
@@ -705,66 +702,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
           nominal_voucher: vnominalvoucher,
           minimum_transaksi: vminimumtransaksi,
           persentase_voucher: vpersentasevoucher,
-          total_harga: hitungsemua.toString(),
           total_asuransi: total_asuransi.toString(),
           totalharixharga: totalhariharga.toString(),
-          totaldeposit: hargaxhari.toString(),
-          totalpointdeposit: ceksaldo.toString(),
+          totaldeposit: hargaxminimalsewa.toString(),
+          saldopoint: ceksaldo.toString(),
           email_asuransi: email_asuransi.toString(),
-          deposit: saldodepositkurangnominaldeposit.toString(),
+          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
           persentase_asuransi: nomasuransi.toString(),
+          minimalsewahari: minimaldeposit,
         );
       }));
-      print("hazazazza : " +
-          flagasuransi.toString() +
-          "_-_" +
-          flagvoucher.toString() +
-          "_-_" +
-          idlokasi.toString() +
-          "_-_" +
-          idjenis_produk.toString() +
-          "_-_" +
-          idvoucher.toString() +
-          "_-_" +
-          idasuransi.toString() +
-          "_-_" +
-          harga_sewa.toString() +
-          "_-_" +
-          vdurasi_sewa.toString() +
-          "_-_" +
-          valueawal.toString() +
-          "_-_" +
-          valueakhir.toString() +
-          "_-_" +
-          "DATE(NOW())" +
-          "Belum Diisi" +
-          kapasitas.toString() +
-          "_-_" +
-          alamat.toString() +
-          "_-_" +
-          _keteranganbarang.text.toString() +
-          "_-_" +
-          _nominalbarang.text.toString() +
-          "_-_" +
-          vnominalvoucher.toString() +
-          "_-_" +
-          vminimumtransaksi.toString() +
-          "_-_" +
-          vpersentasevoucher.toString() +
-          "_-_" +
-          hitungsemua.toString() +
-          "_-_" +
-          total_asuransi.toString() +
-          "_-_" +
-          totalhariharga.toString() +
-          "_-_" +
-          hargaxhari.toString() +
-          "_-_" +
-          ceksaldo.toString() +
-          "_-_" +
-          email_asuransi.toString() +
-          "_-_" +
-          saldodepositkurangnominaldeposit.toString());
     });
   }
 
@@ -777,7 +724,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Konfirmasi Pesanan " + rupiah(hasilperhitungan)),
+            title: Text("Konfirmasi Pesanan " + rupiah(hitungsemua)),
             content: Text(
                 "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
             actions: [
@@ -793,8 +740,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           idjenis_produk: idjenis_produk,
                           idvoucher: idvoucher,
                           idasuransi: idasuransi,
-                          harga: harga_sewa,
-                          jumlah_sewa: vdurasi_sewa,
+                          harga_sewa: harga_sewa,
+                          durasi_sewa: vdurasi_sewa,
                           valuesewaawal: valueawal,
                           valuesewaakhir: valueakhir,
                           tanggal_berakhir_polis: "DATE(NOW())",
@@ -806,13 +753,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           nominal_voucher: vnominalvoucher,
                           minimum_transaksi: vminimumtransaksi,
                           persentase_voucher: vpersentasevoucher,
-                          total_harga: hasilperhitungan.toString(),
                           total_asuransi: total_asuransi.toString(),
                           totalharixharga: totalhariharga.toString(),
-                          totaldeposit: totaldeposit.toString(),
-                          totalpointdeposit: ceksaldo.toString(),
+                          totaldeposit: hargaxminimalsewa.toString(),
+                          saldopoint: ceksaldo.toString(),
                           email_asuransi: email_asuransi.toString(),
-                          deposit: saldodepositkurangnominaldeposit.toString());
+                          tambahsaldopoint:
+                              saldodepositkurangnominaldeposit.toString(),
+                          persentase_asuransi: nomasuransi.toString(),
+                          minimalsewahari: minimaldeposit);
                     }));
                   },
                   child: Text("Ok")),

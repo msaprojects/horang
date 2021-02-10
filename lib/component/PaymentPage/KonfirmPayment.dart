@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,8 +16,8 @@ class KonfirmPayment extends StatefulWidget {
       idjenis_produk,
       idvoucher,
       idasuransi,
-      harga,
-      jumlah_sewa,
+      harga_sewa,
+      durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
       tanggal_berakhir_polis,
@@ -28,15 +29,15 @@ class KonfirmPayment extends StatefulWidget {
       nominal_voucher,
       minimum_transaksi,
       persentase_voucher,
-      total_harga,
       total_asuransi,
       totalharixharga,
       totaldeposit,
-      totalpointdeposit,
+      saldopoint,
       email_asuransi,
-      deposit,
+      tambahsaldopoint,
       persentase_asuransi,
-      idpayment_gateway;
+      idpayment_gateway,
+      minimalsewahari;
 
   KonfirmPayment(
       {this.flagasuransi,
@@ -45,8 +46,8 @@ class KonfirmPayment extends StatefulWidget {
       this.idjenis_produk,
       this.idvoucher,
       this.idasuransi,
-      this.harga,
-      this.jumlah_sewa,
+      this.harga_sewa,
+      this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
       this.tanggal_berakhir_polis,
@@ -58,15 +59,15 @@ class KonfirmPayment extends StatefulWidget {
       this.nominal_voucher,
       this.minimum_transaksi,
       this.persentase_voucher,
-      this.total_harga,
       this.total_asuransi,
       this.totalharixharga,
       this.totaldeposit,
-      this.totalpointdeposit,
+      this.saldopoint,
       this.email_asuransi,
-      this.deposit,
+      this.tambahsaldopoint,
       this.persentase_asuransi,
-      this.idpayment_gateway});
+      this.idpayment_gateway,
+      this.minimalsewahari});
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
@@ -82,8 +83,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kidjenis_produk,
       kidvoucher,
       kidasuransi,
-      kharga,
-      kjumlah_sewa,
+      kharga_sewa,
+      kdurasi_sewa,
       kvaluesewaawal,
       kvaluesewaakhir,
       ktanggal_berakhir_polis,
@@ -95,15 +96,16 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       knominal_voucher,
       kminimum_transaksi,
       kpersentase_voucher,
-      ktotal_harga,
       ktotal_asuransi,
       ktotalharixharga,
       ktotaldeposit,
-      ktotalpointdeposit,
+      ksaldopoint,
       kemail_asuransi,
-      kdeposit,
+      ktambahsaldopoint,
       kpersentase_asuransi,
-      kidpayment_gateway;
+      kidpayment_gateway,
+      hitungsemua,
+      kminimalsewahari;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -153,17 +155,33 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     }
   }
 
+  void hitungsemuaFunction() async {
+    setState(() {
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          kpersentase_voucher.toString(),
+          kminimum_transaksi.toString(),
+          kflagvoucher,
+          kflagasuransi,
+          knominal_voucher.toString(),
+          kharga_sewa.toString(),
+          kdurasi_sewa.toString(),
+          knominal_barang.toString(),
+          ksaldopoint.toString(),
+          kminimalsewahari.toString(),
+          kpersentase_asuransi.toString());
+    });
+  }
+
   @override
   void initState() {
-    cekToken();
     kflagasuransi = widget.flagasuransi;
     kflagvoucher = widget.flagvoucher;
     kidlokasi = widget.idlokasi;
     kidjenis_produk = widget.idjenis_produk;
     kidvoucher = widget.idvoucher;
     kidasuransi = widget.idasuransi;
-    kharga = widget.harga;
-    kjumlah_sewa = widget.jumlah_sewa;
+    kharga_sewa = widget.harga_sewa;
+    kdurasi_sewa = widget.durasi_sewa;
     kvaluesewaawal = widget.valuesewaawal;
     kvaluesewaakhir = widget.valuesewaakhir;
     ktanggal_berakhir_polis = widget.tanggal_berakhir_polis;
@@ -175,15 +193,17 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     knominal_voucher = widget.nominal_voucher;
     kminimum_transaksi = widget.minimum_transaksi;
     kpersentase_voucher = widget.persentase_voucher;
-    ktotal_harga = widget.total_harga;
     ktotal_asuransi = widget.total_asuransi;
     ktotalharixharga = widget.totalharixharga;
     ktotaldeposit = widget.totaldeposit;
-    ktotalpointdeposit = widget.totalpointdeposit;
+    ksaldopoint = widget.saldopoint;
     kemail_asuransi = widget.email_asuransi;
-    kdeposit = widget.deposit;
+    ktambahsaldopoint = widget.tambahsaldopoint;
     kpersentase_asuransi = widget.persentase_asuransi;
     kidpayment_gateway = widget.idpayment_gateway;
+    kminimalsewahari = widget.minimalsewahari;
+    cekToken();
+    hitungsemuaFunction();
     super.initState();
   }
 
@@ -303,15 +323,15 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => Dummy1(
+                builder: (BuildContext context) => KonfirmasiPembayaran(
                     flagasuransi: kflagasuransi,
                     flagvoucher: kflagvoucher,
                     idlokasi: kidlokasi,
                     idjenis_produk: kidjenis_produk,
                     idvoucher: kidvoucher,
                     idasuransi: kidasuransi,
-                    harga: kharga,
-                    jumlah_sewa: kjumlah_sewa,
+                    harga_sewa: kharga_sewa,
+                    durasi_sewa: kdurasi_sewa,
                     valuesewaawal: kvaluesewaawal,
                     valuesewaakhir: kvaluesewaakhir,
                     tanggal_berakhir_polis: ktanggal_berakhir_polis,
@@ -321,16 +341,16 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     nominal_voucher: knominal_voucher,
                     minimum_transaksi: kminimum_transaksi,
                     persentase_voucher: kpersentase_voucher,
-                    total_harga: ktotal_harga,
                     total_asuransi: ktotal_asuransi,
                     totalharixharga: ktotalharixharga,
                     totaldeposit: ktotaldeposit,
-                    totalpointdeposit: ktotalpointdeposit,
+                    saldopoint: ksaldopoint,
                     email_asuransi: kemail_asuransi,
-                    deposit: kdeposit,
+                    tambahsaldopoint: ksaldopoint,
                     persentase_asuransi: kpersentase_asuransi,
                     idpayment_gateway: kidpayment_gateway,
-                    no_ovo: _noOvo.text.toString())));
+                    no_ovo: _noOvo.text.toString(),
+                    minimalsewahari: kminimalsewahari)));
       });
     }
   }

@@ -23,6 +23,8 @@ class ReusableClasses {
   ) {
     var hasilperhitungan;
     num nominalV = 0;
+    num ceksaldoD = 0;
+
     if (boolasuransi == false) asuransi = "0";
     if (boolvoucher == false) {
       nominalV = 0;
@@ -35,17 +37,34 @@ class ReusableClasses {
             double.parse(nominalVoucher)) {
           nominalV = double.parse(nominalVoucher);
         } else {
-          nominalV =
-              double.parse(persentasevoucher) * double.parse(harga) * double.parse(durasi);
+          nominalV = double.parse(persentasevoucher) *
+              double.parse(harga) *
+              double.parse(durasi);
         }
       } else {
         nominalV = 0;
       }
     }
-    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-            ((double.parse(asuransi) / 100) * double.parse(nominalbaranginput)) +
+
+    if (((double.parse(harga) * double.parse(durasi)) +
+            ((double.parse(asuransi) / 100) *
+                double.parse(nominalbaranginput)) +
             int.parse(minimaldeposit) * double.parse(harga) -
-            double.parse(ceksaldopoint) -
+            nominalV) >=
+        double.parse(ceksaldopoint)) {
+      ceksaldoD = double.parse(ceksaldopoint);
+    } else {
+      ceksaldoD = ((double.parse(harga) * double.parse(durasi)) +
+          ((double.parse(asuransi) / 100) * double.parse(nominalbaranginput)) +
+          int.parse(minimaldeposit) * double.parse(harga) -
+          nominalV);
+    }
+
+    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
+            ((double.parse(asuransi) / 100) *
+                double.parse(nominalbaranginput)) +
+            int.parse(minimaldeposit) * double.parse(harga) -
+            ceksaldoD -
             nominalV)
         .toStringAsFixed(2);
 
@@ -132,7 +151,8 @@ class ReusableClasses {
   getSaldo(String access_token) async {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
-    return jsonDecode(response.body);
+    var saldo = json.decode(response.body)[0]['saldo'];
+    return saldo;
     // return saldo;
   }
 }
