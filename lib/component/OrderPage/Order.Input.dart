@@ -652,7 +652,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 saldodepositkurangnominaldeposit =
                                     hargaxminimalsewa - ceksaldo;
                                 kondisisaldo =
-                                    "Saldo anda sekarang ${ceksaldo}, minimum deposit yang ditentukan sebesar $minimaldeposit hari dari nominal harga sewa perhari sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewa)}, apakah anda setuju menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                                    "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewa)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
                                 cekDeposit(context);
                               }
                             });
@@ -676,7 +676,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    warningDialog(context, "Hai, maaf $kondisisaldo ",
+    warningDialog(context, "Hai, Maaf saldo poin anda tidak mencukupi, $kondisisaldo ",title: "Saldo Poin Tidak Mencukupi",
         showNeutralButton: false,
         negativeText: "Batal",
         negativeAction: () {},
@@ -716,59 +716,45 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   orderConfirmation(BuildContext context) {
-    Widget cancelButton = FlatButton(
-      child: Text("Cek Dulu"),
-      onPressed: () => Navigator.pop(context),
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Konfirmasi Pesanan " + rupiah(hitungsemua)),
-            content: Text(
-                "Harap Cek kembali Pesanan anda, jika sudah sesuai klik OK."),
-            actions: [
-              FlatButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (context) {
-                      return FormInputPembayaran(
-                          flagasuransi: flagasuransi,
-                          flagvoucher: flagvoucher,
-                          idlokasi: idlokasi,
-                          idjenis_produk: idjenis_produk,
-                          idvoucher: idvoucher,
-                          idasuransi: idasuransi,
-                          harga_sewa: harga_sewa,
-                          durasi_sewa: vdurasi_sewa,
-                          valuesewaawal: valueawal,
-                          valuesewaakhir: valueakhir,
-                          tanggal_berakhir_polis: "DATE(NOW())",
-                          nomor_polis: "Belum Diisi",
-                          kapasitas: kapasitas,
-                          alamat: alamat,
-                          keterangan_barang: _keteranganbarang.text.toString(),
-                          nominal_barang: _nominalbarang.text.toString(),
-                          nominal_voucher: vnominalvoucher,
-                          minimum_transaksi: vminimumtransaksi,
-                          persentase_voucher: vpersentasevoucher,
-                          total_asuransi: total_asuransi.toString(),
-                          totalharixharga: totalhariharga.toString(),
-                          totaldeposit: hargaxminimalsewa.toString(),
-                          saldopoint: ceksaldo.toString(),
-                          email_asuransi: email_asuransi.toString(),
-                          tambahsaldopoint:
-                              saldodepositkurangnominaldeposit.toString(),
-                          persentase_asuransi: nomasuransi.toString(),
-                          minimalsewahari: minimaldeposit);
-                    }));
-                  },
-                  child: Text("Ok")),
-              cancelButton
-            ],
-          );
-        });
+    successDialog(context,
+        "Harap periksa kembali pesanan anda, pastikan anda data yang anda masukkan sesuai",
+        title: "Konfirmasi Pesanan",
+        showNeutralButton: false,
+        negativeText: "Periksa Kembali",
+        negativeAction: () {},
+        positiveText: "Saya Setuju", positiveAction: () {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return FormInputPembayaran(
+            flagasuransi: flagasuransi,
+            flagvoucher: flagvoucher,
+            idlokasi: idlokasi,
+            idjenis_produk: idjenis_produk,
+            idvoucher: idvoucher,
+            idasuransi: idasuransi,
+            harga_sewa: harga_sewa,
+            durasi_sewa: vdurasi_sewa,
+            valuesewaawal: valueawal,
+            valuesewaakhir: valueakhir,
+            tanggal_berakhir_polis: "DATE(NOW())",
+            nomor_polis: "Belum Diisi",
+            kapasitas: kapasitas,
+            alamat: alamat,
+            keterangan_barang: _keteranganbarang.text.toString(),
+            nominal_barang: _nominalbarang.text.toString(),
+            nominal_voucher: vnominalvoucher,
+            minimum_transaksi: vminimumtransaksi,
+            persentase_voucher: vpersentasevoucher,
+            total_asuransi: total_asuransi.toString(),
+            totalharixharga: totalhariharga.toString(),
+            totaldeposit: hargaxminimalsewa.toString(),
+            saldopoint: ceksaldo.toString(),
+            email_asuransi: email_asuransi.toString(),
+            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+            persentase_asuransi: nomasuransi.toString(),
+            minimalsewahari: minimaldeposit);
+      }));
+    });
   }
 
   Widget _buildListvoucher(List<VoucherModel> dataIndex) {

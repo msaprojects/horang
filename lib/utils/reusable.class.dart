@@ -151,7 +151,7 @@ class ReusableClasses {
   getSaldo(String access_token) async {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
-    var saldo = json.decode(response.body)[0]['saldo'];
+    var saldo = json.decode(response.body);
     return saldo;
     // return saldo;
   }
