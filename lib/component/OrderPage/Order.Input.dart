@@ -62,13 +62,18 @@ class _FormDetailOrder extends State<FormInputOrder> {
       kondisisaldo,
       hargaxminimalsewadeposit,
       saldodepositkurangnominaldeposit,
-      vkodevoucher,
+      vkodevoucher = "",
       access_token,
       refresh_token,
       hitungsemua,
+      gambarvoucher,
       vsatuan_sewa = "",
       namasetting = "",
-      nilaisetting = "";
+      nilaisetting = "",
+      namasetting1 = "",
+      nilaisetting1 = "",
+      namasetting2 = "",
+      nilaisetting2 = "";
   num vdurasi_sewa,
       idjenis_produk,
       idcustomer,
@@ -428,22 +433,39 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   SizedBox(
                     height: 3,
                   ),
-                  new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 38),
-                              child: Text(nilaisetting.toString()),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 38),
-                              child: Text(namasetting.toString()),
-                            ),
-                          ],
-                        ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(nilaisetting.toString()),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(namasetting.toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(nilaisetting1.toString()),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(namasetting1.toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(nilaisetting2.toString()),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 38),
+                        child: Text(namasetting2.toString()),
                       ),
                     ],
                   ),
@@ -840,6 +862,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   onTap: () {
                     setState(() {
                       if (tekanvoucher) {
+                        gambarvoucher = voucherlist.gambar;
                         idvoucher = voucherlist.idvoucher;
                         vminimumtransaksi = voucherlist.min_nominal;
                         vkodevoucher = voucherlist.kode_voucher.toString();
@@ -856,19 +879,45 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       padding: EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Kode Voucher : " +
-                                  voucherlist.kode_voucher.toString()),
-                              Text("Minimum Transaksi : " +
-                                  rupiah(voucherlist.min_nominal.toString())),
-                              Text("Maksimal Potongan : " +
-                                  rupiah(voucherlist.nominal_persentase.toString())),
-                              Text("Persentase Potongan : " +
-                                  voucherlist.persentase.toString() +
-                                  " %"),
-                            ],
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(voucherlist.gambar))),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10, top: 10),
+                            child: SizedBox(
+                              width: 170,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Kode Voucher : " +
+                                      voucherlist.kode_voucher.toString()),
+                                  Flexible(
+                                    child: Text(
+                                      "Minimum Transaksi : " +
+                                          voucherlist.min_nominal.toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.visible,
+                                      softWrap: false,
+                                    ),
+                                  ),
+                                  Text("Nominal Potongan : " +
+                                      voucherlist.persentase.toString()),
+                                  Flexible(
+                                    child: Text("Persentase Potongan : " +
+                                        voucherlist.persentase.toString() +
+                                        " %",
+                                        softWrap: false,
+                                        overflow: TextOverflow.visible,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                           SizedBox(
                             width: 20,
@@ -937,6 +986,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
     print("SETTING : " + response.body);
     namasetting = json.decode(response.body)[0]['kunci'];
     nilaisetting = json.decode(response.body)[0]['nilai'];
+    namasetting1 = json.decode(response.body)[1]['kunci'];
+    nilaisetting1 = json.decode(response.body)[1]['nilai'];
+    namasetting2 = json.decode(response.body)[2]['kunci'];
+    nilaisetting2 = json.decode(response.body)[2]['nilai'];
     print("LOad Setting : " +
         namasetting.toString() +
         " - " +

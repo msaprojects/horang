@@ -755,7 +755,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         ptotal_asuransi,
                                                     totalharixharga:
                                                         ptotalharixharga,
-                                                    totaldeposit: ptotaldeposit,
+                                                    totaldeposit: totaldeposit,
                                                     saldopoint: psaldopoint,
                                                     email_asuransi:
                                                         pemail_asuransi,
