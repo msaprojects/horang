@@ -445,14 +445,14 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
                                 children: <Widget>[
-                                  Text("Point Deposit Anda : ")
+                                  Text("Poin Deposit Terpakai : ")
                                 ],
                               ),
                             ),
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
+                              child: Text("-"+
                                 rupiah(psaldopoint, separator: ','),
                               ),
                             ),
@@ -751,11 +751,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         pminimum_transaksi,
                                                     persentase_voucher:
                                                         ppersentase_voucher,
-                                                    total_asuransi:
-                                                        ptotal_asuransi,
                                                     totalharixharga:
                                                         ptotalharixharga,
-                                                    totaldeposit: totaldeposit,
                                                     saldopoint: psaldopoint,
                                                     email_asuransi:
                                                         pemail_asuransi,

@@ -10,7 +10,8 @@ import 'package:indonesia/indonesia.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
 class KonfirmasiPembayaran extends StatefulWidget {
-  var flagasuransi,
+  var token,
+      flagasuransi,
       flagvoucher,
       idlokasi,
       idjenis_produk,
@@ -28,9 +29,7 @@ class KonfirmasiPembayaran extends StatefulWidget {
       minimum_transaksi,
       persentase_voucher,
       total_harga,
-      total_asuransi,
       totalharixharga,
-      totaldeposit,
       saldopoint,
       email_asuransi,
       tambahsaldopoint,
@@ -41,7 +40,8 @@ class KonfirmasiPembayaran extends StatefulWidget {
       minimalsewahari;
 
   KonfirmasiPembayaran(
-      {this.flagasuransi,
+      {this.token,
+      this.flagasuransi,
       this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
@@ -59,9 +59,7 @@ class KonfirmasiPembayaran extends StatefulWidget {
       this.minimum_transaksi,
       this.persentase_voucher,
       this.total_harga,
-      this.total_asuransi,
       this.totalharixharga,
-      this.totaldeposit,
       this.saldopoint,
       this.email_asuransi,
       this.tambahsaldopoint,
@@ -78,7 +76,8 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
-  var dflagasuransi,
+  var dtoken,
+      dflagasuransi,
       dflagvoucher,
       didlokasi,
       didjenis_produk,
@@ -98,9 +97,9 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       dminimum_transaksi,
       dpersentase_voucher,
       dtotal_harga,
-      dtotal_asuransi,
+      total_asuransi,
       dtotalharixharga,
-      dtotaldeposit,
+      totaldeposit,
       dsaldopoint,
       demail_asuransi,
       dtambahsaldopoint,
@@ -129,7 +128,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
 
   @override
   void initState() {
-    // token = widget.token;
+    dtoken = widget.token;
     dflagasuransi = widget.flagasuransi;
     dflagvoucher = widget.flagvoucher;
     didlokasi = widget.idlokasi;
@@ -148,9 +147,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     dminimum_transaksi = widget.minimum_transaksi;
     dpersentase_voucher = widget.persentase_voucher;
     dtotal_harga = widget.total_harga;
-    dtotal_asuransi = widget.total_asuransi;
     dtotalharixharga = widget.totalharixharga;
-    dtotaldeposit = widget.totaldeposit;
     dsaldopoint = widget.saldopoint;
     demail_asuransi = widget.email_asuransi;
     dtambahsaldopoint = widget.tambahsaldopoint;
@@ -158,28 +155,19 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     didpayment_gateway = widget.idpayment_gateway;
     dno_ovo = widget.no_ovo;
     dminimalsewahari = widget.minimalsewahari;
+    total_asuransi = (double.parse(dpersentase_asuransi) * dharga_sewa);
+    totaldeposit = (dminimalsewahari * dharga_sewa);
     OrderProduk orderProduk = OrderProduk(
-        idjenis_produk: didjenis_produk,
-        idlokasi: didlokasi,
-        jumlah_sewa: int.parse(ddurasi_sewa),
-        idasuransi: didasuransi,
-        idvoucher: didvoucher,
-        idpayment_gateway: didpayment_gateway,
-        total_harga: double.parse(dtotal_harga),
-        harga: dharga_sewa,
-        nominal_barang: double.parse(dnominal_barang),
-        // deposit_tambah: double.parse(deposit_tambah),
-        // deposit_pakai: double.parse(deposit_pakai),
-        // deposit_minimum: double.parse(deposit_minimum),
-        // token: token,
-        valuesewaawal: dvaluesewaawal,
-        valuesewaakhir: dvaluesewaakhir,
-        keterangan_barang: dketerangan_barang,
-        // no_ovo: dno_ovo,
-        email_asuransi: demail_asuransi,
-        flagasuransi: dflagasuransi,
-        flagvoucher: dflagvoucher);
-    print("SEND TO ORDER : " + orderProduk.toString());
+      token: dtoken,
+      flagasuransi: dflagasuransi,
+      flagvoucher: dflagvoucher,
+      idlokasi: didlokasi,
+      idjenis_produk: didjenis_produk,
+      idvoucher: didvoucher,
+      idasuransi: didasuransi,
+      idpayment_gateway: didpayment_gateway,
+      harga_sewa: dharga_sewa,
+    );
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
         Navigator.pushReplacement(
@@ -188,7 +176,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                 builder: (BuildContext context) => KonfirmasiOrderDetail(
                     idorder: idorder,
                     nomVoucher: dnominal_voucher,
-                    asuransi: dtotal_asuransi)));
+                    asuransi: total_asuransi)));
       } else {
         if (idorder == -1) {
           errorDialog(context, "Kontainer tidak tersedia",
@@ -284,11 +272,6 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                             ],
                           ),
                         ),
-                        // Text("Refresh",
-                        //     style: GoogleFonts.inter(
-                        //         fontSize: 14,
-                        //         fontWeight: FontWeight.bold,
-                        //         color: Colors.red)),
                       ],
                     ),
                   ],

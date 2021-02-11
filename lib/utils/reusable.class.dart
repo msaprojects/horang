@@ -31,13 +31,13 @@ class ReusableClasses {
     } else {
       if ((double.parse(durasi) * double.parse(harga)) >=
           double.parse(minimumtransaksi)) {
-        if ((double.parse(persentasevoucher) *
+        if (((double.parse(persentasevoucher)/100) *
                 double.parse(harga) *
                 double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
           nominalV = double.parse(nominalVoucher);
         } else {
-          nominalV = double.parse(persentasevoucher) *
+          nominalV = (double.parse(persentasevoucher) /100) *
               double.parse(harga) *
               double.parse(durasi);
         }

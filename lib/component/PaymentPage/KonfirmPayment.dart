@@ -29,9 +29,7 @@ class KonfirmPayment extends StatefulWidget {
       nominal_voucher,
       minimum_transaksi,
       persentase_voucher,
-      total_asuransi,
       totalharixharga,
-      totaldeposit,
       saldopoint,
       email_asuransi,
       tambahsaldopoint,
@@ -59,9 +57,7 @@ class KonfirmPayment extends StatefulWidget {
       this.nominal_voucher,
       this.minimum_transaksi,
       this.persentase_voucher,
-      this.total_asuransi,
       this.totalharixharga,
-      this.totaldeposit,
       this.saldopoint,
       this.email_asuransi,
       this.tambahsaldopoint,
@@ -96,9 +92,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       knominal_voucher,
       kminimum_transaksi,
       kpersentase_voucher,
-      ktotal_asuransi,
+      total_asuransi,
       ktotalharixharga,
-      ktotaldeposit,
+      totaldeposit,
       ksaldopoint,
       kemail_asuransi,
       ktambahsaldopoint,
@@ -193,15 +189,15 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     knominal_voucher = widget.nominal_voucher;
     kminimum_transaksi = widget.minimum_transaksi;
     kpersentase_voucher = widget.persentase_voucher;
-    ktotal_asuransi = widget.total_asuransi;
     ktotalharixharga = widget.totalharixharga;
-    ktotaldeposit = widget.totaldeposit;
     ksaldopoint = widget.saldopoint;
     kemail_asuransi = widget.email_asuransi;
     ktambahsaldopoint = widget.tambahsaldopoint;
     kpersentase_asuransi = widget.persentase_asuransi;
     kidpayment_gateway = widget.idpayment_gateway;
     kminimalsewahari = widget.minimalsewahari;
+    total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
+    totaldeposit = (kminimalsewahari * kharga_sewa);
     cekToken();
     hitungsemuaFunction();
     super.initState();
@@ -324,6 +320,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiPembayaran(
+                    token: access_token,
                     flagasuransi: kflagasuransi,
                     flagvoucher: kflagvoucher,
                     idlokasi: kidlokasi,
@@ -341,9 +338,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     nominal_voucher: knominal_voucher,
                     minimum_transaksi: kminimum_transaksi,
                     persentase_voucher: kpersentase_voucher,
-                    total_asuransi: ktotal_asuransi,
                     totalharixharga: ktotalharixharga,
-                    totaldeposit: ktotaldeposit,
                     saldopoint: ksaldopoint,
                     email_asuransi: kemail_asuransi,
                     tambahsaldopoint: ksaldopoint,

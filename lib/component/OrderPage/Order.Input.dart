@@ -86,7 +86,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       minimaldeposit = 0,
       nomasuransi = 0,
       idvoucher = 0,
-      totaldeposit = 0;
+      totaldeposit = 0, potonganvoucher =0;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
@@ -139,28 +139,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
           minimaldeposit.toString(),
           nomasuransi.toString());
     });
-    print("HITUNG ALL : " +
-        vpersentasevoucher.toString() +
-        " ~ " +
-        vminimumtransaksi.toString() +
-        " ~ " +
-        flagvoucher.toString() +
-        " ~ " +
-        flagasuransi.toString() +
-        " ~ " +
-        vmaksimalpotongan.toString() +
-        " ~ " +
-        harga_sewa.toString() +
-        " ~ " +
-        vdurasi_sewa.toString() +
-        " ~ " +
-        _nominalbarang.text.toString() +
-        " ~ " +
-        totaldeposit.toString() +
-        " ~ " +
-        minimaldeposit.toString() +
-        " ~ " +
-        nomasuransi.toString()+" ~ "+hitungsemua.toString());
   }
 
   cleartextinputnominal() {
@@ -208,24 +186,19 @@ class _FormDetailOrder extends State<FormInputOrder> {
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
     totalhariharga = vdurasi_sewa * harga_sewa;
-    print("Total hari : " + totalhariharga.toString());
-    _nominalbarang.addListener(() {
-      setState(() {
-        hitungsemuaFunction();
-        total_asuransi =
-            (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
-      });
-    });
     hargaxminimalsewadeposit = harga_sewa * minimaldeposit;
     if (ceksaldo >= hargaxminimalsewadeposit) {
       totaldeposit = hargaxminimalsewadeposit;
     } else {
       totaldeposit = ceksaldo;
     }
-    print("CEKING SALDO LEBIH : " +
-        hargaxminimalsewadeposit.toString() +
-        " - " +
-        totaldeposit.toString());
+    _nominalbarang.addListener(() {
+      setState(() {
+        total_asuransi =
+            (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
+        hitungsemuaFunction();
+      });
+    });
     hitungsemuaFunction();
     super.initState();
   }
@@ -574,7 +547,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       enabled: false,
-                                      hintText: "$getVoucher - $vkodevoucher",
+                                      hintText: "$getVoucher - "+potonganvoucher.toString(),
                                       border: const OutlineInputBorder(),
                                     ),
                                   ),
@@ -605,8 +578,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     WhitelistingTextInputFormatter.digitsOnly,
                                   ],
                                   onChanged: (value) {
-                                    print("nominal barangnya adalah : " +
-                                        _nominalbarang.toString());
                                     bool isFieldValid = value.trim().isNotEmpty;
                                     if (isFieldValid != fieldnominalbarang) {
                                       setState(() =>
@@ -694,28 +665,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           ? errorDialog(context,
                               "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
                           : setState(() {
-                              print("HITUNG ALL : " +
-                                  vpersentasevoucher.toString() +
-                                  " ~ " +
-                                  vminimumtransaksi.toString() +
-                                  " ~ " +
-                                  flagvoucher.toString() +
-                                  " ~ " +
-                                  flagasuransi.toString() +
-                                  " ~ " +
-                                  vmaksimalpotongan.toString() +
-                                  " ~ " +
-                                  harga_sewa.toString() +
-                                  " ~ " +
-                                  vdurasi_sewa.toString() +
-                                  " ~ " +
-                                  _nominalbarang.text.toString() +
-                                  " ~ " +
-                                  totaldeposit.toString() +
-                                  " ~ " +
-                                  minimaldeposit.toString() +
-                                  " ~ " +
-                                  nomasuransi.toString());
                               if (ceksaldo >= hargaxminimalsewadeposit) {
                                 saldodepositkurangnominaldeposit = 0;
                                 totaldeposit = hargaxminimalsewadeposit;
@@ -775,7 +724,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           alamat: alamat,
           keterangan_barang: _keteranganbarang.text.toString(),
           nominal_barang: _nominalbarang.text.toString(),
-          nominal_voucher: vmaksimalpotongan,
+          nominal_voucher: potonganvoucher,
           minimum_transaksi: vminimumtransaksi,
           persentase_voucher: vpersentasevoucher,
           totalharixharga: totalhariharga.toString(),
@@ -816,7 +765,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             alamat: alamat,
             keterangan_barang: _keteranganbarang.text.toString(),
             nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: vmaksimalpotongan,
+            nominal_voucher: potonganvoucher,
             minimum_transaksi: vminimumtransaksi,
             persentase_voucher: vpersentasevoucher,
             totalharixharga: totalhariharga.toString(),
@@ -868,6 +817,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
                         vmaksimalpotongan = voucherlist.nominal_persentase;
+                        potonganvoucher = ((double.parse(vpersentasevoucher.toString())/100) * double.parse(totalhariharga.toString()));
                         flagvoucher = true;
                         Navigator.pop(context);
                         hitungsemuaFunction();
@@ -899,14 +849,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   Flexible(
                                     child: Text(
                                       "Minimum Transaksi : " +
-                                          voucherlist.min_nominal.toString(),
+                                          rupiah(voucherlist.min_nominal.toString()),
                                       maxLines: 2,
                                       overflow: TextOverflow.visible,
                                       softWrap: false,
                                     ),
                                   ),
                                   Text("Nominal Potongan : " +
-                                      voucherlist.persentase.toString()),
+                                      rupiah(voucherlist.nominal_persentase.toString())),
                                   Flexible(
                                     child: Text("Persentase Potongan : " +
                                         voucherlist.persentase.toString() +
@@ -975,7 +925,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
     ceksaldo = json.decode(response.body)[0]['saldo'];
-    print("CEK SALDO : " + ceksaldo.toString());
     return ceksaldo;
   }
 
@@ -983,17 +932,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
     final response = await http.post(ApiService().urlsettingbylokasi,
         headers: {"content-type": "application/json"},
         body: json.encode({"token": token, "idlokasi": idlokasi}));
-    print("SETTING : " + response.body);
     namasetting = json.decode(response.body)[0]['kunci'];
     nilaisetting = json.decode(response.body)[0]['nilai'];
     namasetting1 = json.decode(response.body)[1]['kunci'];
     nilaisetting1 = json.decode(response.body)[1]['nilai'];
     namasetting2 = json.decode(response.body)[2]['kunci'];
     nilaisetting2 = json.decode(response.body)[2]['nilai'];
-    print("LOad Setting : " +
-        namasetting.toString() +
-        " - " +
-        nilaisetting.toString());
   }
 }
 
