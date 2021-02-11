@@ -139,7 +139,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return VoucherDetail(
-                          nominal: voucher.minNominal,
+                          nominal: voucher.min_nominal,
                           gambar: voucher.gambar,
                           keterangan: voucher.keterangan,
                           kode_voucher: voucher.kode_voucher,

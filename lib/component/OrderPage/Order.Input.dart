@@ -58,10 +58,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       tglAkhir,
       total_asuransi,
       totalhariharga,
-      totaldeposit,
       ceksaldo = 0,
       kondisisaldo,
-      hargaxminimalsewa,
+      hargaxminimalsewadeposit,
       saldodepositkurangnominaldeposit,
       vkodevoucher,
       access_token,
@@ -75,13 +74,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
       idcustomer,
       idasuransi,
       idlokasi,
-      vnominalvoucher = 0,
       vminimumtransaksi = 0,
       harga_sewa,
       vpersentasevoucher = 0,
+      vmaksimalpotongan = 0,
       minimaldeposit = 0,
       nomasuransi = 0,
-      idvoucher = 0;
+      idvoucher = 0,
+      totaldeposit = 0;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
@@ -126,14 +126,36 @@ class _FormDetailOrder extends State<FormInputOrder> {
           vminimumtransaksi.toString(),
           flagasuransi,
           flagvoucher,
-          vnominalvoucher.toString(),
+          vmaksimalpotongan.toString(),
           harga_sewa.toString(),
           vdurasi_sewa.toString(),
           _nominalbarang.text.toString(),
-          ceksaldo.toString(),
+          totaldeposit.toString(),
           minimaldeposit.toString(),
           nomasuransi.toString());
     });
+    print("HITUNG ALL : " +
+        vpersentasevoucher.toString() +
+        " ~ " +
+        vminimumtransaksi.toString() +
+        " ~ " +
+        flagvoucher.toString() +
+        " ~ " +
+        flagasuransi.toString() +
+        " ~ " +
+        vmaksimalpotongan.toString() +
+        " ~ " +
+        harga_sewa.toString() +
+        " ~ " +
+        vdurasi_sewa.toString() +
+        " ~ " +
+        _nominalbarang.text.toString() +
+        " ~ " +
+        totaldeposit.toString() +
+        " ~ " +
+        minimaldeposit.toString() +
+        " ~ " +
+        nomasuransi.toString()+" ~ "+hitungsemua.toString());
   }
 
   cleartextinputnominal() {
@@ -150,7 +172,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
-
     idjenis_produk = widget.jenisProduk.idjenis_produk;
     kapasitas = widget.jenisProduk.kapasitas.toString();
     harga_sewa = widget.jenisProduk.harga;
@@ -183,7 +204,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     }
     totalhariharga = vdurasi_sewa * harga_sewa;
     print("Total hari : " + totalhariharga.toString());
-
     _nominalbarang.addListener(() {
       setState(() {
         hitungsemuaFunction();
@@ -191,8 +211,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
             (nomasuransi / 100) * double.parse(_nominalbarang.text.toString());
       });
     });
+    hargaxminimalsewadeposit = harga_sewa * minimaldeposit;
+    if (ceksaldo >= hargaxminimalsewadeposit) {
+      totaldeposit = hargaxminimalsewadeposit;
+    } else {
+      totaldeposit = ceksaldo;
+    }
+    print("CEKING SALDO LEBIH : " +
+        hargaxminimalsewadeposit.toString() +
+        " - " +
+        totaldeposit.toString());
     hitungsemuaFunction();
-
     super.initState();
   }
 //END INITSTATE
@@ -643,16 +672,39 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           ? errorDialog(context,
                               "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
                           : setState(() {
-                              hargaxminimalsewa = harga_sewa * minimaldeposit;
-                              if (ceksaldo >= hargaxminimalsewa) {
+                              print("HITUNG ALL : " +
+                                  vpersentasevoucher.toString() +
+                                  " ~ " +
+                                  vminimumtransaksi.toString() +
+                                  " ~ " +
+                                  flagvoucher.toString() +
+                                  " ~ " +
+                                  flagasuransi.toString() +
+                                  " ~ " +
+                                  vmaksimalpotongan.toString() +
+                                  " ~ " +
+                                  harga_sewa.toString() +
+                                  " ~ " +
+                                  vdurasi_sewa.toString() +
+                                  " ~ " +
+                                  _nominalbarang.text.toString() +
+                                  " ~ " +
+                                  totaldeposit.toString() +
+                                  " ~ " +
+                                  minimaldeposit.toString() +
+                                  " ~ " +
+                                  nomasuransi.toString());
+                              if (ceksaldo >= hargaxminimalsewadeposit) {
                                 saldodepositkurangnominaldeposit = 0;
+                                totaldeposit = hargaxminimalsewadeposit;
                                 kondisisaldo = "";
                                 orderConfirmation(context);
                               } else {
                                 saldodepositkurangnominaldeposit =
-                                    hargaxminimalsewa - ceksaldo;
+                                    hargaxminimalsewadeposit - ceksaldo;
+                                totaldeposit = ceksaldo;
                                 kondisisaldo =
-                                    "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewa)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                                    "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
                                 cekDeposit(context);
                               }
                             });
@@ -676,7 +728,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    warningDialog(context, "Hai, Maaf saldo poin anda tidak mencukupi, $kondisisaldo ",title: "Saldo Poin Tidak Mencukupi",
+    warningDialog(
+        context, "Hai, Maaf saldo poin anda tidak mencukupi, $kondisisaldo ",
+        title: "Saldo Poin Tidak Mencukupi",
         showNeutralButton: false,
         negativeText: "Batal",
         negativeAction: () {},
@@ -699,13 +753,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
           alamat: alamat,
           keterangan_barang: _keteranganbarang.text.toString(),
           nominal_barang: _nominalbarang.text.toString(),
-          nominal_voucher: vnominalvoucher,
+          nominal_voucher: vmaksimalpotongan,
           minimum_transaksi: vminimumtransaksi,
           persentase_voucher: vpersentasevoucher,
-          total_asuransi: total_asuransi.toString(),
           totalharixharga: totalhariharga.toString(),
-          totaldeposit: hargaxminimalsewa.toString(),
-          saldopoint: ceksaldo.toString(),
+          saldopoint: totaldeposit.toString(),
           email_asuransi: email_asuransi.toString(),
           tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
           persentase_asuransi: nomasuransi.toString(),
@@ -742,13 +794,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
             alamat: alamat,
             keterangan_barang: _keteranganbarang.text.toString(),
             nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: vnominalvoucher,
+            nominal_voucher: vmaksimalpotongan,
             minimum_transaksi: vminimumtransaksi,
             persentase_voucher: vpersentasevoucher,
-            total_asuransi: total_asuransi.toString(),
             totalharixharga: totalhariharga.toString(),
-            totaldeposit: hargaxminimalsewa.toString(),
-            saldopoint: ceksaldo.toString(),
+            saldopoint: totaldeposit.toString(),
             email_asuransi: email_asuransi.toString(),
             tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
             persentase_asuransi: nomasuransi.toString(),
@@ -791,18 +841,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     setState(() {
                       if (tekanvoucher) {
                         idvoucher = voucherlist.idvoucher;
-                        vminimumtransaksi = voucherlist.minNominal;
+                        vminimumtransaksi = voucherlist.min_nominal;
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
+                        vmaksimalpotongan = voucherlist.nominal_persentase;
                         flagvoucher = true;
                         Navigator.pop(context);
-                        if (double.parse(voucherlist.minNominal.toString()) >
-                            hitungsemua.toDouble()) {
-                          return infoDialog(
-                            context,
-                            "Maaf, nominal voucher melebihi jumlah total pembayaran.",
-                          );
-                        }
+                        hitungsemuaFunction();
                       }
                     });
                   },
@@ -817,9 +862,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               Text("Kode Voucher : " +
                                   voucherlist.kode_voucher.toString()),
                               Text("Minimum Transaksi : " +
-                                  voucherlist.minNominal.toString()),
-                              Text("Nominal Potongan : " +
-                                  voucherlist.persentase.toString()),
+                                  rupiah(voucherlist.min_nominal.toString())),
+                              Text("Maksimal Potongan : " +
+                                  rupiah(voucherlist.nominal_persentase.toString())),
                               Text("Persentase Potongan : " +
                                   voucherlist.persentase.toString() +
                                   " %"),
@@ -881,6 +926,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     final response = await http.get(ApiService().urlceksaldo,
         headers: {"Authorization": "BEARER ${access_token}"});
     ceksaldo = json.decode(response.body)[0]['saldo'];
+    print("CEK SALDO : " + ceksaldo.toString());
     return ceksaldo;
   }
 
