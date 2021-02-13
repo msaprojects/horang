@@ -21,15 +21,12 @@ class KonfirmasiPembayaran extends StatefulWidget {
       durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
-      tanggal_berakhir_polis,
-      nomor_polis,
       keterangan_barang,
       nominal_barang,
       nominal_voucher,
       minimum_transaksi,
       persentase_voucher,
       total_harga,
-      totalharixharga,
       saldopoint,
       email_asuransi,
       tambahsaldopoint,
@@ -51,15 +48,12 @@ class KonfirmasiPembayaran extends StatefulWidget {
       this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
-      this.tanggal_berakhir_polis,
-      this.nomor_polis,
       this.keterangan_barang,
       this.nominal_barang,
       this.nominal_voucher,
       this.minimum_transaksi,
       this.persentase_voucher,
       this.total_harga,
-      this.totalharixharga,
       this.saldopoint,
       this.email_asuransi,
       this.tambahsaldopoint,
@@ -87,8 +81,6 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       ddurasi_sewa,
       dvaluesewaawal,
       dvaluesewaakhir,
-      dtanggal_berakhir_polis,
-      dnomor_polis,
       dkapasitas,
       dalamat,
       dketerangan_barang,
@@ -98,8 +90,6 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       dpersentase_voucher,
       dtotal_harga,
       total_asuransi,
-      dtotalharixharga,
-      totaldeposit,
       dsaldopoint,
       demail_asuransi,
       dtambahsaldopoint,
@@ -107,7 +97,8 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       didpayment_gateway,
       dno_ovo,
       hitungsemua,
-      dminimalsewahari;
+      dminimalsewahari,
+      totaldeposit;
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -135,28 +126,28 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     didjenis_produk = widget.idjenis_produk;
     didvoucher = widget.idvoucher;
     didasuransi = widget.idasuransi;
+    didpayment_gateway = widget.idpayment_gateway;
     dharga_sewa = widget.harga_sewa;
     ddurasi_sewa = widget.durasi_sewa;
     dvaluesewaawal = widget.valuesewaawal;
     dvaluesewaakhir = widget.valuesewaakhir;
-    dtanggal_berakhir_polis = widget.tanggal_berakhir_polis;
-    dnomor_polis = widget.nomor_polis;
     dketerangan_barang = widget.keterangan_barang;
     dnominal_barang = widget.nominal_barang;
     dnominal_voucher = widget.nominal_voucher;
     dminimum_transaksi = widget.minimum_transaksi;
     dpersentase_voucher = widget.persentase_voucher;
     dtotal_harga = widget.total_harga;
-    dtotalharixharga = widget.totalharixharga;
-    dsaldopoint = widget.saldopoint;
-    demail_asuransi = widget.email_asuransi;
+    total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
+        double.parse(dnominal_barang);
+    dsaldopoint = widget.saldopoint; // as saldo poin terpakai
+    demail_asuransi = widget.email_asuransi; // as tambah saldo poin
     dtambahsaldopoint = widget.tambahsaldopoint;
     dpersentase_asuransi = widget.persentase_asuransi;
-    didpayment_gateway = widget.idpayment_gateway;
     dno_ovo = widget.no_ovo;
     dminimalsewahari = widget.minimalsewahari;
-    total_asuransi = (double.parse(dpersentase_asuransi) * dharga_sewa);
-    totaldeposit = (dminimalsewahari * dharga_sewa);
+    totaldeposit =
+        (dminimalsewahari * dharga_sewa); //as nominal minimum deposit
+    hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
       token: dtoken,
       flagasuransi: dflagasuransi,

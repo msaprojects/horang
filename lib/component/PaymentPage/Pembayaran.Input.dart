@@ -25,8 +25,6 @@ class FormInputPembayaran extends StatefulWidget {
       durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
-      tanggal_berakhir_polis,
-      nomor_polis,
       kapasitas,
       alamat,
       keterangan_barang,
@@ -52,8 +50,6 @@ class FormInputPembayaran extends StatefulWidget {
       this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
-      this.tanggal_berakhir_polis,
-      this.nomor_polis,
       this.kapasitas,
       this.alamat,
       this.keterangan_barang,
@@ -96,8 +92,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pdurasi_sewa,
       pvaluesewaawal,
       pvaluesewaakhir,
-      ptanggal_berakhir_polis,
-      pnomor_polis,
       pkapasitas,
       palamat,
       pketerangan_barang,
@@ -181,8 +175,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pdurasi_sewa = widget.durasi_sewa;
       pvaluesewaawal = widget.valuesewaawal;
       pvaluesewaakhir = widget.valuesewaakhir;
-      ptanggal_berakhir_polis = widget.tanggal_berakhir_polis;
-      pnomor_polis = widget.nomor_polis;
       pkapasitas = widget.kapasitas;
       palamat = widget.alamat;
       pketerangan_barang = widget.keterangan_barang;
@@ -191,9 +183,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pminimum_transaksi = widget.minimum_transaksi;
       ppersentase_voucher = widget.persentase_voucher;
       ptotalharixharga = widget.totalharixharga;
-      psaldopoint = widget.saldopoint;
+      psaldopoint = widget.saldopoint;//as saldo poin terpakai
       pemail_asuransi = widget.email_asuransi;
-      ptambahsaldopoint = widget.tambahsaldopoint;
+      ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
       ppersentase_asuransi = widget.persentase_asuransi;
       pminimalsewahari = widget.minimalsewahari;
       ptotal_asuransi = (double.parse(ppersentase_asuransi) / 100) * double.parse(pnominal_barang);
@@ -218,30 +210,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           psaldopoint.toString(),
           pminimalsewahari.toString(),
           ppersentase_asuransi.toString());
-    });
-    print("HITUNG ALL : " +
-        ppersentase_voucher.toString() +
-        " ~ " +
-        pminimum_transaksi.toString() +
-        " ~ " +
-        pflagvoucher.toString() +
-        " ~ " +
-        pflagasuransi.toString() +
-        " ~ " +
-        pnominal_voucher.toString() +
-        " ~ " +
-        pharga_sewa.toString() +
-        " ~ " +
-        pdurasi_sewa.toString() +
-        " ~ " +
-        pnominal_barang.toString() +
-        " ~ " +
-        psaldopoint.toString() +
-        " ~ " +
-        pminimalsewahari.toString() +
-        " ~ " +
-        ppersentase_asuransi.toString()+" ~ "+hitungsemua.toString());
-  }
+    });  }
 
   @override
   Widget build(BuildContext context) {
@@ -736,9 +705,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         pvaluesewaawal,
                                                     valuesewaakhir:
                                                         pvaluesewaakhir,
-                                                    tanggal_berakhir_polis:
-                                                        ptanggal_berakhir_polis,
-                                                    nomor_polis: pnomor_polis,
                                                     kapasitas: pkapasitas,
                                                     alamat: palamat,
                                                     keterangan_barang:
