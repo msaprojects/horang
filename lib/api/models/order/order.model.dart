@@ -49,11 +49,75 @@ class OrderProduk {
       this.persentase_asuransi,
       this.no_ovo,
       this.minimalsewahari,
-      this.totaldeposit//as nominal minimum deposit
+      this.totaldeposit //as nominal minimum deposit
       });
 
-      
+  factory OrderProduk.fromJson(Map<String, dynamic> map) {
+    return OrderProduk(
+      token: map["token"],
+      flagasuransi: map["flagasuransi"],
+      flagvoucher: map["flagvoucher"],
+      idlokasi: map["idlokasi"],
+      idjenis_produk: map["idjenis_produk"],
+      idvoucher: map["idvoucher"],
+      idasuransi: map["idasuransi"],
+      idpayment_gateway: map["idpayment_gateway"],
+      harga_sewa: map["harga_sewa"],
+      durasi_sewa: map["durasi_sewa"],
+      valuesewaawal: map["valuesewaawal"],
+      valuesewaakhir: map["valuesewaakhir"],
+      keterangan_barang: map["keterangan_barang"],
+      nominal_barang: map["nominal_barang"],
+      nominal_voucher: map["nominal_voucher"],
+      minimum_transaksi: map["minimum_transaksi"],
+      persentase_voucher: map["persentase_voucher"],
+      total_harga: map["total_harga"],
+      total_asuransi: map["total_asuransi"],
+      saldopoint: map["saldopoint"], // as saldo poin terpakai
+      email_asuransi: map["email_asuransi"],
+      tambahsaldopoint: map["tambahsaldopoint"], // as tambah saldo poin
+      persentase_asuransi: map["persentase_asuransi"],
+      no_ovo: map["no_ovo"],
+      minimalsewahari: map["minimalsewahari"],
+      totaldeposit: map["totaldeposit"], //as nominal minimum deposit
+    );
+  }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "token": token,
+      "flagasuransi": flagasuransi,
+      "flagvoucher": flagvoucher,
+      "idlokasi": idlokasi,
+      "idjenis_produk": idjenis_produk,
+      "idvoucher": idvoucher,
+      "idasuransi": idasuransi,
+      "idpayment_gateway": idpayment_gateway,
+      "harga_sewa": harga_sewa,
+      "durasi_sewa": durasi_sewa,
+      "valuesewaawal": valuesewaawal,
+      "valuesewaakhir": valuesewaakhir,
+      "keterangan_barang": keterangan_barang,
+      "nominal_barang": nominal_barang,
+      "nominal_voucher": nominal_voucher,
+      "minimum_transaksi": minimum_transaksi,
+      "persentase_voucher": persentase_voucher,
+      "total_harga": total_harga,
+      "total_asuransi": total_asuransi,
+      "saldopoint": saldopoint, // as saldo poin terpakai
+      "email_asuransi": email_asuransi,
+      "tambahsaldopoint": tambahsaldopoint, // as tambah saldo poin
+      "persentase_asuransi": persentase_asuransi,
+      "no_ovo": no_ovo,
+      "minimalsewahari": minimalsewahari,
+      "totaldeposit": totaldeposit, //as nominal minimum deposit
+    };
+  }
+
+  @override
+  String toString() {
+    return 'OrderProduk{flagasuransi: $flagasuransi, flagvoucher: $flagvoucher, idlokasi: $idlokasi, idjenis_produk: $idjenis_produk, idvoucher: $idvoucher, idasuransi: $idasuransi, idpayment_gateway: $idpayment_gateway, token: $token, harga_sewa: $harga_sewa, durasi_sewa: $durasi_sewa, valuesewaawal: $valuesewaawal, valuesewaakhir: $valuesewaakhir, keterangan_barang: $keterangan_barang, nominal_barang: $nominal_barang, nominal_voucher: $nominal_voucher, minimum_transaksi: $minimum_transaksi, persentase_voucher: $persentase_voucher, total_harga: $total_harga, total_asuransi: $total_asuransi, saldopoint: $saldopoint, email_asuransi: $email_asuransi, tambahsaldopoint: $tambahsaldopoint, persentase_asuransi: $persentase_asuransi, no_ovo: $no_ovo, minimalsewahari: $minimalsewahari, totaldeposit: $totaldeposit}';
+  }
 }
 
 List<OrderProduk> orderprodukFromJson(String jsonData) {

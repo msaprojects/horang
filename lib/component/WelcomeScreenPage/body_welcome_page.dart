@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/component/Dummy/dummypin.dart';
+import 'package:horang/component/Dummy/dummypin2.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
-import 'package:horang/component/account_page/pin2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'background_welcome_page.dart';
