@@ -318,7 +318,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     persentase_voucher: kpersentase_voucher,
                     saldopoint: ksaldopoint,
                     email_asuransi: kemail_asuransi,
-                    tambahsaldopoint: ksaldopoint,
+                    tambahsaldopoint: ktambahsaldopoint,
                     persentase_asuransi: kpersentase_asuransi,
                     idpayment_gateway: kidpayment_gateway,
                     no_ovo: _noOvo.text.toString(),
