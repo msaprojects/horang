@@ -6,13 +6,11 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KonfirmPayment extends StatefulWidget {
-  var flagasuransi,
-      flagvoucher,
-      idlokasi,
+  bool flagasuransi, flagvoucher;
+  var idlokasi,
       idjenis_produk,
       idvoucher,
       idasuransi,
@@ -289,13 +287,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   }
 
   OrderConfirmation(BuildContext context, String notelp) {
-    // print("cek1");
-    // print(notelp);
     if (notelp == "") {
-      print("cek2");
       return infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
     } else {
-      // print("cek3");
       return infoDialog(
           context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
           showNeutralButton: false,

@@ -167,7 +167,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         .toLowerCase()
         .contains('forklift')) {
       minimaldeposit = 0;
-      vsatuan_sewa = " jam )";
+      vsatuan_sewa = "jam ";
       tglawalforklift1 = widget.tglawalforklift.toString();
       jamawal1 = widget.jamawal.toString();
       jamakhir1 = widget.jamakhir.toString();
@@ -177,7 +177,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     } else {
       minimaldeposit = 3;
-      vsatuan_sewa = " hari )";
+      vsatuan_sewa = "hari ";
       tglAwal = widget.tglawal12.toString();
       tglAkhir = widget.tglakhir12.toString();
       valueawal = tglAwal;
@@ -266,7 +266,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               "Harga : " +
                                   rupiah(harga_sewa.toString(),
                                       separator: '.') +
-                                  vsatuan_sewa,
+                                  " /"+vsatuan_sewa,
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -323,8 +323,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     SizedBox(width: 10),
                                     Text(
                                         "( " +
-                                            vdurasi_sewa.toString() +
-                                            vsatuan_sewa,
+                                            vdurasi_sewa.toString() +" "+
+                                            vsatuan_sewa +")",
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),

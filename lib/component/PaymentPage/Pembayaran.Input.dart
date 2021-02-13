@@ -14,10 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputPembayaran extends StatefulWidget {
-  bool warna;
-  var flagasuransi,
-      flagvoucher,
-      idlokasi,
+  bool warna, flagasuransi, flagvoucher;
+  var idlokasi,
       idjenis_produk,
       idvoucher,
       idasuransi,
@@ -183,12 +181,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pminimum_transaksi = widget.minimum_transaksi;
       ppersentase_voucher = widget.persentase_voucher;
       ptotalharixharga = widget.totalharixharga;
-      psaldopoint = widget.saldopoint;//as saldo poin terpakai
+      psaldopoint = widget.saldopoint; //as saldo poin terpakai
       pemail_asuransi = widget.email_asuransi;
       ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
       ppersentase_asuransi = widget.persentase_asuransi;
       pminimalsewahari = widget.minimalsewahari;
-      ptotal_asuransi = (double.parse(ppersentase_asuransi) / 100) * double.parse(pnominal_barang);
+      ptotal_asuransi = (double.parse(ppersentase_asuransi) / 100) *
+          double.parse(pnominal_barang);
       totaldeposit = (pminimalsewahari * pharga_sewa);
       cekToken();
       hitungsemuaFunction();
@@ -210,7 +209,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           psaldopoint.toString(),
           pminimalsewahari.toString(),
           ppersentase_asuransi.toString());
-    });  }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -421,8 +421,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text("-"+
-                                rupiah(psaldopoint, separator: ','),
+                              child: Text(
+                                "-" + rupiah(psaldopoint, separator: ','),
                               ),
                             ),
                           ],
@@ -550,7 +550,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                           print(snapshot.error.toString());
                                           return Center(
                                             child: Text(
-                                                "Something wrong with message: ${snapshot.error.toString()}"),
+                                                "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
                                           );
                                         } else if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
@@ -682,7 +682,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan Pembayaran $pidvoucher",
+                                  "Lanjutkan Pembayaran $idpayment",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {

@@ -10,9 +10,8 @@ import 'package:indonesia/indonesia.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
 class KonfirmasiPembayaran extends StatefulWidget {
+  bool flagasuransi, flagvoucher;
   var token,
-      flagasuransi,
-      flagvoucher,
       idlokasi,
       idjenis_produk,
       idvoucher,
@@ -70,9 +69,8 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
+  bool dflagasuransi, dflagvoucher;
   var dtoken,
-      dflagasuransi,
-      dflagvoucher,
       didlokasi,
       didjenis_produk,
       didvoucher,
@@ -119,34 +117,89 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
 
   @override
   void initState() {
+    print("MASUK KONFIRMASI PEMBAYARAN");
     dtoken = widget.token;
+    print("TOKEN : " + dtoken);
     dflagasuransi = widget.flagasuransi;
+    print("flag asuransi : " + dflagasuransi.toString());
     dflagvoucher = widget.flagvoucher;
+    print("flag voucher : " + dflagvoucher.toString());
     didlokasi = widget.idlokasi;
+    print("idlokasi : " + didlokasi.toString());
     didjenis_produk = widget.idjenis_produk;
+    print("idjenisproduk : " + didjenis_produk.toString());
     didvoucher = widget.idvoucher;
+    print("idvoucher : " + didvoucher.toString());
     didasuransi = widget.idasuransi;
+    print("idasuransi : " + didasuransi.toString());
     didpayment_gateway = widget.idpayment_gateway;
+    print("idpayment : " + didpayment_gateway.toString());
     dharga_sewa = widget.harga_sewa;
+    print("harga sewa : " + dharga_sewa.toString());
     ddurasi_sewa = widget.durasi_sewa;
+    print("durasi sewa : " + ddurasi_sewa.toString());
     dvaluesewaawal = widget.valuesewaawal;
+    print("sewa awal : " + ddurasi_sewa.toString());
     dvaluesewaakhir = widget.valuesewaakhir;
+    print("sewa akhir : " + ddurasi_sewa.toString());
     dketerangan_barang = widget.keterangan_barang;
+    print("keterangan barang : " + dketerangan_barang.toString());
     dnominal_barang = widget.nominal_barang;
+    print("nominal barang : " + dnominal_barang.toString());
     dnominal_voucher = widget.nominal_voucher;
+    print("nominal voucher : " + dnominal_voucher.toString());
     dminimum_transaksi = widget.minimum_transaksi;
+    print("dminimum transaksi : " + dminimum_transaksi.toString());
     dpersentase_voucher = widget.persentase_voucher;
+    print("persentase voucher : " + dpersentase_voucher.toString());
     dtotal_harga = widget.total_harga;
+    print("total harga : " + dtotal_harga.toString());
+    dsaldopoint = widget.saldopoint; // as saldo poin terpakai
+    print("saldo poin : " + dsaldopoint.toString());
+    demail_asuransi = widget.email_asuransi; // as tambah saldo poin
+    print("email : " + demail_asuransi.toString());
+    dtambahsaldopoint = widget.tambahsaldopoint;
+    print("tambah saldo : " + dtambahsaldopoint.toString());
+    dpersentase_asuransi = widget.persentase_asuransi;
+    print("persentase asuransi : " + dpersentase_asuransi.toString());
+    dno_ovo = widget.no_ovo;
+    print("OVO : " + dno_ovo.toString());
+    dminimalsewahari = widget.minimalsewahari;
+    print("Minimal sewa : " + dminimalsewahari.toString());
     total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
         double.parse(dnominal_barang);
-    dsaldopoint = widget.saldopoint; // as saldo poin terpakai
-    demail_asuransi = widget.email_asuransi; // as tambah saldo poin
-    dtambahsaldopoint = widget.tambahsaldopoint;
-    dpersentase_asuransi = widget.persentase_asuransi;
-    dno_ovo = widget.no_ovo;
-    dminimalsewahari = widget.minimalsewahari;
+    print("total asuransi : " + total_asuransi.toString());
     totaldeposit =
         (dminimalsewahari * dharga_sewa); //as nominal minimum deposit
+    print("Total Deposit : " + totaldeposit.toString());
+    print("TOKEN : " +
+        dtoken +
+        " ~ " +
+        dflagasuransi.toString() +
+        " ~ " +
+        dflagvoucher.toString() +
+        " ~ " +
+        didlokasi.toString() +
+        " ~ " +
+        didjenis_produk.toString() +
+        " ~ " +
+        didvoucher.toString() +
+        " ~ " +
+        didasuransi.toString() +
+        " ~ " +
+        didpayment_gateway.toString() +
+        " ~ " +
+        dharga_sewa.toString() +
+        " ~ " +
+        ddurasi_sewa.toString() +
+        " ~ " +
+        dvaluesewaawal.toString() +
+        " ~ " +
+        dvaluesewaakhir.toString() +
+        " ~ " +
+        dketerangan_barang.toString() +
+        " ~ " +
+        dnominal_barang.toString());
     hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
       token: dtoken,
@@ -158,7 +211,25 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       idasuransi: didasuransi,
       idpayment_gateway: didpayment_gateway,
       harga_sewa: dharga_sewa,
+      durasi_sewa: ddurasi_sewa,
+      valuesewaawal: dvaluesewaawal,
+      valuesewaakhir: dvaluesewaakhir,
+      keterangan_barang: dketerangan_barang,
+      nominal_barang: dnominal_barang,
+      nominal_voucher: dnominal_voucher,
+      minimum_transaksi: dminimum_transaksi,
+      persentase_voucher: dpersentase_voucher,
+      total_harga: hitungsemua,
+      total_asuransi: total_asuransi,
+      saldopoint: dsaldopoint,
+      email_asuransi: demail_asuransi,
+      tambahsaldopoint: dtambahsaldopoint,
+      persentase_asuransi: dpersentase_asuransi,
+      no_ovo: dno_ovo,
+      minimalsewahari: dminimalsewahari,
+      totaldeposit: totaldeposit,
     );
+    print("MODEL UNTUK ORDER : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
         Navigator.pushReplacement(
@@ -179,7 +250,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
           });
         } else {
           errorDialog(context, "Transaksi gagal disimpan",
-              positiveText: "Ok", showNeutralButton: false, positiveAction: () {
+              positiveText: "OK", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -195,7 +266,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
+        // elevation: 0,
       ),
       body: Container(
         color: Colors.white,
@@ -204,106 +275,106 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Icon(Icons.close_rounded),
-            ),
-            Container(
-                child: Center(
-              child: Image.asset(
-                'assets/image/sikat_min1.gif',
-                height: MediaQuery.of(context).size.height * 0.35,
-                width: MediaQuery.of(context).size.width * 0.5,
-                fit: BoxFit.contain,
-              ),
-            )),
-            Card(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              elevation: 2.0,
-              child: Container(
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text("Total Bayar",
-                            style: GoogleFonts.inter(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text(rupiah(dtotal_harga),
-                            style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red)),
-                      ],
-                    ),
-                    Divider(
-                      height: 10,
-                      thickness: 1,
-                      indent: 15,
-                      endIndent: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(Icons.timer),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                  "Menunggu pembayaran Sebesar " +
-                                      rupiah(dtotal_harga),
-                                  style: GoogleFonts.inter(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text("Metode Pembayaran ",
-                style: GoogleFonts.inter(
-                    fontSize: 14, fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 15,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              child: Row(
+      Container(
+        alignment: Alignment.topLeft,
+        child: Icon(Icons.close_rounded),
+      ),
+      Container(
+          child: Center(
+        child: Image.asset(
+          'assets/image/sikat_min1.gif',
+          height: MediaQuery.of(context).size.height * 0.35,
+          width: MediaQuery.of(context).size.width * 0.5,
+          fit: BoxFit.contain,
+        ),
+      )),
+      Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 2.0,
+        child: Container(
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
-                    Icons.warning_rounded,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: Text(
-                    "Buka aplikasi OVO anda dan cek pemberitahuan untuk menyelesaikan proses pembayaran. Tolong lakukan dalam 50 detik.",
-                    style: GoogleFonts.lato(
-                        fontSize: 12, height: 1.5, color: Colors.grey),
-                  )),
+                  Text("Total Bayar",
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(rupiah(hitungsemua),
+                      style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red)),
                 ],
               ),
-            )
-          ],
+              Divider(
+                height: 10,
+                thickness: 1,
+                indent: 15,
+                endIndent: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Icon(Icons.timer),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                            "Menunggu pembayaran Sebesar " +
+                                rupiah(hitungsemua),
+                            style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
+      SizedBox(
+        height: 15,
+      ),
+      Text("Metode Pembayaran ",
+          style: GoogleFonts.inter(
+              fontSize: 14, fontWeight: FontWeight.bold)),
+      SizedBox(
+        height: 15,
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.warning_rounded,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: Text(
+              "Buka aplikasi OVO anda dan cek pemberitahuan untuk menyelesaikan proses pembayaran. Tolong lakukan dalam 50 detik.",
+              style: GoogleFonts.lato(
+                  fontSize: 12, height: 1.5, color: Colors.grey),
+            )),
+          ],
+        ),
+      )
+            ],
+          ),
+        ),
     );
   }
 }
