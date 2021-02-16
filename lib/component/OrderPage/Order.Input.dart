@@ -11,8 +11,10 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -74,8 +76,42 @@ class _FormDetailOrder extends State<FormInputOrder> {
       kondisisaldo,
       hargaxhari,
       saldodepositkurangnominaldeposit,
+<<<<<<< Updated upstream
       nominalvoucher = "0",
       kodevvoucher;
+=======
+      vkodevoucher = "",
+      access_token,
+      refresh_token,
+      hitungsemua,
+      gambarvoucher,
+      vsatuan_sewa = "",
+      namasetting = "",
+      nilaisetting = "",
+      namasetting1 = "",
+      nilaisetting1 = "",
+      namasetting2 = "",
+      nilaisetting2 = "";
+  num vdurasi_sewa,
+      idjenis_produk,
+      idcustomer,
+      idasuransi,
+      idlokasi,
+      vminimumtransaksi = 0,
+      harga_sewa,
+      vpersentasevoucher = 0,
+      vmaksimalpotongan = 0,
+      minimaldeposit = 0,
+      nomasuransi = 0,
+      idvoucher = 0,
+      totaldeposit = 0,
+      potonganvoucher = 0;
+  DateTime dtAwal, dtAkhir;
+  //END DEKLARASI VARIABEL
+  //CALLING REFFERENCE
+  SharedPreferences sp;
+  ApiService _apiService = ApiService();
+>>>>>>> Stashed changes
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
 
@@ -477,9 +513,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             ),
                             Text(
                               "Harga : " +
+<<<<<<< Updated upstream
                                   rupiah(harga,
                                       separator: '.',
                                       trailing: ',00' + "/Hari"),
+=======
+                                  rupiah(harga_sewa.toString(),
+                                      separator: '.') +
+                                  " /" +
+                                  vsatuan_sewa,
+>>>>>>> Stashed changes
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -536,8 +579,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     SizedBox(width: 10),
                                     Text(
                                         "( " +
+<<<<<<< Updated upstream
                                             jumlah_sewas.toString() +
                                             " Hari )",
+=======
+                                            vdurasi_sewa.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
+>>>>>>> Stashed changes
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
@@ -722,7 +772,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       enabled: false,
+<<<<<<< Updated upstream
                                       hintText: "$getVoucher - $voucherKode",
+=======
+                                      hintText: "$getVoucher - " +
+                                          potonganvoucher.toString(),
+>>>>>>> Stashed changes
                                       border: const OutlineInputBorder(),
                                     ),
                                   ),
@@ -1049,6 +1104,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   onTap: () {
                     setState(() {
                       if (tekanvoucher) {
+<<<<<<< Updated upstream
                         getVoucher = voucherlist.minNominal.toString();
                         voucherKode = voucherlist.kode_voucher.toString();
                         idvouchers = voucherlist.idvoucher;
@@ -1056,6 +1112,19 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         print("adalah $flagsuransi");
                         // print("kang ndut ${voucherlist.nominal}");
                         // print("kang ndut ${voucherlist.kode_voucher}");
+=======
+                        gambarvoucher = voucherlist.gambar;
+                        idvoucher = voucherlist.idvoucher;
+                        vminimumtransaksi = voucherlist.min_nominal;
+                        vkodevoucher = voucherlist.kode_voucher.toString();
+                        vpersentasevoucher = voucherlist.persentase;
+                        vmaksimalpotongan = voucherlist.nominal_persentase;
+                        potonganvoucher =
+                            ((double.parse(vpersentasevoucher.toString()) /
+                                    100) *
+                                double.parse(totalhariharga.toString()));
+                        flagvoucher = true;
+>>>>>>> Stashed changes
                         Navigator.pop(context);
                         if (double.parse(voucherlist.minNominal.toString()) >
                             hitungsemua.toDouble()) {
@@ -1069,6 +1138,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   },
                   child: Card(
                     child: Container(
+                      height: ResponsiveFlutter.of(context).verticalScale(150),
                       padding: EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
@@ -1079,11 +1149,49 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           SizedBox(
                             width: 20,
                           ),
+<<<<<<< Updated upstream
                           Column(
                             children: [
                               Text(voucherlist.kode_voucher.toString()),
                               Text(voucherlist.minNominal.toString()),
                             ],
+=======
+                          Container(
+                            padding: EdgeInsets.only(left: 10, top: 10),
+                            width: ResponsiveFlutter.of(context).scale(140),
+                            height: ResponsiveFlutter.of(context)
+                                .verticalScale(130),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Kode Voucher : " +
+                                    voucherlist.kode_voucher.toString()),
+                                Flexible(
+                                  child: Text(
+                                    "Min. Transaksi : " +
+                                        rupiah(
+                                            voucherlist.min_nominal.toString()),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.visible,
+                                    softWrap: false,
+                                  ),
+                                ),
+                                Text("Nom. Potongan : " +
+                                    rupiah(voucherlist.nominal_persentase
+                                        .toString())),
+                                Flexible(
+                                  child: Text(
+                                    "Pers. Potongan : " +
+                                        voucherlist.persentase.toString() +
+                                        " %",
+                                    softWrap: false,
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ),
+                              ],
+                            ),
+>>>>>>> Stashed changes
                           ),
                           SizedBox(
                             width: 20,

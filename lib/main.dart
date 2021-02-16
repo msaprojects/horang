@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/notification_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer_util.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -30,9 +31,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+<<<<<<< Updated upstream
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
+=======
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return OrientationBuilder(builder: (context, orientation) {
+          SizerUtil().init(constraints, orientation);
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: WelcomePage(),
+          );
+        });
+      },
+>>>>>>> Stashed changes
     );
   }
 }
