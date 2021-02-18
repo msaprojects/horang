@@ -384,6 +384,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 sketerangan_barang,
                               ),
                             ),
+<<<<<<< Updated upstream
+=======
+                            Container(
+                               padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                pketerangan_barang,
+                              ),
+                            ),
+>>>>>>> Stashed changes
                           ],
                         ),
                         SizedBox(
@@ -482,7 +492,15 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
+<<<<<<< Updated upstream
                                 children: <Widget>[Text("Nominal Asuransi :")],
+=======
+                                children: <Widget>[
+                                  Text("Nominal Asuransi (" +
+                                      ppersentase_asuransi.toString() +
+                                      "%) :"),
+                                ],
+>>>>>>> Stashed changes
                               ),
                             ),
                             Container(
@@ -700,6 +718,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+<<<<<<< Updated upstream
                         // Icon(
                         //   Icons.payment,
                         //   color: Colors.red,
@@ -728,6 +747,28 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         // SizedBox(
                         //   height: 5,
                         // ),
+=======
+                        Center(
+                          child: Text(
+                              "Anda akan melakukan pembayaran menggunakan $namaprovider",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Text(
+                                "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku",
+                                textAlign: TextAlign.left,
+                                style: GoogleFonts.inter(
+                                    height: 1.5, fontSize: 14))),
+                        SizedBox(
+                          height: 5,
+                        ),
+>>>>>>> Stashed changes
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,

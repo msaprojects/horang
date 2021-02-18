@@ -522,6 +522,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       separator: '.') +
                                   " /" +
                                   vsatuan_sewa,
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                               style: TextStyle(
                                   fontSize: 18,
@@ -580,13 +583,19 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     Text(
                                         "( " +
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                             jumlah_sewas.toString() +
                                             " Hari )",
 =======
+=======
+>>>>>>> Stashed changes
                                             vdurasi_sewa.toString() +
                                             " " +
                                             vsatuan_sewa +
                                             ")",
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
@@ -773,7 +782,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     decoration: InputDecoration(
                                       enabled: false,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                       hintText: "$getVoucher - $voucherKode",
+=======
+                                      hintText: "$getVoucher - " +
+                                          potonganvoucher.toString(),
+>>>>>>> Stashed changes
 =======
                                       hintText: "$getVoucher - " +
                                           potonganvoucher.toString(),
@@ -1136,10 +1150,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       }
                     });
                   },
+<<<<<<< Updated upstream
                   child: Card(
                     child: Container(
                       height: ResponsiveFlutter.of(context).verticalScale(150),
                       padding: EdgeInsets.only(left: 10),
+=======
+                  child: Container(
+                    height: 500,
+                    child: Card(
+                      margin: EdgeInsets.only(bottom: 0),
+>>>>>>> Stashed changes
                       child: Row(
                         children: [
                           Container(
@@ -1158,6 +1179,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 =======
                           Container(
                             padding: EdgeInsets.only(left: 10, top: 10),
+<<<<<<< Updated upstream
                             width: ResponsiveFlutter.of(context).scale(140),
                             height: ResponsiveFlutter.of(context)
                                 .verticalScale(130),
@@ -1190,6 +1212,36 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   ),
                                 ),
                               ],
+=======
+                            child: SizedBox(
+                              width: 170,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Kode Voucher : " +
+                                      voucherlist.kode_voucher.toString()),
+                                  Text(
+                                    "Min. Transaksi : " +
+                                        rupiah(
+                                            voucherlist.min_nominal.toString()),
+                                  ),
+                                  Text("Nom. Potongan : " +
+                                      rupiah(voucherlist.nominal_persentase
+                                          .toString())),
+                                  Flexible(
+                                    child: Text(
+                                      "Persn. Potongan : " +
+                                          voucherlist.persentase.toString() +
+                                          " %",
+                                      softWrap: false,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ),
+                                ],
+                              ),
+>>>>>>> Stashed changes
                             ),
 >>>>>>> Stashed changes
                           ),

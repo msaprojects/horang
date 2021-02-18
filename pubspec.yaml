@@ -31,8 +31,12 @@ dependencies:
   http: any
   shared_preferences: any
   indonesia: 1.0.1
+<<<<<<< Updated upstream
   flutter_lock_screen: ^1.0.8
   flutter_launcher_icons: any
+=======
+  flutter_launcher_icons: ^0.8.1
+>>>>>>> Stashed changes
   local_auth: any
   pin_code_text_field: any
   flutter_svg: ^0.18.0
@@ -59,6 +63,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/logogudang.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
