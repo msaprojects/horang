@@ -39,7 +39,7 @@ class _AccountState extends State<Account> {
       idkotas;
 
   void getlistaprofile() async {
-    final response = await http.get(ApiService().urlgetlist,
+    final response = await http.get(ApiService().urlgetcustomer,
         headers: {"Authorization": "BEARER ${access_token}"});
     nmcust = json.decode(response.body)[0]['nama_customer'];
   }
@@ -51,15 +51,11 @@ class _AccountState extends State<Account> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
-    idpengguna = sp.getString("idpengguna");
-    // print("cek ada pin gak ya ? "+pin);
-    print("cek ada namacus gak ya ? " + nama_customer);
-    // print("cek ada id gak ya ? "+idcustomer);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -79,7 +75,7 @@ class _AccountState extends State<Account> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));

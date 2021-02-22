@@ -44,13 +44,19 @@ class ApiService {
   List<Customers> get datacus => _data;
 
   //URL MAKER
-  String urlasuransi, urlceksaldo, urllokasi, urlgetlist, urlsettingbylokasi;
+  String urlasuransi,
+      urlceksaldo,
+      urllokasi,
+      urlgetlist,
+      urlsettingbylokasi,
+      urlkota;
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
     urllokasi = baseUrl + "lokasi";
     urlgetlist = baseUrl + "customer";
     urlsettingbylokasi = baseUrl + "lokasisetting";
+    urlkota = baseUrl + "kota";
   }
 
   /////////////////////// LIST /////////////////////////
@@ -230,7 +236,7 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
-    print(response.statusCode.toString()+" ~ "+response.body.toString());
+    print(response.statusCode.toString() + " ~ " + response.body.toString());
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
     } else if (response.statusCode == 204) {

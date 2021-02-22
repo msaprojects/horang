@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/account.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,7 +40,7 @@ class _UbahPassState extends State<UbahPass> {
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => true);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -60,7 +60,7 @@ class _UbahPassState extends State<UbahPass> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => true);
                         }
                       }));
@@ -144,7 +144,7 @@ class _UbahPassState extends State<UbahPass> {
                       } else {
                         _apiService.UbahPassword(password).then((isSuccess) {
                           setState(() => _isLoading = false);
-                            print("dede ${_apiService.responseCode}");
+                          print("dede ${_apiService.responseCode}");
                           if (isSuccess) {
                             print("sukses");
                             successDialog(
@@ -154,8 +154,9 @@ class _UbahPassState extends State<UbahPass> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Home(initIndexHome: 0,)),
+                                      builder: (BuildContext context) => Home(
+                                            initIndexHome: 0,
+                                          )),
                                   (Route<dynamic> route) => false);
                             });
                           } else {

@@ -6,6 +6,7 @@ import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/account.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,14 +31,7 @@ class _UbahProfileState extends State<UbahProfile> {
       idcustomer,
       namcus;
   bool _isLoading = true, _obsecureText = true;
-  String _nama,
-      _alamat,
-      _noKtp,
-      _email,
-      _noHp,
-      urlcomboKota = "https://server.horang.id:9993/api/kota/",
-      // urlcomboKota = "http://192.168.6.113:9992/api/kota/",
-      valKota;
+  String _nama, _alamat, _noKtp, _email, _noHp, pin, valKota;
   bool _fieldNamaLengkap = false,
       _fieldAlamat = false,
       _fieldNoktp = false,
@@ -58,7 +52,7 @@ class _UbahProfileState extends State<UbahProfile> {
   //COMBOBOX KOTA
   List<dynamic> _dataKota = List();
   void getcomboKota() async {
-    final response = await http.get(urlcomboKota,
+    final response = await http.get(_apiService.urlkota,
         headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
     setState(() {
@@ -70,18 +64,13 @@ class _UbahProfileState extends State<UbahProfile> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    _nama = sp.getString("nama_customer");
-    _alamat = sp.getString("alamat");
-    // _noKtp = sp.getString("noktp");
-    // _email = sp.getString("email");
-    // _noHp = sp.getString("no_hp");
-    valKota.toString();
     idcustomer = sp.getString("idcustomer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => true);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -101,7 +90,7 @@ class _UbahProfileState extends State<UbahProfile> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => true);
                         }
                       }));

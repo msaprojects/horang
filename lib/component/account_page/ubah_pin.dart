@@ -4,6 +4,7 @@ import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // final globalKey = GlobalKey<ScaffoldState>();
@@ -41,12 +42,11 @@ class _UbahPinState extends State<UbahPin> {
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
     pin = sp.getString("pin");
-    print('CEKKKK PIN LAMA $pin');
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => true);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -66,7 +66,7 @@ class _UbahPinState extends State<UbahPin> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => true);
                         }
                       }));
@@ -77,7 +77,6 @@ class _UbahPinState extends State<UbahPin> {
 
   @override
   void initState() {
-    print("cek masuk initstate");
     super.initState();
     cekToken();
   }
@@ -92,7 +91,7 @@ class _UbahPinState extends State<UbahPin> {
         print("SharePref berhasil di hapus");
         showAlertDialog(context);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
             (Route<dynamic> route) => false);
       }
     }
@@ -104,10 +103,6 @@ class _UbahPinState extends State<UbahPin> {
           pin != "0" ? "Ubah Pin" : "Tambah Pin",
           style: TextStyle(color: Colors.black),
         ),
-        // title: Text(
-        //   "Ubah Pin",
-        //   style: TextStyle(color: Colors.black),
-        // ),
         elevation: 0,
         leading: IconButton(
             icon: Icon(

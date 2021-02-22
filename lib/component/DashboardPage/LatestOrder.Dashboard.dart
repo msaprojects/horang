@@ -7,6 +7,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +47,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
     if (access_token == null) {
       // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -66,7 +67,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -176,7 +177,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   mystorageModel.nama_provider,
                   mystorageModel.tanggal_order,
                   mystorageModel.tanggal_akhir,
-                  mystorageModel.tanggal_mulai,                  
+                  mystorageModel.tanggal_mulai,
                   mystorageModel.total_harga,
                   mystorageModel.harga,
                   mystorageModel.jumlah_sewa,
@@ -295,12 +296,16 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Nominal Bayar : " + rupiah(total_harga.toString()),
+                          Text(
+                              "Nominal Bayar : " +
+                                  rupiah(total_harga.toString()),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Jumlah Sewa : " + jumlah_sewa.toString() +
+                          Text(
+                              "Jumlah Sewa : " +
+                                  jumlah_sewa.toString() +
                                   " Hari",
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
@@ -311,9 +316,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(
-                              "Tgl Order : " +
-                                  tanggal_order.toString(),
+                          Text("Tgl Order : " + tanggal_order.toString(),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,

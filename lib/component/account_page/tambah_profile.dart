@@ -3,6 +3,7 @@ import 'package:commons/commons.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,11 +23,7 @@ class _TambahProfileState extends State<TambahProfile> {
   bool _isFieldNamaLengkap;
   bool _isFieldAlamat;
   bool _isFieldNoKtp, isSuccess = true;
-  String _nama,
-      _alamat,
-      _noKtp,
-      urlcomboKota = "https://server.horang.id:9993/api/kota/",
-      valKota;
+  String nama_customer, valKota, pin;
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
   TextEditingController _controllerAlamat = TextEditingController();
@@ -35,7 +32,7 @@ class _TambahProfileState extends State<TambahProfile> {
 
   List<dynamic> _dataKota = List();
   void getcomboKota() async {
-    final response = await http.get(urlcomboKota,
+    final response = await http.get(_apiService.urlkota,
         headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
     setState(() {
@@ -47,17 +44,15 @@ class _TambahProfileState extends State<TambahProfile> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    _nama = sp.getString("nama_customer");
-    _alamat = sp.getString("alamat");
-    _noKtp = sp.getString("noktp");
-    valKota.toString();
     idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => true);
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
@@ -76,8 +71,8 @@ class _TambahProfileState extends State<TambahProfile> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => true);
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
                         }
                       }));
             }
@@ -206,15 +201,6 @@ class _TambahProfileState extends State<TambahProfile> {
                                     }
                                   });
                                 });
-                                //                   });
-                                //                 });
-                                //               }
-                                //             });
-                                //           },
-                                //           color: Colors.blue,
-                                //         ),
-                                //       ))
-                                // ],
                               }
                             });
                           },
@@ -224,8 +210,6 @@ class _TambahProfileState extends State<TambahProfile> {
                 ],
               ),
             ),
-            //   ),
-            // ],
           ],
         ),
       ),
