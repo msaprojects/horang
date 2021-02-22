@@ -23,11 +23,20 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
-
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      pin,
+      ceksaldo;
+  String token = '';
+  final scaffoldState = GlobalKey<ScaffoldState>();
+  final controllerTopic = TextEditingController();
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -36,12 +45,6 @@ class _HomePageState extends State<HomePage> {
     }
     return result;
   }
-
-  final scaffoldState = GlobalKey<ScaffoldState>();
-  final controllerTopic = TextEditingController();
-
-  String token = '';
-  var ceksaldo;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();

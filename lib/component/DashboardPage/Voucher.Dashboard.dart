@@ -7,6 +7,7 @@ import 'package:horang/component/VoucherPage/voucher.detail.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VoucherDashboard extends StatefulWidget {
@@ -17,22 +18,21 @@ class VoucherDashboard extends StatefulWidget {
 class _VoucherDashboard extends State<VoucherDashboard> {
   int _current = 0;
   Widget currentScreen = HomePage();
-
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token, refresh_token, idcustomer, email, nama_customer, nama, pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
@@ -50,7 +50,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -97,14 +97,12 @@ class _VoucherDashboard extends State<VoucherDashboard> {
   }
 
   Widget _listPromo(List<VoucherModel> dataIndex) {
-//    print("Yuhuu.. ${nama_customer}");
     if (idcustomer == "0") {
       nama = email;
     } else {
       nama = nama_customer;
     }
 
-    print(access_token);
     return Column(
       children: <Widget>[
         Container(
@@ -159,40 +157,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             itemCount: dataIndex.length,
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: <Widget>[
-        //     //Lihat selengkapnya
-        //     Text(
-        //       'Lihat Selengkapnya...',
-        //       style: mMorediscountstyle,
-        //     )
-        //   ],
-        // )
       ],
     );
   }
-
-  // showAlertDialog(BuildContext context) {
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => LoginPage()));
-  //     },
-  //   );
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("Sesi Anda Berakhir!"),
-  //     content: Text(
-  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alert;
-  //       });
-  // }
 }

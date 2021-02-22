@@ -9,6 +9,7 @@ import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,10 +74,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
       namasetting1 = "",
       nilaisetting1 = "",
       namasetting2 = "",
-      nilaisetting2 = "";
+      nilaisetting2 = "",
+      idcustomer,
+      pin,
+      nama_customer;
   num vdurasi_sewa,
       idjenis_produk,
-      idcustomer,
       idasuransi,
       idlokasi,
       vminimumtransaksi = 0,
@@ -86,7 +89,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       minimaldeposit = 0,
       nomasuransi = 0,
       idvoucher = 0,
-      totaldeposit = 0, potonganvoucher =0;
+      totaldeposit = 0,
+      potonganvoucher = 0;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
@@ -266,7 +270,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               "Harga : " +
                                   rupiah(harga_sewa.toString(),
                                       separator: '.') +
-                                  " /"+vsatuan_sewa,
+                                  " /" +
+                                  vsatuan_sewa,
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -323,8 +328,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     SizedBox(width: 10),
                                     Text(
                                         "( " +
-                                            vdurasi_sewa.toString() +" "+
-                                            vsatuan_sewa +")",
+                                            vdurasi_sewa.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
@@ -547,7 +554,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       enabled: false,
-                                      hintText: "$getVoucher - "+potonganvoucher.toString(),
+                                      hintText: "$getVoucher - " +
+                                          potonganvoucher.toString(),
                                       border: const OutlineInputBorder(),
                                     ),
                                   ),
@@ -813,7 +821,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
                         vmaksimalpotongan = voucherlist.nominal_persentase;
-                        potonganvoucher = ((double.parse(vpersentasevoucher.toString())/100) * double.parse(totalhariharga.toString()));
+                        potonganvoucher =
+                            ((double.parse(vpersentasevoucher.toString()) /
+                                    100) *
+                                double.parse(totalhariharga.toString()));
                         flagvoucher = true;
                         Navigator.pop(context);
                         hitungsemuaFunction();
@@ -845,21 +856,24 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   Flexible(
                                     child: Text(
                                       "Minimum Transaksi : " +
-                                          rupiah(voucherlist.min_nominal.toString()),
+                                          rupiah(voucherlist.min_nominal
+                                              .toString()),
                                       maxLines: 2,
                                       overflow: TextOverflow.visible,
                                       softWrap: false,
                                     ),
                                   ),
                                   Text("Nominal Potongan : " +
-                                      rupiah(voucherlist.nominal_persentase.toString())),
+                                      rupiah(voucherlist.nominal_persentase
+                                          .toString())),
                                   Flexible(
-                                    child: Text("Persentase Potongan : " +
-                                        voucherlist.persentase.toString() +
-                                        " %",
-                                        softWrap: false,
-                                        overflow: TextOverflow.visible,
-                                        ),
+                                    child: Text(
+                                      "Persentase Potongan : " +
+                                          voucherlist.persentase.toString() +
+                                          " %",
+                                      softWrap: false,
+                                      overflow: TextOverflow.visible,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -883,10 +897,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
+    idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -902,10 +920,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));

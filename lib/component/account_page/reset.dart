@@ -20,11 +20,12 @@ class Reset extends StatefulWidget {
 }
 
 class _ResetState extends State<Reset> {
+  ApiService _apiService = ApiService();
   bool _isLoading = false, _email, _isFieldEmail;
   String emails, tipes, judul;
-  TextEditingController _controlleremail = TextEditingController();
-  ApiService _apiService = ApiService();
   var iddevice;
+  TextEditingController _controlleremail = TextEditingController();
+
   @override
   void initState() {
     tipes = widget.tipe;

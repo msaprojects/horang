@@ -9,6 +9,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,37 +34,37 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       nama_lokasi,
       tanggal_order,
       hari,
-      aktif;
+      aktif,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>

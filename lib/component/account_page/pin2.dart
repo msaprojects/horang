@@ -8,6 +8,7 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -22,30 +23,29 @@ class Pin2 extends StatefulWidget {
 }
 
 class _Pin2State extends State<Pin2> {
-  TextEditingController controller = TextEditingController();
-  String thisText = "";
-  int pinLength = 4;
+  SharedPreferences sp;
+  LocalAuthentication auth = LocalAuthentication();
+  List<BiometricType> _availableBiometrics, availableBiometrics;
   ApiService _apiService = ApiService();
+  int pinLength = 4;
+  bool hasError = false,
+      isSuccess = true,
+      _checkbio = false,
+      authenticated = false,
+      _canCheckBiometrics,
+      canCheckBiometrics;
   var token = "",
       newtoken = "",
       access_token,
       refresh_token,
       idcustomer,
       nama_customer,
-      pin;
-  bool hasError = false,
-      isSuccess = true,
-      _checkbio = false,
-      _canCheckBiometrics;
-  String errorMessage;
-  SharedPreferences sp;
-
-  LocalAuthentication auth = LocalAuthentication();
-  List<BiometricType> _availableBiometrics;
-  String autherized = "Not auth";
+      pin,
+      thisText = "";
+  String autherized = "Not auth", errorMessage;
+  TextEditingController controller = TextEditingController();
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
-    bool canCheckBiometrics;
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
@@ -60,7 +60,6 @@ class _Pin2State extends State<Pin2> {
   }
 
   Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
     try {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
@@ -72,10 +71,9 @@ class _Pin2State extends State<Pin2> {
   }
 
   Future<void> _authenticate() async {
-    bool authenticated = false;
     try {
       authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: "Scan jari anda untuk konfirmasi mas",
+          localizedReason: "Scan jari anda untuk konfirmasi",
           useErrorDialogs: true,
           stickyAuth: false);
     } on PlatformException catch (e) {
@@ -103,7 +101,7 @@ class _Pin2State extends State<Pin2> {
     pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
@@ -121,7 +119,7 @@ class _Pin2State extends State<Pin2> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -297,22 +295,6 @@ class _Pin2State extends State<Pin2> {
                   ),
                 ],
               ),
-              // InkWell(
-              //   onTap: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => Reset(
-              //                   tipe: "ResetPin",
-              //                 )));
-              //   },
-              //   child: new Text(
-              //     "Reset Pin",
-              //     style: TextStyle(
-              //       fontSize: 16,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

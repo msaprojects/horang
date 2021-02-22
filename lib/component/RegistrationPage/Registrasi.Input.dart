@@ -25,12 +25,11 @@ class _RegistrasiState extends State<RegistrasiPage> {
       _fieldNo_Hp = false,
       _fieldPassword = false,
       _fieldPasswordRetype = false;
+  var iddevice;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerNohp = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerPasswordRetype = TextEditingController();
-
-  var iddevice;
 
   void _toggle() {
     setState(() {
@@ -39,15 +38,15 @@ class _RegistrasiState extends State<RegistrasiPage> {
     });
   }
 
-  // @override
-  // void initState() {
-  //   GetDeviceID().getDeviceID(context).then((ids) {
-  //     setState(() {
-  //       iddevice = ids;
-  //     });
-  //   });
-  //   print("IDDEVICE : " + iddevice.toString());
-  // }
+  @override
+  void initState() {
+    GetDeviceID().getDeviceID(context).then((ids) {
+      setState(() {
+        iddevice = ids;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

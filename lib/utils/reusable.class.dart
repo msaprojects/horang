@@ -31,13 +31,13 @@ class ReusableClasses {
     } else {
       if ((double.parse(durasi) * double.parse(harga)) >=
           double.parse(minimumtransaksi)) {
-        if (((double.parse(persentasevoucher)/100) *
+        if (((double.parse(persentasevoucher) / 100) *
                 double.parse(harga) *
                 double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
           nominalV = double.parse(nominalVoucher);
         } else {
-          nominalV = (double.parse(persentasevoucher) /100) *
+          nominalV = (double.parse(persentasevoucher) / 100) *
               double.parse(harga) *
               double.parse(durasi);
         }
@@ -154,5 +154,29 @@ class ReusableClasses {
     var saldo = json.decode(response.body);
     return saldo;
     // return saldo;
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        print("ini konfirmasi order detail");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Sesi Anda Berakhir!"),
+      content: Text(
+          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 }

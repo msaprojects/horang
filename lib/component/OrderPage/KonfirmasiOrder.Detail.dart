@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,18 +30,21 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       idcustomer,
       ktotal_asuransi,
       knomVoucher,
-      idorders = 0;
+      idorders = 0,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -55,11 +60,11 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -72,7 +77,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   void initState() {
     knomVoucher = widget.nomVoucher;
     idorders = widget.idorder;
-    print("AS : "+idorders.toString());
+    print("AS : " + idorders.toString());
     ktotal_asuransi = widget.asuransi;
     cekToken();
   }
@@ -106,6 +111,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       ),
     );
   }
+
   Widget _designForm(List<OrderSukses> dataIndex) {
     // OrderSukses orders;
     return Scaffold(
@@ -379,30 +385,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
         ],
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        print("ini konfirmasi order detail");
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 }
 

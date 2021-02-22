@@ -11,14 +11,14 @@ import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/ListLog.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmasiLog extends StatefulWidget {
-  // MystorageModel mystorage;
-  // KonfirmasiLog({this.mystorage});
   var kode_kontainer,
       nama_kota,
       idtransaksi_detail,
@@ -68,7 +68,9 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       tglakhir,
       tglorder,
       keterangan,
-      idtransaksii;
+      idtransaksii,
+      nama_customer,
+      pin;
   TextEditingController _controllerNoKontainer = TextEditingController();
   TextEditingController _controllerLokasi = TextEditingController();
 
@@ -77,32 +79,33 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -128,7 +131,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
   }
 
   Future<bool> _willPopCallback() async {
-    showAlertDialog(context);
+    ReusableClasses().showAlertDialog(context);
     return true;
   }
 
@@ -169,7 +172,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     height: MediaQuery.of(context).size.height * 0.3,
                     decoration: new BoxDecoration(
                         image: new DecorationImage(
-                      // colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.overlay),
                       image: new AssetImage("assets/image/container1.png"),
                       fit: BoxFit.cover,
                     )),
@@ -186,7 +188,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                   Text(noOrder1.toString(),
+                  Text(noOrder1.toString(),
                       style: GoogleFonts.inter(
                           fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(
@@ -227,7 +229,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   Text(tglmulai.toString(),
                       style: GoogleFonts.inter(
                           fontSize: 16, fontWeight: FontWeight.bold)),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -237,7 +238,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   Text(tglakhir.toString(),
                       style: GoogleFonts.inter(
                           fontSize: 16, fontWeight: FontWeight.bold)),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -247,14 +247,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   Text(keterangan.toString(),
                       style: GoogleFonts.inter(
                           fontSize: 16, fontWeight: FontWeight.bold)),
-                  // Text(
-                  //     "idtransaksi : " +
-                  //         idtransaksii.toString() +
-                  //         "-" +
-                  //         "iddetail-transaksi" +
-                  //         idtransaksi_det.toString(),
-                  //     style: GoogleFonts.lato(
-                  //         fontSize: 14, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -307,10 +299,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                 } else {
                                   errorDialog(context,
                                       "Open kontainer $kode_kontainer1 gagal dilakukan !");
-                                  // print('cekmasuk4');
-                                  // _scaffoldState.currentState.showSnackBar(
-                                  //     SnackBar(
-                                  //         content: Text("Submit data failed")));
                                 }
                               });
                             }
@@ -333,7 +321,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                           SizedBox(
                             width: 30,
                           ),
-                          // Text("Selesai" + idtransaksii.toString(),
                           Text("Selesai",
                               style: GoogleFonts.inter(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
@@ -360,30 +347,9 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                         MaterialPageRoute(
                                             builder: (context) => HomePage()));
                                   }, positiveText: "Ok");
-                                  // WidgetsBinding.instance
-                                  //     .addPostFrameCallback((timeStamp) {
-                                  //   Flushbar(
-                                  //     message: "Ok masuk",
-                                  //     flushbarPosition:
-                                  //         FlushbarPosition.BOTTOM,
-                                  //     icon: Icon(Icons.ac_unit),
-                                  //     flushbarStyle: FlushbarStyle.GROUNDED,
-                                  //     duration: Duration(seconds: 5),
-                                  //   )..show(
-                                  //       _scaffoldState.currentState.context);
-                                  // });
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             StorageActive1()));
                                 } else {
                                   errorDialog(
                                       context, "Transaksi gagal dilakukan !");
-                                  // _scaffoldState.currentState.showSnackBar(
-                                  //     SnackBar(
-                                  //         content:
-                                  //             Text("Submit data failed")));
                                 }
                               });
                             }
@@ -462,28 +428,5 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
         ),
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 }

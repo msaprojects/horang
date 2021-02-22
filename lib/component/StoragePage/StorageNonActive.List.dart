@@ -7,6 +7,8 @@ import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageNonActive1 extends StatefulWidget {
@@ -25,7 +27,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
       refresh_token,
       idcustomer,
       iddetail_trans,
-      email,
+      pin,
       nama,
       nama_customer,
       keterangan,
@@ -36,40 +38,39 @@ class _StorageNonActive extends State<StorageNonActive1> {
       tanggal_order,
       hari,
       aktif;
-  // final String aktif = "";
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -84,7 +85,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
     cekToken();
   }
 
-// class OnGoing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -167,15 +167,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
                             myStorage.tanggal_akhir,
                             myStorage.hari.toString(),
                           );
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) {
-                          //   return KonfirmasiLog(
-                          //     kode_kontainer: myStorage.kode_kontainer,
-                          //     nama_kota: myStorage.nama_kota,
-                          //     idtransaksi_detail: myStorage.idtransaksi_detail,
-                          //     nama: myStorage.nama,
-                          //   );
-                          // }));
                         }
                       },
                       child: Column(
@@ -283,9 +274,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                     // ),
                                   ),
                                 ),
-                                // IconButton(
-                                //   icon: Icon(Icons.hourglass_empty, color: Colors.green, size: 30,),
-                                // ),
                               ],
                             ),
                           ),
@@ -293,8 +281,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
                       ),
                     );
                   },
-                  // separatorBuilder: (context, index) => Divider(),
-                  // itemCount: dataIndex.length,
                 )),
               ),
             ),
@@ -302,29 +288,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
         ],
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 
   AccountValidation(BuildContext context) {
@@ -448,96 +411,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
                               // width: 900,
                               child: Column(
                             children: [
-                              // Row(
-                              //   children: [
-                              //     Container(
-                              //       width: 75,
-                              //       height: 80,
-                              //       child: FlatButton(
-                              //           color: Colors.red,
-                              //           onPressed: () {
-                              //             _alertOpen(
-                              //               context,
-                              //               idtransaksi_detail,
-                              //               kode_kontainer.toString(),
-                              //               nama_kota,
-                              //               nama,
-                              //               nama_lokasi.toString(),
-                              //               keterangan,
-                              //               tanggal_order,
-                              //               tanggal_mulai,
-                              //               tanggal_akhir,
-                              //               hari.toString(),
-                              //             );
-                              //           },
-                              //           child: Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.spaceEvenly,
-                              //             children: [
-                              //               Icon(
-                              //                 Icons.lock_open_outlined,
-                              //                 color: Colors.white,
-                              //               ),
-                              //               Text(
-                              //                 'Open',
-                              //                 style: GoogleFonts.inter(
-                              //                     fontSize: 13,
-                              //                     color: Colors.white,
-                              //                     fontWeight: FontWeight.bold),
-                              //               ),
-                              //             ],
-                              //           )),
-                              //     ),
-                              //     Container(
-                              //       width: 80,
-                              //       height: 80,
-                              //       child: FlatButton(
-                              //           color: Colors.green,
-                              //           onPressed: () {},
-                              //           child: Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.spaceEvenly,
-                              //             children: [
-                              //               Icon(
-                              //                 Icons.check_box_outlined,
-                              //                 color: Colors.white,
-                              //               ),
-                              //               Text(
-                              //                 'Selesai',
-                              //                 style: GoogleFonts.inter(
-                              //                     fontSize: 13,
-                              //                     color: Colors.white,
-                              //                     fontWeight: FontWeight.bold),
-                              //               ),
-                              //             ],
-                              //           )),
-                              //     ),
-                              //     Container(
-                              //       width: 75,
-                              //       height: 80,
-                              //       child: FlatButton(
-                              //           color: Colors.yellow[700],
-                              //           onPressed: () {},
-                              //           child: Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.spaceEvenly,
-                              //             children: [
-                              //               Icon(
-                              //                 Icons.event_note_outlined,
-                              //                 color: Colors.white,
-                              //               ),
-                              //               Text(
-                              //                 'Log',
-                              //                 style: GoogleFonts.inter(
-                              //                     fontSize: 14,
-                              //                     color: Colors.white,
-                              //                     fontWeight: FontWeight.bold),
-                              //               ),
-                              //             ],
-                              //           )),
-                              //     ),
-                              //   ],
-                              // ),
                               Container(
                                 width: 900,
                                 // height: 40,
@@ -545,30 +418,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                     height: 40,
                                     color: Colors.blue,
                                     onPressed: () {
-                                      // Navigator.of(context).pushReplacement(
-                                      //     MaterialPageRoute(
-                                      //         builder: (BuildContext context) =>
-                                      //             KonfirmasiLog(
-                                      //               kode_kontainer:
-                                      //                   kode_kontainer,
-                                      //               nama_kota: nama_kota,
-                                      //               // idtransaksi_detail: ,
-                                      //               idtransaksi_detail:
-                                      //                   idtransaksi_detail,
-                                      //               nama: nama,
-                                      //             )));
                                       Navigator.pop(context);
-                                      // Navigator.push(context,
-                                      //     MaterialPageRoute(builder: (context) {
-                                      //   return KonfirmasiLog(
-                                      //     kode_kontainer: kode_kontainer,
-                                      //     nama_kota: nama_kota,
-                                      //     // idtransaksi_detail: ,
-                                      //     idtransaksi_detail:
-                                      //         idtransaksi_detail,
-                                      //     nama: nama,
-                                      //   );
-                                      // }));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -598,7 +448,6 @@ class _StorageNonActive extends State<StorageNonActive1> {
             ),
           );
         });
-    // showDialog(context: context, child: dialog);
   }
 
   void _alertOpen(

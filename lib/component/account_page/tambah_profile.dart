@@ -4,6 +4,7 @@ import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,12 +18,13 @@ class TambahProfile extends StatefulWidget {
 
 class _TambahProfileState extends State<TambahProfile> {
   SharedPreferences sp;
-  bool _isLoading = false;
   ApiService _apiService = ApiService();
+  bool _isLoading = false,
+      _isFieldNamaLengkap,
+      _isFieldAlamat,
+      _isFieldNoKtp,
+      isSuccess = true;
   var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
-  bool _isFieldNamaLengkap;
-  bool _isFieldAlamat;
-  bool _isFieldNoKtp, isSuccess = true;
   String nama_customer, valKota, pin;
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
@@ -49,7 +51,7 @@ class _TambahProfileState extends State<TambahProfile> {
     pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
@@ -67,7 +69,7 @@ class _TambahProfileState extends State<TambahProfile> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -294,25 +296,5 @@ class _TambahProfileState extends State<TambahProfile> {
         });
       },
     );
-  }
-
-  Future showAlertDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Sesi Anda Berakhir!"),
-            content: Text(
-                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-            actions: [
-              FlatButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Ok"))
-            ],
-          );
-        });
   }
 }

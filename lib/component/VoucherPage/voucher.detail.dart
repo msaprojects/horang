@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VoucherDetail extends StatefulWidget {
@@ -26,7 +28,9 @@ class _VoucherDetailState extends State<VoucherDetail> {
       kode_voucher1,
       nominal1,
       keterangan1,
-      gambar1;
+      gambar1,
+      nama_customer,
+      pin;
   ApiService _apiService = ApiService();
 
   cekToken() async {
@@ -34,32 +38,33 @@ class _VoucherDetailState extends State<VoucherDetail> {
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -142,29 +147,5 @@ class _VoucherDetailState extends State<VoucherDetail> {
         ],
       ),
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        print("ini konfirmasi log");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 }

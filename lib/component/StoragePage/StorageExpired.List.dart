@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'StorageHandler.dart';
@@ -32,42 +34,41 @@ class _StorageExpired extends State<StorageExpired1> {
       nama_lokasi,
       tanggal_order,
       hari,
-      aktif;
-  // final String aktif = "";
+      aktif,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -82,17 +83,13 @@ class _StorageExpired extends State<StorageExpired1> {
     cekToken();
   }
 
-// class OnGoing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(
-          // future: _apiService.listJenisProduk(access_token),
           future: _apiService.listMystorage(access_token),
-          builder:
-              // (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
-              (BuildContext context,
-                  AsyncSnapshot<List<MystorageModel>> snapshot) {
+          builder: (BuildContext context,
+              AsyncSnapshot<List<MystorageModel>> snapshot) {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
@@ -182,51 +179,6 @@ class _StorageExpired extends State<StorageExpired1> {
                                   ),
                                   Text('Lokasi : ' + myStorage.nama_lokasi,
                                       style: GoogleFonts.inter(fontSize: 14)),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                  //   children: <Widget>[
-                                  //     Text(
-                                  //       'Kode Kontainer : ',
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //     Text(
-                                  //       myStorage.kode_kontainer,
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                  //   children: <Widget>[
-                                  //     Text(
-                                  //       'Jenis Kontainer : ',
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //     Text(
-                                  //       myStorage.nama,
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                  //   children: <Widget>[
-                                  //     Text(
-                                  //       'Lokasi : ',
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //     Text(
-                                  //       myStorage.nama_lokasi,
-                                  //       style: TextStyle(
-                                  //           fontSize: 16, color: Colors.black),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Text(
@@ -243,18 +195,10 @@ class _StorageExpired extends State<StorageExpired1> {
                         ],
                       ),
                     ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
-                    // Divider(
-                    //   height: 10,
-                    // )
                   ],
                 ),
               );
             },
-            // separatorBuilder: (context, index) => Divider(),
-            // itemCount: dataIndex.length,
           )),
         ),
       ),
@@ -363,30 +307,6 @@ class _StorageExpired extends State<StorageExpired1> {
                   ]),
             ),
           );
-        });
-    // showDialog(context: context, child: dialog);
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
         });
   }
 

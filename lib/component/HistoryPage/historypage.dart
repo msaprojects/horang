@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
 
@@ -34,14 +36,13 @@ class _HistoryPageState extends State<HistoryPage> {
     jumlah_sewa = sp.getString("jumlah_sewa");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            print('history cek token '+value.toString()+" -- "+access_token);
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
@@ -53,11 +54,11 @@ class _HistoryPageState extends State<HistoryPage> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -77,7 +78,8 @@ class _HistoryPageState extends State<HistoryPage> {
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listHistory(access_token),
-        builder: (BuildContext context, AsyncSnapshot<List<HistoryModel>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<HistoryModel>> snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -91,26 +93,25 @@ class _HistoryPageState extends State<HistoryPage> {
             List<HistoryModel> historyyy = snapshot.data;
             if (historyyy.isEmpty) {
               return Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/image/datanotfound.png"),
-                        Text(
-                          "Oppss..Maaf data history kosong.",
-                          style: GoogleFonts.inter(color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/image/datanotfound.png"),
+                      Text(
+                        "Oppss..Maaf data history kosong.",
+                        style: GoogleFonts.inter(color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
                   ),
-                );
+                ),
+              );
             } else {
               return _buildListView(historyyy);
             }
-            
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -153,14 +154,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 itemBuilder: (context, index) {
                   HistoryModel history = dataIndex[index];
                   return Card(
-                    // child: Column(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
                     child: InkWell(
-                      // onTap: () {
-                      //   setState(() {
-
-                      //   });
-                      // },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
@@ -207,23 +201,26 @@ class _HistoryPageState extends State<HistoryPage> {
                                     ),
                                   ),
                                   Text(
-                                    "Nominal Bayar : " + rupiah(history.total_harga.toString()),
+                                    "Nominal Bayar : " +
+                                        rupiah(history.total_harga.toString()),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black45,
                                     ),
                                   ),
                                   Text(
-                                    "Jumlah Sewa : " + history.jumlah_sewa.toString() +" /Hari",
+                                    "Jumlah Sewa : " +
+                                        history.jumlah_sewa.toString() +
+                                        " /Hari",
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black45,
                                     ),
                                   ),
                                   Text(
-                                    "Harga : "
-                                     + rupiah(history.harga.toString()) +" /Hari"
-                                     ,
+                                    "Harga : " +
+                                        rupiah(history.harga.toString()) +
+                                        " /Hari",
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black45,
@@ -270,49 +267,6 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
   }
-
-  Future showAlertDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Sesi Anda Berakhir!"),
-            content: Text(
-                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-            actions: [
-              FlatButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Ok"))
-            ],
-          );
-        });
-  }
-
-  // showAlertDialog(BuildContext context) {
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => LoginPage()));
-  //     },
-  //   );
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("Sesi Anda Berakhir!"),
-  //     content: Text(
-  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alert;
-  //       });
-  // }
 
   AccountValidation(BuildContext context) {
     Widget okButton = FlatButton(
