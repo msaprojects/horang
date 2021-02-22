@@ -47,14 +47,14 @@ class ApiService {
   String urlasuransi,
       urlceksaldo,
       urllokasi,
-      urlgetlist,
+      urlgetcustomer,
       urlsettingbylokasi,
       urlkota;
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
     urllokasi = baseUrl + "lokasi";
-    urlgetlist = baseUrl + "customer";
+    urlgetcustomer = baseUrl + "customer";
     urlsettingbylokasi = baseUrl + "lokasisetting";
     urlkota = baseUrl + "kota";
   }
