@@ -101,45 +101,11 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
             } else if (snapshot.connectionState == ConnectionState.done) {
               List<HistoryModel> profiles = snapshot.data;
               if (profiles.isNotEmpty) {
-                return _buildlistview(profiles);
+                return Text("kosong");
               } else {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Card(
-                    child: GestureDetector(
-                      onTap: () {
-                        infoDialog(context,
-                            "Data Kosong, Silahkan lakukan transaksi order terlebih dahulu !");
-                      },
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline_rounded,
-                            color: Colors.orange,
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Anda Belum Ada Transaksi...",
-                            style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ),
-                );
+                return Text('llllama');
               }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              // return _buildlistview(profiles);
             }
           }),
     );
@@ -176,7 +142,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   mystorageModel.nama_provider,
                   mystorageModel.tanggal_order,
                   mystorageModel.tanggal_akhir,
-                  mystorageModel.tanggal_mulai,                  
+                  mystorageModel.tanggal_mulai,
                   mystorageModel.total_harga,
                   mystorageModel.harga,
                   mystorageModel.jumlah_sewa,
@@ -295,12 +261,16 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Nominal Bayar : " + rupiah(total_harga.toString()),
+                          Text(
+                              "Nominal Bayar : " +
+                                  rupiah(total_harga.toString()),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Jumlah Sewa : " + jumlah_sewa.toString() +
+                          Text(
+                              "Jumlah Sewa : " +
+                                  jumlah_sewa.toString() +
                                   " Hari",
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
@@ -311,9 +281,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(
-                              "Tgl Order : " +
-                                  tanggal_order.toString(),
+                          Text("Tgl Order : " + tanggal_order.toString(),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,

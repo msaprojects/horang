@@ -247,11 +247,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             pkapasitas,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: new Flexible(
-                              child: Text(
+                          subtitle: new Text(
                             palamat,
                             style: TextStyle(color: Colors.black),
-                          )),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -350,10 +349,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 ],
                               ),
                             ),
-                            Flexible(
-                                child: Text(
-                              pketerangan_barang,
-                            )),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 60),
+                              child: Text(
+                                pketerangan_barang,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -461,14 +463,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Flexible(
-                                child: Text(
-                                  rupiah(
-                                    ptotal_asuransi,
-                                  ),
-                                  overflow: TextOverflow.clip,
-                                  maxLines: 2,
+                              child: Text(
+                                rupiah(
+                                  ptotal_asuransi,
                                 ),
+                                overflow: TextOverflow.clip,
+                                maxLines: 2,
                               ),
                             ),
                           ],
@@ -613,7 +613,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       children: [
                         ListTile(
                           selected: true,
-                          leading: Text("gambar"),
+                          leading: Image(
+                            image: NetworkImage(pymentgtwy.gambar.toString()),
+                            
+                          ),
                           title: Text(
                             pymentgtwy.nama_provider,
                             style: GoogleFonts.inter(
@@ -675,6 +678,26 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Center(
+                          child: Text(
+                              "Anda akan melakukan pembayaran menggunakan $namaprovider",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.inter(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Text(
+                                "Dengan ini Saya menyatakan persetujuan kepada Horang Apps untuk memperoleh dan menggunakan kontainer yang sudah saya pesan sesuai kebijakan yang berlaku",
+                                textAlign: TextAlign.left,
+                                style: GoogleFonts.inter(
+                                    height: 1.5, fontSize: 14))),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -682,7 +705,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             RaisedButton(
                                 color: Colors.green,
                                 child: Text(
-                                  "Lanjutkan Pembayaran $idpayment",
+                                  "Lanjutkan Pembayaran",
+                                  // "Lanjutkan Pembayaran $idpayment",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -85,7 +86,41 @@ class _VoucherDashboard extends State<VoucherDashboard> {
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
           List<VoucherModel> voucher = snapshot.data;
-          return _listPromo(voucher);
+          if (voucher.isNotEmpty) {
+          return _listPromo(voucher);  
+          } else {
+            return Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Card(
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline_rounded,
+                            color: Colors.orange,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Anda Belum Ada Transaksi...",
+                            style: GoogleFonts.lato(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ),
+                );
+          }
+          
         } else {
           return Center(
             child: CircularProgressIndicator(),

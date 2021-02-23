@@ -75,7 +75,7 @@ class _ProdukList extends State<ProdukList> {
   var selectedTimeSelesai =
       TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)));
 
-  var sixtyninetyninehundredthousand =
+  var durasiforklift =
       DateTime.now().add(new Duration(hours: 3));
 
   TextEditingController dateController = TextEditingController();
@@ -539,7 +539,7 @@ class _ProdukList extends State<ProdukList> {
     timeController.text =
         DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
     timeControllerSelesai.text =
-        sixtyninetyninehundredthousand.hour.toString() +
+        durasiforklift.hour.toString() +
             "." +
             DateTime.now().minute.toString();
     _cekKoneksi();

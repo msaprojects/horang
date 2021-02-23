@@ -86,7 +86,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       minimaldeposit = 0,
       nomasuransi = 0,
       idvoucher = 0,
-      totaldeposit = 0, potonganvoucher =0;
+      totaldeposit = 0,
+      potonganvoucher = 0;
   DateTime dtAwal, dtAkhir;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
@@ -266,7 +267,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               "Harga : " +
                                   rupiah(harga_sewa.toString(),
                                       separator: '.') +
-                                  " /"+vsatuan_sewa,
+                                  " /" +
+                                  vsatuan_sewa,
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -320,16 +322,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
-                                    SizedBox(width: 10),
-                                    Text(
-                                        "( " +
-                                            vdurasi_sewa.toString() +" "+
-                                            vsatuan_sewa +")",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
                                   ],
                                 ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 30, top: 5),
+                                child: Text(
+                                    "( " +
+                                        vdurasi_sewa.toString() +
+                                        " " +
+                                        vsatuan_sewa +
+                                        ")",
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),
@@ -547,7 +553,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       enabled: false,
-                                      hintText: "$getVoucher - "+potonganvoucher.toString(),
+                                      hintText: "$getVoucher - " +
+                                          potonganvoucher.toString(),
                                       border: const OutlineInputBorder(),
                                     ),
                                   ),
@@ -657,28 +664,55 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     color: Colors.green,
                     onPressed: () {
                       hitungsemuaFunction();
-                      _nominalbarang.text.toString() == "0" ||
-                              _keteranganbarang.text.toString() == "" ||
-                              _nominalbarang.text.toString() == "" ||
-                              _keteranganbarang.text.toString() == "0" ||
-                              _keteranganbarang.text.toString() == "-"
-                          ? errorDialog(context,
-                              "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
-                          : setState(() {
-                              if (ceksaldo >= hargaxminimalsewadeposit) {
-                                saldodepositkurangnominaldeposit = 0;
-                                totaldeposit = hargaxminimalsewadeposit;
-                                kondisisaldo = "";
-                                orderConfirmation(context);
-                              } else {
-                                saldodepositkurangnominaldeposit =
-                                    hargaxminimalsewadeposit - ceksaldo;
-                                totaldeposit = ceksaldo;
-                                kondisisaldo =
-                                    "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
-                                cekDeposit(context);
-                              }
-                            });
+                      if (_nominalbarang.text.toString() == "0" ||
+                          _nominalbarang.text.toString() == "") {
+                        errorDialog(context,
+                            "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.");
+                      } else if (_keteranganbarang.text.toString() == "" ||
+                          _keteranganbarang.text.toString() == "0" ||
+                          _keteranganbarang.text.toString() == "-") {
+                        errorDialog(context,
+                            "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
+                      } else {
+                        setState(() {
+                        if (ceksaldo >= hargaxminimalsewadeposit) {
+                          saldodepositkurangnominaldeposit = 0;
+                          totaldeposit = hargaxminimalsewadeposit;
+                          kondisisaldo = "";
+                          orderConfirmation(context);
+                        } else {
+                          saldodepositkurangnominaldeposit =
+                              hargaxminimalsewadeposit - ceksaldo;
+                          totaldeposit = ceksaldo;
+                          kondisisaldo =
+                              "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                          cekDeposit(context);
+                        }
+                      });
+                      }
+                      // _nominalbarang.text.toString() == "0" ||
+                      //         _keteranganbarang.text.toString() == "" ||
+                      //         _nominalbarang.text.toString() == "" ||
+                      //         _keteranganbarang.text.toString() == "0" ||
+                      //         _keteranganbarang.text.toString() == "-"
+                      //     ? errorDialog(context,
+                      //         "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
+                      //     :
+                      // setState(() {
+                      //   if (ceksaldo >= hargaxminimalsewadeposit) {
+                      //     saldodepositkurangnominaldeposit = 0;
+                      //     totaldeposit = hargaxminimalsewadeposit;
+                      //     kondisisaldo = "";
+                      //     orderConfirmation(context);
+                      //   } else {
+                      //     saldodepositkurangnominaldeposit =
+                      //         hargaxminimalsewadeposit - ceksaldo;
+                      //     totaldeposit = ceksaldo;
+                      //     kondisisaldo =
+                      //         "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                      //     cekDeposit(context);
+                      //   }
+                      // });
                     },
                     child: Text(
                       "Lanjutkan Pembayaran",
@@ -813,7 +847,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
                         vmaksimalpotongan = voucherlist.nominal_persentase;
-                        potonganvoucher = ((double.parse(vpersentasevoucher.toString())/100) * double.parse(totalhariharga.toString()));
+                        potonganvoucher =
+                            ((double.parse(vpersentasevoucher.toString()) /
+                                    100) *
+                                double.parse(totalhariharga.toString()));
                         flagvoucher = true;
                         Navigator.pop(context);
                         hitungsemuaFunction();
@@ -834,32 +871,32 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           ),
                           Container(
                             padding: EdgeInsets.only(left: 10, top: 10),
+                            height: 500,
                             child: SizedBox(
                               width: 170,
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text("Kode Voucher : " +
                                       voucherlist.kode_voucher.toString()),
-                                  Flexible(
-                                    child: Text(
-                                      "Minimum Transaksi : " +
-                                          rupiah(voucherlist.min_nominal.toString()),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.visible,
-                                      softWrap: false,
-                                    ),
+                                  Text(
+                                    "Min. Transaksi : " +
+                                        rupiah(
+                                            voucherlist.min_nominal.toString()),
+                                    overflow: TextOverflow.visible,
+                                    softWrap: false,
                                   ),
-                                  Text("Nominal Potongan : " +
-                                      rupiah(voucherlist.nominal_persentase.toString())),
-                                  Flexible(
-                                    child: Text("Persentase Potongan : " +
+                                  Text("Nom. Potongan : " +
+                                      rupiah(voucherlist.nominal_persentase
+                                          .toString())),
+                                  Text(
+                                    "Persen. Potongan : " +
                                         voucherlist.persentase.toString() +
                                         " %",
-                                        softWrap: false,
-                                        overflow: TextOverflow.visible,
-                                        ),
+                                    softWrap: false,
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ],
                               ),

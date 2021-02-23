@@ -97,6 +97,7 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: non_constant_identifier_names
     void Keluarr() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       cekToken();

@@ -160,7 +160,10 @@ class _UbahProfileState extends State<UbahProfile> {
   }
 
   Widget _buildIsifield(List<Customers> customer) {
-    print("santzz ${customer[0].namakota}");
+    print("santzz ${customer[0].namakota} ${customer[0].idcustomer}");
+    print("ada akses tokennya $access_token");
+    // if(valKota == null) valKota==customer[0].idkota;
+    print("valkotanya ada kah $valKota");
     idcustomer = customer[0].idcustomer;
     return Container(
         child: SingleChildScrollView(
@@ -187,7 +190,7 @@ class _UbahProfileState extends State<UbahProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        _buildKomboKota(customer[0].namakota.toString()),
+                        _buildKomboKota(customer[0].namakota.toString(), customer[0].idkota.toString()),
                         // Text("kamu memilih kota $valKota"),
                       ],
                     ),
@@ -207,10 +210,6 @@ class _UbahProfileState extends State<UbahProfile> {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () async {
-                        //print("kay");
-                        // String noktp = _controllerNoktp.text.toString();
-                        //print("noktp :$noktp");
-                        // String namalengkap = _controllerNamaLengkap.text.toString();
                         String alamat = _controllerAlamat.text.toString();
                         setState(() {
                           alamat.isEmpty
@@ -224,43 +223,49 @@ class _UbahProfileState extends State<UbahProfile> {
                             _controllerEmail.text +
                             _controllerNoktp.text);
                         setState(() => _isLoading = true);
-                        print("cek kota " + valKota.toString());
+                        if(valKota == null) valKota==customer[0].idkota;
+                        print("cek kota " +
+                            valKota.toString() +
+                            "_____" +
+                            access_token +
+                            "----" +
+                            customer[0].idkota.toString());
                         Customers customer1 = Customers(
-                          // nama_customer: _controllerNamaLengkap.text.toString(),
-                          // no_hp: _controllerNoHp.text.toString(),
-                          // email: _controllerEmail.text.toString(),
-                          // noktp: _controllerNoktp.text.toString(),
                           namacustomer: _controllerNamaLengkap.text.toString(),
-                          // no_hp: _controllerNoHp.text.toString(),
-                          // email: _controllerEmail.text.toString(),
                           noktp: _controllerNoktp.text.toString(),
                           alamat: _controllerAlamat.text.toString(),
                           blacklist: "0",
                           token: access_token,
-                          idkota: int.parse(valKota),
+                          idkota: int.parse(
+                              valKota), //ambil idkota ketika pilih kombo
+                          // idkota: customer[0].idkota, //ambil idkota ketika tidak memilih kombo
                         );
                         print('MASUK ${customer1}');
-                        _apiService.UpdateCustomer(customer1).then((isSuccess) {
-                          setState(() => _isLoading = true);
-                          if (isSuccess) {
-                            print("sukses");
-                            successDialog(
-                                context, "Data profile berhasil disimpan",
-                                showNeutralButton: false,
-                                positiveText: "Ok", positiveAction: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => Home(
-                                            initIndexHome: 0,
-                                          )),
-                                  (route) => false);
-                            });
-                            // return showAlertDialog(context);
-                          } else {
-                            errorDialog(context, "Data profile gagal disimpan");
-                            // Text("Data gagal disimpan, ${_apiService}");
-                          }
-                        });
+                        // ignore: unrelated_type_equality_checks
+                          _apiService.UpdateCustomer(customer1)
+                              .then((isSuccess) {
+                            setState(() => _isLoading = true);
+                            // ignore: unrelated_type_equality_checks
+                            if (isSuccess) {
+                              print("sukses");
+                              successDialog(
+                                  context, "Data profile berhasil disimpan",
+                                  showNeutralButton: false,
+                                  positiveText: "Ok", positiveAction: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => Home(
+                                              initIndexHome: 0,
+                                            )),
+                                    (route) => false);
+                              });
+                              // return showAlertDialog(context);
+                            } else {
+                              errorDialog(
+                                  context, "Data profile gagal disimpan");
+                              // Text("Data gagal disimpan, ${_apiService}");
+                            }
+                          });
                       },
                     ),
                   ),
@@ -459,17 +464,15 @@ class _UbahProfileState extends State<UbahProfile> {
     );
   }
 
-  Widget _buildKomboKota(String kotaaaa) {
-    // List<dynamic> _dataKota = List();
+  Widget _buildKomboKota(String kotaaaa, String idkotaa) {    
     print("buildkombokota : $_dataKota");
-    _controlleridkota.text = kotaaaa;
-    // _controlleridkota = TextEditingController(text: kotaaaa);
+    // _controlleridkota.text = kotaaaa;
+    valKota = idkotaa;
     return DropdownButtonFormField(
       hint: Text(kotaaaa),
       value: valKota,
       items: _dataKota.map((item) {
         return DropdownMenuItem(
-          // child: Text(item['nama_kota']),
           child: Text("${item['nama_kota']}"),
           value: item['idkota'].toString(),
         );
@@ -478,7 +481,7 @@ class _UbahProfileState extends State<UbahProfile> {
         valKota = value.toString();
         // setState(() {
         // valKota = value.toString();
-        // print("damn" + value.toString());
+        // print("ada kah" + value.toString());
         // }
         // );
       },

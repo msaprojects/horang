@@ -319,8 +319,8 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
-    Map message = jsonDecode(response.statusCode.toString());
-    responseCode = ResponseCodeCustom.fromJson(message);
+    // Map message = jsonDecode(response.statusCode.toString());
+    // responseCode = ResponseCodeCustom.fromJson(message);
     // print("responsss" + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
