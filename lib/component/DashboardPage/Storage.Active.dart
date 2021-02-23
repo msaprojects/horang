@@ -6,7 +6,9 @@ import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageActive extends StatefulWidget {
@@ -24,20 +26,21 @@ class _StorageActive extends State<StorageActive> {
       email,
       nama_customer,
       nama,
-      gambar;
+      gambar,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -53,11 +56,11 @@ class _StorageActive extends State<StorageActive> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -81,7 +84,7 @@ class _StorageActive extends State<StorageActive> {
           if (snapshot.hasError) {
             return Center(
               child: Text(
-                  "3Something wrong with message: ${snapshot.error.toString()}"),
+                  "Something wrong with message: ${snapshot.error.toString()}"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -127,8 +130,6 @@ class _StorageActive extends State<StorageActive> {
 
   Widget _buildlistview(List<MystorageModel> dataIndex) {
     return Container(
-      // padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-      // height: MediaQuery.of(context).size.height * 0.35,
       height: 100,
       margin: EdgeInsets.only(left: 16, right: 16),
       child: ListView.builder(
@@ -144,7 +145,6 @@ class _StorageActive extends State<StorageActive> {
                         'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
                     duration: Duration(seconds: 10),
                   ));
-//                        Navigator.pop(context, false);
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return KonfirmasiLog(
@@ -157,7 +157,6 @@ class _StorageActive extends State<StorageActive> {
                       nama_kota: kontainerActive.nama_kota,
                       idtransaksi_detail: kontainerActive.idtransaksi_detail,
                       nama: kontainerActive.nama,
-                      // jenisProduk: jenisProduk,
                     );
                   }));
                 }

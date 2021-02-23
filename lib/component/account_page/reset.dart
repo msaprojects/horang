@@ -20,15 +20,15 @@ class Reset extends StatefulWidget {
 }
 
 class _ResetState extends State<Reset> {
+  ApiService _apiService = ApiService();
   bool _isLoading = false, _email, _isFieldEmail;
   String emails, tipes, judul;
-  TextEditingController _controlleremail = TextEditingController();
-  ApiService _apiService = ApiService();
   var iddevice;
+  TextEditingController _controlleremail = TextEditingController();
+
   @override
   void initState() {
     tipes = widget.tipe;
-    // print("IDDEVICEEE : " + iddevice.toString());
   }
 
   @override
@@ -104,10 +104,6 @@ class _ResetState extends State<Reset> {
                           style: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {
-                          // setState(() {
-                          //   print("IDDEVICE : " + iddevice.toString());
-                          //   _isLoading = false;
-                          // });
                           GetDeviceID().getDeviceID(context).then((ids) {
                             setState(() {
                               iddevice = ids;
@@ -185,7 +181,6 @@ class _ResetState extends State<Reset> {
                                       }
                                     });
                                   } else if (tipes == "ResetDevice") {
-                                    print('reset device');
                                     _apiService.LostDevice(reset)
                                         .then((isSuccess) {
                                       if (!isSuccess) {

@@ -7,6 +7,7 @@ import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,20 +68,16 @@ class FormInputPembayaran extends StatefulWidget {
 }
 
 class _FormInputPembayaran extends State<FormInputPembayaran> {
-  ApiService _apiService = ApiService();
-  int grup = 1;
-  var rgIndex = 1;
-  int rgID = 1;
-  int _currentIndex = 1;
-  String rgValue = "";
-  bool _sel = false, isEnabled = true;
-  bool asuransi = false;
-  String formatedate, formatedate2;
   SharedPreferences sp;
-  bool isSuccess = false;
-  int idorder = 0;
-  var access_token, refresh_token, email, nama_customer;
-  var pflagasuransi,
+  ApiService _apiService = ApiService();
+  int grup = 1, rgID = 1, _currentIndex = 1, rgIndex = 1, idorder = 0;
+  bool _sel = false, isEnabled = true, asuransi = false, isSuccess = false;
+  String formatedate, formatedate2, rgValue = "";
+  var access_token,
+      refresh_token,
+      email,
+      nama_customer,
+      pflagasuransi,
       pflagvoucher,
       pidlokasi,
       pidjenis_produk,
@@ -105,9 +102,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       ppersentase_asuransi,
       hitungsemua,
       pminimalsewahari,
-      totaldeposit;
-
-  var hasilperhitungan;
+      totaldeposit,
+      hasilperhitungan,
+      idcustomer,
+      pin;
 
   enableButton() {
     setState(() {
@@ -125,13 +123,14 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    email = sp.getString("email");
+    idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -147,11 +146,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));

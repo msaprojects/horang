@@ -6,8 +6,8 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/screen/log_aktifitas.dart';
+import 'package:horang/component/LogPage/log_aktifitas.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,11 +23,20 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
-
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      pin,
+      ceksaldo;
+  String token = '';
+  final scaffoldState = GlobalKey<ScaffoldState>();
+  final controllerTopic = TextEditingController();
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -37,26 +46,18 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
-  final scaffoldState = GlobalKey<ScaffoldState>();
-  final controllerTopic = TextEditingController();
-
-  String token = '';
-  var ceksaldo;
-
-  // final firebaseMessaging = FirebaseMessaging();
-
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -72,11 +73,11 @@ class _HomePageState extends State<HomePage> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -368,13 +369,13 @@ class _HomePageState extends State<HomePage> {
   String ucapan() {
     var jam = DateTime.now().hour;
     if (jam <= 12) {
-      return 'Pagi kak';
+      return 'Selamat Pagi ';
     } else if ((jam > 12) && (jam <= 15)) {
-      return 'Siang kak';
+      return 'Selamat Siang ';
     } else if ((jam > 15) && (jam < 20)) {
-      return 'Sore kak';
+      return 'Selamat Sore ';
     } else {
-      return 'Malam kak';
+      return 'Selamat Malam ';
     }
   }
 }

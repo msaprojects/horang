@@ -9,15 +9,12 @@ import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/component/account_page/ubah_profile.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Account extends StatefulWidget {
-  @override
-  // ignore: override_on_non_overriding_member
-  var objectt;
-  // Account({this.objectt});
   _AccountState createState() => _AccountState();
 }
 
@@ -25,7 +22,6 @@ class _AccountState extends State<Account> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  // ignore: non_constant_identifier_names
   var access_token,
       refresh_token,
       idcustomer,
@@ -39,7 +35,7 @@ class _AccountState extends State<Account> {
       idkotas;
 
   void getlistaprofile() async {
-    final response = await http.get(ApiService().urlgetlist,
+    final response = await http.get(ApiService().urlgetcustomer,
         headers: {"Authorization": "BEARER ${access_token}"});
     nmcust = json.decode(response.body)[0]['nama_customer'];
   }
@@ -51,15 +47,11 @@ class _AccountState extends State<Account> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
-    idpengguna = sp.getString("idpengguna");
-    // print("cek ada pin gak ya ? "+pin);
-    print("cek ada namacus gak ya ? " + nama_customer);
-    // print("cek ada id gak ya ? "+idcustomer);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -75,11 +67,11 @@ class _AccountState extends State<Account> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -104,8 +96,6 @@ class _AccountState extends State<Account> {
       await preferences.clear();
       if (preferences.getString("access_token") == null) {
         print("SharePref berhasil di hapus");
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => LoginPage()));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => WelcomePage()),
             (route) => false);
@@ -129,9 +119,6 @@ class _AccountState extends State<Account> {
         ),
         body: ListView(
           children: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            // ),
             Container(
               margin: EdgeInsets.only(left: 12, right: 12, bottom: 10),
               height: MediaQuery.of(context).size.height * 0.110,
@@ -194,11 +181,8 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        // MaterialPageRoute(builder: (context) => Pin2()));
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) => UbahPin()));
-                    // UbahProfile();
                   },
                 ),
               ),
@@ -214,7 +198,6 @@ class _AccountState extends State<Account> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => UbahPass()));
-                    // UbahProfile();
                   },
                 ),
               ),
@@ -230,12 +213,6 @@ class _AccountState extends State<Account> {
                   onTap: () {
                     infoDialog(context,
                         "Maaf, fitur masih dalam proses pengembangan !");
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => Home(
-                    //               initIndexHome: 0,
-                    //             )));
                   },
                 ),
               ),
@@ -262,29 +239,5 @@ class _AccountState extends State<Account> {
             )
           ],
         ));
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        print("ini account");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 }

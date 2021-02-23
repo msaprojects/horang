@@ -9,6 +9,7 @@ import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,10 +74,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
       namasetting1 = "",
       nilaisetting1 = "",
       namasetting2 = "",
-      nilaisetting2 = "";
+      nilaisetting2 = "",
+      idcustomer,
+      pin,
+      nama_customer;
   num vdurasi_sewa,
       idjenis_produk,
-      idcustomer,
       idasuransi,
       idlokasi,
       vminimumtransaksi = 0,
@@ -319,6 +322,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       width: 10,
                                     ),
                                     Text(valueakhir,
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(width: 10),
+                                    Text(
+                                        "( " +
+                                            vdurasi_sewa.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
@@ -920,10 +933,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
+    idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -939,10 +956,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));

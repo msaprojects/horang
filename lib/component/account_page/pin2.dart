@@ -7,6 +7,8 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -21,24 +23,29 @@ class Pin2 extends StatefulWidget {
 }
 
 class _Pin2State extends State<Pin2> {
-  TextEditingController controller = TextEditingController();
-  String thisText = "";
-  int pinLength = 4;
+  SharedPreferences sp;
+  LocalAuthentication auth = LocalAuthentication();
+  List<BiometricType> _availableBiometrics, availableBiometrics;
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token;
+  int pinLength = 4;
   bool hasError = false,
       isSuccess = true,
       _checkbio = false,
-      _canCheckBiometrics;
-  String errorMessage;
-  SharedPreferences sp;
-
-  LocalAuthentication auth = LocalAuthentication();
-  List<BiometricType> _availableBiometrics;
-  String autherized = "Not auth";
+      authenticated = false,
+      _canCheckBiometrics,
+      canCheckBiometrics;
+  var token = "",
+      newtoken = "",
+      access_token,
+      refresh_token,
+      idcustomer,
+      nama_customer,
+      pin,
+      thisText = "";
+  String autherized = "Not auth", errorMessage;
+  TextEditingController controller = TextEditingController();
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
-    bool canCheckBiometrics;
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
@@ -53,7 +60,6 @@ class _Pin2State extends State<Pin2> {
   }
 
   Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
     try {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
@@ -65,10 +71,9 @@ class _Pin2State extends State<Pin2> {
   }
 
   Future<void> _authenticate() async {
-    bool authenticated = false;
     try {
       authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: "Scan jari anda untuk konfirmasi mas",
+          localizedReason: "Scan jari anda untuk konfirmasi",
           useErrorDialogs: true,
           stickyAuth: false);
     } on PlatformException catch (e) {
@@ -83,101 +88,52 @@ class _Pin2State extends State<Pin2> {
             MaterialPageRoute(
               builder: (context) => Home(),
             ));
-        // print("salah bro");
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => Pin2(),
-        //     ));
-        // Pin_Model_Cek a1 = Pin_Model_Cek(
-        //   token_cek: access_token,
-        // );
-        // _apiService.CekPin(a1).then((isSuccess) {
-        //   setState(() {
-        //     if (isSuccess) {
-        //       Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => Home(),
-        //           ));
-      } else {
-        print('Moh. Salah');
-        // Pin_Model_Cek a1 = Pin_Model_Cek(
-        //   token_cek: access_token,
-        // );
-        // _apiService.CekPin(a1).then((isSuccess) {
-        //   setState(() {
-        //     if (isSuccess) {
-        //       Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => Home(),
-        //           ));
-        //     }
-        //   });
-        // });
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => Home(),
-        //     ));
       }
-      print(autherized);
     });
   }
 
-  // @override
-  // void initState() {
-  //   _checkBiometric();
-  //   _getAvailableBiometrics();
-  // }
-  ///////////////////////////////// TUUTP FINGER
-
   cekToken() async {
-    print("MASUK CEK TOKEN");
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    // access_token = access_token.toString();
-    // refresh_token = refresh_token.toString();
-    thisText = "";
-    print("Jasukeeeeeeeeeeeee $access_token");
+    idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    // if (access_token == null) {
-    //   showAlertDialog(context);
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-    //       (Route<dynamic> route) => true);
-    // } else {
-    //   _apiService.checkingToken(access_token).then((value) => setState(() {
-    //         isSuccess = value;
-    //         //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-    //         if (!isSuccess) {
-    //           _apiService
-    //               .refreshToken(refresh_token)
-    //               .then((value) => setState(() {
-    //                     var newtoken = value;
-    //                     //setting access_token dari refresh_token
-    //                     if (newtoken != "") {
-    //                       sp.setString("access_token", newtoken);
-    //                       access_token = newtoken;
-    //                     } else {
-    //                       showAlertDialog(context);
-    //                       Navigator.of(context).pushAndRemoveUntil(
-    //                           MaterialPageRoute(
-    //                               builder: (BuildContext context) =>
-    //                                   LoginPage()),
-    //                           (Route<dynamic> route) => true);
-    //                     }
-    //                   }));
-    //         }
-    //       }));
-    // }
+    if (access_token == null) {
+      ReusableClasses().showAlertDialog(context);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
+    } else {
+      _apiService.checkingToken(access_token).then((value) => setState(() {
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          ReusableClasses().showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
+            }
+          }));
+    }
   }
 
   @override
   void initState() {
-    print("Toookeeeeennnnn $access_token");
     _checkBiometric();
     _getAvailableBiometrics();
     _authenticate();
@@ -217,18 +173,13 @@ class _Pin2State extends State<Pin2> {
                   });
                 },
                 onDone: (text) {
-                  print("DONE $text");
-                  //  onPressed: () {
                   if (access_token == null) {
                     setState(() {
                       this.thisText = controller.text;
-                      print("Gassskaaan ========> $thisText");
-                      print("Cek pinModel: $access_token");
                       TambahPin_model pin = TambahPin_model(
                         // pin: thisText,
                         token: access_token,
                       );
-                      print("Cek PIN: $pin");
                       _apiService.TambahPin(pin).then((isSuccess) {
                         setState(() {
                           if (isSuccess) {
@@ -262,13 +213,10 @@ class _Pin2State extends State<Pin2> {
                   } else {
                     setState(() {
                       this.thisText = controller.text;
-                      // print("Gassskaaan ========> $thisText");
-                      // print("Cek pinModel: $access_token");
                       Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
                         pin_cek: thisText,
                         token_cek: access_token,
                       );
-                      print("Cek PIN masuk maskuh: $pin_cek1");
                       _apiService.CekPin(pin_cek1).then((isSuccess) {
                         setState(() {
                           if (isSuccess) {
@@ -281,8 +229,6 @@ class _Pin2State extends State<Pin2> {
                             //     _scaffoldState.currentState.context);
                             // Text("data berhasil disimpam");
                           } else {
-                            print('Pin salah masku, iling iling maneh');
-
                             WidgetsBinding.instance
                                 .addPostFrameCallback((timeStamp) {
                               Flushbar(
@@ -349,22 +295,6 @@ class _Pin2State extends State<Pin2> {
                   ),
                 ],
               ),
-              // InkWell(
-              //   onTap: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => Reset(
-              //                   tipe: "ResetPin",
-              //                 )));
-              //   },
-              //   child: new Text(
-              //     "Reset Pin",
-              //     style: TextStyle(
-              //       fontSize: 16,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

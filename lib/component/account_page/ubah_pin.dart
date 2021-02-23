@@ -4,6 +4,8 @@ import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // final globalKey = GlobalKey<ScaffoldState>();
@@ -19,18 +21,20 @@ class UbahPin extends StatefulWidget {
 
 class _UbahPinState extends State<UbahPin> {
   SharedPreferences sp;
+  ApiService _apiService = ApiService();
   bool _isLoading = false,
       isSuccess = true,
       _isFieldPinLama,
       _isFieldPinBaru,
       _isFieldPinBaruRetype;
-  ApiService _apiService = ApiService();
   var token = "",
       newtoken = "",
       access_token,
       refresh_token,
       idcustomer = "",
+      nama_customer,
       pin;
+
   TextEditingController _controllerPassLama = TextEditingController();
   TextEditingController _controllerPassBaru = TextEditingController();
   TextEditingController _controllerPassBaruRetype = TextEditingController();
@@ -40,14 +44,14 @@ class _UbahPinState extends State<UbahPin> {
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
-    print('CEKKKK PIN LAMA $pin');
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => true);
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
@@ -62,12 +66,12 @@ class _UbahPinState extends State<UbahPin> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => true);
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
                         }
                       }));
             }
@@ -77,7 +81,6 @@ class _UbahPinState extends State<UbahPin> {
 
   @override
   void initState() {
-    print("cek masuk initstate");
     super.initState();
     cekToken();
   }
@@ -92,7 +95,7 @@ class _UbahPinState extends State<UbahPin> {
         print("SharePref berhasil di hapus");
         showAlertDialog(context);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
             (Route<dynamic> route) => false);
       }
     }
@@ -104,10 +107,6 @@ class _UbahPinState extends State<UbahPin> {
           pin != "0" ? "Ubah Pin" : "Tambah Pin",
           style: TextStyle(color: Colors.black),
         ),
-        // title: Text(
-        //   "Ubah Pin",
-        //   style: TextStyle(color: Colors.black),
-        // ),
         elevation: 0,
         leading: IconButton(
             icon: Icon(

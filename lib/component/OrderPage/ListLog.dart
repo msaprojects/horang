@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -18,19 +20,25 @@ class _ListLogState extends State<ListLog> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, idtransaksi_detail1;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      idtransaksi_detail1,
+      nama_customer,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-
-    // iddetail_order = sp.getString("iddetail_order");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -46,11 +54,11 @@ class _ListLogState extends State<ListLog> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -71,25 +79,19 @@ class _ListLogState extends State<ListLog> {
     return SafeArea(
       child: FutureBuilder(
           future: _apiService.listloggs(access_token, idtransaksi_detail1),
-          // builder: (),
           builder:
               (BuildContext context, AsyncSnapshot<List<LogList>> snapshot) {
-            print('MASUK KANG $access_token');
-            print('detOrder $idtransaksi_detail1');
             if (snapshot.hasError) {
-              print('MASUK KANG1');
               return Center(
                 child: Text(
                     "6Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              print('MASUK KANG3');
               List<LogList> logs1 = snapshot.data;
               print(snapshot.data);
               // print("iamcannor ${snapshot.data}");
               return _buildListview(logs1);
             } else {
-              print('MASUK KANG4');
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -152,18 +154,21 @@ class _ListLogState extends State<ListLog> {
                     endChild: Padding(
                       padding: EdgeInsets.all(25),
                       child: Card(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10, top: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(log2.timestamp, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-                              Text(log2.status)
-                            ],
-                          ),
-                        )
-                      ),
-                      ),
+                          child: Container(
+                        padding: EdgeInsets.only(left: 10, top: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              log2.timestamp,
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            Text(log2.status)
+                          ],
+                        ),
+                      )),
+                    ),
                   );
                 },
               )),
