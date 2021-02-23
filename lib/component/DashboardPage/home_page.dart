@@ -6,7 +6,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/screen/log_aktifitas.dart';
+import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -369,13 +369,13 @@ class _HomePageState extends State<HomePage> {
   String ucapan() {
     var jam = DateTime.now().hour;
     if (jam <= 12) {
-      return 'Pagi kak';
+      return 'Selamat Pagi ';
     } else if ((jam > 12) && (jam <= 15)) {
-      return 'Siang kak';
+      return 'Selamat Siang ';
     } else if ((jam > 15) && (jam < 20)) {
-      return 'Sore kak';
+      return 'Selamat Sore ';
     } else {
-      return 'Malam kak';
+      return 'Selamat Malam ';
     }
   }
 }

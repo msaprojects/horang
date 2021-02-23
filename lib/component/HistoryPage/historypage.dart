@@ -17,13 +17,7 @@ class _HistoryPageState extends State<HistoryPage> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token,
-      refresh_token,
-      nama_customer,
-      no_order,
-      total_harga,
-      jumlah_sewa,
-      idcustomer;
+  var access_token, refresh_token, nama_customer, idcustomer, pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -31,9 +25,7 @@ class _HistoryPageState extends State<HistoryPage> {
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
-    no_order = sp.getString("no_order");
-    total_harga = sp.getString("total_harga");
-    jumlah_sewa = sp.getString("jumlah_sewa");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
