@@ -800,16 +800,15 @@ class _ProdukList extends State<ProdukList> {
                                         onTap: () {
                                           // print("idjenis produknya adalah");
                                           // print(jenisProduk.idjenis_produk);
-                                          if (nama_customer == "" ||
-                                              nama_customer == null ||
-                                              nama_customer == "0") {
+                                          if (idcustomer == "" ||
+                                              idcustomer == null ||
+                                              idcustomer == "0") {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
                                               content: Text(
                                                   'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
                                               duration: Duration(seconds: 10),
                                             ));
-//                        Navigator.pop(context, false);
                                           } else if (jenisProduk.avail == 0) {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
