@@ -103,6 +103,38 @@ class ReusableClasses {
     return nominalV;
   }
 
+  hitungvoucher(
+    String persentasevoucher,
+    String minimumtransaksi,
+    bool boolvoucher,
+    String nominalmaksVoucher,
+    String harga,
+    String durasi,
+  ) {
+    num nominalV = 0;
+
+    if (boolvoucher == false) {
+      nominalV = 0;
+    } else {
+      if ((double.parse(durasi) * double.parse(harga)) >=
+          double.parse(minimumtransaksi)) {
+        if (((double.parse(persentasevoucher) / 100) *
+                double.parse(harga) *
+                double.parse(durasi)) >=
+            double.parse(nominalmaksVoucher)) {
+          nominalV = double.parse(nominalmaksVoucher);
+        } else {
+          nominalV = (double.parse(persentasevoucher) / 100) *
+              double.parse(harga) *
+              double.parse(durasi);
+        }
+      } else {
+        nominalV = 0;
+      }
+    }
+    return nominalV;
+  }
+
   cekToken(String access_token, refresh_token, idcustomer, email, nama_customer,
       BuildContext context) async {
     ApiService _apiService;
