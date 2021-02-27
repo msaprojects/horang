@@ -319,16 +319,25 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     Text("s/d",
                                         style: GoogleFonts.inter(fontSize: 14)),
                                     SizedBox(
-                                      width: 10,
+                                      width: 5,
                                     ),
                                     Text(valueakhir,
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
-                                    SizedBox(width: 10),
+                                    SizedBox(width: 5),
                                     Text(
                                         "( " +
                                             vdurasi_sewa.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                        "+ ( " +
+                                            minimaldeposit.toString() +
                                             " " +
                                             vsatuan_sewa +
                                             ")",
@@ -821,11 +830,18 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
                         vmaksimalpotongan = voucherlist.nominal_persentase;
-                        potonganvoucher =
-                            ((double.parse(vpersentasevoucher.toString()) /
-                                    100) *
-                                double.parse(totalhariharga.toString()));
                         flagvoucher = true;
+                        potonganvoucher = ReusableClasses().hitungvoucher(
+                            vpersentasevoucher.toString(),
+                            vminimumtransaksi.toString(),
+                            flagvoucher,
+                            vmaksimalpotongan.toString(),
+                            harga_sewa.toString(),
+                            vdurasi_sewa.toString());
+                        // potonganvoucher =
+                        //     ((double.parse(vpersentasevoucher.toString()) /
+                        //             100) *
+                        //         double.parse(totalhariharga.toString()));
                         Navigator.pop(context);
                         hitungsemuaFunction();
                       }

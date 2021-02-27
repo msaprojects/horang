@@ -234,7 +234,7 @@ class _AccountState extends State<Account> {
               height: 10.0,
             ),
             Center(
-              child: Text("Version 1.1.0.2 Debug"),
+              child: Text("Version 1.1.0.3 Debuging"),
             )
           ],
         ));
