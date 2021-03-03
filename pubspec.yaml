@@ -41,11 +41,12 @@ dependencies:
   timeline_tile: ^1.0.0
   connectivity: ^0.4.9+5
   commons: ^0.7.8+3
-  syncfusion_flutter_datepicker: ^18.3.47-beta
+  syncfusion_flutter_datepicker: ^18.4.44-beta
   fluttertoast: ^7.1.4
   firebase_messaging: ^7.0.3
   intl: ^0.16.1
   imei_plugin: ^1.2.0
+  grouped_list: ^3.7.1
 
 dev_dependencies:
   flutter_test:

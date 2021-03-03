@@ -325,7 +325,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
-                                    SizedBox(width: 10),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 30, top: 5),
+                                child: Row(
+                                  children: [
                                     Text(
                                         "( " +
                                             vdurasi_sewa.toString() +
@@ -335,20 +341,17 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         style: GoogleFonts.inter(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold)),
+                                    Text(
+                                        "+(Deposit " +
+                                            minimaldeposit.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold)),
                                   ],
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 30, top: 5),
-                                child: Text(
-                                    "( " +
-                                        vdurasi_sewa.toString() +
-                                        " " +
-                                        vsatuan_sewa +
-                                        ")",
-                                    style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),
@@ -688,20 +691,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
                       } else {
                         setState(() {
-                        if (ceksaldo >= hargaxminimalsewadeposit) {
-                          saldodepositkurangnominaldeposit = 0;
-                          totaldeposit = hargaxminimalsewadeposit;
-                          kondisisaldo = "";
-                          orderConfirmation(context);
-                        } else {
-                          saldodepositkurangnominaldeposit =
-                              hargaxminimalsewadeposit - ceksaldo;
-                          totaldeposit = ceksaldo;
-                          kondisisaldo =
-                              "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
-                          cekDeposit(context);
-                        }
-                      });
+                          if (ceksaldo >= hargaxminimalsewadeposit) {
+                            saldodepositkurangnominaldeposit = 0;
+                            totaldeposit = hargaxminimalsewadeposit;
+                            kondisisaldo = "";
+                            orderConfirmation(context);
+                          } else {
+                            saldodepositkurangnominaldeposit =
+                                hargaxminimalsewadeposit - ceksaldo;
+                            totaldeposit = ceksaldo;
+                            kondisisaldo =
+                                "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                            cekDeposit(context);
+                          }
+                        });
                       }
                       // _nominalbarang.text.toString() == "0" ||
                       //         _keteranganbarang.text.toString() == "" ||
@@ -778,6 +781,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
           tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
           persentase_asuransi: nomasuransi.toString(),
           minimalsewahari: minimaldeposit,
+          cekout: nilaisetting,
+          cekin: nilaisetting1,
+          lastorder: nilaisetting2
         );
       }));
     });
@@ -860,11 +866,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         vkodevoucher = voucherlist.kode_voucher.toString();
                         vpersentasevoucher = voucherlist.persentase;
                         vmaksimalpotongan = voucherlist.nominal_persentase;
-                        potonganvoucher =
-                            ((double.parse(vpersentasevoucher.toString()) /
-                                    100) *
-                                double.parse(totalhariharga.toString()));
                         flagvoucher = true;
+                        potonganvoucher = ReusableClasses().hitungvoucher(
+                            vpersentasevoucher.toString(),
+                            vminimumtransaksi.toString(),
+                            flagvoucher,
+                            vmaksimalpotongan.toString(),
+                            harga_sewa.toString(),
+                            vdurasi_sewa.toString());
                         Navigator.pop(context);
                         hitungsemuaFunction();
                       }

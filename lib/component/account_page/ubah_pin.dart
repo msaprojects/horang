@@ -135,20 +135,32 @@ class _UbahPinState extends State<UbahPin> {
                               pin: _controllerPassBaru.text.toString(),
                               token: access_token);
                           if (widget.ubahPin == null) {
-                            _apiService.TambahPin(pintambah).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                successDialog(context,
-                                    "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                    showNeutralButton: false,
-                                    positiveText: "Oke", positiveAction: () {
-                                  Keluarr();
-                                });
-                              } else {
-                                errorDialog(context,
-                                    "Data gagal disimpan, silahkan dicek ulang");
-                              }
-                            });
+                            print("cek masuk nggk");
+                            if (_controllerPassBaru.text !=
+                                _controllerPassBaruRetype.text) {
+                                  print("cek masuk nggk1");
+                              return warningDialog(context,
+                                  "PIN baru dan Retype PIN tidak sama");
+                            } else {
+                              print("cek masuk nggk2");
+                              _apiService.TambahPin(pintambah)
+                                  .then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (!isSuccess) {
+                                  print("cek pin ubah3" + pin);
+                                  successDialog(context,
+                                      "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                      showNeutralButton: false,
+                                      positiveText: "Oke", positiveAction: () {
+                                    Keluarr();
+                                  });
+                                } else {
+                                  print("cek pin ubah4" + pin);
+                                  errorDialog(context,
+                                      "Data pin gagal ditambah, silahkan dicek ulang");
+                                }
+                              });
+                            }
                           }
                         } else {
                           Pin_Model pinubah = Pin_Model(

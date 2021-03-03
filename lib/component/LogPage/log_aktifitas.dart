@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:horang/api/models/log/Log.Aktifitas.Notif.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class LogAktifitasNotif extends StatefulWidget {
   @override
@@ -15,6 +17,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token, refresh_token, nama_customer, idcustomer, pin;
+  final formattanggal = new DateFormat('yyyy-MM-dd hh:mm');
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -97,7 +100,25 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
 
   Widget _buildListView(List<logAktifitasNotif> dataIndex) {
     return Scaffold(
-      body: Column(
+      body:
+          // GroupedListView<dynamic, String>(
+          //   elements: dataIndex,
+          //   groupBy: (item) => item['timestamp'].toString(),
+          //   groupComparator: (group1, group2) => group2.compareTo(group1),
+          //   itemComparator: (item1, item2) =>
+          //       item1['keterangan_user'].compareTo(item2['keterangan_user']),
+          //   order: GroupedListOrder.ASC,
+          //   useStickyGroupSeparators: true,
+          //   groupSeparatorBuilder: (String value) => Padding(
+          //     padding: EdgeInsets.all(8),
+          //     child: Text(
+          //       value,
+          //       textAlign: TextAlign.center,
+          //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          //     ),
+          //   ),
+          //   itemBuilder: (c, element) {
+          Column(
         children: <Widget>[
           Expanded(
               child: Container(
@@ -111,23 +132,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
                 logAktifitasNotif logNotif = dataIndex[index];
                 return Card(
                   child: InkWell(
-                    onTap: () {
-                      // if (idcustomer == "0") {
-                      //   Scaffold.of(context).showSnackBar(SnackBar(
-                      //     content: Text(
-                      //         'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                      //     duration: Duration(seconds: 10),
-                      //   ));
-                      //   Navigator.pop(context, false);
-                      // } else {
-                      //   // Navigator.push(context,
-                      //   //     MaterialPageRoute(builder: (context) {
-                      //   //   return FormInputOrder(
-                      //   //     // jenisProduk: ,
-                      //   //   );
-                      //   // }));
-                      // }
-                    },
+                    onTap: () {},
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -141,19 +146,12 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
                                 child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Timestamp : " + logNotif.timestamp),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "No. Order : " + logNotif.keterangan_user,
-                                    ),
-                                    // Text(
-                                    //   tanggal(date, shortMonth: true),
-                                    //   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                                    // )
-                                  ],
+                                Text("Timestamp : " +
+                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                        .parse(logNotif.timestamp)
+                                        .toString()),
+                                Text(
+                                  "No. Order : " + logNotif.keterangan_user,
                                 ),
                               ],
                             )),

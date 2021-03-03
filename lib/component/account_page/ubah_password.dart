@@ -36,6 +36,7 @@ class _UbahPassState extends State<UbahPass> {
       idcustomer = "",
       nama_customer,
       pin;
+  var tekan1x = true;
   String passlama, passbaru, retypepass;
 
   TextEditingController _controllerPasslama = TextEditingController();
@@ -136,6 +137,12 @@ class _UbahPassState extends State<UbahPass> {
                   child: RaisedButton(
                     child: Text("simpan"),
                     onPressed: () {
+                      if (!tekan1x) {
+                        // return warningDialog(context, "tekan lebih 1x");
+                        return true;
+                      }
+                      tekan1x = false;
+                      // warningDialog(context, "tes aja");
                       if (_isFieldpassLama == null ||
                           _isFieldpassBaru == null ||
                           !_isFieldpassLama ||

@@ -202,6 +202,7 @@ class _UbahProfileState extends State<UbahProfile> {
                       onPressed: () {
                         successDialog(context,
                             "Apakah Data yang anda masukkan sudah sesuai?",
+                            showNeutralButton: false,
                             title: "Konfirmasi Perubahan Data",
                             positiveText: "Sudah Benar", positiveAction: () {
                           String alamat = _controllerAlamat.text.toString();

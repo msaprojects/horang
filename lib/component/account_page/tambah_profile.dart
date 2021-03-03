@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:commons/commons.dart';
+import 'package:flutter/services.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -241,7 +242,9 @@ class _TambahProfileState extends State<TambahProfile> {
   Widget _buildTextFieldKtp() {
     return TextFormField(
       controller: _controllerNoKtp,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
+      // ignore: deprecated_member_use
+      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: "No. Ktp",

@@ -345,7 +345,10 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                       positiveAction: () {
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (context) => HomePage()));
+                                            // builder: (context) => HomePage()));
+                                            builder: (context) => HomePage(
+                                              initialindex: 0,
+                                            )));
                                   }, positiveText: "Ok");
                                 } else {
                                   errorDialog(

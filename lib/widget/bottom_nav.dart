@@ -12,8 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   final int initIndexHome;
-
   const Home({Key key, this.initIndexHome}) : super(key: key);
+  
   @override
   _HomeState createState() => _HomeState();
 }
@@ -40,6 +40,7 @@ class _HomeState extends State<Home> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    
     if (access_token == null) {
       // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(

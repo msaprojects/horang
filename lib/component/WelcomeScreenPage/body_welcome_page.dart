@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/component/Dummy/dummypin2.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
+import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'background_welcome_page.dart';
@@ -23,9 +24,12 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     pin = sp.getString("pin");
+    print("pinnya adalah $pin" );
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       return false;
+    // } else if (pin == '0' && access_token != null) {
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UbahPin()));
     } else {
       if (Platform.isIOS) {
         Navigator.push(
@@ -34,7 +38,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               builder: (context) => LoginPage(),
             ));
       } else if (Platform.isAndroid && access_token != null) {
-        if (pin != null && access_token != null) {
+        if (access_token != null) {
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -48,6 +52,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   @override
   void initState() {
     cekToken();
+    print("cek pin ada nggk yazzz $pin");
   }
 
   @override

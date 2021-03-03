@@ -1,12 +1,15 @@
 import 'dart:ui';
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
+import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LogPage/log_aktifitas.dart';
+import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -15,6 +18,8 @@ import 'package:indonesia/indonesia.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
+  final initialindex;
+  HomePage({Key key, this.initialindex}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -53,7 +58,20 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("cek tokennya gais $access_token" + "--------*****----------" + pin);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    if (pin == '0') {
+      // print("your eyes broke");
+      infoDialog(context,
+          "Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.",
+          showNeutralButton: false,
+          negativeAction: () {},
+          negativeText: "Nanti saja",
+          positiveText: "Setting sekarang", positiveAction: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => UbahPin()));
+      });
+    }
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
@@ -290,10 +308,24 @@ class _HomePageState extends State<HomePage> {
                         style: mTitleStyle,
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+                      child: SelectableText(
+                        "See All...",
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StorageActive()));
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
-              // StorageActive(),
+              StorageActive(),
               SizedBox(
                 height: 10,
               ),

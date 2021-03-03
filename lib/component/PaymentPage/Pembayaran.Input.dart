@@ -36,7 +36,10 @@ class FormInputPembayaran extends StatefulWidget {
       email_asuransi,
       tambahsaldopoint,
       persentase_asuransi,
-      minimalsewahari;
+      minimalsewahari,
+      cekout,
+      cekin,
+      lastorder;
 
   FormInputPembayaran(
       {this.flagasuransi,
@@ -61,7 +64,10 @@ class FormInputPembayaran extends StatefulWidget {
       this.email_asuransi,
       this.tambahsaldopoint,
       this.persentase_asuransi,
-      this.minimalsewahari});
+      this.minimalsewahari,
+      this.cekout,
+      this.cekin,
+      this.lastorder});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -105,6 +111,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       totaldeposit,
       hasilperhitungan,
       idcustomer,
+      pcekout,
+      pcekin,
+      plastorder,
       pin;
 
   enableButton() {
@@ -185,8 +194,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
       ppersentase_asuransi = widget.persentase_asuransi;
       pminimalsewahari = widget.minimalsewahari;
-      ptotal_asuransi = (double.parse(ppersentase_asuransi) / 100) *
-          double.parse(pnominal_barang);
+      pcekin = widget.cekin;
+      pcekout = widget.cekout;
+      plastorder = widget.lastorder;
+      ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
+              double.parse(pnominal_barang))
+          .toStringAsFixed(2);
       totaldeposit = (pminimalsewahari * pharga_sewa);
       cekToken();
       hitungsemuaFunction();
@@ -219,7 +232,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     } else {
       asuransitxt = "Tidak";
     }
-    var media = MediaQuery.of(context);
+    // var media = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -272,9 +285,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text("Tanggal Mulai :"),
-                                  Text("Tanggal Berakhir :"),
+                                  Text("Tgl. Mulai :"),
+                                  Text("Tgl. Berakhir :"),
                                   Text("Durasi Sewa :"),
+                                  Text("Check In :"),
+                                  Text("Check Out :"),
+                                  Text("Last Order :"),
                                 ],
                               ),
                             ),
@@ -292,6 +308,15 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                       overflow: TextOverflow.ellipsis),
                                   Text(
                                     pdurasi_sewa.toString() + " Hari",
+                                  ),
+                                  Text(
+                                    pcekin.toString(),
+                                  ),
+                                  Text(
+                                    pcekout.toString(),
+                                  ),
+                                  Text(
+                                    plastorder.toString(),
                                   ),
                                 ],
                               ),
@@ -343,16 +368,22 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Row(
-                                children: <Widget>[
-                                  Text("Keterangan Barang : ")
-                                ],
+                                children: <Widget>[Text("Ket. Barang : ")],
                               ),
                             ),
                             Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                pketerangan_barang,
+                              padding: const EdgeInsets.only(
+                                  top: 0.0, right: 60, left: 20),
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                child: Text(
+                                  pketerangan_barang,
+                                  maxLines: 10,
+                                  overflow: TextOverflow.visible,
+                                  textAlign: TextAlign.justify,
+                                ),
                               ),
                             ),
                           ],
@@ -612,16 +643,19 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       children: [
                         ListTile(
                           selected: true,
-                          leading: Image(
-                            image: NetworkImage(pymentgtwy.gambar.toString()),
-                            
-                          ),
-                          title: Text(
-                            pymentgtwy.nama_provider,
-                            style: GoogleFonts.inter(
-                                fontSize: 15, color: Colors.black26),
+                          leading: Container(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Image(
+                              height: 50,
+                              width: 50,
+                              image: NetworkImage(pymentgtwy.gambar.toString()),
+                            ),
                           ),
                           trailing: Icon(Icons.keyboard_arrow_right),
+                          // Text(
+                          //   pymentgtwy.nama_provider,
+                          //   style: GoogleFonts.inter(
+                          //       fontSize: 15, color: Colors.black26)),
                         )
                       ],
                     ),
