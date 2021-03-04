@@ -9,6 +9,7 @@ import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
 import 'package:horang/component/LogPage/log_aktifitas.dart';
+import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
@@ -165,7 +166,8 @@ class _HomePageState extends State<HomePage> {
                                             MaterialPageRoute(
                                                 builder:
                                                     (BuildContext context) =>
-                                                        LogAktifitasNotif()));
+                                                        // LogAktifitasNotif()));
+                                                        LogHandler()));
                                       },
                                       icon: (Icon(Icons.notifications)),
                                     )

@@ -6,6 +6,7 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LogAktifitasNotif extends StatefulWidget {
   @override
@@ -67,12 +68,17 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: Text("Log Transaksi Aplikasi"),
-      ),
-      body: FutureBuilder(
+    return SafeArea(
+    // Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: Colors.blueAccent,
+    //     title: Text("Log Transaksi Aplikasi"),
+    //     bottom: PreferredSize(
+    //       child: Icon(Icons.linear_scale,size: 60.0,), 
+    //       preferredSize: Size.fromHeight(40.0)),
+    //   ),
+      // body: 
+      child: FutureBuilder(
         future: _apiService.logAktifitasNotif_(access_token),
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.hasError) {
@@ -113,26 +119,33 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
         useStickyGroupSeparators: true,
         groupSeparatorBuilder: (String value) => Padding(
           padding: EdgeInsets.all(8),
-          child: Text(
-            value,
-            // DateFormat("yyyy-MM-dd").parse(value).toString(),
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              value,
+              // DateFormat("yyyy-MM-dd").parse(value).toString(),
+              textAlign: TextAlign.left,
+              // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: GoogleFonts.lato(fontSize: 18),
+            ),
           ),
         ),
         itemBuilder: (c, element) {
           return Card(
-            elevation: 8.0,
-            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            elevation: 2.0,
+            margin: new EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 10),
             child: Container(
               child: ListTile(
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 leading: Icon(Icons.account_circle),
                 // title: Text(DateFormat("yyyy-MM-dd HH:mm:ss").parse(element['timestamp']).toString()),
-                title: Text(element['timestamp']),
-                trailing: Icon(Icons.arrow_forward),
-                subtitle: Text(element['keterangan_user']),
+                title:
+                    Text(element['timestamp'], style: TextStyle(fontSize: 14)),
+                // trailing: Icon(Icons.arrow_forward),
+                subtitle: Text(element['keterangan_user'],
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
           );
