@@ -5,7 +5,7 @@ import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
-import 'package:horang/api/models/log/Log.Aktifitas.Notif.dart';
+import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/models/log/Log.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/models/log/openLog.dart';
@@ -374,15 +374,16 @@ class ApiService {
     }
   }
 
-  Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
+  // Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
+  Future<List> logAktifitasNotif_(String token) async {
     final response = await client.post(
       "$baseUrl/logaktifitas",
       headers: {"Content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
-    response.body;
+    print ("responnya ?"+response.body);
     if (response.statusCode == 200) {
-      return logAktifitasNotifFromJson(response.body);
+      return logaktifitasnotifToList(response.body);
     } else {
       return null;
     }

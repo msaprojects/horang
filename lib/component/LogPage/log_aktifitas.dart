@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:horang/api/models/log/Log.Aktifitas.Notif.dart';
+import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -74,8 +74,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
       ),
       body: FutureBuilder(
         future: _apiService.logAktifitasNotif_(access_token),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<logAktifitasNotif>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -86,7 +85,8 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List<logAktifitasNotif> logaktifitas1 = snapshot.data;
+            List logaktifitas1 = snapshot.data;
+            print('ada data nggk ya ? ${snapshot.data}');
             return _buildListView(logaktifitas1);
           } else {
             return Center(
@@ -98,74 +98,161 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
     );
   }
 
-  Widget _buildListView(List<logAktifitasNotif> dataIndex) {
+  Widget _buildListView(List dataindex) {
+    // print('objectsssssssssssss ${dataIndex}');
+    var strTMp = dataindex;
+    print('timpstmpnya $strTMp');
     return Scaffold(
-      body:
-          // GroupedListView<dynamic, String>(
-          //   elements: dataIndex,
-          //   groupBy: (item) => item['timestamp'].toString(),
-          //   groupComparator: (group1, group2) => group2.compareTo(group1),
-          //   itemComparator: (item1, item2) =>
-          //       item1['keterangan_user'].compareTo(item2['keterangan_user']),
-          //   order: GroupedListOrder.ASC,
-          //   useStickyGroupSeparators: true,
-          //   groupSeparatorBuilder: (String value) => Padding(
-          //     padding: EdgeInsets.all(8),
-          //     child: Text(
-          //       value,
-          //       textAlign: TextAlign.center,
-          //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          //     ),
-          //   ),
-          //   itemBuilder: (c, element) {
-          Column(
-        children: <Widget>[
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
+      body: GroupedListView<dynamic, String>(
+        elements: dataindex,
+        groupBy: (item) => item['timestamp_group'],
+        groupComparator: (group1, group2) => group2.compareTo(group1),
+        itemComparator: (item1, item2) =>
+            item1['keterangan_user'].compareTo(item2['keterangan_user']),
+        order: GroupedListOrder.DESC,
+        useStickyGroupSeparators: true,
+        groupSeparatorBuilder: (String value) => Padding(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            value,
+            // DateFormat("yyyy-MM-dd").parse(value).toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        itemBuilder: (c, element) {
+          return Card(
+            elevation: 8.0,
+            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            child: Container(
+              child: ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                leading: Icon(Icons.account_circle),
+                // title: Text(DateFormat("yyyy-MM-dd HH:mm:ss").parse(element['timestamp']).toString()),
+                title: Text(element['timestamp']),
+                trailing: Icon(Icons.arrow_forward),
+                subtitle: Text(element['keterangan_user']),
+              ),
             ),
-            color: Colors.grey[100],
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                logAktifitasNotif logNotif = dataIndex[index];
-                return Card(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.only(left: 20)),
-                            Expanded(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text("Timestamp : " +
-                                    DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                        .parse(logNotif.timestamp)
-                                        .toString()),
-                                Text(
-                                  "No. Order : " + logNotif.keterangan_user,
-                                ),
-                              ],
-                            )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              itemCount: dataIndex.length,
-            ),
-          ))
-        ],
+          );
+        },
+        // itemBuilder: (c, element) {
+        //   return Column(
+        //     children: <Widget>[
+        //       Expanded(
+        //           child: Container(
+        //         padding: EdgeInsets.only(
+        //           left: 16,
+        //           right: 16,
+        //         ),
+        //         color: Colors.grey[100],
+        //         child: ListView.builder(
+        //           itemBuilder: (context, index) {
+        //             logAktifitasNotif logNotif = dataIndex[index];
+        //             return Card(
+        //               child: InkWell(
+        //                 onTap: () {},
+        //                 child: Column(
+        //                   mainAxisAlignment: MainAxisAlignment.start,
+        //                   children: <Widget>[
+        //                     SizedBox(
+        //                       height: 15,
+        //                     ),
+        //                     Row(
+        //                       children: <Widget>[
+        //                         Padding(padding: EdgeInsets.only(left: 20)),
+        //                         Expanded(
+        //                             child: Column(
+        //                           crossAxisAlignment: CrossAxisAlignment.start,
+        //                           children: <Widget>[
+        //                             Text("Timestamp : " +
+        //                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        //                                     .parse(logNotif.timestamp)
+        //                                     .toString()),
+        //                             Text(
+        //                               "No. Order : " + logNotif.keterangan_user,
+        //                             ),
+        //                           ],
+        //                         )),
+        //                       ],
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             );
+        //           },
+        //           itemCount: dataIndex.length,
+        //         ),
+        //       ))
+        //     ],
+        //   );
+        // },
+        // floatingHeader: false,
+
+        //       child: Column(
+        //   children: <Widget>[
+        //     Expanded(
+        //         child: Container(
+        //       padding: EdgeInsets.only(
+        //         left: 16,
+        //         right: 16,
+        //       ),
+        //       color: Colors.grey[100],
+        //       child: ListView.builder(
+        //         itemBuilder: (context, index) {
+        //           logAktifitasNotif logNotif = dataIndex[index];
+        //           return Card(
+        //             child: InkWell(
+        //               onTap: () {
+        //                 // if (idcustomer == "0") {
+        //                 //   Scaffold.of(context).showSnackBar(SnackBar(
+        //                 //     content: Text(
+        //                 //         'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+        //                 //     duration: Duration(seconds: 10),
+        //                 //   ));
+        //                 //   Navigator.pop(context, false);
+        //                 // } else {
+        //                 //   // Navigator.push(context,
+        //                 //   //     MaterialPageRoute(builder: (context) {
+        //                 //   //   return FormInputOrder(
+        //                 //   //     // jenisProduk: ,
+        //                 //   //   );
+        //                 //   // }));
+        //                 // }
+        //               },
+
+        //               child: Column(
+        //                 mainAxisAlignment: MainAxisAlignment.start,
+        //                 children: <Widget>[
+        //                   SizedBox(
+        //                     height: 15,
+        //                   ),
+        //                   Row(
+        //                     children: <Widget>[
+        //                       Padding(padding: EdgeInsets.only(left: 20)),
+        //                       Expanded(
+        //                           child: Column(
+        //                         crossAxisAlignment: CrossAxisAlignment.start,
+        //                         children: <Widget>[
+        //                           Text("Timestamp : " + DateFormat("EEE dd'th' MMM, hh:mm").parse(logNotif.timestamp).toString()),
+        //                           Text(
+        //                             "No. Order : " + logNotif.keterangan_user,
+        //                           ),
+        //                         ],
+        //                       )),
+        //                     ],
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //         itemCount: dataIndex.length,
+        //       ),
+        //     ))
+        //   ],
+        // ),
       ),
     );
   }
