@@ -455,12 +455,10 @@ class _OtpScreenState extends State<OtpScreen> {
           }
         });
       });
-    } else {
+    } 
+    if(access_token != null) {
       setState(() {
-        // this.thisText = controller.text;
-        // print("Gassskaaan ========> $thisText");
         print("Cek pin: $strpin");
-
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
             pin_cek: strpin,
             token_cek: access_token,
@@ -473,11 +471,6 @@ class _OtpScreenState extends State<OtpScreen> {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (BuildContext context) => Home()),
                   (Route<dynamic> route) => false);
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => Home(),
-              //     ));
             } else if (!isSuccess && pinIndex >= 4) {
               print('Pin salah masku, iling iling maneh');
               return showDialog(
@@ -490,11 +483,6 @@ class _OtpScreenState extends State<OtpScreen> {
                       title: Text("Pin salah"),
                     );
                   });
-              // return false;
-              // errorDialog(
-              //   context,
-              //   "Pin yang anda masukkan salah",
-              // );
             }
           });
         });

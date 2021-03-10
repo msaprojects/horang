@@ -42,7 +42,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       flagasuransi = true,
       flagvoucher = false,
       fieldnominalbarang,
-      fieldketeranganbarang = false;
+      fieldketeranganbarang = false,
+      boolkontainer = false;
   var kapasitas,
       alamat,
       keterangan,
@@ -170,6 +171,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         .toString()
         .toLowerCase()
         .contains('forklift')) {
+      boolkontainer = true;
       minimaldeposit = 0;
       vsatuan_sewa = "jam ";
       tglawalforklift1 = widget.tglawalforklift.toString();
@@ -579,60 +581,80 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 30, right: 30, top: 5),
-                                child: TextFormField(
-                                  onTap: () {
-                                    if (_nominalbarang.text == "0") {
-                                      cleartextinputnominal();
-                                    }
-                                  },
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      decimal: true),
-                                  decoration: InputDecoration(
-                                    labelText: 'Total Nominal Barang',
-                                    hintText: 'Masukkan Total Nominal Barang',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  controller: _nominalbarang,
-                                  inputFormatters: <TextInputFormatter>[
-                                    // ignore: deprecated_member_use
-                                    WhitelistingTextInputFormatter.digitsOnly,
-                                  ],
-                                  onChanged: (value) {
-                                    bool isFieldValid = value.trim().isNotEmpty;
-                                    if (isFieldValid != fieldnominalbarang) {
-                                      setState(() =>
-                                          fieldnominalbarang = isFieldValid);
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 30, right: 30, top: 5),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Keterangan',
-                                    hintText: 'Masukkan Keterangan Barang',
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 3,
-                                  controller: _keteranganbarang,
-                                  onChanged: (value) {
-                                    bool isFieldValid = value.trim().isNotEmpty;
-                                    if (isFieldValid != fieldketeranganbarang) {
-                                      setState(() =>
-                                          fieldketeranganbarang = isFieldValid);
-                                    }
-                                  },
-                                ),
-                              ),
+                              boolkontainer == true
+                                  ? Text("")
+                                  : Column(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, right: 30, top: 5),
+                                          child: TextFormField(
+                                            onTap: () {
+                                              if (_nominalbarang.text == "0") {
+                                                cleartextinputnominal();
+                                              }
+                                            },
+                                            keyboardType:
+                                                TextInputType.numberWithOptions(
+                                                    decimal: true),
+                                            decoration: InputDecoration(
+                                              labelText: 'Total Nominal Barang',
+                                              hintText:
+                                                  'Masukkan Total Nominal Barang',
+                                              border:
+                                                  const OutlineInputBorder(),
+                                            ),
+                                            controller: _nominalbarang,
+                                            inputFormatters: <
+                                                TextInputFormatter>[
+                                              // ignore: deprecated_member_use
+                                              WhitelistingTextInputFormatter
+                                                  .digitsOnly,
+                                            ],
+                                            onChanged: (value) {
+                                              bool isFieldValid =
+                                                  value.trim().isNotEmpty;
+                                              if (isFieldValid !=
+                                                  fieldnominalbarang) {
+                                                setState(() =>
+                                                    fieldnominalbarang =
+                                                        isFieldValid);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, right: 30, top: 5),
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                              labelText: 'Keterangan',
+                                              hintText:
+                                                  'Masukkan Keterangan Barang',
+                                              border:
+                                                  const OutlineInputBorder(),
+                                            ),
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            maxLines: 3,
+                                            controller: _keteranganbarang,
+                                            onChanged: (value) {
+                                              bool isFieldValid =
+                                                  value.trim().isNotEmpty;
+                                              if (isFieldValid !=
+                                                  fieldketeranganbarang) {
+                                                setState(() =>
+                                                    fieldketeranganbarang =
+                                                        isFieldValid);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                             ],
                           ),
                         )
@@ -680,6 +702,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     color: Colors.green,
                     onPressed: () {
                       hitungsemuaFunction();
+                      // if (boolkontainer = true) 
                       if (_nominalbarang.text.toString() == "0" ||
                           _nominalbarang.text.toString() == "") {
                         errorDialog(context,
@@ -758,33 +781,32 @@ class _FormDetailOrder extends State<FormInputOrder> {
         positiveText: "OK", positiveAction: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-          flagasuransi: flagasuransi,
-          flagvoucher: flagvoucher,
-          idlokasi: idlokasi,
-          idjenis_produk: idjenis_produk,
-          idvoucher: idvoucher,
-          idasuransi: idasuransi,
-          harga_sewa: harga_sewa,
-          durasi_sewa: vdurasi_sewa,
-          valuesewaawal: valueawal,
-          valuesewaakhir: valueakhir,
-          kapasitas: kapasitas,
-          alamat: alamat,
-          keterangan_barang: _keteranganbarang.text.toString(),
-          nominal_barang: _nominalbarang.text.toString(),
-          nominal_voucher: potonganvoucher,
-          minimum_transaksi: vminimumtransaksi,
-          persentase_voucher: vpersentasevoucher,
-          totalharixharga: totalhariharga.toString(),
-          saldopoint: totaldeposit.toString(),
-          email_asuransi: email_asuransi.toString(),
-          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-          persentase_asuransi: nomasuransi.toString(),
-          minimalsewahari: minimaldeposit,
-          cekout: nilaisetting,
-          cekin: nilaisetting1,
-          lastorder: nilaisetting2
-        );
+            flagasuransi: flagasuransi,
+            flagvoucher: flagvoucher,
+            idlokasi: idlokasi,
+            idjenis_produk: idjenis_produk,
+            idvoucher: idvoucher,
+            idasuransi: idasuransi,
+            harga_sewa: harga_sewa,
+            durasi_sewa: vdurasi_sewa,
+            valuesewaawal: valueawal,
+            valuesewaakhir: valueakhir,
+            kapasitas: kapasitas,
+            alamat: alamat,
+            keterangan_barang: _keteranganbarang.text.toString(),
+            nominal_barang: _nominalbarang.text.toString(),
+            nominal_voucher: potonganvoucher,
+            minimum_transaksi: vminimumtransaksi,
+            persentase_voucher: vpersentasevoucher,
+            totalharixharga: totalhariharga.toString(),
+            saldopoint: totaldeposit.toString(),
+            email_asuransi: email_asuransi.toString(),
+            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+            persentase_asuransi: nomasuransi.toString(),
+            minimalsewahari: minimaldeposit,
+            cekout: nilaisetting,
+            cekin: nilaisetting1,
+            lastorder: nilaisetting2);
       }));
     });
   }

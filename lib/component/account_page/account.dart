@@ -151,7 +151,7 @@ class _AccountState extends State<Account> {
                 child: ListTile(
                   leading: Icon(Icons.person),
                   title: Text(
-                    "Lengkapi Profile " + idcustomer.toString(),
+                    "Lengkapi Profile ",
                     style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                   ),
                   trailing: Icon(Icons.keyboard_arrow_right),

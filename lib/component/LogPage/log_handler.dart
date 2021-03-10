@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/component/LogPage/log_aktifitas.dart';
 
@@ -65,6 +66,7 @@ class LogHandler extends StatelessWidget {
             children: [
              LogAktifitasNotif(),
              LogAktifitasNotif()
+            
             ],
           ),
         ),
