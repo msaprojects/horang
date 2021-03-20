@@ -100,7 +100,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
   TextEditingController _keteranganbarang = TextEditingController();
-  TextEditingController _nominalbarang = TextEditingController();
+  final TextEditingController _nominalbarang = TextEditingController();
   //END CALLING REFFERENCE
   //DATE TIME PICKER FORMAT
   int diffInDays(tglAwal, tglAkhir) {
@@ -214,6 +214,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context);
     return Scaffold(
+      // resizeToAvoidBottomPadding: false,
       key: _scaffoldState,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),

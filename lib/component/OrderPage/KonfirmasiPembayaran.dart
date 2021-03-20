@@ -6,6 +6,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 
 import 'KonfirmasiOrder.Detail.dart';
 
@@ -222,7 +223,15 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
           children: [
             Container(
               alignment: Alignment.topLeft,
-              child: Icon(Icons.close_rounded),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        // builder: (context) => HomePage()));
+                        builder: (context) => HomePage(
+                              initialindex: 0,
+                            )));
+                  },
+                  child: Icon(Icons.close_rounded)),
             ),
             Container(
                 child: Center(

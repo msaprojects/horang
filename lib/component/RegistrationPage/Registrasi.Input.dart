@@ -90,6 +90,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
                             width: size.width * 0.8,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(29),
+                              // ignore: deprecated_member_use
                               child: FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 40),
@@ -120,52 +121,61 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                     } else {
                                       // setState(() {
                                       //   _isLoading = true;
-                                      GetDeviceID()
-                                          .getDeviceID(context)
-                                          .then((ids) {
-                                        setState(() {
-                                          iddevice = ids;
-                                          PenggunaModel pengguna =
-                                              PenggunaModel(
-                                                  uuid: iddevice,
-                                                  email: email,
-                                                  password: password,
-                                                  no_hp: nohp,
-                                                  status: 0,
-                                                  notification_token: "0",
-                                                  token_mail: "0",
-                                                  keterangan: "Uji Coba");
-                                          print("Registrasi Value : " +
-                                              pengguna.toString());
-                                          _apiService
-                                              .signup(pengguna)
-                                              .then((isSuccess) {
-                                            if (isSuccess) {
-                                              _controllerEmail.clear();
-                                              _controllerNohp.clear();
-                                              _controllerPassword.clear();
-                                              _controllerPasswordRetype.clear();
-                                              successDialog(context,
-                                                  "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
-                                                  showNeutralButton: false,
-                                                  positiveText: "OK",
-                                                  positiveAction: () {
-                                                Navigator.of(context)
-                                                    .pushAndRemoveUntil(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                LoginPage()),
-                                                        (route) => false);
-                                              });
-                                            } else {
-                                              errorDialog(context,
-                                                  "${_apiService.responseCode.mMessage}");
-                                            }
+                                      infoDialog(context,
+                                          "Data yang anda masukkan sudah benar ?",
+                                          showNeutralButton: false,
+                                          negativeText: "Batal",
+                                          negativeAction: () {},
+                                          positiveText: "Ya",
+                                          positiveAction: () {
+                                        GetDeviceID()
+                                            .getDeviceID(context)
+                                            .then((ids) {
+                                          setState(() {
+                                            iddevice = ids;
+                                            PenggunaModel pengguna =
+                                                PenggunaModel(
+                                                    uuid: iddevice,
+                                                    email: email,
+                                                    password: password,
+                                                    no_hp: nohp,
+                                                    status: 0,
+                                                    notification_token: "0",
+                                                    token_mail: "0",
+                                                    keterangan: "Uji Coba");
+                                            print("Registrasi Value : " +
+                                                pengguna.toString());
+                                            _apiService
+                                                .signup(pengguna)
+                                                .then((isSuccess) {
+                                              if (isSuccess) {
+                                                _controllerEmail.clear();
+                                                _controllerNohp.clear();
+                                                _controllerPassword.clear();
+                                                _controllerPasswordRetype
+                                                    .clear();
+                                                successDialog(context,
+                                                    "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                                    showNeutralButton: false,
+                                                    positiveText: "OK",
+                                                    positiveAction: () {
+                                                  Navigator.of(context)
+                                                      .pushAndRemoveUntil(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoginPage()),
+                                                          (route) => false);
+                                                });
+                                              } else {
+                                                errorDialog(context,
+                                                    "${_apiService.responseCode.mMessage}");
+                                              }
+                                            });
                                           });
                                         });
+                                        // print("IDDEVICE : " + iddevice.toString());
+                                        // });
                                       });
-                                      // print("IDDEVICE : " + iddevice.toString());
-                                      // });
                                     }
                                     return;
                                   }

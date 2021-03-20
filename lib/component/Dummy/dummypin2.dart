@@ -160,11 +160,12 @@ class _OtpScreenState extends State<OtpScreen> {
                           print("cek debug 5");
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
+                          infoDialog(context, "hei 1");
                           _checkBiometric();
                           _getAvailableBiometrics();
                           _authenticate();
                         } else {
-                          print("cek debug 6");
+                          print("cek debug 6 ${newtoken.toString()}");
                           warningDialog(context,
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
                               title: "Sesi anda berakhir 1!",
@@ -181,6 +182,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       }));
             } else {
               print("cek debug 7");
+              infoDialog(context, "hei");
               // print(access_token);
               // print(refresh_token);
               _checkBiometric();
@@ -472,7 +474,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   MaterialPageRoute(builder: (BuildContext context) => Home()),
                   (Route<dynamic> route) => false);
             } else if (!isSuccess && pinIndex >= 4) {
-              print('Pin salah masku, iling iling maneh');
+              print('Pin salah masku');
               return showDialog(
                   context: context,
                   builder: (context) {
