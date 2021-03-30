@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/component/Dummy/dummypin2.dart';
+import 'package:horang/component/Dummy/cobakeyboard.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
@@ -43,6 +44,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => Pinauth(),
+                // builder: (context) => CobaKeyboard(),
               ));
         }
       }

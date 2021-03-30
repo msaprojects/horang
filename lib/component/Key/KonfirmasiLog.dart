@@ -21,6 +21,8 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class KonfirmasiLog extends StatefulWidget {
   var kode_kontainer,
       nama_kota,
+      flag_selesai,
+      selesai,
       idtransaksi_detail,
       nama,
       idtransaksi,
@@ -39,7 +41,10 @@ class KonfirmasiLog extends StatefulWidget {
       this.tglakhir,
       this.tglorder,
       this.keterangan,
-      this.idtransaksi_detail});
+      this.idtransaksi_detail,
+      this.flag_selesai,
+      this.selesai
+      });
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -70,6 +75,8 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       keterangan,
       idtransaksii,
       nama_customer,
+      flag_selesai,
+      selesai,
       pin;
   TextEditingController _controllerNoKontainer = TextEditingController();
   TextEditingController _controllerLokasi = TextEditingController();
@@ -126,6 +133,8 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     tglorder = widget.tglorder;
     tglakhir = widget.tglakhir;
     keterangan = widget.keterangan;
+    flag_selesai = widget.flag_selesai;
+    selesai = widget.selesai;
     super.initState();
     cekToken();
   }
@@ -214,7 +223,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Kota",
+                  Text("Kota $flag_selesai ++++++++ $selesai",
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),

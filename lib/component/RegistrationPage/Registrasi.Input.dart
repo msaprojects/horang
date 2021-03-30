@@ -38,6 +38,13 @@ class _RegistrasiState extends State<RegistrasiPage> {
     });
   }
 
+  String data = '';
+  fetchFileData() async{
+    String responseText;
+    responseText = await rootBundle.loadString('assets/res/syaratketentuan.txt');
+  }
+
+
   @override
   void initState() {
     GetDeviceID().getDeviceID(context).then((ids) {
@@ -206,6 +213,11 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                           color: Colors.blue[900]),
                                     ))
                               ]),
+                          // GestureDetector(
+                          //   onTap: (){
+                          //     loadassets;
+                          //   },
+                          //   child: Text("Syarat dan Ketentuan")),
                           SizedBox(
                             height: 10,
                           ),

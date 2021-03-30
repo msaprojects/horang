@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class HistoryModel {
+  int flag_bayar;
   num total_harga;
   num harga, jumlah_sewa;
   String no_order,
@@ -12,7 +13,8 @@ class HistoryModel {
       tanggal_akhir;
 
   HistoryModel(
-      {this.no_order,
+      {this.flag_bayar,
+        this.no_order,
       this.kode_refrensi,
       this.kode_kontainer,
       this.nama_provider,
@@ -25,6 +27,7 @@ class HistoryModel {
 
   factory HistoryModel.fromJson(Map<String, dynamic> map) {
     return HistoryModel(
+      flag_bayar: map['flag_bayar'],
         no_order: map['no_order'],
         kode_refrensi: map['kode_refrensi'],
         kode_kontainer: map['kode_kontainer'],
@@ -39,6 +42,7 @@ class HistoryModel {
   }
   Map<String, dynamic> toJson() {
     return {
+      "flag_bayar": flag_bayar,
       "no_order": no_order,
       "kode_refrensi": kode_refrensi,
       "kode_kontainer": kode_kontainer,
@@ -54,7 +58,7 @@ class HistoryModel {
 
   @override
   String toString() {
-    return 'HistoryModel{no_order: $no_order, kode_refrensi: $kode_refrensi, kode_kontainer: $kode_kontainer, nama_provider: $nama_provider, total_harga: $total_harga, jumlah_sewa: $jumlah_sewa, harga: $harga, tanggal_order: $tanggal_order, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir}';
+    return 'HistoryModel{flag_bayar: $flag_bayar ,no_order: $no_order, kode_refrensi: $kode_refrensi, kode_kontainer: $kode_kontainer, nama_provider: $nama_provider, total_harga: $total_harga, jumlah_sewa: $jumlah_sewa, harga: $harga, tanggal_order: $tanggal_order, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir}';
   }
 }
 

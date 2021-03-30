@@ -145,6 +145,7 @@ class _HistoryPageState extends State<HistoryPage> {
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   HistoryModel history = dataIndex[index];
+                  print("bakso urat mang ujang" + dataIndex.toString());
                   return Card(
                     child: InkWell(
                       child: Column(
@@ -173,6 +174,10 @@ class _HistoryPageState extends State<HistoryPage> {
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold),
                                       ),
+                                      FlatButton(
+                                        color: Colors.green,
+                                        onPressed: (){}, 
+                                        child: Text(history.flag_bayar == 0 ? "Terbayar" : "Belum Dibayar", style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold),))
                                     ],
                                   ),
                                   SizedBox(

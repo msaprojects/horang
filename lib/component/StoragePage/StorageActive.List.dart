@@ -169,6 +169,8 @@ class _StorageActive extends State<StorageActive1>
                                     tglakhir: myStorage.tanggal_akhir,
                                     tglorder: myStorage.tanggal_order,
                                     keterangan: myStorage.keterangan,
+                                    flag_selesai: myStorage.flag_selesai,
+                                    selesai: myStorage.selesai,
                                   )));
                         }
                       },

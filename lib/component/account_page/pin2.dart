@@ -189,6 +189,7 @@ class _Pin2State extends State<Pin2> {
                                 (Route<dynamic> route) => true);
                           } else if (pin == null) {
                             // Text('Data gagal disimpan');
+                            // ignore: deprecated_member_use
                             _scaffoldState.currentState.showSnackBar(SnackBar(
                               content: Text('Anda belum memiliki pin'),
                               action: SnackBarAction(

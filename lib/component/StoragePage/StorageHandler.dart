@@ -27,7 +27,7 @@ class StorageHandler extends StatelessWidget {
                 ),
                 new Tab(
                   icon: new Icon(Icons.timer_off_rounded, color: Colors.black),
-                  text: "Expired",
+                  text: "Selesai",
                 ),
               ],
             ),
