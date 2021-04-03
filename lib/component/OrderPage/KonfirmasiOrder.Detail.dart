@@ -84,8 +84,16 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Order Berhasil",
+          style: TextStyle(color: Colors.white),
+        ),
+        //Blocking Back
+        automaticallyImplyLeading: false,
+      ),
+      body: FutureBuilder(
         future: _apiService.listOrderSukses(access_token, idorders),
         builder:
             (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
@@ -93,7 +101,8 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
             return Center(
               // child: CircularProgressIndicator(),
               child: Text(
-                  "5Something wrong with message: ${snapshot.error.toString()}"),
+                  // "Something wrong with message: ${snapshot.error.toString()}"
+                  "Koneksi Bermasalah, harap refresh halaman ini..."),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -115,14 +124,6 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   Widget _designForm(List<OrderSukses> dataIndex) {
     // OrderSukses orders;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Detail Transaksi Anda",
-          style: TextStyle(color: Colors.white),
-        ),
-        //Blocking Back
-        automaticallyImplyLeading: false,
-      ),
       body: Column(
         children: <Widget>[
           Expanded(

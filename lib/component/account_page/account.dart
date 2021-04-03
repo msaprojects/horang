@@ -93,13 +93,18 @@ class _AccountState extends State<Account> {
     void Keluarr() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       cekToken();
-      await preferences.clear();
-      if (preferences.getString("access_token") == null) {
-        print("SharePref berhasil di hapus");
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => WelcomePage()),
-            (route) => false);
-      }
+      _apiService.logout(access_token).then((value) => setState(() {
+            isSuccess = value;
+            if (isSuccess) {
+              preferences.clear();
+              if (preferences.getString("access_token") == null) {
+                print("SharePref berhasil di hapus");
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                    (route) => false);
+              }
+            }
+          }));
     }
 
     return Scaffold(

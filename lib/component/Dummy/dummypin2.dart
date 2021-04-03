@@ -103,7 +103,7 @@ class _OtpScreenState extends State<OtpScreen> {
     bool authenticated = false;
     try {
       authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: "Scan jari anda untuk konfirmasi mas",
+          localizedReason: "Konfirmasi Sidik Jari anda untuk masuk ke aplikasi",
           useErrorDialogs: true,
           stickyAuth: false);
     } on PlatformException catch (e) {
@@ -126,14 +126,10 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   cekToken() async {
-    print("MASUK CEK TOKEN");
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    print("Jasukeeeeeeeeeeeee $access_token");
-
     if (access_token == null) {
-      print("cek debug 1");
       warningDialog(context,
           "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
           title: "Sesi anda berakhir !",
@@ -143,29 +139,23 @@ class _OtpScreenState extends State<OtpScreen> {
             (Route<dynamic> route) => false);
       }, positiveText: "Ok");
     } else {
-      print("cek debug 2");
       _apiService.checkingToken(access_token).then((value) => setState(() {
             print("cek debug 3");
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
-              print("cek debug 4");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          print("cek new tokennya ${newtoken.toString()}");
-                          print("cek debug 5");
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
-                          infoDialog(context, "hei 1");
                           _checkBiometric();
                           _getAvailableBiometrics();
                           _authenticate();
                         } else {
-                          print("cek debug 6 ${newtoken.toString()}");
                           warningDialog(context,
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
                               title: "Sesi anda berakhir 1!",
@@ -457,8 +447,8 @@ class _OtpScreenState extends State<OtpScreen> {
           }
         });
       });
-    } 
-    if(access_token != null) {
+    }
+    if (access_token != null) {
       setState(() {
         print("Cek pin: $strpin");
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(

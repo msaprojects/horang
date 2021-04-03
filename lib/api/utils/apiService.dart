@@ -312,7 +312,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
-    print("cek pinnya"+response.body);
+    print("cek pinnya" + response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -382,7 +382,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
-    print ("responnya ?"+response.body);
+    print("responnya ?" + response.body);
     if (response.statusCode == 200) {
       return logaktifitasnotifToList(response.body);
     } else {
@@ -485,6 +485,16 @@ class ApiService {
       return json.decode(response.body)['access_token'];
     } else {
       return "";
+    }
+  }
+
+  Future<bool> logout(String token) async {
+    final response = await client.post("$baseUrl/logout",
+        headers: {"content-type": "application/json"}, body: jsonEncode(token));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
