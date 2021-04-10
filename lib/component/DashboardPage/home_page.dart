@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,16 +7,21 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
+import 'package:horang/component/Dummy/cobakeyboard.dart';
 import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/tambah_profile.dart';
-import 'package:horang/screen/log_aktifitas.dart';
+import 'package:horang/component/LogPage/log_aktifitas.dart';
+import 'package:horang/component/LogPage/log_handler.dart';
+import 'package:horang/component/account_page/ubah_pin.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:indonesia/indonesia.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
+  final initialindex;
+  HomePage({Key key, this.initialindex}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,13 +30,20 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
-  // RefreshController _refreshController =
-  //     RefreshController(initialRefresh: false);
-
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      pin,
+      ceksaldo;
+  String token = '';
+  final scaffoldState = GlobalKey<ScaffoldState>();
+  final controllerTopic = TextEditingController();
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -43,82 +53,37 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
-  final scaffoldState = GlobalKey<ScaffoldState>();
-  final controllerTopic = TextEditingController();
-
-  bool isSubscribed = false;
-  String token = '';
-  static String dataName = '';
-  static String dataAge = '';
-  var ceksaldo;
-
-  getSaldo() async {
-    final response = await http.get(ApiService().urlceksaldo,
-        headers: {"Authorization": "BEARER ${access_token}"});
-    return jsonDecode(response.body);
-  }
-
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    print("kazzzz" + access_token);
+    pin = sp.getString("pin");
+    print("cek tokennya gais $access_token" + "--------*****----------" + pin);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-
-    if (idcustomer.toString() == '0') {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Peringatan'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text('Data profile anda belum lengkap.'),
-                    Text('Harap melengkapi data anda terlebih dahulu !'),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                Row(
-                  children: <Widget>[
-                    FlatButton(
-                      child: Text("Lengkapi"),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    TambahProfile()),
-                            (Route<dynamic> route) => false);
-                      },
-                    ),
-                    FlatButton(
-                      child: Text("Batalkan"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            );
-          });
+    if (pin == '0') {
+      // print("your eyes broke");
+      infoDialog(context,
+          "Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.",
+          showNeutralButton: false,
+          negativeAction: () {},
+          negativeText: "Nanti saja",
+          positiveText: "Setting sekarang", positiveAction: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => UbahPin()));
+      });
     }
-
     if (access_token == null) {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
-              print("tahun baru false");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
@@ -132,71 +97,26 @@ class _HomePageState extends State<HomePage> {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
             }
           }));
-      getSaldo();
     }
   }
 
-  // final firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
-    getSaldo();
     cekToken();
+    ReusableClasses().getSaldo(access_token);
     super.initState();
-    // firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     debugPrint('onMessage home page: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onBackgroundMessage: onBackgroundMessage,
-    //   onResume: (Map<String, dynamic> message) async {
-    //     debugPrint('onResume: $message');
-    //     getDataFcm(message);
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     debugPrint('onLaunch: $message');
-    //     getDataFcm(message);
-    //   },
-    // );
-    // firebaseMessaging.requestNotificationPermissions(
-    //   const IosNotificationSettings(
-    //       sound: true, badge: true, alert: true, provisional: true),
-    // );
-    // firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-    //   debugPrint('Settings registered: $settings');
-    // });
   }
-
-  // static Future<dynamic> onBackgroundMessage(Map<String, dynamic> message) {
-  //   debugPrint('onBackgroundMessage: $message');
-  //   if (message.containsKey('data')) {
-  //     String name = '';
-  //     String age = '';
-  //     if (Platform.isIOS) {
-  //       name = message['name'];
-  //       age = message['age'];
-  //       print("NOTIF : " + name + age);
-  //     } else if (Platform.isAndroid) {
-  //       var data = message['data'];
-  //       name = data['name'];
-  //       age = data['age'];
-  //     }
-  //     dataName = name;
-  //     dataAge = age;
-  //     debugPrint('onBackgroundMessage: name: $name & age: $age');
-  //   }
-  //   return null;
-  // }
 
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
-      getSaldo();
+      ReusableClasses().getSaldo(access_token);
     });
   }
 
@@ -245,9 +165,10 @@ class _HomePageState extends State<HomePage> {
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        LogAktifitasNotif()));
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    // LogAktifitasNotif()));
+                                                    LogHandler()));
                                       },
                                       icon: (Icon(Icons.notifications)),
                                     )
@@ -266,13 +187,14 @@ class _HomePageState extends State<HomePage> {
                                       height: 10,
                                     ),
                                     FutureBuilder(
-                                        future: getSaldo(),
+                                        future: ReusableClasses()
+                                            .getSaldo(access_token),
                                         builder: (context, snapshot) {
                                           if (snapshot.hasData) {
                                             var saldoadatidak =
                                                 snapshot.data[0]['saldo'];
                                             return Text(
-                                              saldoadatidak.toString(),
+                                              rupiah(saldoadatidak.toString()),
                                               style: GoogleFonts.inter(
                                                   color: Colors.white,
                                                   fontSize: 35,
@@ -328,7 +250,8 @@ class _HomePageState extends State<HomePage> {
                                               size: 30),
                                           onPressed: () {
                                             setState(() {
-                                              getSaldo();
+                                              ReusableClasses()
+                                                  .getSaldo(access_token);
                                             });
                                           }),
                                       Text(
@@ -348,12 +271,18 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Scaffold.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  "Fitur ini masih dalam proses pengembangan"),
-                                              duration: Duration(seconds: 5),
-                                            ));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        CobaKeyboard()));
+                                            // Scaffold.of(context)
+                                            //     .showSnackBar(SnackBar(
+                                            //   content: Text(
+                                            //       "Fitur ini masih dalam proses pengembangan"),
+                                            //   duration: Duration(seconds: 5),
+                                            // ));
                                           }),
                                       Text(
                                         "Histori",
@@ -388,10 +317,24 @@ class _HomePageState extends State<HomePage> {
                         style: mTitleStyle,
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
+                      child: SelectableText(
+                        "See All...",
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StorageActive()));
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
-              // StorageActive(),
+              StorageActive(),
               SizedBox(
                 height: 10,
               ),
@@ -413,13 +356,6 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: 16, top: 24),
-                    //   child: Text(
-                    //     'Latest Order',
-                    //     style: mTitleStyle,
-                    //   ),
-                    // ),
                     Text(
                       'Latest Order',
                       style: mTitleStyle,
@@ -474,33 +410,13 @@ class _HomePageState extends State<HomePage> {
   String ucapan() {
     var jam = DateTime.now().hour;
     if (jam <= 12) {
-      return 'Pagi kak';
+      return 'Selamat Pagi ';
     } else if ((jam > 12) && (jam <= 15)) {
-      return 'Siang kak';
+      return 'Selamat Siang ';
     } else if ((jam > 15) && (jam < 20)) {
-      return 'Sore kak';
+      return 'Selamat Sore ';
     } else {
-      return 'Malam kak';
+      return 'Selamat Malam ';
     }
   }
-
-//   void getDataFcm(Map<String, dynamic> message) {
-//     String name = '';
-//     String age = '';
-//     if (Platform.isIOS) {
-//       name = message['name'];
-//       age = message['age'];
-//     } else if (Platform.isAndroid) {
-//       var data = message['data'];
-//       name = data['name'];
-//       age = data['age'];
-//     }
-//     if (name.isNotEmpty && age.isNotEmpty) {
-//       setState(() {
-//         dataName = name;
-//         dataAge = age;
-//       });
-//     }
-//     debugPrint('getDataFcm: name: $name & age: $age');
-//   }
 }

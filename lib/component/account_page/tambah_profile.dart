@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:commons/commons.dart';
+import 'package:flutter/services.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,17 +19,14 @@ class TambahProfile extends StatefulWidget {
 
 class _TambahProfileState extends State<TambahProfile> {
   SharedPreferences sp;
-  bool _isLoading = false;
   ApiService _apiService = ApiService();
+  bool _isLoading = false,
+      _isFieldNamaLengkap,
+      _isFieldAlamat,
+      _isFieldNoKtp,
+      isSuccess = true;
   var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
-  bool _isFieldNamaLengkap;
-  bool _isFieldAlamat;
-  bool _isFieldNoKtp, isSuccess = true;
-  String _nama,
-      _alamat,
-      _noKtp,
-      urlcomboKota = "https://server.horang.id:9993/api/kota/",
-      valKota;
+  String nama_customer, valKota, pin;
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
   TextEditingController _controllerAlamat = TextEditingController();
@@ -35,7 +35,7 @@ class _TambahProfileState extends State<TambahProfile> {
 
   List<dynamic> _dataKota = List();
   void getcomboKota() async {
-    final response = await http.get(urlcomboKota,
+    final response = await http.get(_apiService.urlkota,
         headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
     setState(() {
@@ -47,17 +47,15 @@ class _TambahProfileState extends State<TambahProfile> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    _nama = sp.getString("nama_customer");
-    _alamat = sp.getString("alamat");
-    _noKtp = sp.getString("noktp");
-    valKota.toString();
     idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => true);
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
@@ -72,12 +70,12 @@ class _TambahProfileState extends State<TambahProfile> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => true);
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
                         }
                       }));
             }
@@ -122,25 +120,6 @@ class _TambahProfileState extends State<TambahProfile> {
               Navigator.pop(context);
             }),
       ),
-      // body: Stack(
-      //   children: <Widget>[
-      //     Padding(
-      //       // padding: EdgeInsets.all(16.0),
-      //       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      //       child: Column(
-      //         crossAxisAlignment: CrossAxisAlignment.stretch,
-      //         children: <Widget>[
-      //           _buildTextFieldName(),
-      //           _buildTextFieldKtp(),
-      //           _buildTextFieldAlamat(),
-      //           Container(
-      //             // padding: EdgeInsets.all(0.0),
-      //             child: Column(
-      //               crossAxisAlignment: CrossAxisAlignment.stretch,
-      //               children: <Widget>[
-      //                 _buildKomboKota(valKota.toString()),
-      //                 Text("kamu memilih kota $valKota"),
-      //               ],
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -162,70 +141,10 @@ class _TambahProfileState extends State<TambahProfile> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         _buildKomboKota(valKota.toString()),
-                        Text("kamu memilih kota $valKota"),
                       ],
                     ),
                   ),
-                //   ),
-                // ),
-                // Padding(
-                //     padding: const EdgeInsets.only(top: 8.0),
-                //     child: Container(
-                //       width: 500,
-                //       height: 50,
-                //       child: FlatButton(
-                //         child: Text(
-                //           "Simpan",
-                //           style: TextStyle(color: Colors.white),
-                //         ),
-                //         onPressed: () {
-                //           setState(() {
-                //             if (_isFieldNamaLengkap == null ||
-                //                 _isFieldAlamat == null ||
-                //                 _isFieldNoKtp == null ||
-                //                 !_isFieldNamaLengkap ||
-                //                 !_isFieldAlamat ||
-                //                 !_isFieldNoKtp) {
-                //               warningDialog(
-                //                   context, "Pastikan Semua Kolom Terisi");
-                //               return;
-                //             } else {
-                //               warningDialog(context,
-                //                   "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
-                //                   showNeutralButton: false,
-                //                   negativeText: "Periksa Kembali",
-                //                   negativeAction: () {},
-                //                   positiveText: "OK", positiveAction: () {
-                //                 setState(() => _isLoading = true);
-                //                 Customers data = Customers(
-                //                   namacustomer:
-                //                       _controllerNamaLengkap.text.toString(),
-                //                   noktp: _controllerNoKtp.text.toString(),
-                //                   alamat: _controllerAlamat.text.toString(),
-                //                   token: access_token,
-                //                   blacklist: "0",
-                //                   idkota: int.parse(valKota),
-                //                 );
-                //                 print("Tambah Customer : " + data.toString());
-                //                 _apiService.TambahCustomer(data)
-                //                     .then((isSuccess) {
-                //                   setState(() => _isLoading = false);
-                //                   if (isSuccess) {
-                //                     _controllerNamaLengkap.clear();
-                //                     _controllerNoKtp.clear();
-                //                     _controllerAlamat.clear();
-                //                     successDialog(context,
-                //                         "Profil anda berhasil disimpan",
-                //                         showNeutralButton: false,
-                //                         positiveText: "OK", positiveAction: () {
-                //                       Keluarr();
-                //                     });
-                //                     // Keluarr();
-                //                   } else {
-                //                     errorDialog(context,
-                //                         "${_apiService.responseCode.mMessage}");
-                //                   }
-                Padding(
+                  Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Container(
                         width: 500,
@@ -236,66 +155,70 @@ class _TambahProfileState extends State<TambahProfile> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            setState(() {
-                              if (_isFieldNamaLengkap == null ||
-                                  _isFieldAlamat == null ||
-                                  _isFieldNoKtp == null ||
-                                  !_isFieldNamaLengkap ||
-                                  !_isFieldAlamat ||
-                                  !_isFieldNoKtp) {
-                                warningDialog(
-                                    context, "Pastikan Semua Kolom Terisi");
-                                return;
-                              } else {
-                                warningDialog(context,
-                                    "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
-                                    showNeutralButton: false,
-                                    negativeText: "Periksa Kembali",
-                                    negativeAction: () {},
-                                    positiveText: "OK", positiveAction: () {
-                                  setState(() => _isLoading = true);
-                                  Customers data = Customers(
-                                    namacustomer:
-                                        _controllerNamaLengkap.text.toString(),
-                                    noktp: _controllerNoKtp.text.toString(),
-                                    alamat: _controllerAlamat.text.toString(),
-                                    token: access_token,
-                                    blacklist: "0",
-                                    idkota: int.parse(valKota),
-                                  );
-                                  print("Tambah Customer : " + data.toString());
-                                  _apiService.TambahCustomer(data)
-                                      .then((isSuccess) {
-                                    setState(() => _isLoading = false);
-                                    if (isSuccess) {
-                                      _controllerNamaLengkap.clear();
-                                      _controllerNoKtp.clear();
-                                      _controllerAlamat.clear();
-                                      successDialog(context,
-                                          "Profil anda berhasil disimpan",
-                                          showNeutralButton: false,
-                                          positiveText: "OK",
-                                          positiveAction: () {
-                                        Keluarr();
+                            infoDialog(
+                              context,
+                              "Pastikan data yang anda masukkan sudah benar !",
+                              negativeAction: () {},
+                              negativeText: "Batal",
+                              showNeutralButton: false,
+                              positiveText: "Ya",
+                              positiveAction: () {
+                                setState(() {
+                                  if (_isFieldNamaLengkap == null ||
+                                      _isFieldAlamat == null ||
+                                      _isFieldNoKtp == null ||
+                                      !_isFieldNamaLengkap ||
+                                      !_isFieldAlamat ||
+                                      !_isFieldNoKtp) {
+                                    warningDialog(
+                                        context, "Pastikan Semua Kolom Terisi");
+                                    return;
+                                  } else {
+                                    warningDialog(context,
+                                        "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
+                                        showNeutralButton: false,
+                                        negativeText: "Periksa Kembali",
+                                        negativeAction: () {},
+                                        positiveText: "OK", positiveAction: () {
+                                      setState(() => _isLoading = true);
+                                      Customers data = Customers(
+                                        namacustomer: _controllerNamaLengkap
+                                            .text
+                                            .toString(),
+                                        noktp: _controllerNoKtp.text.toString(),
+                                        alamat:
+                                            _controllerAlamat.text.toString(),
+                                        token: access_token,
+                                        blacklist: "0",
+                                        idkota: int.parse(valKota),
+                                      );
+                                      print("Tambah Customer : " +
+                                          data.toString());
+                                      _apiService.TambahCustomer(data)
+                                          .then((isSuccess) {
+                                        setState(() => _isLoading = false);
+                                        if (isSuccess) {
+                                          _controllerNamaLengkap.clear();
+                                          _controllerNoKtp.clear();
+                                          _controllerAlamat.clear();
+                                          successDialog(context,
+                                              "Profil anda berhasil disimpan",
+                                              showNeutralButton: false,
+                                              positiveText: "OK",
+                                              positiveAction: () {
+                                            Keluarr();
+                                          });
+                                          // Keluarr();
+                                        } else {
+                                          errorDialog(context,
+                                              "${_apiService.responseCode.mMessage}");
+                                        }
                                       });
-                                      // Keluarr();
-                                    } else {
-                                      errorDialog(context,
-                                          "${_apiService.responseCode.mMessage}");
-                                    }
-                                  });
+                                    });
+                                  }
                                 });
-              //                   });
-              //                 });
-              //               }
-              //             });
-              //           },
-              //           color: Colors.blue,
-              //         ),
-              //       ))
-              // ],
-               }
-                            });
+                              },
+                            );
                           },
                           color: Colors.blue,
                         ),
@@ -303,9 +226,7 @@ class _TambahProfileState extends State<TambahProfile> {
                 ],
               ),
             ),
-        //   ),
-        // ],
-         ],
+          ],
         ),
       ),
     );
@@ -334,7 +255,9 @@ class _TambahProfileState extends State<TambahProfile> {
   Widget _buildTextFieldKtp() {
     return TextFormField(
       controller: _controllerNoKtp,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
+      // ignore: deprecated_member_use
+      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: "No. Ktp",
@@ -389,25 +312,5 @@ class _TambahProfileState extends State<TambahProfile> {
         });
       },
     );
-  }
-
-  Future showAlertDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Sesi Anda Berakhir!"),
-            content: Text(
-                "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-            actions: [
-              FlatButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Ok"))
-            ],
-          );
-        });
   }
 }

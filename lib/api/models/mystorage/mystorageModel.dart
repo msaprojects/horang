@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class MystorageModel {
   num hari, idtransaksi_detail, idtransaksi;
+  int flag_selesai = 0, selesai=0;
   String tanggal_mulai,
       tanggal_akhir,
       tanggal_order,
@@ -26,7 +27,9 @@ class MystorageModel {
       this.nama_kota,
       this.nama_lokasi,
       this.keterangan,
-      this.status});
+      this.status,
+      this.flag_selesai,
+      this.selesai});
 
   factory MystorageModel.fromJson(Map<String, dynamic> map){
     return MystorageModel(
@@ -42,7 +45,9 @@ class MystorageModel {
       nama_kota: map['nama_kota'],
       nama_lokasi: map['nama_lokasi'],
       keterangan: map['keterangan'],
-      status: map['status']
+      status: map['status'],
+      flag_selesai: map['flag_selesai'],
+      selesai: map['selesai']
     );
   }
 
@@ -60,13 +65,15 @@ class MystorageModel {
       "nama_kota": nama_kota,
       "nama_lokasi": nama_lokasi,
       "keterangan": keterangan,
-      "status": status
+      "status": status,
+      "flag_selesai": flag_selesai,
+      "selesai": selesai
     };
   }
 
   @override
   String toString() {
-    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, no_order:$noOrder, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status}';
+    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, no_order:$noOrder, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status, flag_selesai: $flag_selesai, selesai: $selesai}';
   }
 }
 

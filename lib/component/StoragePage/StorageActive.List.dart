@@ -5,6 +5,8 @@ import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageActive1 extends StatefulWidget {
@@ -24,7 +26,6 @@ class _StorageActive extends State<StorageActive1>
   var access_token,
       refresh_token,
       idcustomer,
-      email,
       nama,
       nama_customer,
       keterangan,
@@ -36,41 +37,41 @@ class _StorageActive extends State<StorageActive1>
       nama_lokasi,
       tanggal_order,
       hari,
-      aktif;
-  // final String aktif = "";
+      aktif,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
-    // //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
-            // checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
-                        // setting access_token dari refresh_token
+                        //setting access_token dari refresh_token
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -168,21 +169,9 @@ class _StorageActive extends State<StorageActive1>
                                     tglakhir: myStorage.tanggal_akhir,
                                     tglorder: myStorage.tanggal_order,
                                     keterangan: myStorage.keterangan,
+                                    flag_selesai: myStorage.flag_selesai,
+                                    selesai: myStorage.selesai,
                                   )));
-                          // _openAlertDialog(
-                          //   context,
-                          //   myStorage.idtransaksi_detail,
-                          //   myStorage.idtransaksi,
-                          //   myStorage.kode_kontainer.toString(),
-                          //   myStorage.nama_kota,
-                          //   myStorage.nama,
-                          //   myStorage.nama_lokasi.toString(),
-                          //   myStorage.keterangan,
-                          //   myStorage.tanggal_order,
-                          //   myStorage.tanggal_mulai,
-                          //   myStorage.tanggal_akhir,
-                          //   myStorage.hari.toString(),
-                          // );
                         }
                       },
                       child: Column(
@@ -203,7 +192,7 @@ class _StorageActive extends State<StorageActive1>
                                               MainAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              'No. Order : ',
+                                              'No. Orderz : ',
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),
                                             ),
@@ -290,18 +279,10 @@ class _StorageActive extends State<StorageActive1>
                               ],
                             ),
                           ),
-                          // SizedBox(
-                          //   height: 10,
-                          // ),
-                          // Divider(
-                          //   height: 10,
-                          // )
                         ],
                       ),
                     );
                   },
-                  // separatorBuilder: (context, index) => Divider(),
-                  // itemCount: dataIndex.length,
                 )),
               ),
             ),
@@ -333,231 +314,6 @@ class _StorageActive extends State<StorageActive1>
           return alert;
         });
   }
-
-  // void _openAlertDialog(
-  //     BuildContext context,
-  //     int idtransaksi_detail, idtransaksi,
-  //     String kode_kontainer,
-  //     nama_kota,
-  //     nama,
-  //     nama_lokasi,
-  //     keterangan,
-  //     tanggal_order,
-  //     tanggal_mulai,
-  //     tanggal_akhir,
-  //     hari) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           content: new Container(
-  //             width: 280.0,
-  //             height: 380.0,
-  //             decoration: new BoxDecoration(
-  //               shape: BoxShape.rectangle,
-  //               color: const Color(0xFFFFFF),
-  //               borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-  //             ),
-  //             child: new Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                 children: <Widget>[
-  //                   Container(
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: [
-  //                         Container(
-  //                           child: Text(
-  //                             "Detail Pesanan...",
-  //                             style: GoogleFonts.lato(fontSize: 12),
-  //                           ),
-  //                         ),
-  //                         Divider(),
-  //                         SizedBox(
-  //                           height: 10,
-  //                         ),
-  //                         Text("Kode Kontainer : " + kode_kontainer.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Kota : " + nama_kota.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Jenis : " + nama.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Nama Lokasi : " + nama_lokasi.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Keterangan : " + keterangan.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Lama Order : " + hari.toString() + " Hari",
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Tanggal Order : " + tanggal_order.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Tanggal Mulai : " + tanggal_mulai.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         Text("Tanggal Akhir : " + tanggal_akhir.toString(),
-  //                             style: GoogleFonts.lato(fontSize: 14)),
-  //                         SizedBox(
-  //                           height: 5,
-  //                         ),
-  //                         SizedBox(
-  //                           height: 10,
-  //                         ),
-  //                         Container(
-  //                             // width: 900,
-  //                             child: Column(
-  //                           children: [
-  //                             Container(
-  //                               width: 900,
-  //                               // height: 40,
-  //                               child: FlatButton(
-  //                                   height: 40,
-  //                                   color: Colors.blue,
-  //                                   onPressed: () {
-  //                                     Navigator.of(context).pushReplacement(
-  //                                         MaterialPageRoute(
-  //                                             builder: (BuildContext context) =>
-  //                                                 KonfirmasiLog(
-  //                                                   kode_kontainer:
-  //                                                       kode_kontainer,
-  //                                                   nama_kota: nama_kota,
-  //                                                   // idtransaksi_detail: ,
-  //                                                   idtransaksi_detail:
-  //                                                       idtransaksi_detail,
-  //                                                       idtransaksi: idtransaksi,
-  //                                                   nama: nama,
-  //                                                 )));
-  //                                     // Navigator.pop(context);
-  //                                     // Navigator.push(context,
-  //                                     //     MaterialPageRoute(builder: (context) {
-  //                                     //   return KonfirmasiLog(
-  //                                     //     kode_kontainer: kode_kontainer,
-  //                                     //     nama_kota: nama_kota,
-  //                                     //     // idtransaksi_detail: ,
-  //                                     //     idtransaksi_detail:
-  //                                     //         idtransaksi_detail,
-  //                                     //     nama: nama,
-  //                                     //   );
-  //                                     // }));
-  //                                   },
-  //                                   child: Row(
-  //                                     mainAxisAlignment:
-  //                                         MainAxisAlignment.center,
-  //                                     children: [
-  //                                       Icon(Icons.exit_to_app_outlined,
-  //                                           color: Colors.white),
-  //                                       SizedBox(
-  //                                         width: 10,
-  //                                       ),
-  //                                       Text(
-  //                                         'Hal. detail log',
-  //                                         style: GoogleFonts.inter(
-  //                                             fontSize: 14,
-  //                                             color: Colors.white,
-  //                                             fontWeight: FontWeight.bold),
-  //                                       ),
-  //                                     ],
-  //                                   )),
-  //                             ),
-  //                           ],
-  //                         )),
-  //                       ],
-  //                     ),
-  //                   )
-  //                 ]),
-  //           ),
-  //         );
-  //       });
-  // }
-
-  // void _alertOpen(
-  //     BuildContext context,
-  //     int idtransaksi_detail,
-  //     String kode_kontainer,
-  //     nama_kota,
-  //     nama,
-  //     nama_lokasi,
-  //     keterangan,
-  //     tanggal_order,
-  //     tanggal_mulai,
-  //     tanggal_akhir,
-  //     hari) {
-  //   // var ket = _note.text.toString();
-  //   Widget cancelButton = FlatButton(
-  //     child: Text("Batal"),
-  //     onPressed: () => Navigator.pop(context),
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: Text("Konfirmasi Action" + idtransaksi_detail.toString()),
-  //           content: Text("Apakah anda ingin membuka kontainer ini ?"),
-  //           actions: [
-  //             FlatButton(
-  //                 // color: Colors.red,
-  //                 onPressed: () {
-  //                   // setState(() {
-  //                   //   isLoading = true;
-  //                   //   print('cekmasuk123');
-  //                   //   LogOpen logopen = LogOpen(
-  //                   //     idtransaksi_detail: idtransaksi_detail,
-  //                   //     token: access_token,
-  //                   //   );
-  //                   //   if (kode_kontainer != null || nama_kota != null) {
-  //                   //     print('cekmasuk--');
-  //                   //     _apiService.OpenLog(logopen).then((isSuccess) {
-  //                   //       setState(() {
-  //                   //         if (isSuccess) {
-  //                   //           successDialog(
-  //                   //             context,
-  //                   //             "Permintaan open berhasil dilakukan !",
-  //                   //             closeOnBackPress: true,
-  //                   //           );
-  //                   //         } else {
-  //                   //           print('cekmasuk~~~');
-  //                   //           errorDialog(
-  //                   //               context, "Permintaan Open gagal dilakukan !");
-  //                   //         }
-  //                   //       });
-  //                   //     });
-  //                   //   }
-  //                   // }
-  //                   // );
-  //                 },
-  //                 // {
-  //                 //   Navigator.of(context)
-  //                 //       .pushReplacement(MaterialPageRoute(builder: (context) {
-  //                 //     return FormInputPembayaran(
-  //                 //         );
-  //                 //   }));
-  //                 // },
-  //                 child: Text("Ya, Setuju")),
-  //             cancelButton
-  //           ],
-  //         );
-  //       });
-  // }
 
   AccountValidation(BuildContext context) {
     Widget okButton = FlatButton(

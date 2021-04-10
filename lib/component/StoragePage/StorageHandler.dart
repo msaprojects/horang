@@ -3,10 +3,6 @@ import 'package:horang/component/StoragePage/StorageActive.List.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/component/StoragePage/StorageNonActive.List.dart';
 
-// void main() {
-//   runApp(TabBarDemo());
-// }
-
 class StorageHandler extends StatelessWidget {
   final int initialIndex;
   StorageHandler({Key key, this.initialIndex}) : super(key: key);
@@ -31,7 +27,7 @@ class StorageHandler extends StatelessWidget {
                 ),
                 new Tab(
                   icon: new Icon(Icons.timer_off_rounded, color: Colors.black),
-                  text: "Expired",
+                  text: "Selesai",
                 ),
               ],
             ),

@@ -7,6 +7,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/component/account_page/reset.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,40 +48,41 @@ class _ProdukList extends State<ProdukList> {
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
+  DateTime selectedDate = DateTime.now();
   bool isSuccess = false;
   int valKota;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
-  TextEditingController _controlleridkota;
-  var ttanggalAwal = 'Pilih tanggal',
+  var access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      ttanggalAwal = 'Pilih tanggal',
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
-      rtanggalAkhir;
-  String _selectedDate;
-  String _dateCount;
-  String _range;
-  String _rangeCount;
-  String _tanggalAwal, _tanggalAkhir;
-  String _pTanggalAkhir = "";
-  double height;
-  double width;
-  // var _date = "Not set";
-  // var _time = "Not set";
-  // var _timeFinish = "Not set";
-  String setTime = "",
+      rtanggalAkhir,
+      pin;
+  String _selectedDate,
+      _dateCount,
+      _range,
+      _rangeCount,
+      _tanggalAwal,
+      _tanggalAkhir,
+      _pTanggalAkhir = "",
+      setTime = "",
       setTimeSelesai = "",
       setDate = "",
       hour = "",
       minutes = "",
-      time = "";
-  String dateTime;
-  var formatter = new DateFormat('yyyy-MM-dd');
-  DateTime selectedDate = DateTime.now();
-  var selectedTime = TimeOfDay.now();
-  var selectedTimeSelesai =
-      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3)));
-
-  var sixtyninetyninehundredthousand =
-      DateTime.now().add(new Duration(hours: 3));
+      time = "",
+      dateTime;
+  double height, width;
+  var formatter = new DateFormat('yyyy-MM-dd'),
+      selectedTime = TimeOfDay.now(),
+      selectedTimeSelesai =
+          TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3))),
+      durasiforklift =
+          DateTime.now().add(new Duration(hours: 3));
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -118,10 +121,6 @@ class _ProdukList extends State<ProdukList> {
         time = hour + '.' + minutes;
         timeController.text = time;
         selectedTime = picked;
-        // selectedTime = picked.replacing(hour: picked.hourOfPeriod);
-        // timeController.text = formatDate(
-        //     DateTime(2000, 01, 1, selectedTime.hour, selectedTime.minute),
-        //     [HH, ':', mm]).toString();
       });
   }
 
@@ -143,12 +142,6 @@ class _ProdukList extends State<ProdukList> {
         minutes = selectedTimeSelesai.minute.toString();
         time = hour + '.' + minutes;
         timeControllerSelesai.text = time;
-        // selectedTimeSelesai = picked1.replacing(hour: picked1.hourOfPeriod);
-        // timeControllerSelesai.text = formatDate(
-        //     DateTime(2019, 10, 1, selectedTimeSelesai.hour,
-        //         selectedTimeSelesai.minute),
-        //     // [hh, ':', nn, " ", am]
-        //     [HH, ':', mm]).toString();
       });
   }
 
@@ -172,6 +165,195 @@ class _ProdukList extends State<ProdukList> {
 
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
+
+  Widget getDateRangePicker() {
+    return Container(
+        height: 250,
+        child: Card(
+            child: SfDateRangePicker(
+          view: DateRangePickerView.month,
+          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: selectionChanged,
+        )));
+  }
+
+  void selectionChanged(DateRangePickerSelectionChangedArgs args) {
+    _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
+
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
+      setState(() {});
+    });
+  }
+
+  void _cekKoneksi() async {
+    connectivityStream = await Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult resnow) {
+      if (resnow == ConnectivityResult.none) {
+        print("No Connection");
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: new Text("Peringatan"),
+                content: new Text(
+                    "Jaringan anda bermasalah, periksa koneksi anda lagi!"),
+                actions: <Widget>[
+                  new FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: new Text("Tutup"))
+                ],
+              );
+            });
+      } else if (olders == ConnectivityResult.none) {
+        print("Tersambung");
+        RefreshIndicator(
+          onRefresh: () async {
+            this.cekToken().reset();
+            await Future.value({});
+          },
+          child: null,
+        );
+        setState(() {});
+      }
+      olders = resnow;
+    });
+  }
+
+  int diffInDays(DateTime akhir, DateTime awal) {
+    return ((akhir.difference(awal) -
+                    Duration(hours: akhir.hour) +
+                    Duration(hours: awal.hour))
+                .inHours /
+            24)
+        .round();
+  }
+
+  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+      if (args.value is PickerDateRange) {
+        _date1 = args.value.startDate;
+        _date2 = args.value.endDate;
+        _range = DateFormat('yyyy-MM-dd').format(_date1).toString() +
+            ' - ' +
+            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+        _tanggalAkhir =
+            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        if (_date2.isAfter(_date1)) {
+          a = false;
+          initializeDateFormatting("id_ID", null).then((_) {
+            mmtext = DateFormat.yMMMEd("id_ID").format(_date1);
+            aatext = DateFormat.yMMMEd("id_ID").format(_date2);
+          });
+        }
+
+        if (diffInDays(
+                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+            5) {
+          _date2 = _date1.add(Duration(days: 5));
+          _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+          _tanggalAkhir =
+              DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+
+          warningDialog(
+            context,
+            "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
+            title: "minimal sewa 5 hari",
+            positiveAction: () {},
+          );
+        }
+      } else if (args.value is DateTime) {
+        _selectedDate = args.value;
+      } else if (args.value is List<DateTime>) {
+        _dateCount = args.value.length.toString();
+      } else {
+        _rangeCount = args.value.length.toString();
+      }
+    });
+  }
+
+  cekToken() async {
+    sp = await SharedPreferences.getInstance();
+    access_token = sp.getString("access_token");
+    refresh_token = sp.getString("refresh_token");
+    idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
+    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
+    if (access_token == null) {
+      ReusableClasses().showAlertDialog(context);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
+    } else {
+      _apiService.checkingToken(access_token).then((value) => setState(() {
+            isSuccess = value;
+            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
+            if (!isSuccess) {
+              _apiService
+                  .refreshToken(refresh_token)
+                  .then((value) => setState(() {
+                        var newtoken = value;
+                        //setting access_token dari refresh_token
+                        if (newtoken != "") {
+                          sp.setString("access_token", newtoken);
+                          access_token = newtoken;
+                        } else {
+                          ReusableClasses().showAlertDialog(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
+                        }
+                      }));
+            }
+          }));
+      getcomboProduk();
+    }
+  }
+
+  @override
+  void initState() {
+    initializeDateFormatting("id_ID", null).then((_) {
+      mmtext = DateFormat.yMMMEd("id_ID").format(DateTime.now());
+      aatext = DateFormat.yMMMEd("id_ID")
+          .format(DateTime.now().add(Duration(days: 5)));
+    });
+    cekToken();
+    _date1 = DateTime.now();
+    _date2 = DateTime.now().add(Duration(days: 5));
+    _tanggalAwal = _date1.toString();
+    _tanggalAkhir = _date2.toString();
+    dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    timeController.text =
+        DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
+    timeControllerSelesai.text =
+        durasiforklift.hour.toString() +
+            "." +
+            DateTime.now().minute.toString();
+    _cekKoneksi();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivityStream.cancel();
+  }
+
+  void _visibilitymethod() {
+    setState(() {
+      if (a) {
+        a = false;
+      } else {
+        a = true;
+      }
+    });
+  }
 
   Future _popUpTroble(BuildContext context, var jenispro) {
     dateTime = DateFormat.yMd().format(DateTime.now());
@@ -355,13 +537,6 @@ class _ProdukList extends State<ProdukList> {
                           child: FlatButton(
                               color: Colors.red[900],
                               onPressed: () {
-                                // print(selectedDate
-                                //     .format(format: 'yyyy-MM-dd')
-                                //     .toString());
-                                // print(selectedTime.format(context));
-                                // print(selectedTimeSelesai.format(context));
-                                // print(jenispro);
-
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(builder: (context) {
                                   return FormInputOrder(
@@ -389,196 +564,6 @@ class _ProdukList extends State<ProdukList> {
                 },
               ));
         });
-  }
-
-  Widget getDateRangePicker() {
-    return Container(
-        height: 250,
-        child: Card(
-            child: SfDateRangePicker(
-          view: DateRangePickerView.month,
-          selectionMode: DateRangePickerSelectionMode.single,
-          onSelectionChanged: selectionChanged,
-        )));
-  }
-
-  void selectionChanged(DateRangePickerSelectionChangedArgs args) {
-    _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
-
-    SchedulerBinding.instance.addPostFrameCallback((duration) {
-      setState(() {});
-    });
-  }
-
-  void _cekKoneksi() async {
-    connectivityStream = await Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult resnow) {
-      if (resnow == ConnectivityResult.none) {
-        print("No Connection");
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: new Text("Peringatan"),
-                content: new Text(
-                    "Jaringan anda bermasalah, periksa koneksi anda lagi!"),
-                actions: <Widget>[
-                  new FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: new Text("Tutup"))
-                ],
-              );
-            });
-      } else if (olders == ConnectivityResult.none) {
-        print("Tersambung");
-        RefreshIndicator(
-          onRefresh: () async {
-            this.cekToken().reset();
-            await Future.value({});
-          },
-          child: null,
-        );
-        setState(() {});
-      }
-      olders = resnow;
-    });
-  }
-
-  int diffInDays(DateTime akhir, DateTime awal) {
-    return ((akhir.difference(awal) -
-                    Duration(hours: akhir.hour) +
-                    Duration(hours: awal.hour))
-                .inHours /
-            24)
-        .round();
-  }
-
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    setState(() {
-      if (args.value is PickerDateRange) {
-        _date1 = args.value.startDate;
-        _date2 = args.value.endDate;
-        _range = DateFormat('yyyy-MM-dd').format(_date1).toString() +
-            ' - ' +
-            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
-        _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
-        _tanggalAkhir =
-            DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
-        if (_date2.isAfter(_date1)) {
-          a = false;
-          initializeDateFormatting("id_ID", null).then((_) {
-            mmtext = DateFormat.yMMMEd("id_ID").format(_date1);
-            aatext = DateFormat.yMMMEd("id_ID").format(_date2);
-          });
-        }
-
-        if (diffInDays(
-                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
-            5) {
-          // dateValidation(context, _date2 = _date1.add(Duration(days: 5)));
-          warningDialog(
-            context,
-            "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
-            title: "minimal sewa 5 hari",
-            positiveAction: () {},
-          );
-        }
-      } else if (args.value is DateTime) {
-        _selectedDate = args.value;
-      } else if (args.value is List<DateTime>) {
-        _dateCount = args.value.length.toString();
-      } else {
-        _rangeCount = args.value.length.toString();
-      }
-    });
-  }
-
-  cekToken() async {
-    sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
-    refresh_token = sp.getString("refresh_token");
-    idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
-    nama_customer = sp.getString("nama_customer");
-    //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    if (access_token == null) {
-      showAlertDialog(context);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    } else {
-      _apiService.checkingToken(access_token).then((value) => setState(() {
-            isSuccess = value;
-            //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
-            if (!isSuccess) {
-              _apiService
-                  .refreshToken(refresh_token)
-                  .then((value) => setState(() {
-                        var newtoken = value;
-                        //setting access_token dari refresh_token
-                        if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
-                          access_token = newtoken;
-                        } else {
-                          showAlertDialog(context);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => false);
-                        }
-                      }));
-            }
-          }));
-      getcomboProduk();
-    }
-  }
-
-  @override
-  void initState() {
-    initializeDateFormatting("id_ID", null).then((_) {
-      mmtext = DateFormat.yMMMEd("id_ID").format(DateTime.now());
-      aatext = DateFormat.yMMMEd("id_ID")
-          .format(DateTime.now().add(Duration(days: 5)));
-    });
-    cekToken();
-    _date1 = DateTime.now();
-    _date2 = DateTime.now().add(Duration(days: 5));
-    _tanggalAwal = _date1.toString();
-    _tanggalAkhir = _date2.toString();
-    // ttanggalAwal = widget.tanggalAwal;
-    // ttanggalAkhir = widget.tanggalAkhir;
-    // print("HMMM : $access_token");
-    dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    // timeController.text = "${DateTime.now().hour}.${DateTime.now().minute}";
-    timeController.text =
-        DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
-    timeControllerSelesai.text =
-        sixtyninetyninehundredthousand.hour.toString() +
-            "." +
-            DateTime.now().minute.toString();
-    _cekKoneksi();
-    super.initState();
-    // print("Hasil Val Kota"+valKota);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    connectivityStream.cancel();
-  }
-
-  void _visibilitymethod() {
-    setState(() {
-      if (a) {
-        a = false;
-      } else {
-        a = true;
-      }
-    });
   }
 
   @override
@@ -642,22 +627,11 @@ class _ProdukList extends State<ProdukList> {
                             SizedBox(
                               height: 5,
                             ),
-                            // Text(
-                            //   string,
-                            //   mText,
-                            //   style: GoogleFonts.inter(
-                            //     color: Colors.grey[800],
-                            //     fontSize: 18,
-                            //   ),
-                            //   textAlign: TextAlign.left,
-                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Flexible(
                                   child: Text(
-                                    // string,
-                                    // sDate.toString(),
                                     mmtext,
                                     style: GoogleFonts.lato(
                                         fontSize: 15,
@@ -668,7 +642,6 @@ class _ProdukList extends State<ProdukList> {
                                 Icon(Icons.arrow_forward_rounded),
                                 Flexible(
                                   child: Text(
-                                    // fDate.toString(),
                                     aatext,
                                     style: GoogleFonts.lato(
                                         fontSize: 15,
@@ -750,7 +723,6 @@ class _ProdukList extends State<ProdukList> {
         tanggalawal: _tanggalAwal,
         tanggalakhir: _tanggalAkhir,
         idlokasi: valKota);
-    print("PRODUK DATA : " + data.toString());
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -828,9 +800,12 @@ class _ProdukList extends State<ProdukList> {
                                         onTap: () {
                                           // print("idjenis produknya adalah");
                                           // print(jenisProduk.idjenis_produk);
-                                          if (nama_customer == "" ||
-                                              nama_customer == null ||
-                                              nama_customer == "0") {
+                                          // if (nama_customer == "" ||
+                                          //     nama_customer == null ||
+                                          //     nama_customer == "0") {
+                                            if (idcustomer == "" ||
+                                              idcustomer == null ||
+                                              idcustomer == "0") {
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
                                               content: Text(
@@ -846,8 +821,6 @@ class _ProdukList extends State<ProdukList> {
                                               duration: Duration(seconds: 3),
                                             ));
                                           } else {
-                                            print(
-                                                "exxx ${jenisProduk.kapasitas}");
                                             if (jenisProduk.kapasitas
                                                 .toString()
                                                 .toLowerCase()
@@ -855,11 +828,6 @@ class _ProdukList extends State<ProdukList> {
                                               _popUpTroble(
                                                   context, jenisProduk);
                                             } else {
-                                              print("kanez" +
-                                                  jenisProduk.toString());
-                                              // print(
-                                              //     "tglawal ${_tanggalAwal} + ${_tanggalAkhir}");
-                                              // print("my mom is hero ${jenisProduk.kapasitas.toString().toLowerCase().indexOf("forklift")>0}");
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
@@ -869,6 +837,8 @@ class _ProdukList extends State<ProdukList> {
                                                   tglakhir12: _tanggalAkhir,
                                                 );
                                               }));
+                                              print("hey arnold" +
+                                                  jenisProduk.toString());
                                             }
                                           }
                                         },
@@ -1055,30 +1025,6 @@ class _ProdukList extends State<ProdukList> {
         });
       },
     );
-  }
-
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        print("ini produk lis");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
   }
 
   AccountValidation(BuildContext context) {

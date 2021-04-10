@@ -22,9 +22,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false, _obsecureText = true, _checkbio = false;
   ApiService _apiService = ApiService();
-  bool _fieldEmail, _fieldPassword;
+  final firebaseMessaging = FirebaseMessaging();
+  bool _fieldEmail,
+      _fieldPassword,
+      _isLoading = false,
+      _obsecureText = true,
+      _checkbio = false;
+  String token = "";
+  var iddevice = "";
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -34,21 +40,12 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  final controllerTopic = TextEditingController();
-  String token = "";
-  var iddevice = "";
-
   //FIREBASE
-  final firebaseMessaging = FirebaseMessaging();
-
   @override
   void initState() {
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
-          print("Ini Tokennya : " + token);
         }));
-    print("HMM : " + Platform.operatingSystem == 'ios');
-
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
@@ -129,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                         child: FlatButton(
                           child: Text(
                             "LOGIN",
-                            style: GoogleFonts.lato(),
+                            style: GoogleFonts.lato(
+                                fontWeight: FontWeight.bold, fontSize: 18),
                           ), // button login
                           textColor: Colors.white,
                           padding: EdgeInsets.symmetric(
@@ -185,16 +183,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Ada masalah login ? ",
-                          style: GoogleFonts.lato(fontSize: 14),
+                          "Ada masalah login ?",
+                          style: GoogleFonts.lato(fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
+                        SizedBox(width: 5),
                         GestureDetector(
                           onTap: () {
                             _popUpTroble(context);
@@ -202,47 +201,11 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Klik disini",
                             style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(children: <Widget>[
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 30,
-                        endIndent: 12,
-                      )),
-                      Text(
-                        "Atau",
-                        style: GoogleFonts.lato(),
-                      ),
-                      Expanded(
-                          child: Divider(
-                        thickness: 1,
-                        indent: 12,
-                        endIndent: 30,
-                      )),
-                    ]),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    AccountChecker(
-                      press: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return RegistrasiPage();
-                            },
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),
@@ -336,7 +299,7 @@ void _popUpTroble(BuildContext context) {
         return AlertDialog(
           content: new Container(
             width: 250,
-            height: 350,
+            height: 250,
             decoration: new BoxDecoration(
               shape: BoxShape.rectangle,
               color: const Color(0xFFFFFF),
@@ -349,28 +312,6 @@ void _popUpTroble(BuildContext context) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Opsi Pilihan...",
-                              style: GoogleFonts.lato(fontSize: 14),
-                            ),
-                            IconButton(
-                                iconSize: 14,
-                                icon: Icon(
-                                  Icons.close_outlined,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        thickness: 1,
-                      ),
                       SizedBox(
                         height: 10,
                       ),

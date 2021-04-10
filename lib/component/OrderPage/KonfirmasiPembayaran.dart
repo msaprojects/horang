@@ -4,147 +4,188 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 
+import '../../widget/bottom_nav.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
-class Dummy1 extends StatefulWidget {
-  var idlokasi,
+class KonfirmasiPembayaran extends StatefulWidget {
+  bool flagasuransi, flagvoucher;
+  var token,
+      idlokasi,
       idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
       idvoucher,
       idasuransi,
-      nominal_asuransii,
-      idpayment_gateway,
-      nominal_barang,
-      nomvoucher,
-      kodevoucher,
-      harga,
-      token,
-      tanggal_mulai,
-      tanggal_akhir,
+      harga_sewa,
+      durasi_sewa,
+      valuesewaawal,
+      valuesewaakhir,
       keterangan_barang,
-      no_ovo,
+      nominal_barang,
+      nominal_voucher,
+      minimum_transaksi,
+      persentase_voucher,
+      total_harga,
+      saldopoint,
       email_asuransi,
-      flagasuransi,
-      flagvoucher;
+      tambahsaldopoint,
+      persentase_asuransi,
+      idpayment_gateway,
+      saldodepositkurangnominaldeposit,
+      no_ovo,
+      minimalsewahari;
 
-  Dummy1(
-      {this.idjenis_produk,
-      this.idlokasi,
-      this.jumlah_sewa,
-      this.idasuransi,
-      this.nominal_asuransii,
-      this.idvoucher,
-      this.idpayment_gateway,
-      this.total_harga,
-      this.harga,
-      this.nominal_barang,
-      this.nomvoucher,
-      this.kodevoucher,
-      this.deposit_tambah,
-      this.deposit_pakai,
-      this.deposit_minimum,
-      this.token,
-      this.tanggal_mulai,
-      this.tanggal_akhir,
-      this.keterangan_barang,
-      this.no_ovo,
-      this.email_asuransi,
+  KonfirmasiPembayaran(
+      {this.token,
       this.flagasuransi,
-      this.flagvoucher});
+      this.flagvoucher,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.idvoucher,
+      this.idasuransi,
+      this.harga_sewa,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.keterangan_barang,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.total_harga,
+      this.saldopoint,
+      this.email_asuransi,
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.idpayment_gateway,
+      this.saldodepositkurangnominaldeposit,
+      this.no_ovo,
+      this.minimalsewahari});
   @override
-  _Dummy1State createState() => _Dummy1State();
+  _KonfirmasiPembayaran createState() => _KonfirmasiPembayaran();
 }
 
 ApiService _apiService = ApiService();
 bool isSuccess = false;
 
-class _Dummy1State extends State<Dummy1> {
-  var idlokasi,
-      idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
-      idvouchers,
-      idasuransi,
-      idpayment_gateway,
-      nominal_barang,
-      nominal_asuransi,
-      snomvoucher,
-      skodevoucher,
-      harga,
-      token,
-      tanggal_mulai,
-      tanggal_akhir,
-      keterangan_barang,
-      no_ovo,
-      email_asuransi,
-      flagasuransi,
-      flagvoucher;
+class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
+  bool dflagasuransi, dflagvoucher;
+  var dtoken,
+      didlokasi,
+      didjenis_produk,
+      didvoucher,
+      didasuransi,
+      dharga_sewa,
+      ddurasi_sewa,
+      dvaluesewaawal,
+      dvaluesewaakhir,
+      dkapasitas,
+      dalamat,
+      dketerangan_barang,
+      dnominal_barang,
+      dnominal_voucher,
+      dminimum_transaksi,
+      dpersentase_voucher,
+      dtotal_harga,
+      total_asuransi,
+      dsaldopoint,
+      demail_asuransi,
+      dtambahsaldopoint,
+      dpersentase_asuransi,
+      didpayment_gateway,
+      dno_ovo,
+      hitungsemua,
+      dminimalsewahari,
+      totaldeposit;
+
+  void hitungsemuaFunction() async {
+    setState(() {
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          dpersentase_asuransi.toString(),
+          dminimum_transaksi.toString(),
+          dflagvoucher,
+          dflagasuransi,
+          dnominal_voucher.toString(),
+          dharga_sewa.toString(),
+          ddurasi_sewa.toString(),
+          dnominal_barang.toString(),
+          dsaldopoint.toString(),
+          dminimalsewahari.toString(),
+          dpersentase_asuransi.toString());
+    });
+  }
 
   @override
   void initState() {
-    token = widget.token;
-    tanggal_mulai = widget.tanggal_mulai;
-    tanggal_akhir = widget.tanggal_akhir;
-    idlokasi = widget.idlokasi;
-    idjenis_produk = widget.idjenis_produk;
-    idvouchers = widget.idvoucher;
-    idasuransi = widget.idasuransi;
-    nominal_asuransi = widget.nominal_asuransii;
-    snomvoucher = widget.nomvoucher;
-    skodevoucher = widget.kodevoucher;
-    total_harga = widget.total_harga;
-    idlokasi = widget.idlokasi;
-    deposit_tambah = widget.deposit_tambah;
-    deposit_pakai = widget.deposit_pakai;
-    deposit_minimum = widget.deposit_minimum;
-    jumlah_sewa = widget.jumlah_sewa;
-    idpayment_gateway = widget.idpayment_gateway;
-    keterangan_barang = widget.keterangan_barang;
-    nominal_barang = widget.nominal_barang;
-    no_ovo = widget.no_ovo;
-    harga = widget.harga;
-    email_asuransi = widget.email_asuransi;
-    flagasuransi = widget.flagasuransi;
-    flagvoucher = widget.flagvoucher;
-
+    dtoken = widget.token;
+    dflagasuransi = widget.flagasuransi;
+    dflagvoucher = widget.flagvoucher;
+    didlokasi = widget.idlokasi;
+    didjenis_produk = widget.idjenis_produk;
+    didvoucher = widget.idvoucher;
+    didasuransi = widget.idasuransi;
+    didpayment_gateway = widget.idpayment_gateway;
+    dharga_sewa = widget.harga_sewa;
+    ddurasi_sewa = widget.durasi_sewa;
+    dvaluesewaawal = widget.valuesewaawal;
+    dvaluesewaakhir = widget.valuesewaakhir;
+    dketerangan_barang = widget.keterangan_barang;
+    dnominal_barang = widget.nominal_barang;
+    dnominal_voucher = widget.nominal_voucher;
+    dminimum_transaksi = widget.minimum_transaksi;
+    dpersentase_voucher = widget.persentase_voucher;
+    dtotal_harga = widget.total_harga;
+    dsaldopoint = widget.saldopoint; // as saldo poin terpakai
+    demail_asuransi = widget.email_asuransi; // as tambah saldo poin
+    dtambahsaldopoint = widget.tambahsaldopoint;
+    dpersentase_asuransi = widget.persentase_asuransi;
+    dno_ovo = widget.no_ovo;
+    dminimalsewahari = widget.minimalsewahari;
+    total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
+        double.parse(dnominal_barang);
+    totaldeposit = (dminimalsewahari * dharga_sewa); //as nominal m
+    hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
-        idjenis_produk: idjenis_produk,
-        idlokasi: idlokasi,
-        jumlah_sewa: int.parse(jumlah_sewa),
-        idasuransi: idasuransi,
-        idvoucher: idvouchers,
-        idpayment_gateway: idpayment_gateway,
-        total_harga: double.parse(total_harga),
-        harga: harga,
-        nominal_barang: double.parse(nominal_barang),
-        deposit_tambah: double.parse(deposit_tambah),
-        deposit_pakai: double.parse(deposit_pakai),
-        deposit_minimum: double.parse(deposit_minimum),
-        token: token,
-        tanggal_mulai: tanggal_mulai,
-        tanggal_akhir: tanggal_akhir,
-        keterangan_barang: keterangan_barang,
-        no_ovo: no_ovo,
-        email_asuransi: email_asuransi,
-        flagasuransi: flagasuransi,
-        flagvoucher: flagvoucher);
-    print("SEND TO ORDER : " + orderProduk.toString());
+      token: dtoken,
+      flagasuransi: dflagasuransi,
+      flagvoucher: dflagvoucher,
+      idlokasi: didlokasi,
+      idjenis_produk: didjenis_produk,
+      idvoucher: didvoucher,
+      idasuransi: didasuransi,
+      idpayment_gateway: didpayment_gateway,
+      harga_sewa: dharga_sewa,
+      durasi_sewa: ddurasi_sewa,
+      valuesewaawal: dvaluesewaawal,
+      valuesewaakhir: dvaluesewaakhir,
+      keterangan_barang: dketerangan_barang,
+      nominal_barang: dnominal_barang,
+      nominal_voucher: dnominal_voucher,
+      minimum_transaksi: dminimum_transaksi,
+      persentase_voucher: dpersentase_voucher,
+      total_harga: hitungsemua,
+      total_asuransi: total_asuransi,
+      saldopoint: dsaldopoint,
+      email_asuransi: demail_asuransi,
+      tambahsaldopoint: dtambahsaldopoint,
+      persentase_asuransi: dpersentase_asuransi,
+      no_ovo: dno_ovo,
+      minimalsewahari: dminimalsewahari,
+      totaldeposit: totaldeposit,
+    );
+
+    print("ORDER CONFIRM : " + orderProduk.toString());
     _apiService.tambahOrderProduk(orderProduk).then((idorder) {
       if (idorder > 0) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    KonfirmasiOrderDetail(idorder: idorder, nomVoucher: snomvoucher, asuransi: nominal_asuransi,)));
+                builder: (BuildContext context) => KonfirmasiOrderDetail(
+                    idorder: idorder,
+                    nomVoucher: dnominal_voucher,
+                    asuransi: total_asuransi)));
       } else {
         if (idorder == -1) {
           errorDialog(context, "Kontainer tidak tersedia",
@@ -156,7 +197,7 @@ class _Dummy1State extends State<Dummy1> {
           });
         } else {
           errorDialog(context, "Transaksi gagal disimpan",
-              positiveText: "Ok", showNeutralButton: false, positiveAction: () {
+              positiveText: "OK", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -183,7 +224,13 @@ class _Dummy1State extends State<Dummy1> {
           children: [
             Container(
               alignment: Alignment.topLeft,
-              child: Icon(Icons.close_rounded),
+              child: GestureDetector(
+                  onTap: () {
+                    // Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Home()));
+                  },
+                  child: Icon(Icons.close_rounded)),
             ),
             Container(
                 child: Center(
@@ -208,7 +255,7 @@ class _Dummy1State extends State<Dummy1> {
                         Text("Total Bayar",
                             style: GoogleFonts.inter(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text(rupiah(total_harga),
+                        Text(rupiah(hitungsemua),
                             style: GoogleFonts.inter(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -233,18 +280,13 @@ class _Dummy1State extends State<Dummy1> {
                               ),
                               Text(
                                   "Menunggu pembayaran Sebesar " +
-                                      rupiah(total_harga),
+                                      rupiah(hitungsemua),
                                   style: GoogleFonts.inter(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
-                        // Text("Refresh",
-                        //     style: GoogleFonts.inter(
-                        //         fontSize: 14,
-                        //         fontWeight: FontWeight.bold,
-                        //         color: Colors.red)),
                       ],
                     ),
                   ],
@@ -254,9 +296,11 @@ class _Dummy1State extends State<Dummy1> {
             SizedBox(
               height: 15,
             ),
-            Text("Metode Pembayaran $snomvoucher $idvouchers",
-                style: GoogleFonts.inter(
-                    fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(
+              "Metode Pembayaran",
+              style:
+                  GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
             SizedBox(
               height: 15,
             ),

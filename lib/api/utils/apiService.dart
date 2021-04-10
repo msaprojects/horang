@@ -5,7 +5,7 @@ import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
-import 'package:horang/api/models/log/Log.Aktifitas.Notif.dart';
+import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/models/log/Log.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/models/log/openLog.dart';
@@ -23,7 +23,7 @@ import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
-import 'package:horang/api/models/voucher/voucher.controller.dart';
+import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/models/xendit.model.dart';
 import 'package:http/http.dart' show Client;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +35,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.207:9992/api/";
+  // final String baseUrl = "https://dev.horang.id:9993/api/";
   final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
   // ResponseCode responseCode;
@@ -44,12 +45,19 @@ class ApiService {
   List<Customers> get datacus => _data;
 
   //URL MAKER
-  String urlasuransi, urlceksaldo, urllokasi, urlgetlist;
+  String urlasuransi,
+      urlceksaldo,
+      urllokasi,
+      urlgetcustomer,
+      urlsettingbylokasi,
+      urlkota;
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
     urllokasi = baseUrl + "lokasi";
-    urlgetlist = baseUrl + "customer";
+    urlgetcustomer = baseUrl + "customer";
+    urlsettingbylokasi = baseUrl + "lokasisetting";
+    urlkota = baseUrl + "kota";
   }
 
   /////////////////////// LIST /////////////////////////
@@ -105,9 +113,9 @@ class ApiService {
   }
 
   //LOAD VOUCHER
-  Future<List<Voucher>> listVoucher(String token) async {
-    final response = await client.get("$baseUrl/voucher",
-        headers: {"Authorization": "BEARER ${token}"});
+  Future<List<VoucherModel>> listVoucher(String token) async {
+    final response = await client
+        .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
@@ -207,6 +215,7 @@ class ApiService {
     var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
+    print('Value Login ' + test.toString());
     if (response.statusCode == 200) {
 //      Share Preference
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -228,6 +237,7 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
+    print(response.statusCode.toString() + " ~ " + response.body.toString());
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
     } else if (response.statusCode == 204) {
@@ -303,6 +313,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
+    print("cek pinnya" + response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -316,8 +327,8 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
-    Map message = jsonDecode(response.statusCode.toString());
-    responseCode = ResponseCodeCustom.fromJson(message);
+    // Map message = jsonDecode(response.statusCode.toString());
+    // responseCode = ResponseCodeCustom.fromJson(message);
     // print("responsss" + response.statusCode.toString());
     if (response.statusCode == 200) {
       return true;
@@ -365,15 +376,16 @@ class ApiService {
     }
   }
 
-  Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
+  // Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
+  Future<List> logAktifitasNotif_(String token) async {
     final response = await client.post(
       "$baseUrl/logaktifitas",
       headers: {"Content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
-    response.body;
+    print("responnya ?" + response.body);
     if (response.statusCode == 200) {
-      return logAktifitasNotifFromJson(response.body);
+      return logaktifitasnotifToList(response.body);
     } else {
       return null;
     }
@@ -474,6 +486,16 @@ class ApiService {
       return json.decode(response.body)['access_token'];
     } else {
       return "";
+    }
+  }
+
+  Future<bool> logout(String token) async {
+    final response = await client.delete("$baseUrl/logout",
+        headers: {"Authorization": "BEARER ${token}"});
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 

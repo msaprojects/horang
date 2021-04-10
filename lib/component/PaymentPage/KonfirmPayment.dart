@@ -5,54 +5,60 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
-import 'package:horang/widget/bottom_nav.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KonfirmPayment extends StatefulWidget {
+  bool flagasuransi, flagvoucher;
   var idlokasi,
       idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
       idvoucher,
       idasuransi,
-      nominal_asuransi,
-      idpayment_gateway,
-      nominal_barang,
-      nomvoucher,
-      kodevoucher,
-      harga,
-      tanggal_mulai,
-      tanggal_akhir,
+      harga_sewa,
+      durasi_sewa,
+      valuesewaawal,
+      valuesewaakhir,
+      kapasitas,
+      alamat,
       keterangan_barang,
+      nominal_barang,
+      nominal_voucher,
+      minimum_transaksi,
+      persentase_voucher,
+      totalharixharga,
+      saldopoint,
       email_asuransi,
-      flagasuransi,
-      flagvoucher;
+      tambahsaldopoint,
+      persentase_asuransi,
+      idpayment_gateway,
+      minimalsewahari;
 
   KonfirmPayment(
-      {this.idlokasi,
+      {this.flagasuransi,
+      this.flagvoucher,
+      this.idlokasi,
       this.idjenis_produk,
-      this.jumlah_sewa,
-      this.idasuransi,
       this.idvoucher,
-      this.harga,
-      this.nominal_asuransi,
-      this.idpayment_gateway,
-      this.deposit_tambah,
-      this.deposit_pakai,
-      this.deposit_minimum,
-      this.tanggal_mulai,
+      this.idasuransi,
+      this.harga_sewa,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.kapasitas,
+      this.alamat,
       this.keterangan_barang,
       this.nominal_barang,
-      this.nomvoucher,
-      this.kodevoucher,
-      this.total_harga,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.totalharixharga,
+      this.saldopoint,
       this.email_asuransi,
-      this.tanggal_akhir,
-      this.flagasuransi,
-      this.flagvoucher});
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.idpayment_gateway,
+      this.minimalsewahari});
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
@@ -60,70 +66,71 @@ class KonfirmPayment extends StatefulWidget {
 class _KonfirmPaymentState extends State<KonfirmPayment> {
   ApiService _apiService = ApiService();
   SharedPreferences sp;
-  var access_token, refresh_token, email, nama_customer;
+  var access_token, refresh_token, email, nama_customer, idcustomer, pin;
 
-  var idlokasi,
-      idjenis_produk,
-      total_harga,
-      deposit_tambah,
-      deposit_pakai,
-      deposit_minimum,
-      jumlah_sewa,
-      idvoucher,
-      idasuransi,
-      nominal_asuransi,
-      idpayment_gateway,
-      nominal_barang,
-      snomvucher,
-      skodevoucher,
-      harga,
-      tanggal_mulai,
-      tanggal_akhir,
-      keterangan_barang,
-      email_asuransi,
-      flagasuransi,
-      flagvoucher;
+  var kflagasuransi,
+      kflagvoucher,
+      kidlokasi,
+      kidjenis_produk,
+      kidvoucher,
+      kidasuransi,
+      kharga_sewa,
+      kdurasi_sewa,
+      kvaluesewaawal,
+      kvaluesewaakhir,
+      kkapasitas,
+      kalamat,
+      kketerangan_barang,
+      knominal_barang,
+      knominal_voucher,
+      kminimum_transaksi,
+      kpersentase_voucher,
+      total_asuransi,
+      ktotalharixharga,
+      totaldeposit,
+      ksaldopoint,
+      kemail_asuransi,
+      ktambahsaldopoint,
+      kpersentase_asuransi,
+      kidpayment_gateway,
+      hitungsemua,
+      kminimalsewahari;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
 
   cekToken() async {
-    print("masuk1");
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    email = sp.getString("email");
+    idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      print("masuk2");
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
-      print("masuk3");
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
             //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
             if (!isSuccess) {
-              print("masuk4");
               _apiService
                   .refreshToken(refresh_token)
                   .then((value) => setState(() {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          print("masuk5");
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          print("masuk6");
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -132,30 +139,53 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     }
   }
 
+  void hitungsemuaFunction() async {
+    setState(() {
+      hitungsemua = ReusableClasses().PerhitunganOrder(
+          kpersentase_voucher.toString(),
+          kminimum_transaksi.toString(),
+          kflagvoucher,
+          kflagasuransi,
+          knominal_voucher.toString(),
+          kharga_sewa.toString(),
+          kdurasi_sewa.toString(),
+          knominal_barang.toString(),
+          ksaldopoint.toString(),
+          kminimalsewahari.toString(),
+          kpersentase_asuransi.toString());
+    });
+  }
+
   @override
   void initState() {
+    kflagasuransi = widget.flagasuransi;
+    kflagvoucher = widget.flagvoucher;
+    kidlokasi = widget.idlokasi;
+    kidjenis_produk = widget.idjenis_produk;
+    kidvoucher = widget.idvoucher;
+    kidasuransi = widget.idasuransi;
+    kharga_sewa = widget.harga_sewa;
+    kdurasi_sewa = widget.durasi_sewa;
+    kvaluesewaawal = widget.valuesewaawal;
+    kvaluesewaakhir = widget.valuesewaakhir;
+    kkapasitas = widget.kapasitas;
+    kalamat = widget.alamat;
+    kketerangan_barang = widget.keterangan_barang;
+    knominal_barang = widget.nominal_barang;
+    knominal_voucher = widget.nominal_voucher;
+    kminimum_transaksi = widget.minimum_transaksi;
+    kpersentase_voucher = widget.persentase_voucher;
+    ktotalharixharga = widget.totalharixharga;
+    ksaldopoint = widget.saldopoint;
+    kemail_asuransi = widget.email_asuransi;
+    ktambahsaldopoint = widget.tambahsaldopoint;
+    kpersentase_asuransi = widget.persentase_asuransi;
+    kidpayment_gateway = widget.idpayment_gateway;
+    kminimalsewahari = widget.minimalsewahari;
+    total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
+    totaldeposit = (kminimalsewahari * kharga_sewa);
     cekToken();
-    idpayment_gateway = widget.idpayment_gateway;
-    idlokasi = widget.idlokasi;
-    idjenis_produk = widget.idjenis_produk;
-    jumlah_sewa = widget.jumlah_sewa;
-    harga = widget.harga;
-    idasuransi = widget.idasuransi;
-    idvoucher = widget.idvoucher;
-    tanggal_mulai = widget.tanggal_mulai;
-    tanggal_akhir = widget.tanggal_akhir;
-    keterangan_barang = widget.keterangan_barang;
-    nominal_barang = widget.nominal_barang;
-    snomvucher = widget.nomvoucher;
-    skodevoucher = widget.kodevoucher;
-    total_harga = widget.total_harga;
-    deposit_tambah = widget.deposit_tambah;
-    deposit_pakai = widget.deposit_pakai;
-    deposit_minimum = widget.deposit_minimum;
-    email_asuransi = widget.email_asuransi;
-    nominal_asuransi = widget.nominal_asuransi;
-    flagasuransi = widget.flagasuransi;
-    flagvoucher = widget.flagvoucher;
+    hitungsemuaFunction();
     super.initState();
   }
 
@@ -171,11 +201,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               color: Colors.black,
             ),
             onPressed: () {
-              // Navigator.pop(context);
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                  (Route<dynamic> route) => false);
+              Navigator.pop(context);
             }),
       ),
       body: Container(
@@ -185,7 +211,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             Expanded(
                 child: Column(
               children: [
-                Text("Masukkan nomor yang terdaftar di OVO $snomvucher $idvoucher",
+                Text("Masukkan nomor yang terdaftar di OVO ",
                     textAlign: TextAlign.left,
                     style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold, fontSize: 14)),
@@ -239,69 +265,43 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Sesi Anda Berakhir!"),
-      content: Text(
-          "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
-
   OrderConfirmation(BuildContext context, String notelp) {
-    // print("cek1");
-    // print(notelp);
     if (notelp == "") {
-      print("cek2");
       return infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
     } else {
-      // print("cek3");
       return infoDialog(
-          context, "pastikan nomor $notelp ini sudah terdaftar di ewallet $snomvucher $idvoucher!",
+          context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
           showNeutralButton: false,
-          negativeAction: (){}, 
+          negativeAction: () {},
           negativeText: "Batal",
           positiveText: "Ok", positiveAction: () {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => Dummy1(
-                    flagasuransi: flagasuransi,
-                    flagvoucher: flagvoucher,
-                    idjenis_produk: idjenis_produk,
-                    idlokasi: idlokasi,
-                    jumlah_sewa: jumlah_sewa,
-                    idasuransi: idasuransi,
-                    idvoucher: idvoucher,
-                    nomvoucher: snomvucher,
-                    idpayment_gateway: idpayment_gateway,
-                    total_harga: total_harga,
-                    harga: harga,
-                    nominal_barang: nominal_barang,
-                    nominal_asuransii: nominal_asuransi,
-                    deposit_tambah: deposit_tambah,
-                    deposit_pakai: deposit_pakai,
-                    deposit_minimum: deposit_minimum,
+                builder: (BuildContext context) => KonfirmasiPembayaran(
                     token: access_token,
-                    tanggal_mulai: tanggal_mulai,
-                    tanggal_akhir: tanggal_akhir,
-                    keterangan_barang: keterangan_barang,
-                    email_asuransi: email_asuransi,
-                    no_ovo: _noOvo.text.toString())));
+                    flagasuransi: kflagasuransi,
+                    flagvoucher: kflagvoucher,
+                    idlokasi: kidlokasi,
+                    idjenis_produk: kidjenis_produk,
+                    idvoucher: kidvoucher,
+                    idasuransi: kidasuransi,
+                    harga_sewa: kharga_sewa,
+                    durasi_sewa: kdurasi_sewa,
+                    valuesewaawal: kvaluesewaawal,
+                    valuesewaakhir: kvaluesewaakhir,
+                    keterangan_barang: kketerangan_barang,
+                    nominal_barang: knominal_barang,
+                    nominal_voucher: knominal_voucher,
+                    minimum_transaksi: kminimum_transaksi,
+                    persentase_voucher: kpersentase_voucher,
+                    saldopoint: ksaldopoint,
+                    email_asuransi: kemail_asuransi,
+                    tambahsaldopoint: ktambahsaldopoint,
+                    persentase_asuransi: kpersentase_asuransi,
+                    idpayment_gateway: kidpayment_gateway,
+                    no_ovo: _noOvo.text.toString(),
+                    minimalsewahari: kminimalsewahari)));
       });
     }
   }

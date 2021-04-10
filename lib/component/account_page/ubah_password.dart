@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/account.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,10 +21,22 @@ class UbahPass extends StatefulWidget {
 
 class _UbahPassState extends State<UbahPass> {
   SharedPreferences sp;
-  bool _isLoading = false, _obsecureText = true, _obsecureText1 = true;
   ApiService _apiService = ApiService();
-  var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
-  bool _isFieldpassLama, _isFieldpassBaru, _isFieldpassRetype, isSuccess = true;
+  bool _isLoading = false,
+      _obsecureText = true,
+      _obsecureText1 = true,
+      _isFieldpassLama,
+      _isFieldpassBaru,
+      _isFieldpassRetype,
+      isSuccess = true;
+  var token = "",
+      newtoken = "",
+      access_token,
+      refresh_token,
+      idcustomer = "",
+      nama_customer,
+      pin;
+  var tekan1x = true;
   String passlama, passbaru, retypepass;
 
   TextEditingController _controllerPasslama = TextEditingController();
@@ -34,14 +47,15 @@ class _UbahPassState extends State<UbahPass> {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
-    passlama = sp.getString("passwordlama");
-    passbaru = sp.getString("passwordbaru");
+    idcustomer = sp.getString("idcustomer");
+    nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => true);
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
+          (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
             isSuccess = value;
@@ -56,12 +70,12 @@ class _UbahPassState extends State<UbahPass> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
-                              (Route<dynamic> route) => true);
+                                      WelcomePage()),
+                              (Route<dynamic> route) => false);
                         }
                       }));
             }
@@ -123,6 +137,12 @@ class _UbahPassState extends State<UbahPass> {
                   child: RaisedButton(
                     child: Text("simpan"),
                     onPressed: () {
+                      if (!tekan1x) {
+                        // return warningDialog(context, "tekan lebih 1x");
+                        return true;
+                      }
+                      tekan1x = false;
+                      // warningDialog(context, "tes aja");
                       if (_isFieldpassLama == null ||
                           _isFieldpassBaru == null ||
                           !_isFieldpassLama ||
@@ -144,7 +164,7 @@ class _UbahPassState extends State<UbahPass> {
                       } else {
                         _apiService.UbahPassword(password).then((isSuccess) {
                           setState(() => _isLoading = false);
-                            print("dede ${_apiService.responseCode}");
+                          print("dede ${_apiService.responseCode}");
                           if (isSuccess) {
                             print("sukses");
                             successDialog(
@@ -154,17 +174,16 @@ class _UbahPassState extends State<UbahPass> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Home(initIndexHome: 0,)),
+                                      builder: (BuildContext context) => Home(
+                                            initIndexHome: 0,
+                                          )),
                                   (Route<dynamic> route) => false);
                             });
                           } else {
-                            print("dede ${_apiService.responseCode}");
                             if (_apiService.responseCode == "401") {
                               errorDialog(context,
                                   "Password lama yang anda masukkan salah.");
                             }
-                            print("gagal");
                             errorDialog(context,
                                 "Ubah Password gagal disimpan, silahkan dicek ulang");
                           }
@@ -221,15 +240,6 @@ class _UbahPassState extends State<UbahPass> {
           errorText: _isFieldpassBaru == null || _isFieldpassBaru
               ? null
               : "Password is required"),
-      // validator: (String value) {
-      //   if (value.isEmpty) {
-      //     return 'password harus di isi';
-      //   } else if (!(regx.hasMatch(value))) {
-      //     print("jangan gunakan spesial");
-      //     return 'Jangan gunakan spesial karakter';
-      //   }
-      //   return null;
-      // },
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
         if (isFieldValid != _isFieldpassBaru) {
@@ -261,7 +271,6 @@ class _UbahPassState extends State<UbahPass> {
           print("Password tidak sama1");
           _scaffoldState.currentState
               .showSnackBar(SnackBar(content: Text("Password tidak sama")));
-          // setState(() => _isFieldpassRetype = isFieldValid);
         }
       },
     );

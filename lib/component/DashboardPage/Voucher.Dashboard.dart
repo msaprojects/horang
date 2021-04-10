@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:horang/api/models/voucher/voucher.controller.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/VoucherPage/voucher.detail.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
+import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VoucherDashboard extends StatefulWidget {
@@ -16,24 +19,23 @@ class VoucherDashboard extends StatefulWidget {
 class _VoucherDashboard extends State<VoucherDashboard> {
   int _current = 0;
   Widget currentScreen = HomePage();
-
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama;
+  var access_token, refresh_token, idcustomer, email, nama_customer, nama, pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
-    email = sp.getString("email");
     nama_customer = sp.getString("nama_customer");
+    pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      // showAlertDialog(context);
+      ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
           (Route<dynamic> route) => false);
     } else {
       _apiService.checkingToken(access_token).then((value) => setState(() {
@@ -49,11 +51,11 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
-                          // showAlertDialog(context);
+                          ReusableClasses().showAlertDialog(context);
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginPage()),
+                                      WelcomePage()),
                               (Route<dynamic> route) => false);
                         }
                       }));
@@ -72,7 +74,8 @@ class _VoucherDashboard extends State<VoucherDashboard> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _apiService.listVoucher(access_token),
-      builder: (BuildContext context, AsyncSnapshot<List<Voucher>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<VoucherModel>> snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Center(
@@ -83,8 +86,42 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
-          List<Voucher> voucher = snapshot.data;
-          return _listPromo(voucher);
+          List<VoucherModel> voucher = snapshot.data;
+          if (voucher.isNotEmpty) {
+          return _listPromo(voucher);  
+          } else {
+            return Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Card(
+                    child: GestureDetector(
+                      onTap: () {
+                      },
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline_rounded,
+                            color: Colors.orange,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Anda Belum Ada Transaksi...",
+                            style: GoogleFonts.lato(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ),
+                );
+          }
+          
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -94,15 +131,13 @@ class _VoucherDashboard extends State<VoucherDashboard> {
     );
   }
 
-  Widget _listPromo(List<Voucher> dataIndex) {
-//    print("Yuhuu.. ${nama_customer}");
+  Widget _listPromo(List<VoucherModel> dataIndex) {
     if (idcustomer == "0") {
       nama = email;
     } else {
       nama = nama_customer;
     }
 
-    print(access_token);
     return Column(
       children: <Widget>[
         Container(
@@ -130,7 +165,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             autoplay: true,
             layout: SwiperLayout.DEFAULT,
             itemBuilder: (BuildContext context, index) {
-              Voucher voucher = dataIndex[index];
+              VoucherModel voucher = dataIndex[index];
               return Container(
                 child: Container(
                   child: GestureDetector(
@@ -138,7 +173,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return VoucherDetail(
-                          nominal: voucher.minNominal,
+                          nominal: voucher.min_nominal,
                           gambar: voucher.gambar,
                           keterangan: voucher.keterangan,
                           kode_voucher: voucher.kode_voucher,
@@ -157,40 +192,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             itemCount: dataIndex.length,
           ),
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: <Widget>[
-        //     //Lihat selengkapnya
-        //     Text(
-        //       'Lihat Selengkapnya...',
-        //       style: mMorediscountstyle,
-        //     )
-        //   ],
-        // )
       ],
     );
   }
-
-  // showAlertDialog(BuildContext context) {
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => LoginPage()));
-  //     },
-  //   );
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("Sesi Anda Berakhir!"),
-  //     content: Text(
-  //         "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return alert;
-  //       });
-  // }
 }
