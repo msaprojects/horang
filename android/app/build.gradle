@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -32,12 +32,31 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    // compileSdkVersion 29
-    compileSdkVersion 30
+    compileSdkVersion 29
+    // compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    
+    // splits {
+    //     // Configures multiple APKs based on ABI.
+    //     abi {
+    //         // Enables building multiple APKs per ABI.
+    //         enable true
+    //         // By default all ABIs are included, so use reset() and include to specify that we only
+    //         // want APKs for armeabi-v7a and arm64-v8a.
+
+    //         // Resets the list of ABIs that Gradle should create APKs for to none.
+    //         reset()
+
+    //         // Specifies a list of ABIs that Gradle should create APKs for.
+    //         include "armeabi-v7a", "arm64-v8a"
+
+    //         // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+    //         universalApk false
+    //     }
+    // }
 
     lintOptions {
         disable 'InvalidPackage'
@@ -46,7 +65,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.cvdtc.horang"
+        applicationId 'com.cvdtc.horang'
         minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
@@ -64,6 +83,8 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

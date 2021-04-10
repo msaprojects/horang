@@ -19,6 +19,28 @@ class _HistoryPageState extends State<HistoryPage> {
   bool isSuccess = false;
   var access_token, refresh_token, nama_customer, idcustomer, pin;
 
+  FlatButton getBayarBlm(int bayarbelum) {
+    if (bayarbelum == 0) {
+      return FlatButton(
+        onPressed: () {},
+        child: Text('Belum Bayar', style: TextStyle(color: Colors.white),),
+        color: Colors.red,
+      );
+    } else if (bayarbelum == 1){
+      return FlatButton(
+        onPressed: () {},
+        child: Text('Terbayar', style: TextStyle(color: Colors.white),),
+        color: Colors.green,
+      );
+    } else if (bayarbelum == 2){
+      return FlatButton(
+        onPressed: () {},
+        child: Text('Expired', style: TextStyle(color: Colors.white),),
+        color: Colors.orange,
+      );
+    }
+  }
+
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -174,7 +196,19 @@ class _HistoryPageState extends State<HistoryPage> {
                                             color: Colors.grey[800],
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      flagStatus(history.flag_bayar)
+                                      Container(
+                                        child: getBayarBlm(history.flag_bayar),
+                                      )
+                                      // FlatButton(
+                                      //     color: Colors.green,
+                                      //     onPressed: () {},
+                                      //     child: Text(
+                                      //         history.flag_bayar == 0
+                                      //             ? "Terbayar"
+                                      //             : "Belum Dibayar",
+                                      //         style: GoogleFonts.inter(
+                                      //             color: Colors.white,
+                                      //             fontWeight: FontWeight.bold)))
                                     ],
                                   ),
                                   SizedBox(
@@ -260,42 +294,6 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
     );
-  }
-
-  flagStatus(var status) {
-    if (status == 0) {
-      FlatButton(
-          color: Colors.red,
-          child: Text(
-            "Belum Terbayar",
-            style: GoogleFonts.inter(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          ));
-    } else if (status == 1) {
-      FlatButton(
-          color: Colors.green,
-          child: Text(
-            "Sudah Terbayar",
-            style: GoogleFonts.inter(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          ));
-    } else if (status == 2) {
-      FlatButton(
-          color: Colors.grey[350],
-          child: Text(
-            "Expired",
-            style: GoogleFonts.inter(
-                color: Colors.white, fontWeight: FontWeight.bold),
-          ));
-    } else {
-      FlatButton(
-          color: Colors.white,
-          child: Text(
-            "-",
-            style: GoogleFonts.inter(
-                color: Colors.red, fontWeight: FontWeight.bold),
-          ));
-    }
   }
 
   AccountValidation(BuildContext context) {

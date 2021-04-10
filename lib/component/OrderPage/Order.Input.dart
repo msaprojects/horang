@@ -214,7 +214,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context);
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomInset: false,
       key: _scaffoldState,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -226,7 +226,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       body: Column(
         children: <Widget>[
           Expanded(
+            flex: 1,
             child: SingleChildScrollView(
+              reverse: true,
               controller: ScrollController(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,6 +298,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
+                          flex: 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -367,6 +370,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
+                          flex: 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -392,6 +396,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   new Row(
                     children: <Widget>[
                       Expanded(
+                        flex: 1,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -409,6 +414,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
+                          flex: 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -472,6 +478,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
+                          flex: 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -587,9 +594,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   : Column(
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.only(
+                                          padding: EdgeInsets.only(
                                               left: 30, right: 30, top: 5),
                                           child: TextFormField(
+                                            scrollPadding: MediaQuery.of(context).viewInsets,
                                             onTap: () {
                                               if (_nominalbarang.text == "0") {
                                                 cleartextinputnominal();

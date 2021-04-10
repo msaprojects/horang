@@ -8,6 +8,8 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/notification_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'component/Dummy/dummypin2.dart';
+
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MyHttpOverride extends HttpOverrides {
@@ -66,6 +68,7 @@ class _HomePageState extends State<HomePage> {
       ),
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
+      // home: Pinauth(),
     );
   }
 }

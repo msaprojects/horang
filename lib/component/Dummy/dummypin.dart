@@ -400,7 +400,8 @@ class _OtpScreenState extends State<OtpScreen> {
           Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
               pin_cek: strpin,
               token_cek: access_token,
-              token_notifikasi: token_notifikasi);
+              // token_notifikasi: token_notifikasi
+              );
           _apiService.CekPin(pin_cek1).then((isSuccess) {
             setState(() {
               if (isSuccess) {

@@ -172,7 +172,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       }));
             } else {
               print("cek debug 7");
-              infoDialog(context, "hei");
+              // infoDialog(context, "hei");
               // print(access_token);
               // print(refresh_token);
               _checkBiometric();
@@ -454,7 +454,8 @@ class _OtpScreenState extends State<OtpScreen> {
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
             pin_cek: strpin,
             token_cek: access_token,
-            token_notifikasi: token_notifikasi);
+            // token_notifikasi: token_notifikasi
+            );
         print("pin 99 $pin_cek1");
         print("Cek PIN masuk maskuh: $pin_cek1");
         _apiService.CekPin(pin_cek1).then((isSuccess) {

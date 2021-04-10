@@ -8,6 +8,7 @@ import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 
+import '../../widget/bottom_nav.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
 class KonfirmasiPembayaran extends StatefulWidget {
@@ -212,7 +213,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        // elevation: 0,
+        elevation: 0,
       ),
       body: Container(
         color: Colors.white,
@@ -225,11 +226,9 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
               alignment: Alignment.topLeft,
               child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        // builder: (context) => HomePage()));
-                        builder: (context) => HomePage(
-                              initialindex: 0,
-                            )));
+                    // Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Home()));
                   },
                   child: Icon(Icons.close_rounded)),
             ),

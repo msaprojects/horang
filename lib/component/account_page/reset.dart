@@ -107,6 +107,7 @@ class _ResetState extends State<Reset> {
                           GetDeviceID().getDeviceID(context).then((ids) {
                             setState(() {
                               iddevice = ids;
+                              print("ss + $ids");
                               var getEmail = _controlleremail.text.toString();
                               if (getEmail == null || getEmail == "") {
                                 warningDialog(
@@ -120,6 +121,7 @@ class _ResetState extends State<Reset> {
                                     infoDialog(context,
                                         "Apakah Email yang anda masukkan sudah benar?",
                                         title: "Konfirmasi",
+                                        showNeutralButton: false,
                                         positiveText: "Ya", positiveAction: () {
                                       _apiService.ResendEmail(reset)
                                           .then((isSuccess) {
@@ -205,6 +207,7 @@ class _ResetState extends State<Reset> {
                                     infoDialog(context,
                                         "Apakah Email yang anda masukkan sudah benar?",
                                         title: "Konfirmasi",
+                                        showNeutralButton: false,
                                         positiveText: "Ya", positiveAction: () {
                                       _apiService.LostDevice(reset)
                                           .then((isSuccess) {

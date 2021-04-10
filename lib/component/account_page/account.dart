@@ -231,6 +231,7 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
+                    print('keluar');
                     Keluarr();
                   },
                 ),
@@ -240,7 +241,7 @@ class _AccountState extends State<Account> {
               height: 10.0,
             ),
             Center(
-              child: Text("Version 1.1.0.2 Debug"),
+              child: Text("Version 2.28.0"),
             )
           ],
         ));

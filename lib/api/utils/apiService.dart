@@ -35,6 +35,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.207:9992/api/";
+  // final String baseUrl = "https://dev.horang.id:9993/api/";
   final String baseUrl = "https://server.horang.id:9993/api/";
   Client client = Client();
   // ResponseCode responseCode;
@@ -489,8 +490,8 @@ class ApiService {
   }
 
   Future<bool> logout(String token) async {
-    final response = await client.post("$baseUrl/logout",
-        headers: {"content-type": "application/json"}, body: jsonEncode(token));
+    final response = await client.delete("$baseUrl/logout",
+        headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return true;
     } else {
