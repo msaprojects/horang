@@ -212,8 +212,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       hitungsemua = ReusableClasses().PerhitunganOrder(
           ppersentase_voucher.toString(),
           pminimum_transaksi.toString(),
-          pflagvoucher,
           pflagasuransi,
+          pflagvoucher,
           pnominal_voucher.toString(),
           pharga_sewa.toString(),
           pdurasi_sewa.toString(),

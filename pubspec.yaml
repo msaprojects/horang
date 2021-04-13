@@ -28,41 +28,29 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: any
   cupertino_icons: 1.0.2
-  # flushbar: any
   flushbar: 1.10.4
-  # http: any
   http: ^0.12.2
-  # shared_preferences: any
   shared_preferences: ^0.5.12+4
   indonesia: 1.0.1
-  # flutter_launcher_icons: ^0.8.1
   flutter_launcher_icons: 0.9.0
-  # local_auth: any
   local_auth: ^0.6.3+4
-  # pin_code_text_field: any
   pin_code_text_field: 1.8.0
   google_fonts: ^1.1.2
-  # flutter_swiper: any
   flutter_swiper: 1.1.6
   email_validator: 2.0.1
-  # email_validator: any
-  # date_format: any
   date_format: ^1.0.9
-  # timeline_tile: ^1.0.0
   timeline_tile: ^2.0.0
-  # connectivity: ^0.4.9+5
   connectivity: 3.0.3
   numeric_keyboard: ^1.1.0
   pin_code_view: 0.2.1
   commons: ^0.7.8+3
-  # syncfusion_flutter_datepicker: ^18.4.44-beta
   syncfusion_flutter_datepicker: ^18.4.49-beta
   fluttertoast: 7.1.6
   firebase_messaging: ^7.0.3
   intl: ^0.16.1
   imei_plugin: ^1.2.0
-  # grouped_list: ^3.7.1
   grouped_list: 4.0.0
+  ffi: ^1.0.0
 
 dev_dependencies:
   flutter_test:

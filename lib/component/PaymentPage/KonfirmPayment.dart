@@ -144,8 +144,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       hitungsemua = ReusableClasses().PerhitunganOrder(
           kpersentase_voucher.toString(),
           kminimum_transaksi.toString(),
-          kflagvoucher,
           kflagasuransi,
+          kflagvoucher,
           knominal_voucher.toString(),
           kharga_sewa.toString(),
           kdurasi_sewa.toString(),
