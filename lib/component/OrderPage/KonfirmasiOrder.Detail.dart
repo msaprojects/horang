@@ -358,10 +358,12 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                           child: RaisedButton(
                             color: Colors.blue[300],
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Home()));
+                                      builder: (BuildContext context) =>
+                                          Home()),
+                                  (Route<dynamic> route) => false);
                             },
                             child: Text(
                               "OK",

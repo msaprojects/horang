@@ -12,6 +12,8 @@ import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../screen/welcome_page.dart';
+
 class Pinauth extends StatefulWidget {
   @override
   _PinauthState createState() => _PinauthState();
@@ -165,7 +167,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        LoginPage()),
+                                        WelcomePage()),
                                 (Route<dynamic> route) => false);
                           }, positiveText: "Ok");
                         }
@@ -568,7 +570,8 @@ class _OtpScreenState extends State<OtpScreen> {
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()),
+                        // builder: (BuildContext context) => LoginPage()),
+                        builder: (BuildContext context) => WelcomePage()),
                     (Route<dynamic> route) => false);
               }),
         )

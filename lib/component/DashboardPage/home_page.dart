@@ -21,6 +21,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:http/http.dart' as http;
 
+import '../../widget/bottom_nav.dart';
+import '../StoragePage/StorageHandler.dart';
+
 class HomePage extends StatefulWidget {
   int _current = 0;
   final initialindex;
@@ -43,7 +46,8 @@ class _HomePageState extends State<HomePage> {
       nama_customer,
       nama,
       pin,
-      ceksaldo;
+      ceksaldo,
+      sk;
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -54,6 +58,22 @@ class _HomePageState extends State<HomePage> {
       result.add(handler(i, list[i]));
     }
     return result;
+  }
+
+  Future<String> _ambildataSK() async {
+    http.Response response = await http
+        .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
+    print("mmzzzrr" + response.body);
+    return sk = response.body;
+
+    // final response = await http.get('https://server.horang.id/adminmaster/sk.txt');
+    // if(response.statusCode == 200){
+    //   var decoded = utf8.decode(response.bodyBytes);
+    //   print(decoded);
+    //   return(decoded);
+    // } else{
+    //   return "ada masalah";
+    // }
   }
 
   cekToken() async {
@@ -117,11 +137,11 @@ class _HomePageState extends State<HomePage> {
         .then((HttpClientResponse response) =>
             response.transform(new Utf8Decoder()).listen(print))
         .toString();
-    print("IYUH : " + hai);
+    print("IYUH : " + hai.toString());
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
-    ReusableClasses().sk();
+    // ReusableClasses().sk();
   }
 
   Future refreshData() async {
@@ -282,12 +302,13 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        CobaKeyboard()));
+                                            print(_ambildataSK());
+                                            // popUpsk(context);
+                                            confirmationDialog(context, '$sk',
+                                                title: 'Syarat Ketentuan',
+                                                confirm: true,
+                                                confirmationText:
+                                                    'Setuju, S&K Berlaku',);
                                             // Scaffold.of(context)
                                             //     .showSnackBar(SnackBar(
                                             //   content: Text(
@@ -379,11 +400,14 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    // StorageHandler(
-                                    //       initialIndex: 2,
-                                    //     )
-                                    HistoryPage()));
+                                builder: (context) => Home(
+                                      initIndexHome: 1,
+                                    )
+                                // StorageHandler(
+                                //       initialIndex: 2,
+                                //     )
+                                // HistoryPage()
+                                ));
                       },
                     ),
                   ],
@@ -406,6 +430,36 @@ class _HomePageState extends State<HomePage> {
             title: Text("Sesi Anda Berakhir!"),
             content: Text(
                 "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
+        });
+  }
+
+  Future popUpsk(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            // content: Text("$sk"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      // height: 200,
+                      // width: 400,
+                      child: Text("$sk")),
+                ],
+              ),
+            ),
             actions: [
               FlatButton(
                   color: Colors.red,

@@ -642,6 +642,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         ListTile(
+                          title: Center(
+                            child: Text(pymentgtwy.nama_provider,
+                                style: GoogleFonts.inter(
+                                    fontSize: 15, color: Colors.black87)),
+                          ),
                           selected: true,
                           leading: Container(
                             padding: EdgeInsets.only(left: 20),

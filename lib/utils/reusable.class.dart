@@ -212,9 +212,10 @@ class ReusableClasses {
         });
   }
 
-  sk() async {
-    ApiService _apiService = ApiService();
-    print('///xxx///');
-    print(await http.read('https://server.horang.id/adminmaster/sk.txt'));
-  }
+  // sk()  {
+  //   ApiService _apiService = ApiService();
+  //   print('///xxx///');
+  //   print(http.read('https://server.horang.id/adminmaster/sk.txt'));
+  // }
+  
 }
