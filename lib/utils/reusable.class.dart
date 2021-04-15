@@ -211,4 +211,10 @@ class ReusableClasses {
           return alert;
         });
   }
+
+  sk() async {
+    ApiService _apiService = ApiService();
+    print('///xxx///');
+    print(await http.read('https://server.horang.id/adminmaster/sk.txt'));
+  }
 }

@@ -37,6 +37,7 @@ class ApiService {
   // final String baseUrl = "http://192.168.1.207:9992/api/";
   // final String baseUrl = "https://dev.horang.id:9993/api/";
   final String baseUrl = "https://server.horang.id:9993/api/";
+  final String UrlFTP = "https://server.horang.id/adminmaster/sk.txt";
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;

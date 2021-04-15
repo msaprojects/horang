@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +19,7 @@ import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -108,9 +111,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    String hai = new HttpClient()
+        .getUrl(Uri.parse('https://server.horang.id/adminmaster/sk.txt'))
+        .then((HttpClientRequest request) => request.close())
+        .then((HttpClientResponse response) =>
+            response.transform(new Utf8Decoder()).listen(print))
+        .toString();
+    print("IYUH : " + hai);
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
+    ReusableClasses().sk();
   }
 
   Future refreshData() async {
