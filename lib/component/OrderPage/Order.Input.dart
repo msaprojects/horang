@@ -36,6 +36,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   //DEKLARASI VARIABEL
   bool isLoading = false,
       boolasuransi = true,
+      boolsk = true,
       boolvoucher = false,
       tekanvoucher = false,
       isSuccess = false,
@@ -78,7 +79,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       nilaisetting2 = "",
       idcustomer,
       pin,
-      nama_customer;
+      nama_customer,
+      sk;
   num vdurasi_sewa,
       idjenis_produk,
       idasuransi,
@@ -93,6 +95,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       totaldeposit = 0,
       potonganvoucher = 0;
   DateTime dtAwal, dtAkhir;
+  int ssk;
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
   SharedPreferences sp;
@@ -129,6 +132,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
     return;
   }
 
+  Future<String> _ambildataSK() async {
+    http.Response response = await http
+        .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
+    print("mmzzzrr" + response.body);
+    return sk = response.body;
+  }
+
   void hitungsemuaFunction() async {
     setState(() {
       hitungsemua = ReusableClasses().PerhitunganOrder(
@@ -157,6 +167,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void initState() {
     cekToken();
     getSaldo();
+    _ambildataSK();
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
@@ -597,7 +608,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           padding: EdgeInsets.only(
                                               left: 30, right: 30, top: 5),
                                           child: TextFormField(
-                                            scrollPadding: MediaQuery.of(context).viewInsets,
+                                            scrollPadding:
+                                                MediaQuery.of(context)
+                                                    .viewInsets,
                                             onTap: () {
                                               if (_nominalbarang.text == "0") {
                                                 cleartextinputnominal();
@@ -662,6 +675,50 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             },
                                           ),
                                         ),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, top: 5),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Checkbox(
+                                                value: boolsk,
+                                                onChanged:
+                                                    (bool syaratketentuan) {
+                                                  setState(() {
+                                                    print(boolsk);
+                                                    boolsk = syaratketentuan;
+                                                    if (boolsk == true) {
+                                                      ssk = 1;
+                                                      print("ssk $ssk");
+                                                    } else {
+                                                      ssk = 0;
+                                                      print("ssk1 $ssk");
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                              SizedBox(width: 0.0),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  infoDialog(
+                                                    context,
+                                                    '$sk',
+                                                    title: 'Syarat Ketentuan',
+                                                  );
+                                                },
+                                                child: Text(
+                                                  "(*) Syarat dan Ketentuan",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.blue,
+                                                    fontStyle: FontStyle.italic,
+                                                    decoration: TextDecoration.underline
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                             ],
@@ -711,7 +768,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     color: Colors.green,
                     onPressed: () {
                       hitungsemuaFunction();
-                      // if (boolkontainer = true) 
+                      // if (boolkontainer = true)
                       if (_nominalbarang.text.toString() == "0" ||
                           _nominalbarang.text.toString() == "") {
                         errorDialog(context,
@@ -721,6 +778,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           _keteranganbarang.text.toString() == "-") {
                         errorDialog(context,
                             "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
+                      } else if (ssk == 0) {
+                        warningDialog(context,
+                            'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
                       } else {
                         setState(() {
                           if (ceksaldo >= hargaxminimalsewadeposit) {

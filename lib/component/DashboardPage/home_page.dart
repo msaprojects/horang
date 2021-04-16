@@ -60,21 +60,12 @@ class _HomePageState extends State<HomePage> {
     return result;
   }
 
-  Future<String> _ambildataSK() async {
-    http.Response response = await http
-        .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
-    print("mmzzzrr" + response.body);
-    return sk = response.body;
-
-    // final response = await http.get('https://server.horang.id/adminmaster/sk.txt');
-    // if(response.statusCode == 200){
-    //   var decoded = utf8.decode(response.bodyBytes);
-    //   print(decoded);
-    //   return(decoded);
-    // } else{
-    //   return "ada masalah";
-    // }
-  }
+  // Future<String> _ambildataSK() async {
+  //   http.Response response = await http
+  //       .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
+  //   print("mmzzzrr" + response.body);
+  //   return sk = response.body;
+  // }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -141,6 +132,7 @@ class _HomePageState extends State<HomePage> {
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
+    // _ambildataSK();
     // ReusableClasses().sk();
   }
 
@@ -302,19 +294,14 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            print(_ambildataSK());
+                                            // print(_ambildataSK());
                                             // popUpsk(context);
-                                            confirmationDialog(context, '$sk',
-                                                title: 'Syarat Ketentuan',
-                                                confirm: true,
-                                                confirmationText:
-                                                    'Setuju, S&K Berlaku',);
-                                            // Scaffold.of(context)
-                                            //     .showSnackBar(SnackBar(
-                                            //   content: Text(
-                                            //       "Fitur ini masih dalam proses pengembangan"),
-                                            //   duration: Duration(seconds: 5),
-                                            // ));
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Fitur ini masih dalam proses pengembangan"),
+                                              duration: Duration(seconds: 5),
+                                            ));
                                           }),
                                       Text(
                                         "Histori",
