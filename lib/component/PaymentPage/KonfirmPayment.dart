@@ -204,12 +204,12 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               Navigator.pop(context);
             }),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(30),
-          child: Column(
-            children: [
-              Expanded(
+      body: Container(
+        padding: EdgeInsets.all(30),
+        child: Column(
+          children: [
+            SingleChildScrollView(
+              child: Expanded(
                   child: Column(
                 children: [
                   Text("Masukkan nomor yang terdaftar di OVO ",
@@ -250,20 +250,20 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                   ),
                 ],
               )),
-              FlatButton(
-                color: Colors.green,
-                child: Text(
-                  "Bayar Sekarang",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  setState(() {
-                    OrderConfirmation(context, _noOvo.text.toString());
-                  });
-                },
-              )
-            ],
-          ),
+            ),
+            FlatButton(
+              color: Colors.green,
+              child: Text(
+                "Bayar Sekarang",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                setState(() {
+                  OrderConfirmation(context, _noOvo.text.toString());
+                });
+              },
+            )
+          ],
         ),
       ),
     );

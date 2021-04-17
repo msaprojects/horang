@@ -998,7 +998,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     "Min. Transaksi : " +
                                         rupiah(
                                             voucherlist.min_nominal.toString()),
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.clip,
                                     softWrap: false,
                                   ),
                                   Text("Potongan : " +
