@@ -346,7 +346,7 @@ class _StorageExpired extends State<StorageExpired1> {
             content: new Container(
               width: 260.0,
               // height: 300.0,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.6,
               decoration: new BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: const Color(0xFFFFFF),

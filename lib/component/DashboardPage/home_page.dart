@@ -327,28 +327,24 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Container(
+                padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-                      child: Text(
-                        'Kontainer Aktif',
-                        style: mTitleStyle,
-                      ),
+                    Text(
+                      'Kontainer Aktif',
+                      style: mTitleStyle,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                      child: SelectableText(
-                        "See All...",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StorageActive()));
-                        },
-                      ),
+                    SelectableText(
+                      "See All...",
+                      style: TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StorageActive()));
+                      },
                     ),
                   ],
                 ),
@@ -387,12 +383,9 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Home(
-                                      initIndexHome: 1,
+                                builder: (context) => StorageHandler(
+                                      initialIndex: 2,
                                     )
-                                // StorageHandler(
-                                //       initialIndex: 2,
-                                //     )
                                 // HistoryPage()
                                 ));
                       },

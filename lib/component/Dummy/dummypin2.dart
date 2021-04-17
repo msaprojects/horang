@@ -454,10 +454,10 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         print("Cek pin: $strpin");
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
-            pin_cek: strpin,
-            token_cek: access_token,
-            // token_notifikasi: token_notifikasi
-            );
+          pin_cek: strpin,
+          token_cek: access_token,
+          // token_notifikasi: token_notifikasi
+        );
         print("pin 99 $pin_cek1");
         print("Cek PIN masuk maskuh: $pin_cek1");
         _apiService.CekPin(pin_cek1).then((isSuccess) {
@@ -568,11 +568,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        // builder: (BuildContext context) => LoginPage()),
-                        builder: (BuildContext context) => WelcomePage()),
-                    (Route<dynamic> route) => false);
+                Navigator.of(context).pop();
               }),
         )
       ],

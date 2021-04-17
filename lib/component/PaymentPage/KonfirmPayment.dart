@@ -204,62 +204,66 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               Navigator.pop(context);
             }),
       ),
-      body: Container(
-        padding: EdgeInsets.all(30),
-        child: Column(
-          children: [
-            Expanded(
-                child: Column(
-              children: [
-                Text("Masukkan nomor yang terdaftar di OVO ",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold, fontSize: 14)),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  controller: _noOvo,
-                  // ignore: deprecated_member_use
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    hintText: "Ovo",
-                    labelText: "Ovo",
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(30),
+          child: Column(
+            children: [
+              Expanded(
+                  child: Column(
+                children: [
+                  Text("Masukkan nomor yang terdaftar di OVO ",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold, fontSize: 14)),
+                  SizedBox(
+                    height: 15,
                   ),
+                  TextFormField(
+                    controller: _noOvo,
+                    // ignore: deprecated_member_use
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      hintText: "Ovo",
+                      labelText: "Ovo",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
+                    style: GoogleFonts.inter(height: 1.5, fontSize: 14),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "2. Pastikan Anda melakukan pembayaran dalam waktu 30 detik untuk menghindari pembatalan secara otomatis.",
+                    style: GoogleFonts.inter(height: 1.5, fontSize: 14),
+                  ),
+                ],
+              )),
+              FlatButton(
+                color: Colors.green,
+                child: Text(
+                  "Bayar Sekarang",
+                  style: TextStyle(color: Colors.white),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
-                  style: GoogleFonts.inter(height: 1.5, fontSize: 14),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "2. Pastikan Anda melakukan pembayaran dalam waktu 30 detik untuk menghindari pembatalan secara otomatis.",
-                  style: GoogleFonts.inter(height: 1.5, fontSize: 14),
-                ),
-              ],
-            )),
-            FlatButton(
-              color: Colors.green,
-              child: Text(
-                "Bayar Sekarang",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                setState(() {
-                  OrderConfirmation(context, _noOvo.text.toString());
-                });
-              },
-            )
-          ],
+                onPressed: () {
+                  setState(() {
+                    OrderConfirmation(context, _noOvo.text.toString());
+                  });
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

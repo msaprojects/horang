@@ -707,7 +707,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                   );
                                                 },
                                                 child: Text(
-                                                  "(*) Syarat dan Ketentuan",
+                                                  "(*) Syarat dan Ketentuan berlaku",
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.blue,
@@ -992,20 +992,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Kode Voucher : " +
+                                  Text("Kode : " +
                                       voucherlist.kode_voucher.toString()),
                                   Text(
                                     "Min. Transaksi : " +
                                         rupiah(
                                             voucherlist.min_nominal.toString()),
-                                    overflow: TextOverflow.visible,
+                                    overflow: TextOverflow.ellipsis,
                                     softWrap: false,
                                   ),
-                                  Text("Nom. Potongan : " +
+                                  Text("Potongan : " +
                                       rupiah(voucherlist.nominal_persentase
                                           .toString())),
                                   Text(
-                                    "Persen. Potongan : " +
+                                    "Potongan (%) : " +
                                         voucherlist.persentase.toString() +
                                         " %",
                                     softWrap: false,
