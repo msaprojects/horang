@@ -12,19 +12,79 @@ import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
-
 import 'background_welcome_page.dart';
+import 'package:get_version/get_version.dart';
 
 class BodyWelcomePage extends StatefulWidget {
   @override
   _BodyWelcomePageState createState() => _BodyWelcomePageState();
 }
 
+
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
   var pin = '';
   var access_token = '';
   bool _showbutton = false;
-  
+  String _projectVersion = '';
+  String _platformVersion = 'Unknown';
+  String _projectCode = '';
+  String _projectAppID = '';
+  String _projectName = '';
+
+  initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await GetVersion.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    String projectVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectVersion = await GetVersion.projectVersion;
+    } on PlatformException {
+      projectVersion = 'Failed to get project version.';
+    }
+
+    String projectCode;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectCode = await GetVersion.projectCode;
+    } on PlatformException {
+      projectCode = 'Failed to get build number.';
+    }
+
+    String projectAppID;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectAppID = await GetVersion.appID;
+    } on PlatformException {
+      projectAppID = 'Failed to get app ID.';
+    }
+
+    String projectName;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectName = await GetVersion.appName;
+    } on PlatformException {
+      projectName = 'Failed to get app name.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _projectVersion = projectVersion;
+      _platformVersion = platformVersion;
+      _projectCode = projectCode;
+      _projectAppID = projectAppID;
+      _projectName = projectName;
+    });
+  }
 
   cekToken() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -56,10 +116,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     }
   }
 
+  
+
   @override
   void initState() {
     cekToken();
-    print("cek pin ada nggk yazzz $pin");
+    initPlatformState();
+    print("cek pin ada nggk yazzz $pin ");
   }
 
   @override
@@ -81,7 +144,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                   fit: BoxFit.fill,
                 ),
               ),
-              
+              Text('Version $_projectVersion'),
               SizedBox(
                 height: 50,
               ),
@@ -145,4 +208,5 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       ),
     );
   }
+  
 }

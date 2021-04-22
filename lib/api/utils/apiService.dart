@@ -80,6 +80,7 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
+    print('rampage'+response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -95,6 +96,7 @@ class ApiService {
       body: PostProdukModelToJson(data),
     );
     // response.body;
+    print('rampage1'+response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {

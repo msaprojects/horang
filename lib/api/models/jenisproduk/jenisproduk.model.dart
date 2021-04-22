@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class JenisProduk{
 
-  num idlokasi, idjenis_produk, harga, avail;
+  num idlokasi, idjenis_produk, harga, avail, diskon, harganett;
   String kapasitas, keterangan, gambar, nama_kota, nama_lokasi;
 
   JenisProduk({
@@ -14,7 +14,9 @@ class JenisProduk{
     this.nama_kota,
     this.nama_lokasi,
     this.gambar,
-    this.avail = 0
+    this.avail = 0,
+    this.diskon,
+    this.harganett
   });
 
   factory JenisProduk.fromJson(Map<String, dynamic> map){
@@ -27,7 +29,9 @@ class JenisProduk{
       nama_kota: map["nama_kota"],
       nama_lokasi: map["nama_lokasi"],
       gambar: map["gambar"],
-      avail: map["avail"]
+      avail: map["avail"],
+      diskon: map['diskon'],
+      harganett: map['harganett']
     );
   }
 
@@ -41,13 +45,15 @@ class JenisProduk{
       "nama_kota": nama_kota,
       "nama_lokasi": nama_lokasi,
       "gambar": gambar,
-      "avail": avail
+      "avail": avail,
+      "diskon": diskon,
+      "harganett": harganett
     };
   }
 
   @override
   String toString(){
-    return 'JenisProduk{idlokasi: $idlokasi, idjenis_produk: $idjenis_produk, harga: $harga, kapasitas: $kapasitas, keterangan: $keterangan, nama_lokasi: $nama_lokasi, nama_kota: $nama_kota}, gambar: $gambar, avail: $avail}';
+    return 'JenisProduk{idlokasi: $idlokasi, idjenis_produk: $idjenis_produk, harga: $harga, kapasitas: $kapasitas, keterangan: $keterangan, nama_lokasi: $nama_lokasi, nama_kota: $nama_kota}, gambar: $gambar, avail: $avail, diskon: $diskon, harganett: $harganett}';
   }
 
 }

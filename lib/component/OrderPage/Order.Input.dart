@@ -93,7 +93,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       nomasuransi = 0,
       idvoucher = 0,
       totaldeposit = 0,
-      potonganvoucher = 0;
+      potonganvoucher = 0,
+      harganett = 0,
+      diskon,
+      harga;
   DateTime dtAwal, dtAkhir;
   int ssk;
   //END DEKLARASI VARIABEL
@@ -147,7 +150,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           flagasuransi,
           flagvoucher,
           vmaksimalpotongan.toString(),
-          harga_sewa.toString(),
+          harganett.toString(),
           vdurasi_sewa.toString(),
           _nominalbarang.text.toString(),
           totaldeposit.toString(),
@@ -159,6 +162,49 @@ class _FormDetailOrder extends State<FormInputOrder> {
   cleartextinputnominal() {
     _nominalbarang.clear();
     _keteranganbarang.clear();
+  }
+
+  adaDiskonGakOrderInput() {
+    if (diskon != 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa,
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.red[600],
+                fontWeight: FontWeight.bold),
+          ),
+          Row(
+            children: [
+              Text(
+                rupiah(harga.toString(), separator: '.'),
+                // jenisProduk.harga.toString(),
+                style: GoogleFonts.inter(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.lineThrough),
+                overflow: TextOverflow.fade,
+              ),
+              Text(' ($diskon%)',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ))
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Text(
+        rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa,
+        style: TextStyle(
+            fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold),
+      );
+    }
   }
 
   //END ADDON
@@ -178,6 +224,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
     keterangan = widget.jenisProduk.keterangan;
     idlokasi = widget.jenisProduk.idlokasi;
     produkimage = widget.jenisProduk.gambar;
+    harganett = widget.jenisProduk.harganett;
+    harga = widget.jenisProduk.harga;
+    diskon = widget.jenisProduk.diskon;
     if (widget.jenisProduk.kapasitas
         .toString()
         .toLowerCase()
@@ -280,19 +329,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                 ),
                                 overflow: TextOverflow.ellipsis),
                             SizedBox(
-                              height: 16,
+                              height: 10,
                             ),
-                            Text(
-                              "Harga : " +
-                                  rupiah(harga_sewa.toString(),
-                                      separator: '.') +
-                                  " /" +
-                                  vsatuan_sewa,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold),
-                            )
+                            adaDiskonGakOrderInput()
                           ],
                         ),
                         // IconButton(
@@ -709,11 +748,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 child: Text(
                                                   "(*) Syarat dan Ketentuan berlaku",
                                                   style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.blue,
-                                                    fontStyle: FontStyle.italic,
-                                                    decoration: TextDecoration.underline
-                                                  ),
+                                                      fontSize: 12,
+                                                      color: Colors.blue,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      decoration: TextDecoration
+                                                          .underline),
                                                 ),
                                               ),
                                             ],
@@ -856,7 +896,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
             idjenis_produk: idjenis_produk,
             idvoucher: idvoucher,
             idasuransi: idasuransi,
-            harga_sewa: harga_sewa,
+            harga_sewa: harganett,
+            harga_awal: harga,
+            diskonn: diskon,
             durasi_sewa: vdurasi_sewa,
             valuesewaawal: valueawal,
             valuesewaakhir: valueakhir,
@@ -897,7 +939,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             idjenis_produk: idjenis_produk,
             idvoucher: idvoucher,
             idasuransi: idasuransi,
-            harga_sewa: harga_sewa,
+            harga_sewa: harganett,
             durasi_sewa: vdurasi_sewa,
             valuesewaawal: valueawal,
             valuesewaakhir: valueakhir,

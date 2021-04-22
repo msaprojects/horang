@@ -21,6 +21,8 @@ class FormInputPembayaran extends StatefulWidget {
       idvoucher,
       idasuransi,
       harga_sewa,
+      harga_awal,
+      diskonn,
       durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
@@ -49,6 +51,8 @@ class FormInputPembayaran extends StatefulWidget {
       this.idvoucher,
       this.idasuransi,
       this.harga_sewa,
+      this.harga_awal,
+      this.diskonn,
       this.durasi_sewa,
       this.valuesewaawal,
       this.valuesewaakhir,
@@ -90,6 +94,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pidvoucher,
       pidasuransi,
       pharga_sewa,
+      pharga_awal,
+      pdiskon,
       pdurasi_sewa,
       pvaluesewaawal,
       pvaluesewaakhir,
@@ -178,6 +184,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pidvoucher = widget.idvoucher;
       pidasuransi = widget.idasuransi;
       pharga_sewa = widget.harga_sewa;
+      pharga_awal = widget.harga_awal;
+      pdiskon = widget.diskonn;
       pdurasi_sewa = widget.durasi_sewa;
       pvaluesewaawal = widget.valuesewaawal;
       pvaluesewaakhir = widget.valuesewaakhir;
@@ -272,7 +280,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           padding: const EdgeInsets.only(left: 30, bottom: 15),
                           child: Row(
                             children: <Widget>[
-                              Text("Detail Pesanan ",
+                              Text("Detail Pesanan",
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           ),
@@ -291,6 +299,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text("Check In :"),
                                   Text("Check Out :"),
                                   Text("Last Order :"),
+                                  Text("Diskon :"),
+                                  Text("Harga Awal :"),
                                 ],
                               ),
                             ),
@@ -318,6 +328,15 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text(
                                     plastorder.toString(),
                                   ),
+                                  Text(
+                                    pdiskon.toString() + "%",
+                                  ),
+                                  Text(
+                                      rupiah(pharga_awal,
+                                          separator: ',', trailing: " /hari"),
+                                      style: TextStyle(
+                                          decoration:
+                                              TextDecoration.lineThrough)),
                                 ],
                               ),
                             ),

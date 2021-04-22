@@ -81,8 +81,7 @@ class _ProdukList extends State<ProdukList> {
       selectedTime = TimeOfDay.now(),
       selectedTimeSelesai =
           TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3))),
-      durasiforklift =
-          DateTime.now().add(new Duration(hours: 3));
+      durasiforklift = DateTime.now().add(new Duration(hours: 3));
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -275,6 +274,55 @@ class _ProdukList extends State<ProdukList> {
     });
   }
 
+  adaDiskonGak(num diskonn, harganettz, hargaa) {
+    if (diskonn != 0) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                rupiah(hargaa.toString(), separator: ',', trailing: '.00'),
+                // jenisProduk.harga.toString(),
+                style: GoogleFonts.inter(
+                    fontSize: 10,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.lineThrough),
+                overflow: TextOverflow.fade,
+              ),
+              Text(' ($diskonn%)',style: GoogleFonts.inter(
+                    fontSize: 10,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,))
+            ],
+          ),
+          Text(
+            rupiah(harganettz.toString(), separator: ',', trailing: '.00'),
+            // jenisProduk.harga.toString(),
+            style: GoogleFonts.inter(
+                fontSize: 15,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,),
+            overflow: TextOverflow.fade,
+          ),
+        ],
+      );
+    } else {
+      return Text(
+        rupiah(hargaa.toString(), separator: ',', trailing: '.00'),
+        // jenisProduk.harga.toString(),
+        style: GoogleFonts.inter(
+            fontSize: 15,
+            color: Colors.green,
+            fontWeight: FontWeight.bold,),
+        overflow: TextOverflow.fade,
+      );
+      // Text(harganettz.toString()),
+      
+
+    }
+  }
+
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -332,9 +380,7 @@ class _ProdukList extends State<ProdukList> {
     timeController.text =
         DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
     timeControllerSelesai.text =
-        durasiforklift.hour.toString() +
-            "." +
-            DateTime.now().minute.toString();
+        durasiforklift.hour.toString() + "." + DateTime.now().minute.toString();
     _cekKoneksi();
     super.initState();
   }
@@ -794,6 +840,7 @@ class _ProdukList extends State<ProdukList> {
                               child: ListView.builder(
                                 itemBuilder: (context, index) {
                                   JenisProduk jenisProduk = dataIndex[index];
+                                  print('coblos $dataIndex');
                                   return Container(
                                     child: Card(
                                       child: InkWell(
@@ -803,7 +850,7 @@ class _ProdukList extends State<ProdukList> {
                                           // if (nama_customer == "" ||
                                           //     nama_customer == null ||
                                           //     nama_customer == "0") {
-                                            if (idcustomer == "" ||
+                                          if (idcustomer == "" ||
                                               idcustomer == null ||
                                               idcustomer == "0") {
                                             Scaffold.of(context)
@@ -897,21 +944,32 @@ class _ProdukList extends State<ProdukList> {
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-                                                    Text(
-                                                      rupiah(
-                                                          jenisProduk.harga
-                                                              .toString(),
-                                                          separator: ',',
-                                                          trailing: '.00'),
-                                                      // jenisProduk.harga.toString(),
-                                                      style: GoogleFonts.inter(
-                                                          fontSize: 15,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                    ),
+                                                    adaDiskonGak(
+                                                        jenisProduk.diskon,
+                                                        jenisProduk.harganett,
+                                                        jenisProduk.harga)
+                                                    // Text(
+                                                    //   rupiah(
+                                                    //       jenisProduk.harga
+                                                    //           .toString(),
+                                                    //       separator: ',',
+                                                    //       trailing: '.00'),
+                                                    //   // jenisProduk.harga.toString(),
+                                                    //   style: GoogleFonts.inter(
+                                                    //       fontSize: 15,
+                                                    //       color: Colors.green,
+                                                    //       fontWeight:
+                                                    //           FontWeight.bold,
+                                                    //       decoration:
+                                                    //           TextDecoration
+                                                    //               .lineThrough),
+                                                    //   overflow:
+                                                    //       TextOverflow.fade,
+                                                    // ),
+                                                    // Text(jenisProduk.harganett
+                                                    //     .toString()),
+                                                    // Text(jenisProduk.diskon
+                                                    //     .toString())
                                                   ],
                                                 ),
                                               ],
