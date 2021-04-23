@@ -290,19 +290,22 @@ class _ProdukList extends State<ProdukList> {
                     decoration: TextDecoration.lineThrough),
                 overflow: TextOverflow.fade,
               ),
-              Text(' ($diskonn%)',style: GoogleFonts.inter(
+              Text(' ($diskonn%)',
+                  style: GoogleFonts.inter(
                     fontSize: 10,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,))
+                    fontWeight: FontWeight.bold,
+                  ))
             ],
           ),
           Text(
             rupiah(harganettz.toString(), separator: ',', trailing: '.00'),
             // jenisProduk.harga.toString(),
             style: GoogleFonts.inter(
-                fontSize: 15,
-                color: Colors.red,
-                fontWeight: FontWeight.bold,),
+              fontSize: 15,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
             overflow: TextOverflow.fade,
           ),
         ],
@@ -312,13 +315,13 @@ class _ProdukList extends State<ProdukList> {
         rupiah(hargaa.toString(), separator: ',', trailing: '.00'),
         // jenisProduk.harga.toString(),
         style: GoogleFonts.inter(
-            fontSize: 15,
-            color: Colors.green,
-            fontWeight: FontWeight.bold,),
+          fontSize: 15,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
         overflow: TextOverflow.fade,
       );
       // Text(harganettz.toString()),
-      
 
     }
   }
@@ -415,8 +418,9 @@ class _ProdukList extends State<ProdukList> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Opsi Pilihan...",
-                            style: GoogleFonts.lato(fontSize: 14)),
+                        Text("Pilih Tanggal dan Durasi Sewa",
+                            style: GoogleFonts.lato(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
                         IconButton(
                             iconSize: 14,
                             icon: Icon(

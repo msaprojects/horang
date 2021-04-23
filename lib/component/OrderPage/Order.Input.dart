@@ -714,53 +714,59 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             },
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, top: 5),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Checkbox(
-                                                value: boolsk,
-                                                onChanged:
-                                                    (bool syaratketentuan) {
-                                                  setState(() {
-                                                    print(boolsk);
-                                                    boolsk = syaratketentuan;
-                                                    if (boolsk == true) {
-                                                      ssk = 1;
-                                                      print("ssk $ssk");
-                                                    } else {
-                                                      ssk = 0;
-                                                      print("ssk1 $ssk");
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                              SizedBox(width: 0.0),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  infoDialog(
-                                                    context,
-                                                    '$sk',
-                                                    title: 'Syarat Ketentuan',
-                                                  );
-                                                },
-                                                child: Text(
-                                                  "(*) Syarat dan Ketentuan berlaku",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.blue,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      decoration: TextDecoration
-                                                          .underline),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                      ],
+                                    ),
+                              SizedBox(width: 0.0),
+                              Row(
+                                children: [
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.only(left: 20, top: 5),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Checkbox(
+                                          value: boolsk,
+                                          onChanged: (bool syaratketentuan) {
+                                            setState(() {
+                                              print(boolsk);
+                                              boolsk = syaratketentuan;
+                                              if (boolsk == true) {
+                                                ssk = 1;
+                                                print("ssk $ssk");
+                                              } else {
+                                                ssk = 0;
+                                                print("ssk1 $ssk");
+                                              }
+                                            });
+                                          },
                                         ),
                                       ],
                                     ),
+                                  ),
+                                  Container(
+                                    padding:
+                                        const EdgeInsets.only(left: 20, top: 5),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        infoDialog(
+                                          context,
+                                          '$sk',
+                                          title: 'Syarat Ketentuan',
+                                        );
+                                      },
+                                      child: Text(
+                                        "(*) Syarat dan Ketentuan berlaku",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.blue,
+                                            fontStyle: FontStyle.italic,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         )
@@ -809,58 +815,60 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     onPressed: () {
                       hitungsemuaFunction();
                       // if (boolkontainer = true)
-                      if (_nominalbarang.text.toString() == "0" ||
-                          _nominalbarang.text.toString() == "") {
-                        errorDialog(context,
-                            "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.");
-                      } else if (_keteranganbarang.text.toString() == "" ||
-                          _keteranganbarang.text.toString() == "0" ||
-                          _keteranganbarang.text.toString() == "-") {
-                        errorDialog(context,
-                            "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
-                      } else if (ssk == 0) {
-                        warningDialog(context,
-                            'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
+                      if (boolkontainer == true) {
+                        if (_nominalbarang.text.toString() == "0" ||
+                            _nominalbarang.text.toString() == "") {
+                          errorDialog(context,
+                              "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.");
+                        }
+                        if (_keteranganbarang.text.toString() == "" ||
+                            _keteranganbarang.text.toString() == "0" ||
+                            _keteranganbarang.text.toString() == "-") {
+                          errorDialog(context,
+                              "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
+                        }
+                        if (ssk == 0) {
+                          warningDialog(context,
+                              'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
+                        } else {
+                          setState(() {
+                            if (ceksaldo >= hargaxminimalsewadeposit) {
+                              saldodepositkurangnominaldeposit = 0;
+                              totaldeposit = hargaxminimalsewadeposit;
+                              kondisisaldo = "";
+                              orderConfirmation(context);
+                            } else {
+                              saldodepositkurangnominaldeposit =
+                                  hargaxminimalsewadeposit - ceksaldo;
+                              totaldeposit = ceksaldo;
+                              kondisisaldo =
+                                  "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                              cekDeposit(context);
+                            }
+                          });
+                        }
                       } else {
-                        setState(() {
-                          if (ceksaldo >= hargaxminimalsewadeposit) {
-                            saldodepositkurangnominaldeposit = 0;
-                            totaldeposit = hargaxminimalsewadeposit;
-                            kondisisaldo = "";
-                            orderConfirmation(context);
-                          } else {
-                            saldodepositkurangnominaldeposit =
-                                hargaxminimalsewadeposit - ceksaldo;
-                            totaldeposit = ceksaldo;
-                            kondisisaldo =
-                                "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
-                            cekDeposit(context);
-                          }
-                        });
+                        if (ssk == 0) {
+                          warningDialog(context,
+                              'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
+                        } else {
+                          setState(() {
+                            if (ceksaldo >= hargaxminimalsewadeposit) {
+                              saldodepositkurangnominaldeposit = 0;
+                              totaldeposit = hargaxminimalsewadeposit;
+                              kondisisaldo = "";
+                              orderConfirmation(context);
+                            } else {
+                              saldodepositkurangnominaldeposit =
+                                  hargaxminimalsewadeposit - ceksaldo;
+                              totaldeposit = ceksaldo;
+                              kondisisaldo =
+                                  "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
+                              cekDeposit(context);
+                            }
+                          });
+                        }
                       }
-                      // _nominalbarang.text.toString() == "0" ||
-                      //         _keteranganbarang.text.toString() == "" ||
-                      //         _nominalbarang.text.toString() == "" ||
-                      //         _keteranganbarang.text.toString() == "0" ||
-                      //         _keteranganbarang.text.toString() == "-"
-                      //     ? errorDialog(context,
-                      //         "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama, pastikan juga keterangan barang sudah terisi.")
-                      //     :
-                      // setState(() {
-                      //   if (ceksaldo >= hargaxminimalsewadeposit) {
-                      //     saldodepositkurangnominaldeposit = 0;
-                      //     totaldeposit = hargaxminimalsewadeposit;
-                      //     kondisisaldo = "";
-                      //     orderConfirmation(context);
-                      //   } else {
-                      //     saldodepositkurangnominaldeposit =
-                      //         hargaxminimalsewadeposit - ceksaldo;
-                      //     totaldeposit = ceksaldo;
-                      //     kondisisaldo =
-                      //         "Saldo Poin anda sekarang ${rupiah(ceksaldo)}, minimal saldo poin sebesar $minimaldeposit ($vsatuan_sewa dari nominal harga sewa sebesar ${rupiah(harga_sewa)} total ${rupiah(hargaxminimalsewadeposit)}, diwajibkan untuk menambah nominal deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)} ?";
-                      //     cekDeposit(context);
-                      //   }
-                      // });
                     },
                     child: Text(
                       "Lanjutkan Pembayaran",

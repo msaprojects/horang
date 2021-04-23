@@ -211,11 +211,4 @@ class ReusableClasses {
           return alert;
         });
   }
-
-  // sk()  {
-  //   ApiService _apiService = ApiService();
-  //   print('///xxx///');
-  //   print(http.read('https://server.horang.id/adminmaster/sk.txt'));
-  // }
-  
 }
