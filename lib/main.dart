@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/notification_handler.dart';
 import 'package:new_version/new_version.dart';
+// import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'component/Dummy/dummypin2.dart';
@@ -58,11 +60,6 @@ class _HomePageState extends State<HomePage> {
         .then((value) => print("Ini Tokennya2 : " + value));
     NotificationHandler().FirebaseHandler();
     super.initState();
-    final newVersion = NewVersion(
-      context: context,
-      androidId: 'com.cvdtc.horang',
-    );
-    newVersion.showUpdateDialog(VersionStatus());
   }
 
   @override

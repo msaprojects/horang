@@ -192,7 +192,7 @@ class _StorageActive extends State<StorageActive1>
                                               MainAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              'No. Orderz : ',
+                                              'No. Order : ',
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),
                                             ),

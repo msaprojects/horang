@@ -420,7 +420,7 @@ class _ProdukList extends State<ProdukList> {
                       children: [
                         Text("Pilih Tanggal dan Durasi Sewa",
                             style: GoogleFonts.lato(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                                fontSize: 13, fontWeight: FontWeight.bold)),
                         IconButton(
                             iconSize: 14,
                             icon: Icon(

@@ -200,9 +200,86 @@ class _FormDetailOrder extends State<FormInputOrder> {
       );
     } else {
       return Text(
-        rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa,
+        rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa ,
         style: TextStyle(
             fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold),
+      );
+    }
+  }
+
+  settingJamOperasional() {
+    if (widget.jenisProduk.kapasitas
+        .toString()
+        .toLowerCase()
+        .contains('forklift')) {
+      return Visibility(child: Text(''));
+    } else {
+      return Column(
+        children: [
+          Divider(),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            const EdgeInsets.only(bottom: 8, left: 36, top: 8),
+                        child: Text(
+                          "Jam Operasional",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(nilaisetting.toString()),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(namasetting.toString()),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(nilaisetting1.toString()),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(namasetting1.toString()),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(nilaisetting2.toString()),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 38),
+                child: Text(namasetting2.toString()),
+              ),
+            ],
+          ),
+        ],
       );
     }
   }
@@ -459,70 +536,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       ),
                     ],
                   ),
-                  Divider(),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    bottom: 8, left: 36, top: 8),
-                                child: Text(
-                                  "Jam Operasional",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(nilaisetting.toString()),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(namasetting.toString()),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(nilaisetting1.toString()),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(namasetting1.toString()),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(nilaisetting2.toString()),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 38),
-                        child: Text(namasetting2.toString()),
-                      ),
-                    ],
-                  ),
+                  settingJamOperasional(),
                   Divider(),
                   Container(
                     child: Row(
@@ -948,6 +962,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
             idvoucher: idvoucher,
             idasuransi: idasuransi,
             harga_sewa: harganett,
+            harga_awal: harga,
+            diskonn: diskon,
             durasi_sewa: vdurasi_sewa,
             valuesewaawal: valueawal,
             valuesewaakhir: valueakhir,

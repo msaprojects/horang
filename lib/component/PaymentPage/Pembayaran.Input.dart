@@ -3,6 +3,7 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -120,7 +121,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pcekout,
       pcekin,
       plastorder,
-      pin;
+      pin,
+      labeldiskon,
+      labelhargaawal,
+      dis,
+      harawl;
 
   enableButton() {
     setState(() {
@@ -132,6 +137,107 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     setState(() {
       isEnabled = false;
     });
+  }
+
+  adaDiskonGakLabel(num diskonn, hargaa) {
+    if (diskonn != 0) {
+      labeldiskon = 'Diskon :';
+      labelhargaawal = 'Harga Awal';
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(labeldiskon),
+          Text(labelhargaawal),
+        ],
+      );
+    } else {
+      return Visibility(visible: false, child: Text(""));
+    }
+  }
+
+  adaDiskonGak(num diskonn, hargaa) {
+    if (diskonn != 0) {
+      dis = diskonn.toString();
+      harawl = hargaa.toString();
+      return Column(
+        children: [
+          Text(dis + '%'),
+          Text(rupiah(harawl, separator: ',', trailing: " /hari"),
+              style: TextStyle(decoration: TextDecoration.lineThrough)),
+        ],
+      );
+    } else {
+      return Visibility(visible: false, child: Text(""));
+    }
+  }
+
+  settingJamOperasionalLabel() {
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return Visibility(visible: false, child: Text(""));
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('Check In : '),
+              // Text(
+              //   pcekin.toString(),
+              // ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Check Out : '),
+              // Text(
+              //   pcekout.toString(),
+              // ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Last Order : '),
+              // Text(
+              //   plastorder.toString(),
+              // ),
+            ],
+          ),
+        ],
+      );
+    }
+  }
+
+  settingJamOperasional() {
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return Visibility(visible: false, child: Text(""));
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                pcekin.toString(),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                pcekout.toString(),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                plastorder.toString(),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 
   cekToken() async {
@@ -291,16 +397,22 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text("Tgl. Mulai :"),
-                                  Text("Tgl. Berakhir :"),
-                                  Text("Durasi Sewa :"),
-                                  Text("Check In :"),
-                                  Text("Check Out :"),
-                                  Text("Last Order :"),
-                                  Text("Diskon :"),
-                                  Text("Harga Awal :"),
+                                children: [
+                                  // adaDiskonGak(pdiskon, pharga_awal),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text("Tgl. Mulai :"),
+                                      Text("Tgl. Berakhir :"),
+                                      Text("Durasi Sewa :"),
+                                      // Text("Check In :"),
+                                      // Text("Check Out :"),
+                                      // Text("Last Order :"),
+                                      settingJamOperasionalLabel(),
+                                      adaDiskonGakLabel(pdiskon, pharga_awal)
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -319,24 +431,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text(
                                     pdurasi_sewa.toString() + " Hari",
                                   ),
-                                  Text(
-                                    pcekin.toString(),
-                                  ),
-                                  Text(
-                                    pcekout.toString(),
-                                  ),
-                                  Text(
-                                    plastorder.toString(),
-                                  ),
-                                  Text(
-                                    pdiskon.toString() + "%",
-                                  ),
-                                  Text(
-                                      rupiah(pharga_awal,
-                                          separator: ',', trailing: " /hari"),
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough)),
+                                  settingJamOperasional(),
+                                  adaDiskonGak(pdiskon, pharga_awal)
                                 ],
                               ),
                             ),

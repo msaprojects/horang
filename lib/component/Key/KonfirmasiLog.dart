@@ -6,6 +6,7 @@ import 'package:horang/api/models/log/Log.dart';
 import 'package:horang/api/models/log/openLog.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
+import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -43,8 +44,7 @@ class KonfirmasiLog extends StatefulWidget {
       this.keterangan,
       this.idtransaksi_detail,
       this.flag_selesai,
-      this.selesai
-      });
+      this.selesai});
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -80,6 +80,69 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       pin;
   TextEditingController _controllerNoKontainer = TextEditingController();
   TextEditingController _controllerLokasi = TextEditingController();
+  TextEditingController _inputPin = TextEditingController();
+
+  Future<void> _tampilInputPin(BuildContext context) async {
+    String values = "";
+    int pinIndex = 0;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Konfirmasi Open"),
+            content: SingleChildScrollView(
+              child: TextField(
+                onChanged: (values) {
+                  print('ada nggk ya valuenya $values');
+                },
+                controller: _inputPin,
+                decoration: InputDecoration(hintText: 'Masukkan PIN anda !'),
+              ),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'.toUpperCase()),
+              ),
+              FlatButton(
+                onPressed: () {
+                  print('mmass $values');
+                  Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
+                    pin_cek: values,
+                    token_cek: access_token,
+                    // token_notifikasi: token_notifikasi
+                  );
+                  _apiService.CekPin(pin_cek1).then((isSuccess) {
+                    setState(() {
+                      if (isSuccess && values == 4) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => Home()),
+                            (Route<dynamic> route) => false);
+                      } else if (!isSuccess && pinIndex >= 4) {
+                        print('Pin salah masku');
+                        return showDialog(
+                            context: context,
+                            builder: (context) {
+                              Future.delayed(Duration(milliseconds: 100), () {
+                                Navigator.of(context).pop(true);
+                              });
+                              return AlertDialog(
+                                title: Text("Pin salah"),
+                              );
+                            });
+                      }
+                    });
+                  });
+                },
+                child: Text('OK'.toUpperCase()),
+              ),
+            ],
+          );
+        });
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -223,7 +286,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Kota $flag_selesai ++++++++ $selesai",
+                  Text("Kota",
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),
@@ -284,35 +347,36 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                       ),
                       color: Colors.orange,
                       onPressed: () {
-                        warningDialog(context,
-                            "Apakah anda ingin membuka kode kontainer $kode_kontainer1 ini ?",
-                            positiveText: "Ya",
-                            negativeText: "Batal",
-                            showNeutralButton: false, positiveAction: () {
-                          setState(() {
-                            _isLoading = true;
-                            LogOpen logopen = LogOpen(
-                              idtransaksi_detail: idtransaksi_det,
-                              token: access_token,
-                            );
-                            if (widget.kode_kontainer != null ||
-                                widget.nama_kota != null) {
-                              _apiService.OpenLog(logopen).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  successDialog(
-                                    context,
-                                    "Permintaan open berhasil dilakukan !",
-                                    closeOnBackPress: true,
-                                  );
-                                } else {
-                                  errorDialog(context,
-                                      "Open kontainer $kode_kontainer1 gagal dilakukan !");
-                                }
-                              });
-                            }
-                          });
-                        }, negativeAction: () {});
+                        _tampilInputPin(context);
+                        // warningDialog(context,
+                        //     "Apakah anda ingin membuka kode kontainer $kode_kontainer1 ini ?",
+                        //     positiveText: "Ya",
+                        //     negativeText: "Batal",
+                        //     showNeutralButton: false, positiveAction: () {
+                        //   setState(() {
+                        //     _isLoading = true;
+                        //     LogOpen logopen = LogOpen(
+                        //       idtransaksi_detail: idtransaksi_det,
+                        //       token: access_token,
+                        //     );
+                        //     if (widget.kode_kontainer != null ||
+                        //         widget.nama_kota != null) {
+                        //       _apiService.OpenLog(logopen).then((isSuccess) {
+                        //         setState(() => _isLoading = false);
+                        //         if (isSuccess) {
+                        //           successDialog(
+                        //             context,
+                        //             "Permintaan open berhasil dilakukan !",
+                        //             closeOnBackPress: true,
+                        //           );
+                        //         } else {
+                        //           errorDialog(context,
+                        //               "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                        //         }
+                        //       });
+                        //     }
+                        //   });
+                        // }, negativeAction: () {});
                       },
                     ),
                   ),
@@ -352,11 +416,10 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                   successDialog(context, "Berhasil",
                                       showNeutralButton: false,
                                       positiveAction: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
                                             // builder: (context) => HomePage()));
-                                            builder: (context) => HomePage(
-                                        )));
+                                            builder: (context) => HomePage()));
                                   }, positiveText: "Ok");
                                 } else {
                                   errorDialog(
