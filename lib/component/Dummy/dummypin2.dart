@@ -115,11 +115,9 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {
       autherized = authenticated ? "Auth sukses" : "gagal konfirm";
       if (access_token != "" && authenticated) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Home()),
+            (Route<dynamic> route) => false);
       } else {
         print('Moh. Salah');
       }

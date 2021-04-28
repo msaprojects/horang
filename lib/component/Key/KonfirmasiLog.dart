@@ -83,8 +83,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
   TextEditingController _inputPin = TextEditingController();
 
   Future<void> _tampilInputPin(BuildContext context) async {
-    String values = "";
-    int pinIndex = 0;
     return showDialog(
         context: context,
         builder: (context) {
@@ -92,6 +90,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
             title: Text("Konfirmasi Open"),
             content: SingleChildScrollView(
               child: TextField(
+                maxLength: 4,
                 onChanged: (values) {
                   print('ada nggk ya valuenya $values');
                 },
@@ -108,31 +107,58 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
               ),
               FlatButton(
                 onPressed: () {
-                  print('mmass $values');
+                  print('mmass $_inputPin');
                   Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
-                    pin_cek: values,
+                    pin_cek: _inputPin.text,
                     token_cek: access_token,
                     // token_notifikasi: token_notifikasi
                   );
                   _apiService.CekPin(pin_cek1).then((isSuccess) {
                     setState(() {
-                      if (isSuccess && values == 4) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => Home()),
-                            (Route<dynamic> route) => false);
-                      } else if (!isSuccess && pinIndex >= 4) {
-                        print('Pin salah masku');
-                        return showDialog(
-                            context: context,
-                            builder: (context) {
-                              Future.delayed(Duration(milliseconds: 100), () {
-                                Navigator.of(context).pop(true);
-                              });
-                              return AlertDialog(
-                                title: Text("Pin salah"),
-                              );
+                      if (isSuccess) {
+                        setState(() {
+                          _isLoading = true;
+                          LogOpen logopen = LogOpen(
+                            idtransaksi_detail: idtransaksi_det,
+                            token: access_token,
+                          );
+                          if (widget.kode_kontainer != null ||
+                              widget.nama_kota != null) {
+                            _apiService.OpenLog(logopen).then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              if (isSuccess) {
+                                successDialog(context,
+                                    "Permintaan open berhasil dilakukan !",
+                                    closeOnBackPress: false,
+                                    showNeutralButton: false,
+                                    positiveAction: () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              Home()),
+                                      (Route<dynamic> route) => false);
+                                }, positiveText: 'OK');
+                              } else {
+                                errorDialog(context,
+                                    "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                              }
                             });
+                          }
+                        });
+                      } else if (!isSuccess) {
+                        print('Pin salah masku');
+                        return errorDialog(
+                            context, 'Pin yang anda masukkan salah');
+                        // return showDialog(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       Future.delayed(Duration(milliseconds: 100), () {
+                        //         Navigator.of(context).pop(true);
+                        //       });
+                        //       return AlertDialog(
+                        //         title: Text("Pin salah"),
+                        //       );
+                        //     });
                       }
                     });
                   });
@@ -353,29 +379,29 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         //     positiveText: "Ya",
                         //     negativeText: "Batal",
                         //     showNeutralButton: false, positiveAction: () {
-                        //   setState(() {
-                        //     _isLoading = true;
-                        //     LogOpen logopen = LogOpen(
-                        //       idtransaksi_detail: idtransaksi_det,
-                        //       token: access_token,
-                        //     );
-                        //     if (widget.kode_kontainer != null ||
-                        //         widget.nama_kota != null) {
-                        //       _apiService.OpenLog(logopen).then((isSuccess) {
-                        //         setState(() => _isLoading = false);
-                        //         if (isSuccess) {
-                        //           successDialog(
-                        //             context,
-                        //             "Permintaan open berhasil dilakukan !",
-                        //             closeOnBackPress: true,
-                        //           );
-                        //         } else {
-                        //           errorDialog(context,
-                        //               "Open kontainer $kode_kontainer1 gagal dilakukan !");
-                        //         }
-                        //       });
-                        //     }
-                        //   });
+                        // setState(() {
+                        //   _isLoading = true;
+                        //   LogOpen logopen = LogOpen(
+                        //     idtransaksi_detail: idtransaksi_det,
+                        //     token: access_token,
+                        //   );
+                        //   if (widget.kode_kontainer != null ||
+                        //       widget.nama_kota != null) {
+                        //     _apiService.OpenLog(logopen).then((isSuccess) {
+                        //       setState(() => _isLoading = false);
+                        //       if (isSuccess) {
+                        //         successDialog(
+                        //           context,
+                        //           "Permintaan open berhasil dilakukan !",
+                        //           closeOnBackPress: true,
+                        //         );
+                        //       } else {
+                        //         errorDialog(context,
+                        //             "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                        //       }
+                        //     });
+                        //   }
+                        // });
                         // }, negativeAction: () {});
                       },
                     ),
