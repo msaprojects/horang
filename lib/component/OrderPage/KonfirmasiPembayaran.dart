@@ -35,7 +35,9 @@ class KonfirmasiPembayaran extends StatefulWidget {
       idpayment_gateway,
       saldodepositkurangnominaldeposit,
       no_ovo,
-      minimalsewahari;
+      minimalsewahari
+      // jenisitem
+      ;
 
   KonfirmasiPembayaran(
       {this.token,
@@ -62,7 +64,9 @@ class KonfirmasiPembayaran extends StatefulWidget {
       this.idpayment_gateway,
       this.saldodepositkurangnominaldeposit,
       this.no_ovo,
-      this.minimalsewahari});
+      this.minimalsewahari,
+      // this.jenisitem
+      });
   @override
   _KonfirmasiPembayaran createState() => _KonfirmasiPembayaran();
 }
@@ -98,7 +102,9 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       dno_ovo,
       hitungsemua,
       dminimalsewahari,
-      totaldeposit;
+      totaldeposit
+      // djenisitem
+      ;
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -146,6 +152,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
         double.parse(dnominal_barang);
     totaldeposit = (dminimalsewahari * dharga_sewa); //as nominal m
+    // djenisitem = widget.jenisitem;
     hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
       token: dtoken,
@@ -174,6 +181,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       no_ovo: dno_ovo,
       minimalsewahari: dminimalsewahari,
       totaldeposit: totaldeposit,
+      // jenisitem: djenisitem
     );
 
     print("ORDER CONFIRM : " + orderProduk.toString());

@@ -32,7 +32,9 @@ class KonfirmPayment extends StatefulWidget {
       tambahsaldopoint,
       persentase_asuransi,
       idpayment_gateway,
-      minimalsewahari;
+      minimalsewahari
+      // jenisitem
+      ;
 
   KonfirmPayment(
       {this.flagasuransi,
@@ -58,7 +60,10 @@ class KonfirmPayment extends StatefulWidget {
       this.tambahsaldopoint,
       this.persentase_asuransi,
       this.idpayment_gateway,
-      this.minimalsewahari});
+      this.minimalsewahari,
+      // this.jenisitem
+      });
+
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
@@ -94,7 +99,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kpersentase_asuransi,
       kidpayment_gateway,
       hitungsemua,
-      kminimalsewahari;
+      kminimalsewahari
+      // kjenisitem
+      ;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -184,6 +191,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     kminimalsewahari = widget.minimalsewahari;
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
     totaldeposit = (kminimalsewahari * kharga_sewa);
+    // kjenisitem = widget.jenisitem;
     cekToken();
     hitungsemuaFunction();
     super.initState();
@@ -305,7 +313,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     persentase_asuransi: kpersentase_asuransi,
                     idpayment_gateway: kidpayment_gateway,
                     no_ovo: _noOvo.text.toString(),
-                    minimalsewahari: kminimalsewahari)));
+                    minimalsewahari: kminimalsewahari,
+                    // jenisitem: kjenisitem,
+                    )));
       });
     }
   }

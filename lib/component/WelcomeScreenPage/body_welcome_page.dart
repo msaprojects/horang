@@ -10,6 +10,8 @@ import 'package:horang/component/Dummy/cobakeyboard.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
+import 'package:horang/screen/welcome_page.dart';
+import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
 import 'background_welcome_page.dart';
@@ -20,7 +22,6 @@ class BodyWelcomePage extends StatefulWidget {
   _BodyWelcomePageState createState() => _BodyWelcomePageState();
 }
 
-
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
   var pin = '';
   var access_token = '';
@@ -30,6 +31,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
+  SharedPreferences sp;
 
   initPlatformState() async {
     String platformVersion;
@@ -87,39 +89,53 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   }
 
   cekToken() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
     pin = sp.getString("pin");
-    print("pinnya adalah $pin");
+    print("pinnya adalah $pin + $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
+
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) => WelcomePage()));
       return false;
       // } else if (pin == '0' && access_token != null) {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UbahPin()));
     } else {
       if (Platform.isIOS) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ));
+        new Future.delayed(
+            const Duration(seconds: 3),
+            () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginPage())));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => LoginPage(),
+        //     ));
       } else if (Platform.isAndroid && access_token != null) {
         if (access_token != null) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Pinauth(),
-                // builder: (context) => CobaKeyboard(),
-              ));
+          new Future.delayed(
+              const Duration(seconds: 3),
+              () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Pinauth())));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => Pinauth(),
+          //     ));
         }
       }
     }
   }
 
-  
 
   @override
   void initState() {
+    NewVersion(
+      androidId: 'com.cvdtc.horang',
+      // iOSId: ,
+      context: context,
+    ).showAlertIfNecessary();
     cekToken();
     initPlatformState();
     print("cek pin ada nggk yazzz $pin ");
@@ -208,5 +224,4 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       ),
     );
   }
-  
 }

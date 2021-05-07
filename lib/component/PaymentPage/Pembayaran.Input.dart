@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
+import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
@@ -42,37 +43,41 @@ class FormInputPembayaran extends StatefulWidget {
       minimalsewahari,
       cekout,
       cekin,
-      lastorder;
+      lastorder
+      // jenisitem
+      ;
 
-  FormInputPembayaran(
-      {this.flagasuransi,
-      this.flagvoucher,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.idvoucher,
-      this.idasuransi,
-      this.harga_sewa,
-      this.harga_awal,
-      this.diskonn,
-      this.durasi_sewa,
-      this.valuesewaawal,
-      this.valuesewaakhir,
-      this.kapasitas,
-      this.alamat,
-      this.keterangan_barang,
-      this.nominal_barang,
-      this.nominal_voucher,
-      this.minimum_transaksi,
-      this.persentase_voucher,
-      this.totalharixharga,
-      this.saldopoint,
-      this.email_asuransi,
-      this.tambahsaldopoint,
-      this.persentase_asuransi,
-      this.minimalsewahari,
-      this.cekout,
-      this.cekin,
-      this.lastorder});
+  FormInputPembayaran({
+    this.flagasuransi,
+    this.flagvoucher,
+    this.idlokasi,
+    this.idjenis_produk,
+    this.idvoucher,
+    this.idasuransi,
+    this.harga_sewa,
+    this.harga_awal,
+    this.diskonn,
+    this.durasi_sewa,
+    this.valuesewaawal,
+    this.valuesewaakhir,
+    this.kapasitas,
+    this.alamat,
+    this.keterangan_barang,
+    this.nominal_barang,
+    this.nominal_voucher,
+    this.minimum_transaksi,
+    this.persentase_voucher,
+    this.totalharixharga,
+    this.saldopoint,
+    this.email_asuransi,
+    this.tambahsaldopoint,
+    this.persentase_asuransi,
+    this.minimalsewahari,
+    this.cekout,
+    this.cekin,
+    this.lastorder,
+    // this.jenisitem
+  });
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -83,7 +88,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   ApiService _apiService = ApiService();
   int grup = 1, rgID = 1, _currentIndex = 1, rgIndex = 1, idorder = 0;
   bool _sel = false, isEnabled = true, asuransi = false, isSuccess = false;
-  String formatedate, formatedate2, rgValue = "";
+  String formatedate, formatedate2, rgValue = "", haurOrDay;
   var access_token,
       refresh_token,
       email,
@@ -125,7 +130,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       labeldiskon,
       labelhargaawal,
       dis,
-      harawl;
+      harawl
+      // pjenisitem
+      ;
 
   enableButton() {
     setState(() {
@@ -240,6 +247,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
   }
 
+  satuanHariatauJam(){
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return haurOrDay = ' Jam';
+  } else {
+    return haurOrDay = ' Hari';
+  }}
+
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -315,6 +329,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               double.parse(pnominal_barang))
           .toStringAsFixed(2);
       totaldeposit = (pminimalsewahari * pharga_sewa);
+      // pjenisitem = widget.jenisitem;
       cekToken();
       hitungsemuaFunction();
     });
@@ -429,7 +444,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text(pvaluesewaakhir,
                                       overflow: TextOverflow.ellipsis),
                                   Text(
-                                    pdurasi_sewa.toString() + " Hari",
+                                    pdurasi_sewa.toString() + satuanHariatauJam()
                                   ),
                                   settingJamOperasional(),
                                   adaDiskonGak(pdiskon, pharga_awal)
@@ -452,7 +467,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 rupiah(pharga_sewa,
-                                    separator: ',', trailing: " /hari"),
+                                    separator: ',', trailing: " /"+satuanHariatauJam()),
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                             ),
@@ -684,36 +699,139 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                     ),
                                   ),
                                 ),
-                                SafeArea(
-                                  child: FutureBuilder(
-                                      future: _apiService
-                                          .listPaymentGateway(access_token),
-                                      builder: (context,
-                                          AsyncSnapshot<List<PaymentGateway>>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error.toString());
-                                          return Center(
-                                            child: Text(
-                                                "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
-                                          );
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          List<PaymentGateway> payment =
-                                              snapshot.data;
-                                          return _listPaymentGateway(payment);
-                                        } else {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                      }),
-                                )
+                                Card(
+                                  child: Container(
+                                    child: ExpansionTile(
+                                      title: Text(
+                                        "Instant Payment : ",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SafeArea(
+                                              child: FutureBuilder(
+                                                  future: _apiService
+                                                      .listPaymentGateway(
+                                                          access_token),
+                                                  // .listPaymentGatewayVA(),
+                                                  builder: (context,
+                                                      // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
+                                                      AsyncSnapshot<
+                                                              List<
+                                                                  PaymentGateway>>
+                                                          snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      print(snapshot.error
+                                                          .toString());
+                                                      return Center(
+                                                        child: Text(
+                                                            "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
+                                                      );
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.done) {
+                                                      // List<PaymentGatewayVirtualAccount> payment =
+                                                      List<PaymentGateway>
+                                                          payment =
+                                                          snapshot.data;
+                                                      return _listPaymentGateway(
+                                                          payment);
+                                                    } else {
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    }
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  // padding: EdgeInsets.only(
+                                  //   left: 16,
+                                  //   right: 16,
+                                  // ),
+                                  child: Card(
+                                    child: Container(
+                                      child: ExpansionTile(
+                                        title: Text(
+                                          "Virtual Account : ",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              SafeArea(
+                                                child: FutureBuilder(
+                                                    future: _apiService
+                                                        .listPaymentGatewayVA(),
+                                                    // .listPaymentGatewayVA(),
+                                                    builder: (context,
+                                                        // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
+                                                        AsyncSnapshot<
+                                                                List<
+                                                                    PaymentGatewayVirtualAccount>>
+                                                            snapshot) {
+                                                      if (snapshot.hasError) {
+                                                        print(snapshot.error
+                                                            .toString());
+                                                        return Center(
+                                                          child: Text(
+                                                              "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
+                                                        );
+                                                      } else if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      } else if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .done) {
+                                                        List<PaymentGatewayVirtualAccount>
+                                                            paymentz =
+                                                            snapshot.data;
+                                                        return _listPaymentGatewayVA(
+                                                            paymentz);
+                                                      } else {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      }
+                                                    }),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -730,9 +848,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     );
   }
 
-  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+  Widget _listPaymentGatewayVA(List<PaymentGatewayVirtualAccount> dataIndex) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.30,
       child: Column(
         children: [
           Expanded(
@@ -743,6 +861,56 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
             ),
             child: ListView.builder(
               itemBuilder: (context, index) {
+                PaymentGatewayVirtualAccount pymentgtwyVA = dataIndex[index];
+                return Card(
+                  child: InkWell(
+                    onTap: () {
+                      _tripModalBottomSheet(context, pymentgtwyVA.code.toInt(),
+                          pymentgtwyVA.name);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Center(
+                            child: Text(pymentgtwyVA.code,
+                                style: GoogleFonts.inter(
+                                    fontSize: 15, color: Colors.black87)),
+                          ),
+                          selected: true,
+                          leading: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(pymentgtwyVA.name)),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+              itemCount: dataIndex.length,
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.55,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                // PaymentGatewayVirtualAccount pymentgtwy = dataIndex[index];
                 PaymentGateway pymentgtwy = dataIndex[index];
                 // print("data index $dataIndex");
                 return Card(
@@ -772,10 +940,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                           ),
                           trailing: Icon(Icons.keyboard_arrow_right),
-                          // Text(
-                          //   pymentgtwy.nama_provider,
-                          //   style: GoogleFonts.inter(
-                          //       fontSize: 15, color: Colors.black26)),
                         )
                       ],
                     ),
@@ -785,7 +949,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               itemCount: dataIndex.length,
             ),
           )),
-          // Text("Kamu memilih Pembayaran menggunakan : $rgValue")
         ],
       ),
     );
@@ -863,6 +1026,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
+                                  // print('heeyyyyy ' + pjenisitem.toString());
                                   setState(() {
                                     Navigator.pushReplacement(
                                         context,
@@ -906,7 +1070,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                     idpayment_gateway:
                                                         idpayment,
                                                     minimalsewahari:
-                                                        pminimalsewahari)));
+                                                        pminimalsewahari,
+                                                        )));
                                   });
                                 })
                           ],

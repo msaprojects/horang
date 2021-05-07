@@ -80,7 +80,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
       idcustomer,
       pin,
       nama_customer,
-      sk;
+      sk
+      // jenisitem1
+      ;
+
   num vdurasi_sewa,
       idjenis_produk,
       idasuransi,
@@ -316,9 +319,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
       jamakhir1 = widget.jamakhir.toString();
       valueawal = tglawalforklift1 + " " + jamawal1;
       valueakhir = tglawalforklift1 + " " + jamakhir1;
+      // jenisitem1 = 'forklift'.toLowerCase();
       vdurasi_sewa =
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     } else {
+      // jenisitem1 = 'kontainer'.toLowerCase();
       minimaldeposit = 3;
       vsatuan_sewa = "hari ";
       tglAwal = widget.tglawal12.toString();
@@ -827,6 +832,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         borderRadius: BorderRadius.circular(12.0)),
                     color: Colors.green,
                     onPressed: () {
+                      // print('kazep' + jenisitem1);
                       hitungsemuaFunction();
                       // if (boolkontainer = true)
                       if (boolkontainer == true) {
@@ -939,7 +945,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
             minimalsewahari: minimaldeposit,
             cekout: nilaisetting,
             cekin: nilaisetting1,
-            lastorder: nilaisetting2);
+            lastorder: nilaisetting2,
+            // jenisitem: jenisitem1
+            );
       }));
     });
   }
@@ -979,7 +987,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
             email_asuransi: email_asuransi.toString(),
             tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
             persentase_asuransi: nomasuransi.toString(),
-            minimalsewahari: minimaldeposit);
+            minimalsewahari: minimaldeposit,
+            cekout: nilaisetting,
+            cekin: nilaisetting1,
+            lastorder: nilaisetting2,
+            // jenisitem: jenisitem1
+            );
       }));
     });
   }

@@ -9,20 +9,20 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
-import 'package:horang/component/Dummy/cobakeyboard.dart';
-import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/component/LogPage/log_aktifitas.dart';
+// import 'package:horang/component/Dummy/cobakeyboard.dart';
+// import 'package:horang/component/HistoryPage/historypage.dart';
+// import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:new_version/new_version.dart';
+// import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
-import '../../widget/bottom_nav.dart';
+// import '../../widget/bottom_nav.dart';
 import '../StoragePage/StorageHandler.dart';
 
 class HomePage extends StatefulWidget {
@@ -123,11 +123,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    NewVersion(
-      androidId: 'com.cvdtc.horang',
-      // iOSId: ,
-      context: context,
-    ).showAlertIfNecessary();
+    // NewVersion(
+    //   androidId: 'com.cvdtc.horang',
+    //   // iOSId: ,
+    //   context: context,
+    // ).showAlertIfNecessary();
     // newVersion.showUpdateDialog(VersionStatus());
     String hai = new HttpClient()
         .getUrl(Uri.parse('https://server.horang.id/adminmaster/sk.txt'))

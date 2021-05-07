@@ -73,6 +73,23 @@ class _OtpScreenState extends State<OtpScreen> {
   //   }
   // }
 
+   void Keluarr() async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      cekToken();
+      _apiService.logout(access_token).then((value) => setState(() {
+            isSuccess = value;
+            if (isSuccess) {
+              preferences.clear();
+              if (preferences.getString("access_token") == null) {
+                print("SharePref berhasil di hapus");
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                    (route) => false);
+              }
+            }
+          }));
+    }
+
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
     bool canCheckBiometrics;
@@ -160,13 +177,14 @@ class _OtpScreenState extends State<OtpScreen> {
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
                               title: "Sesi anda berakhir 1!",
                               showNeutralButton: false, positiveAction: () {
+                                Keluarr();
                             // _deleteAppDir();
                             // _deleteCacheDir();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        WelcomePage()),
-                                (Route<dynamic> route) => false);
+                            // Navigator.of(context).pushReplacement(
+                            //     MaterialPageRoute(
+                            //         builder: (BuildContext context) =>
+                            //             WelcomePage()));
+                                // (Route<dynamic> route) => false);
                           }, positiveText: "Ok");
                         }
                       }));
