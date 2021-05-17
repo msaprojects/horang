@@ -80,8 +80,8 @@ class _ProdukList extends State<ProdukList> {
   var formatter = new DateFormat('yyyy-MM-dd'),
       selectedTime = TimeOfDay.now(),
       selectedTimeSelesai =
-          TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 3))),
-      durasiforklift = DateTime.now().add(new Duration(hours: 3));
+          TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 180))),
+      durasiforklift = DateTime.now().add(new Duration(minutes: 180));
 
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();

@@ -124,6 +124,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   int diffInTime(tglAwal, tglAkhir) {
     return ((Duration(hours: tglAkhir.hour) - Duration(hours: tglAwal.hour))
             .inHours)
+            // .inMinutes)
         .round();
   }
 

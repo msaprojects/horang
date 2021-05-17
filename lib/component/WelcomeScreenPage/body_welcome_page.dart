@@ -95,7 +95,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     print("pinnya adalah $pin + $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-
       // Navigator.pushReplacement(
       //     context, MaterialPageRoute(builder: (context) => WelcomePage()));
       return false;
@@ -114,20 +113,16 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         //     ));
       } else if (Platform.isAndroid && access_token != null) {
         if (access_token != null) {
+          // loadingScreen(context,
+          //     duration: Duration(seconds: 3), loadingType: LoadingType.SCALING);
           new Future.delayed(
               const Duration(seconds: 3),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Pinauth())));
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => Pinauth(),
-          //     ));
         }
       }
     }
   }
-
 
   @override
   void initState() {
@@ -162,7 +157,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               ),
               Text('Version $_projectVersion'),
               SizedBox(
-                height: 50,
+                height: 10,
               ),
               Text("Hei, Selamat Datang !",
                   style: GoogleFonts.lato(
@@ -213,6 +208,17 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     }),
               ),
+              SizedBox(height: 15,),
+              access_token != null
+                  ? CircularProgressIndicator(
+                    backgroundColor: Colors.blueAccent,
+                    valueColor: AlwaysStoppedAnimation(Colors.red), 
+                    strokeWidth: 10,
+                  )
+                  : Visibility(
+                      child: Text(''),
+                      visible: false,
+                    ),
             ],
           ),
         ),
