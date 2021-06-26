@@ -36,33 +36,33 @@ class KonfirmPayment extends StatefulWidget {
       // jenisitem
       ;
 
-  KonfirmPayment(
-      {this.flagasuransi,
-      this.flagvoucher,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.idvoucher,
-      this.idasuransi,
-      this.harga_sewa,
-      this.durasi_sewa,
-      this.valuesewaawal,
-      this.valuesewaakhir,
-      this.kapasitas,
-      this.alamat,
-      this.keterangan_barang,
-      this.nominal_barang,
-      this.nominal_voucher,
-      this.minimum_transaksi,
-      this.persentase_voucher,
-      this.totalharixharga,
-      this.saldopoint,
-      this.email_asuransi,
-      this.tambahsaldopoint,
-      this.persentase_asuransi,
-      this.idpayment_gateway,
-      this.minimalsewahari,
-      // this.jenisitem
-      });
+  KonfirmPayment({
+    this.flagasuransi,
+    this.flagvoucher,
+    this.idlokasi,
+    this.idjenis_produk,
+    this.idvoucher,
+    this.idasuransi,
+    this.harga_sewa,
+    this.durasi_sewa,
+    this.valuesewaawal,
+    this.valuesewaakhir,
+    this.kapasitas,
+    this.alamat,
+    this.keterangan_barang,
+    this.nominal_barang,
+    this.nominal_voucher,
+    this.minimum_transaksi,
+    this.persentase_voucher,
+    this.totalharixharga,
+    this.saldopoint,
+    this.email_asuransi,
+    this.tambahsaldopoint,
+    this.persentase_asuransi,
+    this.idpayment_gateway,
+    this.minimalsewahari,
+    // this.jenisitem
+  });
 
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
@@ -198,6 +198,12 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   }
 
   @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -217,8 +223,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
         child: Column(
           children: [
             SingleChildScrollView(
-              child: Expanded(
-                  child: Column(
+              child: Column(
                 children: [
                   Text("Masukkan nomor yang terdaftar di OVO ",
                       textAlign: TextAlign.left,
@@ -257,7 +262,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     style: GoogleFonts.inter(height: 1.5, fontSize: 14),
                   ),
                 ],
-              )),
+              ),
             ),
             FlatButton(
               color: Colors.green,
@@ -291,30 +296,30 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiPembayaran(
-                    token: access_token,
-                    flagasuransi: kflagasuransi,
-                    flagvoucher: kflagvoucher,
-                    idlokasi: kidlokasi,
-                    idjenis_produk: kidjenis_produk,
-                    idvoucher: kidvoucher,
-                    idasuransi: kidasuransi,
-                    harga_sewa: kharga_sewa,
-                    durasi_sewa: kdurasi_sewa,
-                    valuesewaawal: kvaluesewaawal,
-                    valuesewaakhir: kvaluesewaakhir,
-                    keterangan_barang: kketerangan_barang,
-                    nominal_barang: knominal_barang,
-                    nominal_voucher: knominal_voucher,
-                    minimum_transaksi: kminimum_transaksi,
-                    persentase_voucher: kpersentase_voucher,
-                    saldopoint: ksaldopoint,
-                    email_asuransi: kemail_asuransi,
-                    tambahsaldopoint: ktambahsaldopoint,
-                    persentase_asuransi: kpersentase_asuransi,
-                    idpayment_gateway: kidpayment_gateway,
-                    no_ovo: _noOvo.text.toString(),
-                    minimalsewahari: kminimalsewahari,
-                    // jenisitem: kjenisitem,
+                      token: access_token,
+                      flagasuransi: kflagasuransi,
+                      flagvoucher: kflagvoucher,
+                      idlokasi: kidlokasi,
+                      idjenis_produk: kidjenis_produk,
+                      idvoucher: kidvoucher,
+                      idasuransi: kidasuransi,
+                      harga_sewa: kharga_sewa,
+                      durasi_sewa: kdurasi_sewa,
+                      valuesewaawal: kvaluesewaawal,
+                      valuesewaakhir: kvaluesewaakhir,
+                      keterangan_barang: kketerangan_barang,
+                      nominal_barang: knominal_barang,
+                      nominal_voucher: knominal_voucher,
+                      minimum_transaksi: kminimum_transaksi,
+                      persentase_voucher: kpersentase_voucher,
+                      saldopoint: ksaldopoint,
+                      email_asuransi: kemail_asuransi,
+                      tambahsaldopoint: ktambahsaldopoint,
+                      persentase_asuransi: kpersentase_asuransi,
+                      idpayment_gateway: kidpayment_gateway,
+                      no_ovo: _noOvo.text.toString(),
+                      minimalsewahari: kminimalsewahari,
+                      // jenisitem: kjenisitem,
                     )));
       });
     }

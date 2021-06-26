@@ -252,7 +252,8 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                                   fontSize: 14),
                                             ),
                                             Text(
-                                              myStorage.nama_lokasi,
+                                              myStorage.idtransaksi_detail.toString(),
+                                              // myStorage.nama_lokasi,
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),
                                             ),

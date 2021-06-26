@@ -88,6 +88,12 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(

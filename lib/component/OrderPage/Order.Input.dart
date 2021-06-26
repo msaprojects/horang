@@ -36,7 +36,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   //DEKLARASI VARIABEL
   bool isLoading = false,
       boolasuransi = true,
-      boolsk = true,
+      boolsk = false,
       boolvoucher = false,
       tekanvoucher = false,
       isSuccess = false,
@@ -313,6 +313,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         .toLowerCase()
         .contains('forklift')) {
       boolkontainer = true;
+      boolsk = false;
       minimaldeposit = 0;
       vsatuan_sewa = "jam ";
       tglawalforklift1 = widget.tglawalforklift.toString();
@@ -753,6 +754,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                               if (boolsk == true) {
                                                 ssk = 1;
                                                 print("ssk $ssk");
+                                                infoDialog(context, 'Anda telah menyetujui syarat dan ketentuan berlaku, silahkan lanjutkan transaksi pembayaran anda');
                                               } else {
                                                 ssk = 0;
                                                 print("ssk1 $ssk");
@@ -848,7 +850,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           errorDialog(context,
                               "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
                         }
-                        if (ssk == 0) {
+                        if (boolsk == false) {
                           warningDialog(context,
                               'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
                         } else {
@@ -869,7 +871,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           });
                         }
                       } else {
-                        if (ssk == 0) {
+                        if (boolsk == false) {
                           warningDialog(context,
                               'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
                         } else {

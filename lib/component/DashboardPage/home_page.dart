@@ -143,6 +143,12 @@ class _HomePageState extends State<HomePage> {
     // ReusableClasses().sk();
   }
 
+  @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
@@ -344,8 +350,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SelectableText(
                       "See All...",
-                      style: TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {
                         Navigator.push(
                             context,

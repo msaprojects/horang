@@ -128,7 +128,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   void initState() {
     NewVersion(
       androidId: 'com.cvdtc.horang',
-      // iOSId: ,
+      iOSId: 'com.cvdtc.horang',
       context: context,
     ).showAlertIfNecessary();
     cekToken();

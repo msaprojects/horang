@@ -137,11 +137,11 @@ class _UbahPassState extends State<UbahPass> {
                   child: RaisedButton(
                     child: Text("simpan"),
                     onPressed: () {
-                      if (!tekan1x) {
+                      // if (!tekan1x) {
                         // return warningDialog(context, "tekan lebih 1x");
-                        return true;
-                      }
-                      tekan1x = false;
+                      //   return true;
+                      // }
+                      // tekan1x = false;
                       // warningDialog(context, "tes aja");
                       if (_isFieldpassLama == null ||
                           _isFieldpassBaru == null ||
@@ -150,17 +150,20 @@ class _UbahPassState extends State<UbahPass> {
                         _scaffoldState.currentState.showSnackBar(SnackBar(
                           content: Text("Please Fill all field"),
                         ));
-                        return;
+                        // return;
                       }
                       setState(() => _isLoading = true);
                       Password password = Password(
                           passwordlama: _controllerPasslama.text.toString(),
                           passwordbaru: _controllerPassbaru.text.toString(),
                           token: access_token);
+                      print("MUI $password");
                       if (_controllerPassbaru.text !=
                           _controllerPassretype.text) {
-                        return warningDialog(context,
-                            "Password baru tidak sama dengan retype password");
+                        warningDialog(context,
+                            "Password baru tidak sama dengan retype password",
+                            showNeutralButton: false,
+                            positiveText: 'Ok', positiveAction: () {});
                       } else {
                         _apiService.UbahPassword(password).then((isSuccess) {
                           setState(() => _isLoading = false);

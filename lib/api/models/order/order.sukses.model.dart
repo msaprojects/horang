@@ -4,7 +4,7 @@ class OrderSukses{
   num idtransaksi, idpembayaran, idpayment_gateway, idproduk, jumlah_sewa;
   // int total_harga, nominal, harga;
   num total_harga, nominal, harga;
-  String no_order, keterangan, kode_refrensi, nama_provider, kode_kontainer;
+  String no_order, keterangan, kode_refrensi, nama_provider, kode_kontainer,tanggal_order, tanggal_mulai, tanggal_akhir;
 
   OrderSukses({
     this.idtransaksi = 0,
@@ -19,7 +19,10 @@ class OrderSukses{
     this.kode_refrensi,
     this.nominal = 0,
     this.nama_provider,
-    this.kode_kontainer
+    this.kode_kontainer,
+    this.tanggal_akhir,
+    this.tanggal_mulai,
+    this.tanggal_order
   });
 
   factory OrderSukses.fromJson(Map<String, dynamic> map){
@@ -36,7 +39,10 @@ class OrderSukses{
       harga: map["harga"],
       kode_kontainer: map["kode_kontainer"],
       kode_refrensi: map["kode_refrensi"],
-      nama_provider: map["nama_provider"]
+      nama_provider: map["nama_provider"],
+      tanggal_mulai: map["tanggal_mulai"],
+      tanggal_akhir: map["tanggal_akhir"],
+      tanggal_order: map["tanggal_order"],
     );
   }
 
@@ -54,14 +60,17 @@ class OrderSukses{
       "harga": harga,
       "kode_kontainer": kode_kontainer,
       "kode_refrensi": kode_refrensi,
-      "nama_provider": nama_provider
+      "nama_provider": nama_provider,
+      "tanggal_mulai": tanggal_mulai,
+      "tanggal_akhir": tanggal_akhir,
+      "tanggal_order": tanggal_order,
     };
   }
 
   @override
   String  toString(){
     print("order sukses1 $idtransaksi");
-    return 'OrderSukses{idtransaksi: $idtransaksi, idpembayaran: $idpembayaran, idpayment_gateway: $idpayment_gateway, idproduk: $idproduk, jumlah_sewa: $jumlah_sewa, total_harga: $total_harga, nominal: $nominal, no_order: $no_order, keterangan: $keterangan, harga: $harga, kode_kontainer: $kode_kontainer, kode_refrensi: $kode_refrensi, nama_provider: $nama_provider}';
+    return 'OrderSukses{idtransaksi: $idtransaksi, idpembayaran: $idpembayaran, idpayment_gateway: $idpayment_gateway, idproduk: $idproduk, jumlah_sewa: $jumlah_sewa, total_harga: $total_harga, nominal: $nominal, no_order: $no_order, keterangan: $keterangan, harga: $harga, kode_kontainer: $kode_kontainer, kode_refrensi: $kode_refrensi, nama_provider: $nama_provider, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order}';
   }
 
 }

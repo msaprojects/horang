@@ -299,7 +299,7 @@ void _popUpTroble(BuildContext context) {
         return AlertDialog(
           content: new Container(
             width: 250,
-            height: 250,
+            height: 270,
             decoration: new BoxDecoration(
               shape: BoxShape.rectangle,
               color: const Color(0xFFFFFF),
@@ -312,12 +312,27 @@ void _popUpTroble(BuildContext context) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 10,
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          height: 18.0,
+                          width: 18.0,
+                          color: Colors.red,
+                          child: new IconButton(
+                            padding: new EdgeInsets.all(0.0),
+                              icon: new Icon(Icons.close_rounded, size: 18,),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                        ),
                       ),
-                      Text("Lost Device",
-                          style: GoogleFonts.lato(
-                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      Row(
+                        children: [
+                          Text("Lost Device",
+                              style: GoogleFonts.lato(
+                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       SizedBox(
                         height: 5,
                       ),

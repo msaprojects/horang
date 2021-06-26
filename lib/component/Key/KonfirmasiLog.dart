@@ -3,12 +3,14 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/log/Log.dart';
+import 'package:horang/api/models/log/generateKode.model.dart';
 import 'package:horang/api/models/log/openLog.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
+import 'package:horang/component/Key/DummyCode.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/ListLog.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
@@ -60,6 +62,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
   PaymentGateway statussk = PaymentGateway();
   var token = "",
       newtoken = "",
+      code,
       access_token,
       refresh_token,
       idcustomer,
@@ -113,60 +116,136 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     token_cek: access_token,
                     // token_notifikasi: token_notifikasi
                   );
-                  _apiService.CekPin(pin_cek1).then((isSuccess) {
-                    setState(() {
+                  if (widget.nama
+                      .toString()
+                      .toLowerCase()
+                      .contains('forklift')) {
+                    print("ini area forklift");
+                    _apiService.CekPin(pin_cek1).then((isSuccess) {
+                      _isLoading = true;
+                      print("ezz0 $idtransaksi_det, $access_token");
+                      GenerateCode gcodezzzz = GenerateCode(
+                          idtransaksi_det: idtransaksi_det,
+                          token: access_token);
                       if (isSuccess) {
-                        setState(() {
-                          _isLoading = true;
-                          LogOpen logopen = LogOpen(
-                            idtransaksi_detail: idtransaksi_det,
-                            token: access_token,
-                          );
-                          if (widget.kode_kontainer != null ||
-                              widget.nama_kota != null) {
-                            _apiService.OpenLog(logopen).then((isSuccess) {
-                              setState(() => _isLoading = false);
-                              if (isSuccess) {
-                                successDialog(context,
-                                    "Permintaan open berhasil dilakukan !",
-                                    closeOnBackPress: false,
-                                    showNeutralButton: false,
-                                    positiveAction: () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Home()),
-                                      (Route<dynamic> route) => false);
-                                }, positiveText: 'OK');
-                              } else {
-                                errorDialog(context,
-                                    "Open kontainer $kode_kontainer1 gagal dilakukan !");
-                              }
-                            });
-                          }
+                        //  return successDialog(context, "KOde aktivasine ${gcodezzzz.kode_aktivasi}");
+                        //  return buildCode(context);
+
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          Flushbar(
+                            message: "Ok masuk",
+                            flushbarPosition: FlushbarPosition.BOTTOM,
+                            icon: Icon(Icons.ac_unit),
+                            flushbarStyle: FlushbarStyle.GROUNDED,
+                            duration: Duration(seconds: 5),
+                          )..show(_scaffoldState.currentState.context);
                         });
-                      } else if (!isSuccess) {
-                        print('Pin salah masku');
-                        return errorDialog(
-                            context, 'Pin yang anda masukkan salah');
-                        // return showDialog(
-                        //     context: context,
-                        //     builder: (context) {
-                        //       Future.delayed(Duration(milliseconds: 100), () {
-                        //         Navigator.of(context).pop(true);
-                        //       });
-                        //       return AlertDialog(
-                        //         title: Text("Pin salah"),
-                        //       );
-                        //     });
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return DummyCode(
+                            iddetail_orders: gcodezzzz.idtransaksi_det,
+                          );
+                        }));
                       }
                     });
-                  });
+                  } else {
+                    _apiService.CekPin(pin_cek1).then((isSuccess) {
+                      setState(() {
+                        if (isSuccess) {
+                          setState(() {
+                            _isLoading = true;
+                            LogOpen logopen = LogOpen(
+                              idtransaksi_detail: idtransaksi_det,
+                              token: access_token,
+                            );
+                            if (widget.kode_kontainer != null ||
+                                widget.nama_kota != null) {
+                              _apiService.OpenLog(logopen).then((isSuccess) {
+                                setState(() => _isLoading = false);
+                                if (isSuccess) {
+                                  successDialog(context, "",
+                                      title:
+                                          "Permintaan open berhasil dilakukan !",
+                                      closeOnBackPress: false,
+                                      showNeutralButton: false,
+                                      positiveAction: () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                Home()),
+                                        (Route<dynamic> route) => false);
+                                  }, positiveText: 'OK');
+                                } else {
+                                  errorDialog(context,
+                                      "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                                }
+                              });
+                            }
+                          });
+                        } else if (!isSuccess) {
+                          print('Pin salah masku');
+                          return errorDialog(
+                              context, 'Pin yang anda masukkan salah');
+                          // return showDialog(
+                          //     context: context,
+                          //     builder: (context) {
+                          //       Future.delayed(Duration(milliseconds: 100), () {
+                          //         Navigator.of(context).pop(true);
+                          //       });
+                          //       return AlertDialog(
+                          //         title: Text("Pin salah"),
+                          //       );
+                          //     });
+                        }
+                      });
+                    });
+                  }
                 },
                 child: Text('OK'.toUpperCase()),
               ),
             ],
           );
+        });
+  }
+
+  Widget buildCode(BuildContext context) {
+    print("optimus prime1");
+    return SafeArea(
+      child: FutureBuilder(
+          future: _apiService.generateCode(access_token, idtransaksi_det),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<GenerateCode>> snapshot) {
+            if (snapshot.hasError) {
+              print("optimus prime2");
+              return Center(
+                child: Text(
+                    "zzSomething wrong with message ${snapshot.error.toString()}"),
+              );
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              print("optimus prime3");
+              List<GenerateCode> zcode = snapshot.data;
+              // print(snapshot.data);
+              print("iamcannor ${snapshot.data}");
+              return _designviewCode(zcode);
+            } else {
+              print("optimus prime4");
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
+    );
+  }
+
+  Widget _designviewCode(List<GenerateCode> dataIndex) {
+    print("optimus prime");
+    return ListView.builder(
+        itemCount: dataIndex == null ? 0 : dataIndex.length,
+        itemBuilder: (BuildContext context, int index) {
+          GenerateCode gCode2 = dataIndex[index];
+          return successDialog(
+              context, "Kode Aktivasi anda ${gCode2.kode_aktivasi}");
         });
   }
 
@@ -227,6 +306,12 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     super.initState();
     cekToken();
   }
+
+  @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
 
   Future<bool> _willPopCallback() async {
     ReusableClasses().showAlertDialog(context);
@@ -312,7 +397,11 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Kota",
+                  Text(
+                      "Kota" +
+                          idtransaksi_det.toString() +
+                          " __ " +
+                          idtransaksii.toString(),
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),
@@ -339,9 +428,14 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Keterangan",
-                      style:
-                          GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+                  GestureDetector(
+                    onTap: () {
+                      print("woyy $access_token");
+                    },
+                    child: Text("Keterangan",
+                        style: GoogleFonts.inter(
+                            fontSize: 12, color: Colors.grey)),
+                  ),
                   Text(keterangan.toString(),
                       style: GoogleFonts.inter(
                           fontSize: 16, fontWeight: FontWeight.bold)),

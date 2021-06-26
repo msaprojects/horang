@@ -91,6 +91,12 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
+  @override
   Widget build(BuildContext context) {
     void Keluarr() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -202,7 +208,7 @@ class _TambahProfileState extends State<TambahProfile> {
                                           _controllerNoKtp.clear();
                                           _controllerAlamat.clear();
                                           successDialog(context,
-                                              "Profil anda berhasil disimpan",
+                                              "Profil anda berhasil disimpan, tekan 'Ok' untuk login ulang aplikasi",
                                               showNeutralButton: false,
                                               positiveText: "OK",
                                               positiveAction: () {
@@ -254,6 +260,7 @@ class _TambahProfileState extends State<TambahProfile> {
 
   Widget _buildTextFieldKtp() {
     return TextFormField(
+      maxLength: 16,
       controller: _controllerNoKtp,
       keyboardType: TextInputType.number,
       // ignore: deprecated_member_use

@@ -7,6 +7,7 @@ import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/models/log/Log.dart';
+import 'package:horang/api/models/log/generateKode.model.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/models/log/openLog.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
@@ -36,8 +37,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.207:9992/api/";
-  // final String baseUrl = "https://dev.horang.id:9993/api/";
-  final String baseUrl = "https://server.horang.id:9993/api/";
+  final String baseUrl = "https://dev.horang.id:9993/api/";
+  // final String baseUrl = "https://server.horang.id:9993/api/";
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";
   final String UrlFTP = "https://server.horang.id/adminmaster/sk.txt";
@@ -158,12 +159,11 @@ class ApiService {
     String password = '';
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await client.get("$baseUrlVA", 
-    headers: {
+    final response = await client.get("$baseUrlVA", headers: {
       "content-type": "application/json",
-          "Authorization": basicAuth
+      "Authorization": basicAuth
     });
-    print("aman ?"+response.body);
+    print("aman ?" + response.body);
     if (response.statusCode == 200) {
       return paymentgatewayVAFromJson(response.body);
     } else {
@@ -262,7 +262,10 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
-    print("helloworld"+response.statusCode.toString() + " ~ " + response.body.toString());
+    print("helloworld" +
+        response.statusCode.toString() +
+        " ~ " +
+        response.body.toString());
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
     } else if (response.statusCode == 204) {
@@ -372,6 +375,35 @@ class ApiService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  // Future<bool> generateCode(GenerateCode data) async {
+  //   // Future<GenerateCode> generateKodeForklift(String token) async {
+  //   final response = await client.post("$baseUrl/generateforklift",
+  //       headers: {"Content-type": "application/json"},
+  //       body: generateCodeToJson(data));
+  //   print('dollars' + response.body);
+    
+  //   if (response.statusCode == 200) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  Future<List<GenerateCode>> generateCode(String access_token, idtransaksi_det) async {
+    final response = await client.post(
+      "$baseUrl/generateforklift",
+      headers: {"content-type": "application/json"},
+      body: jsonEncode(
+          {"token": "${access_token}", "idtransaksi_detail": "${idtransaksi_det}"}),
+    );
+    print('isoGAK ${response.body}');
+    if (response.statusCode == 200) {
+      return generateCodeFromJson(response.body);
+    } else {
+      return null;
     }
   }
 

@@ -150,7 +150,9 @@ class _ResetState extends State<Reset> {
                                     infoDialog(
                                         context, "Yakin Mau Reset Password?",
                                         title: "Konfirmasi",
-                                        positiveText: "Ya", positiveAction: () {
+                                        showNeutralButton: false,
+                                        positiveText: "Ya", 
+                                        positiveAction: () {
                                       _apiService.ForgetPass(reset)
                                           .then((isSuccess) {
                                         setState(() => _isLoading = false);

@@ -116,8 +116,9 @@ class _ProdukList extends State<ProdukList> {
       setState(() {
         selectedTime = picked;
         hour = selectedTime.hour.toString();
-        minutes = selectedTime.minute.toString();
-        time = hour + '.' + minutes;
+        // minutes = selectedTime.minute.toString();
+        // time = hour + '.' + minutes;
+        time = hour+ '.00';
         timeController.text = time;
         selectedTime = picked;
       });
@@ -138,8 +139,9 @@ class _ProdukList extends State<ProdukList> {
       setState(() {
         selectedTimeSelesai = picked1;
         hour = selectedTimeSelesai.hour.toString();
-        minutes = selectedTimeSelesai.minute.toString();
-        time = hour + '.' + minutes;
+        // minutes = selectedTimeSelesai.minute.toString();
+        // time = hour + '.' + minutes;
+        time = hour + '.00';
         timeControllerSelesai.text = time;
       });
   }
@@ -380,10 +382,13 @@ class _ProdukList extends State<ProdukList> {
     _tanggalAwal = _date1.toString();
     _tanggalAkhir = _date2.toString();
     dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    timeController.text =
-        DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
-    timeControllerSelesai.text =
-        durasiforklift.hour.toString() + "." + DateTime.now().minute.toString();
+    // timeController.text =
+    //     DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
+    // timeControllerSelesai.text =
+    //     durasiforklift.hour.toString() + "." + DateTime.now().minute.toString();
+
+    timeController.text = DateTime.now().hour.toString() + ".00";
+    timeControllerSelesai.text = durasiforklift.hour.toString() + ".00";
     _cekKoneksi();
     super.initState();
   }
@@ -596,7 +601,7 @@ class _ProdukList extends State<ProdukList> {
                                     tglawalforklift: selectedDate
                                         .format(format: 'yyyy-MM-dd')
                                         .toString(),
-                                    jamawal: selectedTime.format(context),
+                                  jamawal: selectedTime.format(context),
                                     jamakhir:
                                         selectedTimeSelesai.format(context),
                                   );

@@ -336,6 +336,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     super.initState();
   }
 
+  @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
   void hitungsemuaFunction() async {
     setState(() {
       hitungsemua = ReusableClasses().PerhitunganOrder(
@@ -501,22 +507,36 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 children: <Widget>[Text("Ket. Barang : ")],
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.only(
-                                  top: 0.0, right: 60, left: 20),
-                              child: SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                width: MediaQuery.of(context).size.height * 0.2,
-                                child: Text(
-                                  pketerangan_barang,
-                                  maxLines: 10,
-                                  overflow: TextOverflow.visible,
-                                  textAlign: TextAlign.justify,
-                                ),
-                              ),
-                            ),
+                            
                           ],
+                        ),
+                        // Container(
+                        //   alignment: Alignment.topRight,
+                        //       padding: const EdgeInsets.only(
+                        //           top: 10.0, right: 50, left: 50, ),
+                        //       child: Flexible(
+                        //         child: Column(
+                        //           children: [
+                        //             Text(
+                        //               pketerangan_barang,
+                        //               maxLines: 10,
+                        //               overflow: TextOverflow.visible,
+                        //               // textAlign: TextAlign.justify,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                         Container(
+                          alignment: Alignment.topRight,
+                              padding: const EdgeInsets.only(
+                                  top: 0.0, right: 60, left: 40),
+                              child: Text(
+                                pketerangan_barang,
+                                maxLines: 10,
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.justify,),
+                          // ],
                         ),
                         SizedBox(
                           height: 8,

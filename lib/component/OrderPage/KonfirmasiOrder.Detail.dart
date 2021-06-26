@@ -136,6 +136,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   OrderSukses os = dataIndex[index];
+                  print("testing hu $dataIndex");
                   return Card(
                     child: new Column(
                       children: <Widget>[
@@ -203,6 +204,63 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                                   const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
                                 os.jumlah_sewa.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Row(
+                                children: <Widget>[Text("Tgl. Order :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 20),
+                              child: Text(
+                                os.tanggal_order,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Row(
+                                children: <Widget>[Text("Tgl. Mulai :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 20),
+                              child: Text(
+                                os.tanggal_mulai.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Row(
+                                children: <Widget>[Text("Tgl. Akhir :")],
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 20),
+                              child: Text(
+                                os.tanggal_akhir.toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),

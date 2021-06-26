@@ -7,6 +7,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/models/log/selesaiLog.dart';
@@ -47,7 +48,7 @@ class _StorageExpired extends State<StorageExpired1> {
       noted;
   Color flag_noted;
 
-  accbayar(int accbyr, idtr, idtrd, String nam_kotaa, kod_kontanr) {
+  Widget accbayar(BuildContext context, int accbyr, idtr, idtrd, String nam_kotaa, kod_kontanr) {
     if (accbyr == 1) {
       return Visibility(
         child: FlatButton(
@@ -87,12 +88,13 @@ class _StorageExpired extends State<StorageExpired1> {
                     setState(() => _isLoading = false);
                     if (isSuccess) {
                       successDialog(context, "Berhasil",
-                          showNeutralButton: false, positiveAction: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            // builder: (context) => HomePage()));
-                            builder: (context) => HomePage(
-                                  initialindex: 0,
-                                )));
+                          showNeutralButton: false, 
+                          positiveAction: () {
+                        Navigator.pop(context);
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //     MaterialPageRoute(
+                        //         builder: (BuildContext context) => Home()),
+                        //     (Route<dynamic> route) => false);
                       }, positiveText: "Ok");
                     } else {
                       errorDialog(context, "Transaksi gagal dilakukan !");
@@ -113,7 +115,7 @@ class _StorageExpired extends State<StorageExpired1> {
     }
   }
 
-  FlatButton getBayarBlm(int fselesai, selesai) {
+  Container getBayarBlm(int fselesai, selesai) {
     if (fselesai == 0 && selesai == 0) {
       noted = "Harap Konfirmasi Selesai";
       flag_noted = Colors.red[600];
@@ -126,14 +128,13 @@ class _StorageExpired extends State<StorageExpired1> {
     } else {
       noted = "-";
     }
-    return FlatButton(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.06,
-      onPressed: () {},
       child: Text(
         noted,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: flag_noted, fontWeight: FontWeight.bold),
       ),
-      color: flag_noted,
+      color: Colors.transparent,
     );
   }
 
@@ -421,6 +422,7 @@ class _StorageExpired extends State<StorageExpired1> {
                           Container(
                               width: 900,
                               child: accbayar(
+                                context,
                                   flagselesaii,
                                   idtransaksiz,
                                   idtransaksi_detailz,
@@ -438,7 +440,7 @@ class _StorageExpired extends State<StorageExpired1> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    'Ok',
+                                    'Tutup',
                                     style: GoogleFonts.inter(
                                         fontSize: 14,
                                         color: Colors.white,
