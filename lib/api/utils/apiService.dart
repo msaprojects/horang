@@ -16,6 +16,7 @@ import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
+import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
@@ -252,6 +253,22 @@ class ApiService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  // CEK LOGIN UUID
+  Future<List<CekLoginUUID>> cekLoginUUID(String uuid) async {
+    final response = await client.post(
+      "$baseUrl/generateforklift",
+      headers: {"content-type": "application/json"},
+      body: jsonEncode(
+          {"uuid": "${uuid}"}),
+    );
+    print('isoGAK ${response.body}');
+    if (response.statusCode == 200) {
+      return cekLoginUUIDFromJson(response.body);
+    } else {
+      return null;
     }
   }
 

@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
-import 'package:horang/api/models/token/token.model.dart';
+// import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
-import 'package:horang/component/account_page/AccountChecker.dart';
+import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
+// import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
+// import 'package:horang/component/account_page/AccountChecker.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       _obsecureText = true,
       _checkbio = false;
   String token = "";
-  var iddevice = "";
+  var iddevice = "", uuidAnyar = "";
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -43,6 +44,35 @@ class _LoginPageState extends State<LoginPage> {
   //FIREBASE
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      GetDeviceID().getDeviceID(context).then((cekuuids) {
+        uuidAnyar = cekuuids;
+        print("JACK2 $uuidAnyar");
+      });
+      FutureBuilder(
+        future: _apiService.cekLoginUUID(uuidAnyar),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot){
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                  "Something wrong with message: ${snapshot.error.toString()}"),
+            ); 
+          } else if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done){
+            List uidi = snapshot.data;
+            print('mamajo $uidi');
+            if (uidi == uuidAnyar) {
+              infoDialog(context, "gaskan");
+            }
+          }
+        },
+      );
+    });
+
+    print('kriswantoyi $uuidAnyar');
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
@@ -137,6 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                             GetDeviceID().getDeviceID(context).then((ids) {
                               setState(() {
                                 iddevice = ids;
+                                print('cek uudi $iddevice');
                                 if (_fieldEmail == null ||
                                     _fieldPassword == null ||
                                     !_fieldEmail ||
@@ -319,8 +350,11 @@ void _popUpTroble(BuildContext context) {
                           width: 18.0,
                           color: Colors.red,
                           child: new IconButton(
-                            padding: new EdgeInsets.all(0.0),
-                              icon: new Icon(Icons.close_rounded, size: 18,),
+                              padding: new EdgeInsets.all(0.0),
+                              icon: new Icon(
+                                Icons.close_rounded,
+                                size: 18,
+                              ),
                               onPressed: () {
                                 Navigator.pop(context);
                               }),
@@ -328,7 +362,7 @@ void _popUpTroble(BuildContext context) {
                       ),
                       Row(
                         children: [
-                          Text("Lost Device",
+                          Text("Ganti Perangkat",
                               style: GoogleFonts.lato(
                                   fontSize: 14, fontWeight: FontWeight.bold)),
                         ],
@@ -337,7 +371,7 @@ void _popUpTroble(BuildContext context) {
                         height: 5,
                       ),
                       Text(
-                          "Lost Device digunakan ketika anda menginstall ulang aplikasi atau ganti perangkat.",
+                          "Ganti Perangkat digunakan ketika anda menginstall ulang aplikasi atau ganti perangkat.",
                           style: GoogleFonts.lato(fontSize: 12)),
                       Container(
                           width: 900,
@@ -352,7 +386,7 @@ void _popUpTroble(BuildContext context) {
                                             )));
                               },
                               child: Text(
-                                'Lost Device',
+                                'Ganti Perangkat',
                                 style: GoogleFonts.inter(
                                     fontSize: 14,
                                     color: Colors.white,

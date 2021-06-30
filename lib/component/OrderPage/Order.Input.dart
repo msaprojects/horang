@@ -14,6 +14,7 @@ import 'package:horang/utils/reusable.class.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -102,6 +103,20 @@ class _FormDetailOrder extends State<FormInputOrder> {
       harga;
   DateTime dtAwal, dtAkhir;
   int ssk;
+
+  // var _controller = ScrollController();
+  // var _isVisible = false;
+
+  final scrollController = ScrollController();
+  var buttonVisible = false.obs;
+
+  _FormDetailOrder() {
+    scrollController.addListener(() {
+      if (!buttonVisible.value)
+        buttonVisible.value = scrollController.position.atEdge;
+    });
+  }
+
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
   SharedPreferences sp;
@@ -124,7 +139,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   int diffInTime(tglAwal, tglAkhir) {
     return ((Duration(hours: tglAkhir.hour) - Duration(hours: tglAwal.hour))
             .inHours)
-            // .inMinutes)
+        // .inMinutes)
         .round();
   }
 
@@ -141,7 +156,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   Future<String> _ambildataSK() async {
     http.Response response = await http
-        .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
+        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+    // .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
     print("mmzzzrr" + response.body);
     return sk = response.body;
   }
@@ -204,7 +220,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       );
     } else {
       return Text(
-        rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa ,
+        rupiah(harganett.toString(), separator: '.') + " /" + vsatuan_sewa,
         style: TextStyle(
             fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold),
       );
@@ -289,12 +305,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   //END ADDON
+
 //INIT STATE
   @override
   void initState() {
     cekToken();
     getSaldo();
     _ambildataSK();
+
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
@@ -749,12 +767,49 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           value: boolsk,
                                           onChanged: (bool syaratketentuan) {
                                             setState(() {
-                                              print(boolsk);
+                                              print("$boolsk ss");
                                               boolsk = syaratketentuan;
                                               if (boolsk == true) {
                                                 ssk = 1;
+                                                buttonVisible.value = false;
+                                                showDialog(
+                                                    barrierDismissible: false,
+                                                    context: context,
+                                                    builder: (context) =>
+                                                            WillPopScope(
+                                                              onWillPop: () async => false,
+                                                              child: AlertDialog(
+                                                                title: Text(
+                                                                    'Syarat dan Ketentuan'),
+                                                                content:
+                                                                    SingleChildScrollView(
+                                                                  controller:
+                                                                      scrollController,
+                                                                  child:
+                                                                      Text('$sk'),
+                                                                ),
+                                                                actions: [
+                                                                  Obx(() =>
+                                                                      Visibility(
+                                                                          visible:
+                                                                              buttonVisible
+                                                                                  .value,
+                                                                          child:
+                                                                              ElevatedButton(
+                                                                            child:
+                                                                                Text("Setuju"),
+                                                                            onPressed:
+                                                                                () {
+                                                                              ssk =
+                                                                                  1;
+                                                                              Navigator.pop(context);
+                                                                              print('$boolsk');
+                                                                            },
+                                                                          )))
+                                                                ],
+                                                              ),
+                                                            ));
                                                 print("ssk $ssk");
-                                                infoDialog(context, 'Anda telah menyetujui syarat dan ketentuan berlaku, silahkan lanjutkan transaksi pembayaran anda');
                                               } else {
                                                 ssk = 0;
                                                 print("ssk1 $ssk");
@@ -770,11 +825,32 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         const EdgeInsets.only(left: 20, top: 5),
                                     child: GestureDetector(
                                       onTap: () {
-                                        infoDialog(
-                                          context,
-                                          '$sk',
-                                          title: 'Syarat Ketentuan',
-                                        );
+                                        print('sjdw');
+                                        // buttonVisible.value = false;
+                                        // showDialog(
+                                        //     context: context,
+                                        //     builder: (context) => AlertDialog(
+                                        //           title: Text(
+                                        //               'Syarat dan Ketentuan'),
+                                        //           content:
+                                        //               SingleChildScrollView(
+                                        //             controller:
+                                        //                 scrollController,
+                                        //             child: Text('$sk'),
+                                        //           ),
+                                        //           actions: [
+                                        //             Obx(() => Visibility(
+                                        //                 visible:
+                                        //                     buttonVisible.value,
+                                        //                 child: ElevatedButton(
+                                        //                   child: Text("Setuju"),
+                                        //                   onPressed: () {
+                                        //                     boolsk = true;
+                                        //                     print('$boolsk');
+                                        //                   },
+                                        //                 )))
+                                        //           ],
+                                        //         ));
                                       },
                                       child: Text(
                                         "(*) Syarat dan Ketentuan berlaku",
@@ -921,36 +997,36 @@ class _FormDetailOrder extends State<FormInputOrder> {
         positiveText: "OK", positiveAction: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-            flagasuransi: flagasuransi,
-            flagvoucher: flagvoucher,
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            idvoucher: idvoucher,
-            idasuransi: idasuransi,
-            harga_sewa: harganett,
-            harga_awal: harga,
-            diskonn: diskon,
-            durasi_sewa: vdurasi_sewa,
-            valuesewaawal: valueawal,
-            valuesewaakhir: valueakhir,
-            kapasitas: kapasitas,
-            alamat: alamat,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: potonganvoucher,
-            minimum_transaksi: vminimumtransaksi,
-            persentase_voucher: vpersentasevoucher,
-            totalharixharga: totalhariharga.toString(),
-            saldopoint: totaldeposit.toString(),
-            email_asuransi: email_asuransi.toString(),
-            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-            persentase_asuransi: nomasuransi.toString(),
-            minimalsewahari: minimaldeposit,
-            cekout: nilaisetting,
-            cekin: nilaisetting1,
-            lastorder: nilaisetting2,
-            // jenisitem: jenisitem1
-            );
+          flagasuransi: flagasuransi,
+          flagvoucher: flagvoucher,
+          idlokasi: idlokasi,
+          idjenis_produk: idjenis_produk,
+          idvoucher: idvoucher,
+          idasuransi: idasuransi,
+          harga_sewa: harganett,
+          harga_awal: harga,
+          diskonn: diskon,
+          durasi_sewa: vdurasi_sewa,
+          valuesewaawal: valueawal,
+          valuesewaakhir: valueakhir,
+          kapasitas: kapasitas,
+          alamat: alamat,
+          keterangan_barang: _keteranganbarang.text.toString(),
+          nominal_barang: _nominalbarang.text.toString(),
+          nominal_voucher: potonganvoucher,
+          minimum_transaksi: vminimumtransaksi,
+          persentase_voucher: vpersentasevoucher,
+          totalharixharga: totalhariharga.toString(),
+          saldopoint: totaldeposit.toString(),
+          email_asuransi: email_asuransi.toString(),
+          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+          persentase_asuransi: nomasuransi.toString(),
+          minimalsewahari: minimaldeposit,
+          cekout: nilaisetting,
+          cekin: nilaisetting1,
+          lastorder: nilaisetting2,
+          // jenisitem: jenisitem1
+        );
       }));
     });
   }
@@ -966,36 +1042,36 @@ class _FormDetailOrder extends State<FormInputOrder> {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-            flagasuransi: flagasuransi,
-            flagvoucher: flagvoucher,
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            idvoucher: idvoucher,
-            idasuransi: idasuransi,
-            harga_sewa: harganett,
-            harga_awal: harga,
-            diskonn: diskon,
-            durasi_sewa: vdurasi_sewa,
-            valuesewaawal: valueawal,
-            valuesewaakhir: valueakhir,
-            kapasitas: kapasitas,
-            alamat: alamat,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: potonganvoucher,
-            minimum_transaksi: vminimumtransaksi,
-            persentase_voucher: vpersentasevoucher,
-            totalharixharga: totalhariharga.toString(),
-            saldopoint: totaldeposit.toString(),
-            email_asuransi: email_asuransi.toString(),
-            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-            persentase_asuransi: nomasuransi.toString(),
-            minimalsewahari: minimaldeposit,
-            cekout: nilaisetting,
-            cekin: nilaisetting1,
-            lastorder: nilaisetting2,
-            // jenisitem: jenisitem1
-            );
+          flagasuransi: flagasuransi,
+          flagvoucher: flagvoucher,
+          idlokasi: idlokasi,
+          idjenis_produk: idjenis_produk,
+          idvoucher: idvoucher,
+          idasuransi: idasuransi,
+          harga_sewa: harganett,
+          harga_awal: harga,
+          diskonn: diskon,
+          durasi_sewa: vdurasi_sewa,
+          valuesewaawal: valueawal,
+          valuesewaakhir: valueakhir,
+          kapasitas: kapasitas,
+          alamat: alamat,
+          keterangan_barang: _keteranganbarang.text.toString(),
+          nominal_barang: _nominalbarang.text.toString(),
+          nominal_voucher: potonganvoucher,
+          minimum_transaksi: vminimumtransaksi,
+          persentase_voucher: vpersentasevoucher,
+          totalharixharga: totalhariharga.toString(),
+          saldopoint: totaldeposit.toString(),
+          email_asuransi: email_asuransi.toString(),
+          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+          persentase_asuransi: nomasuransi.toString(),
+          minimalsewahari: minimaldeposit,
+          cekout: nilaisetting,
+          cekin: nilaisetting1,
+          lastorder: nilaisetting2,
+          // jenisitem: jenisitem1
+        );
       }));
     });
   }

@@ -58,6 +58,7 @@ dependencies:
   # in_app_update: ^2.0.0
   # get_version: ^0.2.2
   new_version: any
+  get: ^4.1.4
 
 dev_dependencies:
   flutter_test:
