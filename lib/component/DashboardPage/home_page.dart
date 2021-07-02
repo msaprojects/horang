@@ -129,13 +129,6 @@ class _HomePageState extends State<HomePage> {
     //   context: context,
     // ).showAlertIfNecessary();
     // newVersion.showUpdateDialog(VersionStatus());
-    String hai = new HttpClient()
-        .getUrl(Uri.parse('https://server.horang.id/adminmaster/sk.txt'))
-        .then((HttpClientRequest request) => request.close())
-        .then((HttpClientResponse response) =>
-            response.transform(new Utf8Decoder()).listen(print))
-        .toString();
-    print("IYUH : " + hai.toString());
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
@@ -144,10 +137,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));

@@ -24,7 +24,6 @@ import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
-import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/models/xendit.model.dart';
@@ -37,12 +36,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  // final String baseUrl = "http://192.168.1.207:9992/api/";
   final String baseUrl = "https://dev.horang.id:9993/api/";
   // final String baseUrl = "https://server.horang.id:9993/api/";
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";
-  final String UrlFTP = "https://server.horang.id/adminmaster/sk.txt";
+  final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;
@@ -257,15 +255,14 @@ class ApiService {
   }
 
   // CEK LOGIN UUID
-  Future<List<CekLoginUUID>> cekLoginUUID(String uuid) async {
+  Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
     final response = await client.post(
-      "$baseUrl/generateforklift",
+      "$baseUrl/cekuuid",
       headers: {"content-type": "application/json"},
-      body: jsonEncode(
-          {"uuid": "${uuid}"}),
+      body: jsonEncode(uuid),
     );
-    print('isoGAK ${response.body}');
     if (response.statusCode == 200) {
+      print(response.body + " - UUID SAMA");
       return cekLoginUUIDFromJson(response.body);
     } else {
       return null;
@@ -401,7 +398,7 @@ class ApiService {
   //       headers: {"Content-type": "application/json"},
   //       body: generateCodeToJson(data));
   //   print('dollars' + response.body);
-    
+
   //   if (response.statusCode == 200) {
   //     return true;
   //   } else {
@@ -409,12 +406,15 @@ class ApiService {
   //   }
   // }
 
-  Future<List<GenerateCode>> generateCode(String access_token, idtransaksi_det) async {
+  Future<List<GenerateCode>> generateCode(
+      String access_token, idtransaksi_det) async {
     final response = await client.post(
       "$baseUrl/generateforklift",
       headers: {"content-type": "application/json"},
-      body: jsonEncode(
-          {"token": "${access_token}", "idtransaksi_detail": "${idtransaksi_det}"}),
+      body: jsonEncode({
+        "token": "${access_token}",
+        "idtransaksi_detail": "${idtransaksi_det}"
+      }),
     );
     print('isoGAK ${response.body}');
     if (response.statusCode == 200) {

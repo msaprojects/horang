@@ -44,35 +44,6 @@ class _LoginPageState extends State<LoginPage> {
   //FIREBASE
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      GetDeviceID().getDeviceID(context).then((cekuuids) {
-        uuidAnyar = cekuuids;
-        print("JACK2 $uuidAnyar");
-      });
-      FutureBuilder(
-        future: _apiService.cekLoginUUID(uuidAnyar),
-        builder: (BuildContext context, AsyncSnapshot<List> snapshot){
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                  "Something wrong with message: ${snapshot.error.toString()}"),
-            ); 
-          } else if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done){
-            List uidi = snapshot.data;
-            print('mamajo $uidi');
-            if (uidi == uuidAnyar) {
-              infoDialog(context, "gaskan");
-            }
-          }
-        },
-      );
-    });
-
-    print('kriswantoyi $uuidAnyar');
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));

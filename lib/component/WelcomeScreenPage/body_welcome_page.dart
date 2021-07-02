@@ -5,17 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher_icons/main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
+import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/Dummy/dummypin2.dart';
 import 'package:horang/component/Dummy/cobakeyboard.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/deviceinfo.dart';
 import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaml/yaml.dart';
 import 'background_welcome_page.dart';
 import 'package:get_version/get_version.dart';
+import 'package:http/http.dart' as http;
 
 class BodyWelcomePage extends StatefulWidget {
   @override
@@ -31,7 +35,9 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
+  String _uuid = '';
   SharedPreferences sp;
+  ApiService _apiService = new ApiService();
 
   initPlatformState() async {
     String platformVersion;
@@ -126,6 +132,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
+    gettingUUID();
+    checkingUUID(_uuid);
     NewVersion(
       androidId: 'com.cvdtc.horang',
       iOSId: 'com.cvdtc.horang',
@@ -204,17 +212,22 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     onPressed: () {
+                      gettingUUID();
+                      checkingUUID(_uuid);
+                      print('UUID : ' + _uuid);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     }),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               access_token != null
                   ? CircularProgressIndicator(
-                    backgroundColor: Colors.blueAccent,
-                    valueColor: AlwaysStoppedAnimation(Colors.red), 
-                    strokeWidth: 10,
-                  )
+                      backgroundColor: Colors.blueAccent,
+                      valueColor: AlwaysStoppedAnimation(Colors.red),
+                      strokeWidth: 10,
+                    )
                   : Visibility(
                       child: Text(''),
                       visible: false,
@@ -229,5 +242,18 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         // ),
       ),
     );
+  }
+
+  void gettingUUID() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      GetDeviceID().getDeviceID(context).then((cekuuids) {
+        _uuid = cekuuids;
+      });
+    });
+  }
+
+  checkingUUID(String UUID) async {
+    CekLoginUUID uuid = CekLoginUUID(uuid: UUID);
+    _apiService.cekLoginUUID(uuid);
   }
 }
