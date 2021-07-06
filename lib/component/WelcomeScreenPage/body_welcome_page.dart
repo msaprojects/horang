@@ -103,6 +103,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     print("pinnya adalah $pin + $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
+      checkingUUID();
       // Navigator.pushReplacement(
       //     context, MaterialPageRoute(builder: (context) => WelcomePage()));
       return false;
@@ -113,7 +114,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         new Future.delayed(
             const Duration(seconds: 3),
             () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage())));
+                context, MaterialPageRoute(builder: (context) => Pinauth())));
         // Navigator.push(
         //     context,
         //     MaterialPageRoute(
@@ -127,6 +128,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               const Duration(seconds: 3),
               () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Pinauth())));
+          initPlatformState();
         }
       }
     }
@@ -134,10 +136,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
-    gettingUUID();
-    checkingUUID(_uuid);
-    print('UUID  frm init: ' + _uuid + email);
-    print('Email  from init : ' + email);
     Future<String> cekIPublic() async {
       http.Response response =
           await http.get(Uri.encodeFull('https://api.ipify.org'));
@@ -151,8 +149,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       context: context,
     ).showAlertIfNecessary();
     cekToken();
-    initPlatformState();
-    print("cek pin ada nggk yazzz $pin ");
   }
 
   @override
@@ -229,8 +225,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     onPressed: () {
-                      gettingUUID();
-                      checkingUUID(_uuid);
+                      // gettingUUID();
+                      // checkingUUID();
                       print('UUID : ' + _uuid + email);
                       print('Email : ' + email);
                       Navigator.push(
@@ -265,23 +261,25 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     );
   }
 
-  void gettingUUID() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+  checkingUUID() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       GetDeviceID().getDeviceID(context).then((cekuuids) {
         _uuid = cekuuids;
+        CekLoginUUID uuid = CekLoginUUID(uuid: _uuid);
+        _apiService.cekLoginUUID(uuid).then((value) => setState(() {
+              print("HEM : " + value);
+              if (value == "") {
+                email = "";
+              } else {
+                email = value.toString();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            LoginPage(cekUUID: _uuid, email: email)));
+              }
+            }));
       });
     });
-  }
-
-  checkingUUID(String UUID) async {
-    CekLoginUUID uuid = CekLoginUUID(uuid: UUID);
-    _apiService.cekLoginUUID(uuid).then((value) => setState(() {
-          print("HEM : " + value);
-          if (value == "") {
-            email = "";
-          } else {
-            email = value.toString();
-          }
-        }));
   }
 }
