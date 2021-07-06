@@ -111,7 +111,7 @@ class _AccountState extends State<Account> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            "AKUN",
+            "Akun",
             style: TextStyle(color: Colors.black),
           ),
           elevation: 0,

@@ -28,14 +28,14 @@ class BodyWelcomePage extends StatefulWidget {
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
   var pin = '';
-  var access_token = '';
+  var access_token = '', ipPublic;
   bool _showbutton = false;
   String _projectVersion = '';
   String _platformVersion = 'Unknown';
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
-  String _uuid = '';
+  String _uuid = '', email = '';
   SharedPreferences sp;
   ApiService _apiService = new ApiService();
 
@@ -132,6 +132,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
+    Future<String> cekIPublic() async {
+      http.Response response =
+          await http.get(Uri.encodeFull('https://api.ipify.org'));
+      print("mmzzzrr" + response.body);
+      return ipPublic = response.body;
+    }
+
     gettingUUID();
     checkingUUID(_uuid);
     NewVersion(
@@ -164,6 +171,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                 ),
               ),
               Text('Version $_projectVersion'),
+              Text("IP PUBKUC $ipPublic"),
               SizedBox(
                 height: 10,
               ),
@@ -214,9 +222,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                     onPressed: () {
                       gettingUUID();
                       checkingUUID(_uuid);
-                      print('UUID : ' + _uuid);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      print('UUID : ' + _uuid );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginPage(
+                                    cekUUID: _uuid,
+                                  )));
                     }),
               ),
               SizedBox(
@@ -254,6 +266,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   checkingUUID(String UUID) async {
     CekLoginUUID uuid = CekLoginUUID(uuid: UUID);
-    _apiService.cekLoginUUID(uuid);
+    _apiService.cekLoginUUID(uuid.toString());
   }
 }

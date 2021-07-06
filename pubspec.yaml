@@ -30,7 +30,7 @@ dependencies:
   # cupertino_icons: any
   cupertino_icons: 1.0.2
   flushbar: 1.10.4
-  http: ^0.12.2
+  http: any
   shared_preferences: ^0.5.12+4
   # http: ^0.12.1
   # shared_preferences: ^0.5.7

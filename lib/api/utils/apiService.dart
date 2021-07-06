@@ -255,15 +255,18 @@ class ApiService {
   }
 
   // CEK LOGIN UUID
-  Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
+  
+  // Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
+Future<List<CekLoginUUID>> cekLoginUUID(String uuid) async {
     final response = await client.post(
       "$baseUrl/cekuuid",
       headers: {"content-type": "application/json"},
-      body: jsonEncode(uuid),
+      body: jsonEncode({"uuid": uuid}),
     );
     if (response.statusCode == 200) {
       print(response.body + " - UUID SAMA");
       return cekLoginUUIDFromJson(response.body);
+      // return jsonDecode(response.body);
     } else {
       return null;
     }

@@ -101,9 +101,9 @@ class _ResetState extends State<Reset> {
                     minWidth: MediaQuery.of(context).size.width,
                     height: 50,
                     child: RaisedButton(
-                        color: Colors.grey,
+                        color: Colors.blueAccent,
                         child: Text(
-                          'Submit',
+                          'Simpan',
                           style: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {

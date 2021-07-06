@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 // import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -18,11 +19,15 @@ import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
 
 class LoginPage extends StatefulWidget {
+  var cekUUID;
+  LoginPage({this.cekUUID});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future futures;
   ApiService _apiService = ApiService();
   final firebaseMessaging = FirebaseMessaging();
   bool _fieldEmail,
@@ -31,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       _obsecureText = true,
       _checkbio = false;
   String token = "";
-  var iddevice = "", uuidAnyar = "";
+  var iddevice = "", uuidAnyar = "", email = "";
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -44,6 +49,9 @@ class _LoginPageState extends State<LoginPage> {
   //FIREBASE
   @override
   void initState() {
+
+    uuidAnyar = widget.cekUUID;
+    tesUUID(email);
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
@@ -94,6 +102,22 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint('getDataFcm: name: $name & age: $age');
   }
 
+  tesUUID(String hEmail) {
+    return FutureBuilder(
+        future: _apiService.cekLoginUUID(uuidAnyar),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            List<CekLoginUUID> usermail = snapshot.data;
+            print('cek1234 ${snapshot.data[0].email}');
+            email = snapshot.data[0].email;
+            return Text('$email');
+            // return Text('${snapshot.data[0].email}');
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -109,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    tesUUID(email),
                     Text(
                       "Login",
                       style: GoogleFonts.lato(
@@ -150,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                                     print("IDDEVICE : " + iddevice.toString());
                                     _isLoading = true;
                                   });
-                                  String email =
+                                  String emailz =
                                       _controllerEmail.text.toString();
                                   String password =
                                       _controllerPassword.text.toString();
@@ -238,19 +263,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildTextFieldEmail() {
     return TextFieldContainer(
       child: TextField(
+        // enabled: uuidAnyar != "" ? false : true,
         controller: _controllerEmail,
         decoration: InputDecoration(
           icon: Icon(
             Icons.mail,
             color: primaryColor,
           ),
-          hintText: "Email",
+          hintText: uuidAnyar != "" ? email : "Email",
           fillColor: primaryColor,
           border: InputBorder.none,
           errorText:
               _fieldEmail == null || _fieldEmail ? null : "Email Harus Diisi!",
         ),
         onChanged: (value) {
+          value = email;
+          print('value $value + $_fieldEmail + $_controllerEmail');
           bool isFieldValid = value.trim().isNotEmpty;
           if (isFieldValid != _fieldEmail) {
             setState(() => _fieldEmail = isFieldValid);

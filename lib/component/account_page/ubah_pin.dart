@@ -125,64 +125,34 @@ class _UbahPinState extends State<UbahPin> {
               seleksi(),
               Padding(
                 padding: const EdgeInsets.only(top: 9),
-                child: RaisedButton(
-                    child: Text('Simpan'),
-                    onPressed: () {
-                      setState(() {
-                        if (pin == "0") {
-                          // print("cek Tambah pin");
-                          TambahPin_model pintambah = TambahPin_model(
-                              pin: _controllerPassBaru.text.toString(),
-                              token: access_token);
-                          if (widget.ubahPin == null) {
-                            print("cek masuk nggk");
-                            if (_controllerPassBaru.text !=
-                                _controllerPassBaruRetype.text) {
-                                  print("cek masuk nggk1");
-                              return warningDialog(context,
-                                  "PIN baru dan Retype PIN tidak sama");
-                            } else {
-                              print("cek masuk nggk2");
-                              _apiService.TambahPin(pintambah)
-                                  .then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (!isSuccess) {
-                                  print("cek pin ubah3" + pin);
-                                  successDialog(context,
-                                      "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                      showNeutralButton: false,
-                                      positiveText: "Oke", positiveAction: () {
-                                    Keluarr();
-                                  });
-                                } else {
-                                  print("cek pin ubah4" + pin);
-                                  errorDialog(context,
-                                      "Data pin gagal ditambah, silahkan dicek ulang");
-                                }
-                              });
-                            }
-                          }
-                        } else {
-                          Pin_Model pinubah = Pin_Model(
-                              pinlama: _controllerPassLama.text.toString(),
-                              pinbaru: _controllerPassBaru.text.toString(),
-                              token: access_token);
-                          if (widget.ubahPin == null) {
-                            if (_controllerPassLama.text != pin) {
-                              return warningDialog(context,
-                                  "PIN lama yang anda masukkan tidak sama. ");
-                            } else {
+                child: ButtonTheme(
+                  minWidth: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: RaisedButton(
+                      child: Text('Simpan'),
+                      onPressed: () {
+                        setState(() {
+                          if (pin == "0") {
+                            // print("cek Tambah pin");
+                            TambahPin_model pintambah = TambahPin_model(
+                                pin: _controllerPassBaru.text.toString(),
+                                token: access_token);
+                            if (widget.ubahPin == null) {
+                              print("cek masuk nggk");
                               if (_controllerPassBaru.text !=
                                   _controllerPassBaruRetype.text) {
+                                print("cek masuk nggk1");
                                 return warningDialog(context,
                                     "PIN baru dan Retype PIN tidak sama");
                               } else {
-                                _apiService.UbahPin(pinubah).then((isSuccess) {
+                                print("cek masuk nggk2");
+                                _apiService.TambahPin(pintambah)
+                                    .then((isSuccess) {
                                   setState(() => _isLoading = false);
-                                  if (isSuccess) {
+                                  if (!isSuccess) {
                                     print("cek pin ubah3" + pin);
                                     successDialog(context,
-                                        "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                        "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
                                         showNeutralButton: false,
                                         positiveText: "Oke",
                                         positiveAction: () {
@@ -191,15 +161,51 @@ class _UbahPinState extends State<UbahPin> {
                                   } else {
                                     print("cek pin ubah4" + pin);
                                     errorDialog(context,
-                                        "Data pin gagal diubah, silahkan dicek ulang");
+                                        "Data pin gagal ditambah, silahkan dicek ulang");
                                   }
                                 });
                               }
                             }
+                          } else {
+                            Pin_Model pinubah = Pin_Model(
+                                pinlama: _controllerPassLama.text.toString(),
+                                pinbaru: _controllerPassBaru.text.toString(),
+                                token: access_token);
+                            if (widget.ubahPin == null) {
+                              if (_controllerPassLama.text != pin) {
+                                return warningDialog(context,
+                                    "PIN lama yang anda masukkan tidak sama. ");
+                              } else {
+                                if (_controllerPassBaru.text !=
+                                    _controllerPassBaruRetype.text) {
+                                  return warningDialog(context,
+                                      "PIN baru dan Retype PIN tidak sama");
+                                } else {
+                                  _apiService.UbahPin(pinubah)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      print("cek pin ubah3" + pin);
+                                      successDialog(context,
+                                          "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                          showNeutralButton: false,
+                                          positiveText: "Oke",
+                                          positiveAction: () {
+                                        Keluarr();
+                                      });
+                                    } else {
+                                      print("cek pin ubah4" + pin);
+                                      errorDialog(context,
+                                          "Data pin gagal diubah, silahkan dicek ulang");
+                                    }
+                                  });
+                                }
+                              }
+                            }
                           }
-                        }
-                      });
-                    }),
+                        });
+                      }),
+                ),
               )
             ],
           )),
