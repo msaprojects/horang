@@ -44,6 +44,7 @@ class ApiService {
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;
+  CekLoginUUID emailuuid;
   OrderSukses orderSukses = OrderSukses();
   List<Customers> _data = [];
   List<Customers> get datacus => _data;
@@ -255,20 +256,20 @@ class ApiService {
   }
 
   // CEK LOGIN UUID
-  
+
   // Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
-Future<List<CekLoginUUID>> cekLoginUUID(String uuid) async {
+  Future<String> cekLoginUUID(CekLoginUUID uuid) async {
     final response = await client.post(
       "$baseUrl/cekuuid",
       headers: {"content-type": "application/json"},
-      body: jsonEncode({"uuid": uuid}),
+      body: cekLoginUUIDCodeToJson(uuid),
     );
     if (response.statusCode == 200) {
-      print(response.body + " - UUID SAMA");
-      return cekLoginUUIDFromJson(response.body);
-      // return jsonDecode(response.body);
+//      print(response.body + " - UUID SAMA - " + response.statusCode.toString());
+      print("YUHUU : " + response.body);
+      return response.body;
     } else {
-      return null;
+      return "";
     }
   }
 

@@ -35,9 +35,11 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
-  String _uuid = '', email = '';
+  String _uuid = '';
   SharedPreferences sp;
   ApiService _apiService = new ApiService();
+  String email = "";
+  // var email = _apiService().emailuuid.email;
 
   initPlatformState() async {
     String platformVersion;
@@ -132,6 +134,10 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
+    gettingUUID();
+    checkingUUID(_uuid);
+    print('UUID  frm init: ' + _uuid + email);
+    print('Email  from init : ' + email);
     Future<String> cekIPublic() async {
       http.Response response =
           await http.get(Uri.encodeFull('https://api.ipify.org'));
@@ -139,8 +145,6 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
       return ipPublic = response.body;
     }
 
-    gettingUUID();
-    checkingUUID(_uuid);
     NewVersion(
       androidId: 'com.cvdtc.horang',
       iOSId: 'com.cvdtc.horang',
@@ -149,6 +153,11 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     cekToken();
     initPlatformState();
     print("cek pin ada nggk yazzz $pin ");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -222,13 +231,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                     onPressed: () {
                       gettingUUID();
                       checkingUUID(_uuid);
-                      print('UUID : ' + _uuid );
+                      print('UUID : ' + _uuid + email);
+                      print('Email : ' + email);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginPage(
-                                    cekUUID: _uuid,
-                                  )));
+                              builder: (context) =>
+                                  LoginPage(cekUUID: _uuid, email: email)));
                     }),
               ),
               SizedBox(
@@ -266,6 +275,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   checkingUUID(String UUID) async {
     CekLoginUUID uuid = CekLoginUUID(uuid: UUID);
-    _apiService.cekLoginUUID(uuid.toString());
+    _apiService.cekLoginUUID(uuid).then((value) => setState(() {
+          print("HEM : " + value);
+          if (value == "") {
+            email = "";
+          } else {
+            email = value.toString();
+          }
+        }));
   }
 }

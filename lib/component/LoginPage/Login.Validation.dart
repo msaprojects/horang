@@ -7,11 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
-// import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
-// import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
-// import 'package:horang/component/account_page/AccountChecker.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
@@ -19,8 +16,8 @@ import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
 
 class LoginPage extends StatefulWidget {
-  var cekUUID;
-  LoginPage({this.cekUUID});
+  var cekUUID, email;
+  LoginPage({this.cekUUID, this.email});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -36,7 +33,11 @@ class _LoginPageState extends State<LoginPage> {
       _obsecureText = true,
       _checkbio = false;
   String token = "";
-  var iddevice = "", uuidAnyar = "", email = "";
+  var iddevice = "",
+      uuidAnyar = "",
+      email = "",
+      emailaccountselection = "",
+      emaile;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -49,19 +50,24 @@ class _LoginPageState extends State<LoginPage> {
   //FIREBASE
   @override
   void initState() {
-
     uuidAnyar = widget.cekUUID;
-    tesUUID(email);
+    emaile = widget.email;
+    setState(() {
+      if (emaile == "") {
+        emailaccountselection = _controllerEmail.text.toString();
+      } else {
+        emailaccountselection = emaile.toString();
+      }
+    });
+
+    print("askj : " + emailaccountselection.toString());
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
-        // getDataFcm(message);
-        print("OS : " + Platform.operatingSystem);
         if (Platform.isIOS) {
-          print('HMM : ' + Platform.operatingSystem == 'ios');
           successDialog(context, message['alert']['body'],
               title: message['alert']['title']);
         } else if (Platform.isAndroid) {
@@ -88,6 +94,11 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void getDataFcm(Map<String, dynamic> message) {
     String name = '';
     String age = '';
@@ -100,22 +111,6 @@ class _LoginPageState extends State<LoginPage> {
       age = data['body'];
     }
     debugPrint('getDataFcm: name: $name & age: $age');
-  }
-
-  tesUUID(String hEmail) {
-    return FutureBuilder(
-        future: _apiService.cekLoginUUID(uuidAnyar),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            List<CekLoginUUID> usermail = snapshot.data;
-            print('cek1234 ${snapshot.data[0].email}');
-            email = snapshot.data[0].email;
-            return Text('$email');
-            // return Text('${snapshot.data[0].email}');
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
   }
 
   @override
@@ -133,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    tesUUID(email),
+                    Text(emaile),
                     Text(
                       "Login",
                       style: GoogleFonts.lato(
@@ -142,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    _buildTextFieldEmail(),
+                    emaile == "" ? _buildTextFieldEmail() : Text(emaile),
                     _buildTextFieldPassword(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
@@ -164,9 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                               setState(() {
                                 iddevice = ids;
                                 print('cek uudi $iddevice');
-                                if (_fieldEmail == null ||
+                                if (emailaccountselection == null ||
+                                    emailaccountselection == "" ||
                                     _fieldPassword == null ||
-                                    !_fieldEmail ||
                                     !_fieldPassword) {
                                   warningDialog(
                                       context, "Pastikan Semua Kolom Terisi!");
@@ -175,18 +170,19 @@ class _LoginPageState extends State<LoginPage> {
                                     print("IDDEVICE : " + iddevice.toString());
                                     _isLoading = true;
                                   });
-                                  String emailz =
-                                      _controllerEmail.text.toString();
+                                  // String emailz =
+                                  //     _controllerEmail.text.toString();
                                   String password =
                                       _controllerPassword.text.toString();
                                   PenggunaModel pengguna = PenggunaModel(
                                       uuid: iddevice,
-                                      email: email,
+                                      email: emailaccountselection.toString(),
                                       password: password,
                                       status: 0,
                                       notification_token: token,
                                       token_mail: "0",
                                       keterangan: "Uji Coba");
+                                  print("LOGIN? : " + pengguna.toString());
                                   _apiService
                                       .loginIn(pengguna)
                                       .then((isSuccess) {
@@ -270,15 +266,13 @@ class _LoginPageState extends State<LoginPage> {
             Icons.mail,
             color: primaryColor,
           ),
-          hintText: uuidAnyar != "" ? email : "Email",
+          hintText: uuidAnyar != "" ? emailaccountselection : "Email",
           fillColor: primaryColor,
           border: InputBorder.none,
           errorText:
               _fieldEmail == null || _fieldEmail ? null : "Email Harus Diisi!",
         ),
         onChanged: (value) {
-          value = email;
-          print('value $value + $_fieldEmail + $_controllerEmail');
           bool isFieldValid = value.trim().isNotEmpty;
           if (isFieldValid != _fieldEmail) {
             setState(() => _fieldEmail = isFieldValid);
