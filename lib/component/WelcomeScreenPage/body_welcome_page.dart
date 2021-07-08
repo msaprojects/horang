@@ -38,7 +38,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   String _uuid = '';
   SharedPreferences sp;
   ApiService _apiService = new ApiService();
-  String email = "";
+  String email = "", nama = "";
   // var email = _apiService().emailuuid.email;
 
   initPlatformState() async {
@@ -233,7 +233,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LoginPage(cekUUID: _uuid, email: email)));
+                                  LoginPage(cekUUID: _uuid, email: email, nama: nama)));
                     }),
               ),
               SizedBox(
@@ -271,12 +271,13 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               if (value == "") {
                 email = "";
               } else {
-                email = value.toString();
+                email = value.split(":")[0].toString();
+                nama = value.split(":")[1].toString();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            LoginPage(cekUUID: _uuid, email: email)));
+                            LoginPage(cekUUID: _uuid, email: email, nama: nama)));
               }
             }));
       });
