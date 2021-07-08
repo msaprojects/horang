@@ -12,7 +12,8 @@ class PostProdukModel {
         token: map["token"],
         tanggalawal: map['tanggal_mulai'],
         tanggalakhir: map['tanggal_akhir'],
-        idlokasi: map['idlokasi']);
+        idlokasi: map['idlokasi'],
+        );
   }
 
   Map<String, dynamic> toJson() {
@@ -20,7 +21,7 @@ class PostProdukModel {
       "token": token,
       "tanggal_mulai": tanggalawal,
       "tanggal_akhir": tanggalakhir,
-      "idlokasi": idlokasi
+      "idlokasi": idlokasi,
     };
   }
 

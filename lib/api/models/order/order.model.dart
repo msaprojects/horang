@@ -21,7 +21,9 @@ class OrderProduk {
       persentase_asuransi,
       no_ovo,
       minimalsewahari,
-      totaldeposit;
+      totaldeposit
+      // jenisitem
+      ;
 
   OrderProduk(
       {this.token,
@@ -49,7 +51,8 @@ class OrderProduk {
       this.persentase_asuransi,
       this.no_ovo,
       this.minimalsewahari,
-      this.totaldeposit //as nominal minimum deposit
+      this.totaldeposit, //as nominal minimum deposit
+      // this.jenisitem
       });
 
   factory OrderProduk.fromJson(Map<String, dynamic> map) {
@@ -80,6 +83,7 @@ class OrderProduk {
       no_ovo: map["no_ovo"],
       minimalsewahari: map["minimalsewahari"],
       totaldeposit: map["totaldeposit"], //as nominal minimum deposit
+      // jenisitem: map['jenisitem']
     );
   }
 
@@ -111,6 +115,7 @@ class OrderProduk {
       "no_ovo": no_ovo,
       "minimalsewahari": minimalsewahari,
       "totaldeposit": totaldeposit, //as nominal minimum deposit
+      // "jenisitem": jenisitem
     };
   }
 

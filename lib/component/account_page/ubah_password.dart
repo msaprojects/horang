@@ -134,62 +134,70 @@ class _UbahPassState extends State<UbahPass> {
                 _buildTextFieldRetypePassBaru(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: RaisedButton(
-                    child: Text("simpan"),
-                    onPressed: () {
-                      if (!tekan1x) {
+                  child: ButtonTheme(
+                    minWidth: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text("Simpan"),
+                      onPressed: () {
+                        // if (!tekan1x) {
                         // return warningDialog(context, "tekan lebih 1x");
-                        return true;
-                      }
-                      tekan1x = false;
-                      // warningDialog(context, "tes aja");
-                      if (_isFieldpassLama == null ||
-                          _isFieldpassBaru == null ||
-                          !_isFieldpassLama ||
-                          !_isFieldpassBaru) {
-                        _scaffoldState.currentState.showSnackBar(SnackBar(
-                          content: Text("Please Fill all field"),
-                        ));
-                        return;
-                      }
-                      setState(() => _isLoading = true);
-                      Password password = Password(
-                          passwordlama: _controllerPasslama.text.toString(),
-                          passwordbaru: _controllerPassbaru.text.toString(),
-                          token: access_token);
-                      if (_controllerPassbaru.text !=
-                          _controllerPassretype.text) {
-                        return warningDialog(context,
-                            "Password baru tidak sama dengan retype password");
-                      } else {
-                        _apiService.UbahPassword(password).then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          print("dede ${_apiService.responseCode}");
-                          if (isSuccess) {
-                            print("sukses");
-                            successDialog(
-                                context, "Ubah password berhasil disimpan",
-                                showNeutralButton: false,
-                                positiveText: "Okeh", positiveAction: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) => Home(
-                                            initIndexHome: 0,
-                                          )),
-                                  (Route<dynamic> route) => false);
-                            });
-                          } else {
-                            if (_apiService.responseCode == "401") {
+                        //   return true;
+                        // }
+                        // tekan1x = false;
+                        // warningDialog(context, "tes aja");
+                        if (_isFieldpassLama == null ||
+                            _isFieldpassBaru == null ||
+                            !_isFieldpassLama ||
+                            !_isFieldpassBaru) {
+                          _scaffoldState.currentState.showSnackBar(SnackBar(
+                            content: Text("Please Fill all field"),
+                          ));
+                          // return;
+                        }
+                        setState(() => _isLoading = true);
+                        Password password = Password(
+                            passwordlama: _controllerPasslama.text.toString(),
+                            passwordbaru: _controllerPassbaru.text.toString(),
+                            token: access_token);
+                        print("MUI $password");
+                        if (_controllerPassbaru.text !=
+                            _controllerPassretype.text) {
+                          warningDialog(context,
+                              "Password baru tidak sama dengan retype password",
+                              showNeutralButton: false,
+                              positiveText: 'Ok',
+                              positiveAction: () {});
+                        } else {
+                          _apiService.UbahPassword(password).then((isSuccess) {
+                            setState(() => _isLoading = false);
+                            print("dede ${_apiService.responseCode}");
+                            if (isSuccess) {
+                              print("sukses");
+                              successDialog(
+                                  context, "Ubah password berhasil disimpan",
+                                  showNeutralButton: false,
+                                  positiveText: "Okeh", positiveAction: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) => Home(
+                                              initIndexHome: 0,
+                                            )),
+                                    (Route<dynamic> route) => false);
+                              });
+                            } else {
+                              if (_apiService.responseCode == "401") {
+                                errorDialog(context,
+                                    "Password lama yang anda masukkan salah.");
+                              }
                               errorDialog(context,
-                                  "Password lama yang anda masukkan salah.");
+                                  "Ubah Password gagal disimpan, silahkan dicek ulang");
                             }
-                            errorDialog(context,
-                                "Ubah Password gagal disimpan, silahkan dicek ulang");
-                          }
-                        });
-                      }
-                    },
+                          });
+                        }
+                      },
+                    ),
                   ),
                 )
               ],

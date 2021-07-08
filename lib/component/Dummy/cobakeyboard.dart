@@ -133,11 +133,11 @@ class _CobaKeyboardState extends State<CobaKeyboard> {
                               showNeutralButton: false, positiveAction: () {
                             // _deleteAppDir();
                             // _deleteCacheDir();
-                            Navigator.of(context).pushAndRemoveUntil(
+                            Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        LoginPage()),
-                                (Route<dynamic> route) => false);
+                                        LoginPage()));
+                                // (Route<dynamic> route) => false);
                           }, positiveText: "Ok");
                         }
                       }));

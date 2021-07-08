@@ -68,7 +68,7 @@ class ReusableClasses {
             nominalV)
         .toStringAsFixed(2);
 
-    return hasilperhitungan;
+   return hasilperhitungan;
   }
 
   hitungvoucher(

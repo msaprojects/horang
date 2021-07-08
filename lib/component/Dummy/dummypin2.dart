@@ -12,6 +12,8 @@ import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../screen/welcome_page.dart';
+
 class Pinauth extends StatefulWidget {
   @override
   _PinauthState createState() => _PinauthState();
@@ -71,6 +73,23 @@ class _OtpScreenState extends State<OtpScreen> {
   //   }
   // }
 
+   void Keluarr() async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      cekToken();
+      _apiService.logout(access_token).then((value) => setState(() {
+            isSuccess = value;
+            if (isSuccess) {
+              preferences.clear();
+              if (preferences.getString("access_token") == null) {
+                print("SharePref berhasil di hapus");
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                    (route) => false);
+              }
+            }
+          }));
+    }
+
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
     bool canCheckBiometrics;
@@ -113,11 +132,9 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {
       autherized = authenticated ? "Auth sukses" : "gagal konfirm";
       if (access_token != "" && authenticated) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Home()),
+            (Route<dynamic> route) => false);
       } else {
         print('Moh. Salah');
       }
@@ -160,13 +177,14 @@ class _OtpScreenState extends State<OtpScreen> {
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
                               title: "Sesi anda berakhir 1!",
                               showNeutralButton: false, positiveAction: () {
+                                Keluarr();
                             // _deleteAppDir();
                             // _deleteCacheDir();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        LoginPage()),
-                                (Route<dynamic> route) => false);
+                            // Navigator.of(context).pushReplacement(
+                            //     MaterialPageRoute(
+                            //         builder: (BuildContext context) =>
+                            //             WelcomePage()));
+                                // (Route<dynamic> route) => false);
                           }, positiveText: "Ok");
                         }
                       }));
@@ -452,10 +470,10 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         print("Cek pin: $strpin");
         Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
-            pin_cek: strpin,
-            token_cek: access_token,
-            // token_notifikasi: token_notifikasi
-            );
+          pin_cek: strpin,
+          token_cek: access_token,
+          // token_notifikasi: token_notifikasi
+        );
         print("pin 99 $pin_cek1");
         print("Cek PIN masuk maskuh: $pin_cek1");
         _apiService.CekPin(pin_cek1).then((isSuccess) {
@@ -566,10 +584,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()),
-                    (Route<dynamic> route) => false);
+                Navigator.of(context).pop();
               }),
         )
       ],

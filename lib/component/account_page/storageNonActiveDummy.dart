@@ -11,18 +11,18 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StorageNonActive1 extends StatefulWidget {
+class Sksk extends StatefulWidget {
   final TabController tabController1;
-  const StorageNonActive1({Key key, this.tabController1}) : super(key: key);
+  const Sksk({Key key, this.tabController1}) : super(key: key);
   @override
   _StorageNonActive createState() => _StorageNonActive();
 }
 
-class _StorageNonActive extends State<StorageNonActive1> {
+class _StorageNonActive extends State<Sksk> {
   bool isLoading = false;
   SharedPreferences sp;
   ApiService _apiService = ApiService();
-  bool isSuccess = false;
+  bool isSuccess = false, _loading = true;
   var access_token,
       refresh_token,
       idcustomer,
@@ -39,7 +39,8 @@ class _StorageNonActive extends State<StorageNonActive1> {
       hari,
       aktif;
 
-      List<MystorageModel> ngeList = List<MystorageModel>();
+  List<MystorageModel> ngeList = <MystorageModel>[];
+  List<MystorageModel> ngeList1 = <MystorageModel>[];
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -83,6 +84,13 @@ class _StorageNonActive extends State<StorageNonActive1> {
 
   @override
   void initState() {
+    // _apiService.listMystorage(access_token).then((value) {
+    //   setState(() {
+    //     ngeList.addAll(value);
+    //     ngeList1 = ngeList;
+    //   });
+    // });
+    // _loading = false;
     super.initState();
     cekToken();
   }
@@ -102,7 +110,10 @@ class _StorageNonActive extends State<StorageNonActive1> {
             } else if (snapshot.connectionState == ConnectionState.done) {
               // List<MystorageModel> profiles =
               //     snapshot.data.where((i) => i.status == "NONAKTIF").toList();
-              var profiles = ngeList = snapshot.data.where((element) => element.status == "NONAKTIF").toList();
+              var profiles = ngeList = snapshot.data
+                  .where((element) => element.status == "NONAKTIF")
+                  .toList();
+              // print('profilezz'+ ngeList1.toString());
               if (profiles.isNotEmpty) {
                 return _buildListview(profiles);
               } else {
@@ -131,174 +142,176 @@ class _StorageNonActive extends State<StorageNonActive1> {
             }
           }),
     );
-  }  
+  }
 
-  _searchBar(){
+  _searchBar() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-        decoration: InputDecoration(
-          hintText: 'Cari...'
-        ),
+        decoration: InputDecoration(hintText: 'Cari...'),
+        onChanged: (text) {
+          text = text.toLowerCase();
+          setState(() {
+            print('tes1 $ngeList');
+            ngeList1 = ngeList.where((element){
+                var posjudul = element.noOrder.toLowerCase();
+                print('dapat apa ?? ${posjudul.toLowerCase()} -- $text');
+                return posjudul.contains(text);
+              }).toList();
+            });
+            //   var posjudul = element.noOrder.toLowerCase();
+            //   return posjudul.contains(text);
+            // }).toList();
+          // });
+        },
       ),
-      );
+    );
   }
 
   Widget _buildListview(List<MystorageModel> dataIndex) {
     return Scaffold(
-      body: Column(
+      body: ListView.builder(
+        itemCount: ngeList.length + 1,
+        itemBuilder: (context, index) {
+          print("wkwkwkw $index");
+          return index == 0 ? _searchBar() : listItem(index -1);
+          // MystorageModel myStorage = ngeList[index];
+          // if (!_loading) {
+          //   if (ngeList.length > 0){
+          //   // return listItem(index);
+          //   return index == 0 ? _searchBar() : listItem(index - 1);
+          // } else {
+          //   return Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // }
+        },
+      ),
+    );
+  }
+
+  listItem(index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() => isLoading = true);
+        if (idcustomer == "0") {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(
+                'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+            duration: Duration(seconds: 10),
+          ));
+        } else {
+          _openAlertDialog(
+            context,
+            ngeList[index].idtransaksi_detail,
+            ngeList[index].noOrder.toString(),
+            ngeList[index].kode_kontainer.toString(),
+            ngeList[index].nama_kota,
+            ngeList[index].nama,
+            ngeList[index].nama_lokasi.toString(),
+            ngeList[index].keterangan,
+            ngeList[index].tanggal_order,
+            ngeList[index].tanggal_mulai,
+            ngeList[index].tanggal_akhir,
+            ngeList[index].hari.toString(),
+          );
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Container(
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 30),
-                color: Colors.grey[100],
-                child: ListView.builder(
-                  itemCount: dataIndex == null ? 0 : dataIndex.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    MystorageModel myStorage = dataIndex[index];
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() => isLoading = true);
-                        if (idcustomer == "0") {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                            duration: Duration(seconds: 10),
-                          ));
-                        } else {
-                          _openAlertDialog(
-                            context,
-                            myStorage.idtransaksi_detail,
-                            myStorage.noOrder.toString(),
-                            myStorage.kode_kontainer.toString(),
-                            myStorage.nama_kota,
-                            myStorage.nama,
-                            myStorage.nama_lokasi.toString(),
-                            myStorage.keterangan,
-                            myStorage.tanggal_order,
-                            myStorage.tanggal_mulai,
-                            myStorage.tanggal_akhir,
-                            myStorage.hari.toString(),
-                          );
-                        }
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Card(
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.all(20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'No. Order : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                myStorage.noOrder.toString(),
-                                                style: GoogleFonts.inter(
-                                                    fontSize: 14),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'Kode Kontainer : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.kode_kontainer,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'Jenis Kontainer : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.nama,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
-                                              'Lokasi : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.idtransaksi_detail.toString(),
-                                              // myStorage.nama_lokasi,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Text(
-                                            "Ketuk untuk detail...",
-                                            style: GoogleFonts.lato(
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    // );
-                                    //   },
-                                    // ),
-                                  ),
-                                ),
-                              ],
+          Card(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'No. Order : ',
+                              style: GoogleFonts.inter(fontSize: 14),
                             ),
+                            Flexible(
+                              child: Text(
+                                ngeList[index].noOrder.toString(),
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Kode Kontainer : ',
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                            Text(
+                              ngeList[index].kode_kontainer,
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Jenis Kontainer : ',
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                            Text(
+                              ngeList[index].nama,
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
+                              'Lokasi : ',
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                            Text(
+                              ngeList[index].idtransaksi_detail.toString(),
+                              // myStorage.nama_lokasi,
+                              style: GoogleFonts.inter(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            "Ketuk untuk detail...",
+                            style: GoogleFonts.lato(
+                                fontSize: 12, fontStyle: FontStyle.italic),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                )),
-              ),
+                        )
+                      ],
+                    ),
+                    // );
+                    //   },
+                    // ),
+                  ),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );

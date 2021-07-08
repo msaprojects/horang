@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,16 +9,21 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
-import 'package:horang/component/Dummy/cobakeyboard.dart';
-import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/component/LogPage/log_aktifitas.dart';
+// import 'package:horang/component/Dummy/cobakeyboard.dart';
+// import 'package:horang/component/HistoryPage/historypage.dart';
+// import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
+// import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
+// import 'package:http/http.dart' as http;
+
+// import '../../widget/bottom_nav.dart';
+import '../StoragePage/StorageHandler.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -40,7 +47,8 @@ class _HomePageState extends State<HomePage> {
       nama_customer,
       nama,
       pin,
-      ceksaldo;
+      ceksaldo,
+      sk;
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -52,6 +60,13 @@ class _HomePageState extends State<HomePage> {
     }
     return result;
   }
+
+  // Future<String> _ambildataSK() async {
+  //   http.Response response = await http
+  //       .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
+  //   print("mmzzzrr" + response.body);
+  //   return sk = response.body;
+  // }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -108,9 +123,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    // NewVersion(
+    //   androidId: 'com.cvdtc.horang',
+    //   // iOSId: ,
+    //   context: context,
+    // ).showAlertIfNecessary();
+    // newVersion.showUpdateDialog(VersionStatus());
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
+    // _ambildataSK();
+    // ReusableClasses().sk();
+  }
+
+  @override
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
   }
 
   Future refreshData() async {
@@ -271,18 +300,14 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        CobaKeyboard()));
-                                            // Scaffold.of(context)
-                                            //     .showSnackBar(SnackBar(
-                                            //   content: Text(
-                                            //       "Fitur ini masih dalam proses pengembangan"),
-                                            //   duration: Duration(seconds: 5),
-                                            // ));
+                                            // print(_ambildataSK());
+                                            // popUpsk(context);
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Fitur ini masih dalam proses pengembangan"),
+                                              duration: Duration(seconds: 5),
+                                            ));
                                           }),
                                       Text(
                                         "Histori",
@@ -308,28 +333,24 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Container(
+                padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-                      child: Text(
-                        'Kontainer Aktif',
-                        style: mTitleStyle,
-                      ),
+                    Text(
+                      'Kontainer Aktif',
+                      style: mTitleStyle,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                      child: SelectableText(
-                        "See All...",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StorageActive()));
-                        },
-                      ),
+                    SelectableText(
+                      "See All...",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StorageActive()));
+                      },
                     ),
                   ],
                 ),
@@ -368,11 +389,11 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    // StorageHandler(
-                                    //       initialIndex: 2,
-                                    //     )
-                                    HistoryPage()));
+                                builder: (context) => StorageHandler(
+                                      initialIndex: 2,
+                                    )
+                                // HistoryPage()
+                                ));
                       },
                     ),
                   ],
@@ -395,6 +416,36 @@ class _HomePageState extends State<HomePage> {
             title: Text("Sesi Anda Berakhir!"),
             content: Text(
                 "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
+        });
+  }
+
+  Future popUpsk(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            // content: Text("$sk"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      // height: 200,
+                      // width: 400,
+                      child: Text("$sk")),
+                ],
+              ),
+            ),
             actions: [
               FlatButton(
                   color: Colors.red,

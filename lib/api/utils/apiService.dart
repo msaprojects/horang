@@ -7,6 +7,7 @@ import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/models/log/Log.dart';
+import 'package:horang/api/models/log/generateKode.model.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/models/log/openLog.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
@@ -14,13 +15,14 @@ import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
+import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
+import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
-import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
@@ -34,12 +36,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  // final String baseUrl = "http://192.168.1.207:9992/api/";
-  // final String baseUrl = "https://dev.horang.id:9993/api/";
-  final String baseUrl = "https://server.horang.id:9993/api/";
+  final String baseUrl = "https://dev.horang.id:9993/api/";
+  // final String baseUrl = "https://server.horang.id:9993/api/";
+  final String baseUrlVA =
+      "https://api.xendit.co/available_virtual_account_banks/";
+  final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;
+  CekLoginUUID emailuuid;
   OrderSukses orderSukses = OrderSukses();
   List<Customers> _data = [];
   List<Customers> get datacus => _data;
@@ -79,6 +84,7 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
+    print('rampage' + response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -94,6 +100,7 @@ class ApiService {
       body: PostProdukModelToJson(data),
     );
     // response.body;
+    print('rampage1' + response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -141,6 +148,24 @@ class ApiService {
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return paymentgatewayFromJson(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<PaymentGatewayVirtualAccount>> listPaymentGatewayVA() async {
+    String username =
+        'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
+    String password = '';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final response = await client.get("$baseUrlVA", headers: {
+      "content-type": "application/json",
+      "Authorization": basicAuth
+    });
+    print("aman ?" + response.body);
+    if (response.statusCode == 200) {
+      return paymentgatewayVAFromJson(response.body);
     } else {
       return null;
     }
@@ -230,6 +255,24 @@ class ApiService {
     }
   }
 
+  // CEK LOGIN UUID
+
+  // Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
+  Future<String> cekLoginUUID(CekLoginUUID uuid) async {
+    final response = await client.post(
+      "$baseUrl/cekuuid",
+      headers: {"content-type": "application/json"},
+      body: cekLoginUUIDCodeToJson(uuid),
+    );
+    if (response.statusCode == 200) {
+//      print(response.body + " - UUID SAMA - " + response.statusCode.toString());
+      print("YUHUU : " + response.body);
+      return response.body;
+    } else {
+      return "";
+    }
+  }
+
 //  ORDER PRODUK
   Future<int> tambahOrderProduk(OrderProduk data) async {
     final response = await client.post(
@@ -237,7 +280,10 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
-    print(response.statusCode.toString() + " ~ " + response.body.toString());
+    print("helloworld" +
+        response.statusCode.toString() +
+        " ~ " +
+        response.body.toString());
     if (response.statusCode == 200) {
       return int.parse(response.body.split(" : ")[1]);
     } else if (response.statusCode == 204) {
@@ -347,6 +393,38 @@ class ApiService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  // Future<bool> generateCode(GenerateCode data) async {
+  //   // Future<GenerateCode> generateKodeForklift(String token) async {
+  //   final response = await client.post("$baseUrl/generateforklift",
+  //       headers: {"Content-type": "application/json"},
+  //       body: generateCodeToJson(data));
+  //   print('dollars' + response.body);
+
+  //   if (response.statusCode == 200) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  Future<List<GenerateCode>> generateCode(
+      String access_token, idtransaksi_det) async {
+    final response = await client.post(
+      "$baseUrl/generateforklift",
+      headers: {"content-type": "application/json"},
+      body: jsonEncode({
+        "token": "${access_token}",
+        "idtransaksi_detail": "${idtransaksi_det}"
+      }),
+    );
+    print('isoGAK ${response.body}');
+    if (response.statusCode == 200) {
+      return generateCodeFromJson(response.body);
+    } else {
+      return null;
     }
   }
 
