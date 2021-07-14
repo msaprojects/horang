@@ -2,10 +2,10 @@ import 'dart:convert';
 
 class PostProdukModel {
   int idlokasi;
-  String token, tanggalawal, tanggalakhir;
+  String token, tanggalawal, tanggalakhir, jenisitem;
 
   PostProdukModel(
-      {this.token, this.tanggalawal, this.tanggalakhir, this.idlokasi = 0});
+      {this.token, this.tanggalawal, this.tanggalakhir, this.idlokasi = 0, this.jenisitem});
 
   factory PostProdukModel.fromJson(Map<String, dynamic> map) {
     return PostProdukModel(
@@ -13,6 +13,7 @@ class PostProdukModel {
         tanggalawal: map['tanggal_mulai'],
         tanggalakhir: map['tanggal_akhir'],
         idlokasi: map['idlokasi'],
+        jenisitem: map['jenisitem']
         );
   }
 
@@ -22,12 +23,13 @@ class PostProdukModel {
       "tanggal_mulai": tanggalawal,
       "tanggal_akhir": tanggalakhir,
       "idlokasi": idlokasi,
+      "jenisitem": jenisitem,
     };
   }
 
   @override
   String toString() {
-    return 'PostProdukModel{token: $token, tanggal_mulai: $tanggalawal, tanggal_akhir:$tanggalakhir, idlokasi:$idlokasi}';
+    return 'PostProdukModel{token: $token, tanggal_mulai: $tanggalawal, tanggal_akhir:$tanggalakhir, idlokasi:$idlokasi, jenisitem:$jenisitem}';
   }
 }
 

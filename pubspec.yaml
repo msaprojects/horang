@@ -48,10 +48,10 @@ dependencies:
   numeric_keyboard: ^1.1.0
   pin_code_view: 0.2.1
   commons: ^0.7.8+3
-  syncfusion_flutter_datepicker: ^18.4.49-beta
+  syncfusion_flutter_datepicker: ^19.2.46
   fluttertoast: 7.1.6
   firebase_messaging: ^7.0.3
-  intl: ^0.16.1
+    
   imei_plugin: ^1.2.0
   grouped_list: 4.0.0
   ffi: ^1.0.0

@@ -228,13 +228,20 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) => Home()));
                                     } else {
-                                      warningDialog(context,
-                                          "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",
-                                          showNeutralButton: false,
-                                          positiveText: "Oke",
-                                          positiveAction: () {
-                                        closeApp();
-                                      }, title: "Warning!");
+                                      if (_apiService.responseCode.mMessage ==
+                                          "Email atau Password anda Salah! ") {
+                                        warningDialog(context,
+                                            "${_apiService.responseCode.mMessage}",
+                                            title: "Warning!");
+                                      } else {
+                                        warningDialog(context,
+                                            "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",
+                                            showNeutralButton: false,
+                                            positiveText: "Oke",
+                                            positiveAction: () {
+                                          closeApp();
+                                        }, title: "Warning!");
+                                      }
                                     }
                                   });
                                 }

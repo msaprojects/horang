@@ -44,13 +44,16 @@ class _ProdukList extends State<ProdukList> {
   DateTime dtAwal, dtAkhir, _date1, _date2;
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
-  String string = DateFormat.yMMMd().add_Hm().format(DateTime.now());
+
+  String tMulaiForklift = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  var formatTglForklift = DateFormat('yyyy-MM-dd');
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   DateTime selectedDate = DateTime.now();
+
   bool isSuccess = false;
-  int valKota;
+  int valKota, pilihProduk;
   var access_token,
       refresh_token,
       idcustomer,
@@ -61,7 +64,8 @@ class _ProdukList extends State<ProdukList> {
       ttanggalAkhir = 'Pilih Tanggal',
       rtanggalAwal,
       rtanggalAkhir,
-      pin;
+      pin,
+      defaultProduk = '';
   String _selectedDate,
       _dateCount,
       _range,
@@ -75,7 +79,11 @@ class _ProdukList extends State<ProdukList> {
       hour = "",
       minutes = "",
       time = "",
-      dateTime;
+      dateTime,
+      pilihproduks = '',
+      cektanggal = '',
+      timestart = '',
+      timefinish = '';
   double height, width;
   var formatter = new DateFormat('yyyy-MM-dd'),
       selectedTime = TimeOfDay.now(),
@@ -87,19 +95,66 @@ class _ProdukList extends State<ProdukList> {
   TextEditingController timeController = TextEditingController();
   TextEditingController timeControllerSelesai = TextEditingController();
 
-  Future<Null> selectDate(BuildContext context) async {
+  // Future<Null> selectDate(BuildContext context) async {
+  //   cobaJamAwal = DateFormat.Hm().format(DateTime.now());
+  //   final DateTime picked = await showDatePicker(
+  //       context: context,
+  //       // initialDate: selectedDate,
+  //       initialDate: DateTime.parse(tMulaiForklift),
+  //       firstDate: DateTime.parse(tMulaiForklift),
+  //       lastDate: DateTime(2900));
+  //   if (picked != null)
+  //     setState(() {
+  //       selectedDate = picked;
+  //        dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+  //       // print('selectedtimer $jAwal + $jAkhir + $tMulaiForklift');
+  //     });
+  // }
+
+  // void tesaja() async {
+  //   // List<int> value = [];
+  //   // for (var i = 0; i < 24; i++) {
+  //   //   value.add(i);
+  //   // }
+  //   await showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return SimpleDialog(
+  //           title: Text('Pilih Data'),
+  //           children: [
+  //             SingleChildScrollView(
+  //               child: SizedBox(
+  //                 width: 500,
+  //                 child: ListView.builder(
+  //                     shrinkWrap: true,
+  //                     itemBuilder: (ctx, int index) {
+  //                       return SimpleDialogOption(
+  //                         onPressed: () => Navigator.pop(context),
+  //                         child: SingleChildScrollView(
+  //                             child: Text('${index}.00')),
+  //                       );
+  //                     },
+  //                     itemCount: 24),
+  //               ),
+  //             )
+  //           ],
+  //         );
+  //       });
+  // }
+
+  Future<void> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime.now(),
+        firstDate: DateTime.parse(tMulaiForklift),
         lastDate: DateTime(2900));
-    if (picked != null)
-      setState(() {
-        selectedDate = picked;
-        // dateController.text = DateFormat.yMd().format(selectedDate);
-        dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
-      });
+    setState(() {
+      selectedDate = picked ?? selectedDate;
+    });
   }
+
+  String jAwal = DateFormat.Hm().format(DateTime.now());
+  String jAkhir = DateFormat.Hm().format(DateTime.now());
 
   Future<Null> selectTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
@@ -118,9 +173,10 @@ class _ProdukList extends State<ProdukList> {
         hour = selectedTime.hour.toString();
         // minutes = selectedTime.minute.toString();
         // time = hour + '.' + minutes;
-        time = hour+ '.00';
+        time = hour + '.00';
         timeController.text = time;
         selectedTime = picked;
+        // timestart = time;
       });
   }
 
@@ -143,6 +199,7 @@ class _ProdukList extends State<ProdukList> {
         // time = hour + '.' + minutes;
         time = hour + '.00';
         timeControllerSelesai.text = time;
+        // timefinish = time;
       });
   }
 
@@ -155,7 +212,7 @@ class _ProdukList extends State<ProdukList> {
   var FlagCari = 0;
 
   List<dynamic> _dataKota = List();
-  void getcomboProduk() async {
+  void getcomboKota() async {
     final response = await http.get(ApiService().urllokasi,
         headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
@@ -163,6 +220,8 @@ class _ProdukList extends State<ProdukList> {
       _dataKota = listdata;
     });
   }
+
+  var dataProduk = ['kontainer', 'forklift'];
 
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
@@ -365,7 +424,7 @@ class _ProdukList extends State<ProdukList> {
                       }));
             }
           }));
-      getcomboProduk();
+      getcomboKota();
     }
   }
 
@@ -381,6 +440,25 @@ class _ProdukList extends State<ProdukList> {
     _date2 = DateTime.now().add(Duration(days: 5));
     _tanggalAwal = _date1.toString();
     _tanggalAkhir = _date2.toString();
+
+    _date1 = DateTime.parse(tMulaiForklift);
+    selectDate(context);
+    selectTime(context);
+    selectTimeSelesai(context);
+    defaultProduk = dataProduk[0];
+    print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
+
+    _buildKomboProduk(pilihproduks);
+    setState(() {
+      print('pilihproduk001 $defaultProduk');
+      if (pilihproduks == 'forklift') {
+        print('inidapet001');
+        return cektanggal = '0';
+      } else {
+        print('inidapet011');
+        return cektanggal = '1';
+      }
+    });
     dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     // timeController.text =
     //     DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
@@ -409,217 +487,216 @@ class _ProdukList extends State<ProdukList> {
     });
   }
 
-  Future _popUpTroble(BuildContext context, var jenispro) {
-    dateTime = DateFormat.yMd().format(DateTime.now());
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Column(
-                children: [
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Pilih Tanggal dan Durasi Sewa",
-                            style: GoogleFonts.lato(
-                                fontSize: 13, fontWeight: FontWeight.bold)),
-                        IconButton(
-                            iconSize: 14,
-                            icon: Icon(
-                              Icons.close_outlined,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                  ),
-                  SizedBox(
-                    height: 7,
-                  ),
-                  Text(
-                      "Pilih tanggal dan jam sewa terlebih dahulu sebelum anda melakukan sewa Forklift ini.",
-                      style: GoogleFonts.lato(fontSize: 12)),
-                ],
-              ),
-              content: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "Tanggal Sewa : ",
-                            style: GoogleFonts.lato(fontSize: 14),
-                            textAlign: TextAlign.left,
-                          )),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          selectDate(context);
-                        },
-                        child: Container(
-                          width: width / 1.5,
-                          height: height / 14,
-                          decoration: BoxDecoration(color: Colors.grey[200]),
-                          child: TextFormField(
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                            enabled: false,
-                            keyboardType: TextInputType.text,
-                            controller: dateController,
-                            onSaved: (String val) {
-                              setDate = val;
-                            },
-                            decoration: InputDecoration(
-                                disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.none),
-                                contentPadding: EdgeInsets.only(top: 0.0)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Jam Mulai : ",
-                                    style: GoogleFonts.lato(fontSize: 14),
-                                    textAlign: TextAlign.left,
-                                  )),
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Jam Selesai : ",
-                                    style: GoogleFonts.lato(fontSize: 14),
-                                    textAlign: TextAlign.left,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  selectTime(context);
-                                },
-                                child: Container(
-                                  width: width / 3.2,
-                                  height: height / 14,
-                                  alignment: Alignment.center,
-                                  decoration:
-                                      BoxDecoration(color: Colors.grey[200]),
-                                  child: TextFormField(
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                    onSaved: (String val) {
-                                      setTime = val;
-                                      // print("jam awalnya -> " + setTime);
-                                    },
-                                    enabled: false,
-                                    keyboardType: TextInputType.text,
-                                    controller: timeController,
-                                    decoration: InputDecoration(
-                                        disabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide.none),
-                                        // labelText: 'Time',
-                                        contentPadding: EdgeInsets.all(5)),
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  selectTimeSelesai(context);
-                                },
-                                child: Container(
-                                  width: width / 3.2,
-                                  height: height / 14,
-                                  alignment: Alignment.center,
-                                  decoration:
-                                      BoxDecoration(color: Colors.grey[200]),
-                                  child: TextFormField(
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                    onSaved: (String val1) {
-                                      setTimeSelesai = val1;
-                                      print("jam selesainya -> " +
-                                          setTimeSelesai);
-                                    },
-                                    enabled: false,
-                                    keyboardType: TextInputType.text,
-                                    controller: timeControllerSelesai,
-                                    decoration: InputDecoration(
-                                        disabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide.none),
-                                        // labelText: 'Time',
-                                        contentPadding: EdgeInsets.all(5)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                          width: 900,
-                          child: FlatButton(
-                              color: Colors.red[900],
-                              onPressed: () {
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return FormInputOrder(
-                                    jenisProduk: jenispro,
-
-                                    // jensprod: jenispro.toString(),
-                                    tglawalforklift: selectedDate
-                                        .format(format: 'yyyy-MM-dd')
-                                        .toString(),
-                                  jamawal: selectedTime.format(context),
-                                    jamakhir:
-                                        selectedTimeSelesai.format(context),
-                                  );
-                                }));
-                              },
-                              child: Text(
-                                'Lanjutkan',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ))),
-                    ],
-                  );
-                },
-              ));
-        });
-  }
+  //DITUTUP KARENA PERUBAHAN FORKLIFT DIPISAH JAM DAN TANGGALNYA
+  // Future _popUpTroble(BuildContext context, var jenispro) {
+  //   dateTime = DateFormat.yMd().format(DateTime.now());
+  //   height = MediaQuery.of(context).size.height;
+  //   width = MediaQuery.of(context).size.width;
+  //   return showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //             title: Column(
+  //               children: [
+  //                 Container(
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: [
+  //                       Text("Pilih Tanggal dan Durasi Sewa",
+  //                           style: GoogleFonts.lato(
+  //                               fontSize: 13, fontWeight: FontWeight.bold)),
+  //                       IconButton(
+  //                           iconSize: 14,
+  //                           icon: Icon(
+  //                             Icons.close_outlined,
+  //                           ),
+  //                           onPressed: () {
+  //                             Navigator.pop(context);
+  //                           }),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 Divider(
+  //                   thickness: 1,
+  //                 ),
+  //                 SizedBox(
+  //                   height: 7,
+  //                 ),
+  //                 Text(
+  //                     "Pilih tanggal dan jam sewa terlebih dahulu sebelum anda melakukan sewa Forklift ini.",
+  //                     style: GoogleFonts.lato(fontSize: 12)),
+  //               ],
+  //             ),
+  //             content: StatefulBuilder(
+  //               builder: (BuildContext context, StateSetter setState) {
+  //                 return Column(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Align(
+  //                         alignment: Alignment.topLeft,
+  //                         child: Text(
+  //                           "Tanggal Sewa : ",
+  //                           style: GoogleFonts.lato(fontSize: 14),
+  //                           textAlign: TextAlign.left,
+  //                         )),
+  //                     SizedBox(
+  //                       height: 7,
+  //                     ),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         selectDate(context);
+  //                       },
+  //                       child: Container(
+  //                         width: width / 1.5,
+  //                         height: height / 14,
+  //                         decoration: BoxDecoration(color: Colors.grey[200]),
+  //                         child: TextFormField(
+  //                           style: TextStyle(
+  //                               fontSize: 20, fontWeight: FontWeight.bold),
+  //                           textAlign: TextAlign.center,
+  //                           enabled: false,
+  //                           keyboardType: TextInputType.text,
+  //                           controller: dateController,
+  //                           onSaved: (String val) {
+  //                             setDate = val;
+  //                           },
+  //                           decoration: InputDecoration(
+  //                               disabledBorder: UnderlineInputBorder(
+  //                                   borderSide: BorderSide.none),
+  //                               contentPadding: EdgeInsets.only(top: 0.0)),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     SizedBox(
+  //                       height: 10,
+  //                     ),
+  //                     Column(
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                           children: [
+  //                             Align(
+  //                                 alignment: Alignment.topLeft,
+  //                                 child: Text(
+  //                                   "Jam Mulai : ",
+  //                                   style: GoogleFonts.lato(fontSize: 14),
+  //                                   textAlign: TextAlign.left,
+  //                                 )),
+  //                             Align(
+  //                                 alignment: Alignment.topLeft,
+  //                                 child: Text(
+  //                                   "Jam Selesai : ",
+  //                                   style: GoogleFonts.lato(fontSize: 14),
+  //                                   textAlign: TextAlign.left,
+  //                                 )),
+  //                           ],
+  //                         ),
+  //                         SizedBox(
+  //                           height: 7,
+  //                         ),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                           children: [
+  //                             InkWell(
+  //                               onTap: () {
+  //                                 selectTime(context);
+  //                               },
+  //                               child: Container(
+  //                                 width: width / 3.2,
+  //                                 height: height / 14,
+  //                                 alignment: Alignment.center,
+  //                                 decoration:
+  //                                     BoxDecoration(color: Colors.grey[200]),
+  //                                 child: TextFormField(
+  //                                   style: TextStyle(
+  //                                       fontSize: 20,
+  //                                       fontWeight: FontWeight.bold),
+  //                                   textAlign: TextAlign.center,
+  //                                   onSaved: (String val) {
+  //                                     setTime = val;
+  //                                     // print("jam awalnya -> " + setTime);
+  //                                   },
+  //                                   enabled: false,
+  //                                   keyboardType: TextInputType.text,
+  //                                   controller: timeController,
+  //                                   decoration: InputDecoration(
+  //                                       disabledBorder: UnderlineInputBorder(
+  //                                           borderSide: BorderSide.none),
+  //                                       // labelText: 'Time',
+  //                                       contentPadding: EdgeInsets.all(5)),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             InkWell(
+  //                               onTap: () {
+  //                                 selectTimeSelesai(context);
+  //                               },
+  //                               child: Container(
+  //                                 width: width / 3.2,
+  //                                 height: height / 14,
+  //                                 alignment: Alignment.center,
+  //                                 decoration:
+  //                                     BoxDecoration(color: Colors.grey[200]),
+  //                                 child: TextFormField(
+  //                                   style: TextStyle(
+  //                                       fontSize: 20,
+  //                                       fontWeight: FontWeight.bold),
+  //                                   textAlign: TextAlign.center,
+  //                                   onSaved: (String val1) {
+  //                                     setTimeSelesai = val1;
+  //                                     print("jam selesainya -> " +
+  //                                         setTimeSelesai);
+  //                                   },
+  //                                   enabled: false,
+  //                                   keyboardType: TextInputType.text,
+  //                                   controller: timeControllerSelesai,
+  //                                   decoration: InputDecoration(
+  //                                       disabledBorder: UnderlineInputBorder(
+  //                                           borderSide: BorderSide.none),
+  //                                       // labelText: 'Time',
+  //                                       contentPadding: EdgeInsets.all(5)),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     SizedBox(
+  //                       height: 10,
+  //                     ),
+  //                     Container(
+  //                         width: 900,
+  //                         child: FlatButton(
+  //                             color: Colors.red[900],
+  //                             onPressed: () {
+  //                               Navigator.pushReplacement(context,
+  //                                   MaterialPageRoute(builder: (context) {
+  //                                 return FormInputOrder(
+  //                                   jenisProduk: jenispro,
+  //                                   tglawalforklift: selectedDate
+  //                                       .format(format: 'yyyy-MM-dd')
+  //                                       .toString(),
+  //                                   jamawal: selectedTime.format(context),
+  //                                   jamakhir:
+  //                                       selectedTimeSelesai.format(context),
+  //                                 );
+  //                               }));
+  //                             },
+  //                             child: Text(
+  //                               'Lanjutkan',
+  //                               style: GoogleFonts.inter(
+  //                                   fontSize: 14,
+  //                                   color: Colors.white,
+  //                                   fontWeight: FontWeight.bold),
+  //                             ))),
+  //                   ],
+  //                 );
+  //               },
+  //             ));
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -646,110 +723,41 @@ class _ProdukList extends State<ProdukList> {
           padding: EdgeInsets.all(5),
           child: Column(
             children: <Widget>[
+              // Container(
+              //     child: GestureDetector(
+              //         onTap: () {
+              //           tesaja();
+              //         },
+              //         child: Text('klik disini'))),
               Container(
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Container(),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.1,
                       margin: EdgeInsets.only(left: 16, right: 16),
-                      child: FlatButton(
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5)),
-                        color: Colors.grey[200],
-                        onPressed: _visibilitymethod,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  "Mulai",
-                                  style: GoogleFonts.lato(
-                                      fontSize: 12, color: Colors.grey[800]),
-                                ),
-                                Text(
-                                  "Akhir",
-                                  style: GoogleFonts.lato(
-                                      fontSize: 12, color: Colors.grey[800]),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    mmtext,
-                                    style: GoogleFonts.lato(
-                                        fontSize: 15,
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Icon(Icons.arrow_forward_rounded),
-                                Flexible(
-                                  child: Text(
-                                    aatext,
-                                    style: GoogleFonts.lato(
-                                        fontSize: 15,
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: _buildKomboProduk(pilihproduks),
                     ),
                     SizedBox(
-                      height: 7,
+                      height: 10,
                     ),
-                    a == true
-                        ? new Container(
-                            child: Column(
-                            children: [
-                              SfDateRangePicker(
-                                minDate: DateTime(sekarang.year, sekarang.month,
-                                    sekarang.day),
-                                onSelectionChanged: _onSelectionChanged,
-                                selectionMode:
-                                    DateRangePickerSelectionMode.range,
-                                initialSelectedRange:
-                                    PickerDateRange(_date1, _date2),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    right: 16, left: 16, bottom: 16),
-                                alignment: Alignment.topRight,
-                                child: Text(
-                                  'Note : Minimum Pesanan 5 Hari',
-                                  style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontStyle: FontStyle.italic),
-                                  textAlign: TextAlign.end,
-                                ),
-                              )
-                            ],
-                          ))
-                        : new Container(),
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
-                      child: _buildKomboProduk(valKota),
+                      child: _buildKombokota(valKota),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    //iki tempat tanggal kontainer/forklift
+                    // _buildTanggal(),
+                    // defaultProduk != dataProduk[0]
+                    //     ? _buildTanggal()
+                    //     : _buildTanggalFokrlift()
+                    cektanggal == '1'
+                        ? _buildTanggal()
+                        : _buildTanggalFokrlift()
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 10,
               ),
               FlatButton(
                   minWidth: MediaQuery.of(context).size.width * 0.9,
@@ -774,10 +782,19 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _search(BuildContext context) {
     PostProdukModel data = PostProdukModel(
-        token: access_token,
-        tanggalawal: _tanggalAwal,
-        tanggalakhir: _tanggalAkhir,
-        idlokasi: valKota);
+      token: access_token,
+      // tanggalawal: _tanggalAwal,
+      // tanggalakhir: _tanggalAkhir,
+      tanggalawal: cektanggal == '0'
+          ? '${formatTglForklift.format(selectedDate)} $jAwal'
+          : _tanggalAwal,
+      tanggalakhir: cektanggal == '0'
+          ? '${formatTglForklift.format(selectedDate)} $jAkhir'
+          : _tanggalAkhir,
+      idlokasi: valKota,
+      jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
+    );
+    print('objectonexyz $data');
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -794,8 +811,11 @@ class _ProdukList extends State<ProdukList> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
+            print('stay alive $profiles');
             if (profiles != null) {
               return _buildListView(profiles);
+              // } else if (data = )){
+              //   return
             } else {
               return Center(
                 child: Container(
@@ -825,7 +845,257 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
+  Widget _buildTanggalFokrlift() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height / 8.5,
+              margin: EdgeInsets.only(left: 16, right: 16),
+              child: FlatButton(
+                shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(5)),
+                color: Colors.grey[200],
+                // onPressed: _visibilitymethod,
+                onPressed: () {
+                  selectDate(context);
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Pilih Tanggal",
+                      style: GoogleFonts.lato(
+                          fontSize: 12, color: Colors.grey[800]),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                          child: Container(
+                            decoration: BoxDecoration(color: Colors.grey[200]),
+                            child: TextFormField(
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                              enabled: false,
+                              keyboardType: TextInputType.text,
+                              controller: dateController,
+                              onSaved: (String val) {
+                                setDate = val;
+                                print('tanggalforklift $val');
+                              },
+                              decoration: InputDecoration(
+                                  disabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                  contentPadding: EdgeInsets.only(top: 0.0)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: FlatButton(
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5)),
+                    color: Colors.grey[200],
+                    onPressed: () {
+                      selectTime(context);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Jam Mulai",
+                          style: GoogleFonts.lato(
+                              fontSize: 12, color: Colors.grey[800]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: TextFormField(
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                onSaved: (String val) {
+                                  setTime = val;
+                                },
+                                enabled: false,
+                                keyboardType: TextInputType.text,
+                                controller: timeController,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    disabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    // labelText: 'Time',
+                                    contentPadding: EdgeInsets.zero),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: FlatButton(
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5)),
+                    color: Colors.grey[200],
+                    onPressed: () {
+                      selectTimeSelesai(context);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Jam Selesai",
+                          style: GoogleFonts.lato(
+                              fontSize: 12, color: Colors.grey[800]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: TextFormField(
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                onSaved: (String val1) {
+                                  setTimeSelesai = val1;
+                                },
+                                enabled: false,
+                                keyboardType: TextInputType.text,
+                                controller: timeControllerSelesai,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    disabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    contentPadding: EdgeInsets.zero),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildTanggal() {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.1,
+          margin: EdgeInsets.only(left: 16, right: 16),
+          child: FlatButton(
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(5)),
+            color: Colors.grey[200],
+            onPressed: _visibilitymethod,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Mulai",
+                      style: GoogleFonts.lato(
+                          fontSize: 12, color: Colors.grey[800]),
+                    ),
+                    Text(
+                      "Akhir",
+                      style: GoogleFonts.lato(
+                          fontSize: 12, color: Colors.grey[800]),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        mmtext,
+                        style: GoogleFonts.lato(
+                            fontSize: 15,
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_rounded),
+                    Flexible(
+                      child: Text(
+                        aatext,
+                        style: GoogleFonts.lato(
+                            fontSize: 15,
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 7,
+        ),
+        a == true
+            ? new Container(
+                child: Column(
+                children: [
+                  SfDateRangePicker(
+                    minDate:
+                        DateTime(sekarang.year, sekarang.month, sekarang.day),
+                    onSelectionChanged: _onSelectionChanged,
+                    selectionMode: DateRangePickerSelectionMode.range,
+                    initialSelectedRange: PickerDateRange(_date1, _date2),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: 16, left: 16, bottom: 16),
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      'Note : Minimum Pesanan 5 Hari',
+                      style: GoogleFonts.inter(
+                          fontSize: 12, fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.end,
+                    ),
+                  )
+                ],
+              ))
+            : new Container(),
+      ],
+    );
+  }
+
   Widget _buildListView(List<JenisProduk> dataIndex) {
+    print('object123 $dataIndex');
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -854,11 +1124,6 @@ class _ProdukList extends State<ProdukList> {
                                     child: Card(
                                       child: InkWell(
                                         onTap: () {
-                                          // print("idjenis produknya adalah");
-                                          // print(jenisProduk.idjenis_produk);
-                                          // if (nama_customer == "" ||
-                                          //     nama_customer == null ||
-                                          //     nama_customer == "0") {
                                           if (idcustomer == "" ||
                                               idcustomer == null ||
                                               idcustomer == "0") {
@@ -881,8 +1146,8 @@ class _ProdukList extends State<ProdukList> {
                                                 .toString()
                                                 .toLowerCase()
                                                 .contains('forklift')) {
-                                              _popUpTroble(
-                                                  context, jenisProduk);
+                                              // _popUpTroble(
+                                              //     context, jenisProduk);
                                             } else {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
@@ -957,28 +1222,6 @@ class _ProdukList extends State<ProdukList> {
                                                         jenisProduk.diskon,
                                                         jenisProduk.harganett,
                                                         jenisProduk.harga)
-                                                    // Text(
-                                                    //   rupiah(
-                                                    //       jenisProduk.harga
-                                                    //           .toString(),
-                                                    //       separator: ',',
-                                                    //       trailing: '.00'),
-                                                    //   // jenisProduk.harga.toString(),
-                                                    //   style: GoogleFonts.inter(
-                                                    //       fontSize: 15,
-                                                    //       color: Colors.green,
-                                                    //       fontWeight:
-                                                    //           FontWeight.bold,
-                                                    //       decoration:
-                                                    //           TextDecoration
-                                                    //               .lineThrough),
-                                                    //   overflow:
-                                                    //       TextOverflow.fade,
-                                                    // ),
-                                                    // Text(jenisProduk.harganett
-                                                    //     .toString()),
-                                                    // Text(jenisProduk.diskon
-                                                    //     .toString())
                                                   ],
                                                 ),
                                               ],
@@ -1043,7 +1286,7 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
-  Widget _buildKomboProduk(int kotaaaa) {
+  Widget _buildKombokota(int kotaaaa) {
     return DropdownButtonFormField(
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
@@ -1074,6 +1317,7 @@ class _ProdukList extends State<ProdukList> {
           contentPadding:
               const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
       items: _dataKota.map((item) {
+        print('data kota $_dataKota');
         return DropdownMenuItem(
           // child: Text(item['nama_kota']),
           child: Padding(
@@ -1089,6 +1333,67 @@ class _ProdukList extends State<ProdukList> {
       onChanged: (value) {
         setState(() {
           valKota = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildKomboProduk(String produks) {
+    print('defaultpro $defaultProduk');
+    return DropdownButtonFormField(
+      hint: Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Row(
+            children: [
+              Icon(
+                Icons.search,
+              ),
+              SizedBox(
+                width: 7,
+              ),
+              Text("$defaultProduk",
+                  textAlign: TextAlign.end,
+                  style:
+                      GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+            ],
+          )),
+      value: pilihProduk == null ? null : dataProduk.join("$pilihproduks"),
+      // value: pilihproduks,
+      decoration: InputDecoration(
+          fillColor: Colors.grey[200],
+          filled: true,
+          border: const OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+              borderSide:
+                  const BorderSide(color: Colors.transparent, width: 0.0),
+              borderRadius: BorderRadius.circular(5.0)),
+          isDense: true,
+          contentPadding:
+              const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
+      items: dataProduk.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: new Text(value,
+                style:
+                    GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          print('object value $value');
+          pilihproduks = value;
+          if (value == null) {
+            return defaultProduk;
+          } else if (pilihproduks == 'forklift') {
+            print('hey');
+            return cektanggal = '0';
+          } else if (pilihproduks == 'kontainer') {
+            print('hey123');
+            return cektanggal = '1';
+          }
         });
       },
     );

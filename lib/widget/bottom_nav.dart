@@ -90,6 +90,7 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: PageStorage(
           bucket: bucket,
           child: currentScreen,
@@ -108,6 +109,7 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: BottomAppBar(
             shape: CircularNotchedRectangle(),
             child: Container(
+              
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

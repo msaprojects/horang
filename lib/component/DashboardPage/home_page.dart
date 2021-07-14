@@ -331,7 +331,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 18,
               ),
-
+              
               Container(
                 padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
                 child: Row(

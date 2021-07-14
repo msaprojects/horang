@@ -1,24 +1,25 @@
-import 'package:commons/commons.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/log/openLog.dart';
+// import 'package:get/get.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/component/account_page/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Sksk extends StatefulWidget {
-  final TabController tabController1;
-  const Sksk({Key key, this.tabController1}) : super(key: key);
+  String token;
+
+  Sksk({this.token});
   @override
-  _StorageNonActive createState() => _StorageNonActive();
+  _SearchListViewExampleState createState() => _SearchListViewExampleState();
 }
 
-class _StorageNonActive extends State<Sksk> {
+class _SearchListViewExampleState extends State<Sksk> {
   bool isLoading = false;
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -39,8 +40,10 @@ class _StorageNonActive extends State<Sksk> {
       hari,
       aktif;
 
-  List<MystorageModel> ngeList = <MystorageModel>[];
-  List<MystorageModel> ngeList1 = <MystorageModel>[];
+
+  List<MystorageModel> storage = [];
+  String query = '', token='';
+  Timer debouncer;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -49,6 +52,7 @@ class _StorageNonActive extends State<Sksk> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("tesacctoken $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -83,263 +87,221 @@ class _StorageNonActive extends State<Sksk> {
   }
 
   @override
-  void initState() {
-    // _apiService.listMystorage(access_token).then((value) {
-    //   setState(() {
-    //     ngeList.addAll(value);
-    //     ngeList1 = ngeList;
-    //   });
-    // });
-    // _loading = false;
-    super.initState();
+  initState() {
+    token = widget.token;
     cekToken();
+    _apiService.listMystorageNew(token,query);
+    init();
+    print('acctoken $access_token ++ $token');
+    super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-          future: _apiService.listMystorage(access_token),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<MystorageModel>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    "Something wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              // List<MystorageModel> profiles =
-              //     snapshot.data.where((i) => i.status == "NONAKTIF").toList();
-              var profiles = ngeList = snapshot.data
-                  .where((element) => element.status == "NONAKTIF")
-                  .toList();
-              // print('profilezz'+ ngeList1.toString());
-              if (profiles.isNotEmpty) {
-                return _buildListview(profiles);
-              } else {
-                return Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/image/datanotfound.png"),
-                        Text(
-                          "Oppss..Maaf data kontainer belum aktif kosong.",
-                          style: GoogleFonts.inter(color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
+  void dispose() {
+    debouncer?.cancel();
+    super.dispose();
   }
 
-  _searchBar() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(hintText: 'Cari...'),
-        onChanged: (text) {
-          text = text.toLowerCase();
-          setState(() {
-            print('tes1 $ngeList');
-            ngeList1 = ngeList.where((element){
-                var posjudul = element.noOrder.toLowerCase();
-                print('dapat apa ?? ${posjudul.toLowerCase()} -- $text');
-                return posjudul.contains(text);
-              }).toList();
-            });
-            //   var posjudul = element.noOrder.toLowerCase();
-            //   return posjudul.contains(text);
-            // }).toList();
-          // });
-        },
-      ),
-    );
+  void debounce(
+    VoidCallback callback, {
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
+    if (debouncer != null) {
+      debouncer.cancel();
+    }
+
+    debouncer = Timer(duration, callback);
   }
 
-  Widget _buildListview(List<MystorageModel> dataIndex) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: ngeList.length + 1,
-        itemBuilder: (context, index) {
-          print("wkwkwkw $index");
-          return index == 0 ? _searchBar() : listItem(index -1);
-          // MystorageModel myStorage = ngeList[index];
-          // if (!_loading) {
-          //   if (ngeList.length > 0){
-          //   // return listItem(index);
-          //   return index == 0 ? _searchBar() : listItem(index - 1);
-          // } else {
-          //   return Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
-        },
-      ),
-    );
+  init() async {
+    final storage = await _apiService.listMystorageNew(token, query);
+    print('yuhu ada gak');
+    setState(() => this.storage = storage);
   }
 
-  listItem(index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() => isLoading = true);
-        if (idcustomer == "0") {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(
-                'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-            duration: Duration(seconds: 10),
-          ));
-        } else {
-          _openAlertDialog(
-            context,
-            ngeList[index].idtransaksi_detail,
-            ngeList[index].noOrder.toString(),
-            ngeList[index].kode_kontainer.toString(),
-            ngeList[index].nama_kota,
-            ngeList[index].nama,
-            ngeList[index].nama_lokasi.toString(),
-            ngeList[index].keterangan,
-            ngeList[index].tanggal_order,
-            ngeList[index].tanggal_mulai,
-            ngeList[index].tanggal_akhir,
-            ngeList[index].hari.toString(),
-          );
-        }
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Card(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'No. Order : ',
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                            Flexible(
-                              child: Text(
-                                ngeList[index].noOrder.toString(),
-                                style: GoogleFonts.inter(fontSize: 14),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Kode Kontainer : ',
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                            Text(
-                              ngeList[index].kode_kontainer,
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Jenis Kontainer : ',
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                            Text(
-                              ngeList[index].nama,
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
-                              'Lokasi : ',
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                            Text(
-                              ngeList[index].idtransaksi_detail.toString(),
-                              // myStorage.nama_lokasi,
-                              style: GoogleFonts.inter(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            "Ketuk untuk detail...",
-                            style: GoogleFonts.lato(
-                                fontSize: 12, fontStyle: FontStyle.italic),
-                          ),
-                        )
-                      ],
-                    ),
-                    // );
-                    //   },
-                    // ),
-                  ),
-                ),
-              ],
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text('coba'),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: <Widget>[
+            buildSearch(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: storage.length,
+                itemBuilder: (context, index) {
+                  final storages = storage[index];
+
+                  return buildmyStorage(storages);
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
-  AccountValidation(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Lengkapi Profile anda"),
-      content: Text("Anda harus melengkapi akun sebelum melakukan transaksi!"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Title or Author Name',
+        onChanged: searchmystorage,
+      );
+
+  Future searchmystorage(String query) async => debounce(() async {
+        final storage = await _apiService.listMystorageNew(token, query);
+        if (!mounted) return;
+        setState(() {
+          this.storage = storage;
+              print("Execute searcgh");
         });
-  }
+      });
 
-  void _openAlertDialog(
+      Widget buildmyStorage(MystorageModel storage)=> 
+      Container(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+        color: Colors.grey[100],
+        child: GestureDetector(
+              onTap: () {
+                // setState(() => isLoading = true);
+                if (idcustomer == "0") {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+                    duration: Duration(seconds: 10),
+                  ));
+                } else {
+                  _openAlertDialog(
+                    context,
+                    storage.idtransaksi_detail,
+                    storage.noOrder.toString(),
+                    storage.kode_kontainer.toString(),
+                    storage.nama_kota,
+                    storage.nama,
+                    storage.nama_lokasi.toString(),
+                    storage.keterangan,
+                    storage.tanggal_order,
+                    storage.tanggal_mulai,
+                    storage.tanggal_akhir,
+                    storage.hari.toString(),
+                  );
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Card(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'No. Order : ',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        storage.noOrder.toString(),
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Kode Kontainer : ',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      storage.kode_kontainer,
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Jenis Kontainer : ',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      storage.nama,
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
+                                      'Lokasi : ',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      storage.idtransaksi_detail.toString(),
+                                      // myStorage.nama_lokasi,
+                                      style: GoogleFonts.inter(
+                                          fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    "Ketuk untuk detail...",
+                                    style: GoogleFonts.lato(
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.italic),
+                                  ),
+                                )
+                              ],
+                            ),
+                            // );
+                            //   },
+                            // ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        );
+
+      void _openAlertDialog(
       BuildContext context,
       int idtransaksi_detail,
       String noOrder,
@@ -509,3 +471,4 @@ class _StorageNonActive extends State<Sksk> {
         });
   }
 }
+

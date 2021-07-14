@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:commons/commons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
@@ -132,11 +133,36 @@ class ApiService {
   }
 
   //LOAD MYSTORAGE
+
+  Future<List<MystorageModel>> listMystorageNew(
+      String token, var query) async {
+    final response = await client.get("$baseUrl/mystorage",
+        headers: {"Authorization": "BEARER ${token}"});
+    print(response.body + "togen" + token);
+    if (response.statusCode == 200) {
+      List storage = json.decode(response.body);
+      
+      return storage
+          .map((json) => MystorageModel.fromJson(json))
+          .where((storage) {
+        final namaProdukLower = storage.noOrder.toLowerCase();
+        final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+        final searchLower = query.toLowerCase();
+
+        return namaProdukLower.contains(searchLower) ||
+            kodeKontainerLower.contains(searchLower);
+      }).where((element) => element.status == "NONAKTIF").toList();
+    } else {
+      throw Exception('gagal');
+    }
+  }
+
   Future<List<MystorageModel>> listMystorage(String token) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
+      // return compute(response.body);
     } else {
       return null;
     }
