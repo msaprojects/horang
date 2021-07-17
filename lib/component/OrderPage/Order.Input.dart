@@ -154,13 +154,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
     return;
   }
 
-  Future<String> _ambildataSK() async {
+    Future<String> _ambildataSK() async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-    // .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
     print("mmzzzrr" + response.body);
     return sk = response.body;
   }
+
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -311,6 +311,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void initState() {
     cekToken();
     getSaldo();
+    // _apiService.ambildataSK(sk);
     _ambildataSK();
 
     // getSetting(access_token, idlokasi);
@@ -380,9 +381,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
       key: _scaffoldState,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          "Lengkapi Data Sewa",
-          style: TextStyle(color: Colors.black),
+        title: GestureDetector(
+          onTap: (){
+            print('klikSK $sk');
+          },
+          child: Text(
+            "Lengkapi Data Sewa",
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       ),
       body: Column(
@@ -823,44 +829,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   Container(
                                     padding:
                                         const EdgeInsets.only(left: 20, top: 5),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        print('sjdw');
-                                        // buttonVisible.value = false;
-                                        // showDialog(
-                                        //     context: context,
-                                        //     builder: (context) => AlertDialog(
-                                        //           title: Text(
-                                        //               'Syarat dan Ketentuan'),
-                                        //           content:
-                                        //               SingleChildScrollView(
-                                        //             controller:
-                                        //                 scrollController,
-                                        //             child: Text('$sk'),
-                                        //           ),
-                                        //           actions: [
-                                        //             Obx(() => Visibility(
-                                        //                 visible:
-                                        //                     buttonVisible.value,
-                                        //                 child: ElevatedButton(
-                                        //                   child: Text("Setuju"),
-                                        //                   onPressed: () {
-                                        //                     boolsk = true;
-                                        //                     print('$boolsk');
-                                        //                   },
-                                        //                 )))
-                                        //           ],
-                                        //         ));
-                                      },
-                                      child: Text(
-                                        "(*) Syarat dan Ketentuan berlaku",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.blue,
-                                            fontStyle: FontStyle.italic,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
+                                    child: Text(
+                                      "(*) Syarat dan Ketentuan berlaku",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.blue,
+                                          fontStyle: FontStyle.italic,
+                                          decoration:
+                                              TextDecoration.underline),
                                     ),
                                   ),
                                 ],

@@ -33,7 +33,8 @@ class KonfirmasiLog extends StatefulWidget {
       tglmulai,
       tglakhir,
       tglorder,
-      keterangan;
+      keterangan,
+      gambar;
   KonfirmasiLog(
       {this.nama_kota,
       this.idtransaksi,
@@ -46,7 +47,9 @@ class KonfirmasiLog extends StatefulWidget {
       this.keterangan,
       this.idtransaksi_detail,
       this.flag_selesai,
-      this.selesai});
+      this.selesai,
+      this.gambar
+      });
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -67,6 +70,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
       refresh_token,
       idcustomer,
       kode_kontainer1,
+      gambar1,
       idtransaksi_det,
       nama_kota1,
       status1,
@@ -291,6 +295,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
 
   @override
   void initState() {
+    gambar1 = widget.gambar;
     kode_kontainer1 = widget.kode_kontainer;
     nama_kota1 = widget.nama_kota;
     idtransaksi_det = widget.idtransaksi_detail;
@@ -355,7 +360,8 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     height: MediaQuery.of(context).size.height * 0.3,
                     decoration: new BoxDecoration(
                         image: new DecorationImage(
-                      image: new AssetImage("assets/image/container1.png"),
+                      // image: new AssetImage("assets/image/container1.png"),
+                      image: NetworkImage(gambar1),
                       fit: BoxFit.cover,
                     )),
                   ),
@@ -398,10 +404,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     height: 10,
                   ),
                   Text(
-                      "Kota" +
-                          idtransaksi_det.toString() +
-                          " __ " +
-                          idtransaksii.toString(),
+                      "Kota",
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),

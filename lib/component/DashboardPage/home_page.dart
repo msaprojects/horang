@@ -13,6 +13,7 @@ import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
 // import 'package:horang/component/HistoryPage/historypage.dart';
 // import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
@@ -331,9 +332,80 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 18,
               ),
-              
+              Padding(
+                padding: const EdgeInsets.only(left: 25, right: 25),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child:
+                            Text('Order Sekarang Kuy !', style: mTitleStyle)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ProdukList();
+                            }));
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 5,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]),
+                                image: DecorationImage(
+                                    scale: 6.0,
+                                    image: AssetImage(
+                                        'assets/image/container1.png'))),
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  'Kontainer',
+                                  style: GoogleFonts.lato(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 20,
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 5,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey[300]),
+                              image: DecorationImage(
+                                scale: 6.0,
+                                fit: BoxFit.scaleDown,
+                                image: AssetImage('assets/image/forklift.png'),
+                              )),
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                'Forklift',
+                                style: GoogleFonts.lato(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               Container(
-                padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                padding:
+                    EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

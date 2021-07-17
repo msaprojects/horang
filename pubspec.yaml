@@ -51,6 +51,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.2.46
   fluttertoast: 7.1.6
   firebase_messaging: ^7.0.3
+  time_picker_widget: ^1.0.0+9
+  flutter_native_timezone: ^2.0.0
     
   imei_plugin: ^1.2.0
   grouped_list: 4.0.0

@@ -21,6 +21,7 @@ import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:time_picker_widget/time_picker_widget.dart';
 
 class ProdukList extends StatefulWidget {
   var tanggalAwal, tanggalAkhir;
@@ -40,18 +41,22 @@ class MyHttpOverride extends HttpOverrides {
 }
 
 class _ProdukList extends State<ProdukList> {
-  bool a = false;
+  bool showHidetanggalKontainer = false;
   DateTime dtAwal, dtAkhir, _date1, _date2;
   String mText = DateTime.now().toString();
   String aText = DateTime.now().add(Duration(days: 5)).toString();
 
   String tMulaiForklift = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  var formatTglForklift = DateFormat('yyyy-MM-dd');
+  var formatTglForklift = DateFormat('yyyy-MM-dd'),
+      selectedWaktu = TimeOfDay.now();
 
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   DateTime selectedDate = DateTime.now();
-
+  List<int> _availableHoursAwal = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  List<int> _availableMenitAwal = [0];
+  List<int> _availableHoursSelesai = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+  List<int> _availableMenitSelesai = [0];
   bool isSuccess = false;
   int valKota, pilihProduk;
   var access_token,
@@ -65,7 +70,7 @@ class _ProdukList extends State<ProdukList> {
       rtanggalAwal,
       rtanggalAkhir,
       pin,
-      defaultProduk = '';
+      defaultProduk = '', timehourawal, timehourselesai;
   String _selectedDate,
       _dateCount,
       _range,
@@ -79,6 +84,7 @@ class _ProdukList extends State<ProdukList> {
       hour = "",
       minutes = "",
       time = "",
+      timeselesai = "",
       dateTime,
       pilihproduks = '',
       cektanggal = '',
@@ -95,113 +101,144 @@ class _ProdukList extends State<ProdukList> {
   TextEditingController timeController = TextEditingController();
   TextEditingController timeControllerSelesai = TextEditingController();
 
-  // Future<Null> selectDate(BuildContext context) async {
-  //   cobaJamAwal = DateFormat.Hm().format(DateTime.now());
-  //   final DateTime picked = await showDatePicker(
-  //       context: context,
-  //       // initialDate: selectedDate,
-  //       initialDate: DateTime.parse(tMulaiForklift),
-  //       firstDate: DateTime.parse(tMulaiForklift),
-  //       lastDate: DateTime(2900));
-  //   if (picked != null)
-  //     setState(() {
-  //       selectedDate = picked;
-  //        dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
-  //       // print('selectedtimer $jAwal + $jAkhir + $tMulaiForklift');
-  //     });
-  // }
-
-  // void tesaja() async {
-  //   // List<int> value = [];
-  //   // for (var i = 0; i < 24; i++) {
-  //   //   value.add(i);
-  //   // }
-  //   await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return SimpleDialog(
-  //           title: Text('Pilih Data'),
-  //           children: [
-  //             SingleChildScrollView(
-  //               child: SizedBox(
-  //                 width: 500,
-  //                 child: ListView.builder(
-  //                     shrinkWrap: true,
-  //                     itemBuilder: (ctx, int index) {
-  //                       return SimpleDialogOption(
-  //                         onPressed: () => Navigator.pop(context),
-  //                         child: SingleChildScrollView(
-  //                             child: Text('${index}.00')),
-  //                       );
-  //                     },
-  //                     itemCount: 24),
-  //               ),
-  //             )
-  //           ],
-  //         );
-  //       });
-  // }
-
-  Future<void> selectDate(BuildContext context) async {
+  Future<Null> selectDate(BuildContext context) async {
+    // cobaJamAwal = DateFormat.Hm().format(DateTime.now());
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        // initialDate: selectedDate,
+        initialDate: DateTime.parse(tMulaiForklift),
         firstDate: DateTime.parse(tMulaiForklift),
         lastDate: DateTime(2900));
-    setState(() {
-      selectedDate = picked ?? selectedDate;
-    });
+    if (picked != null)
+      setState(() {
+        selectedDate = picked;
+        dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+        // print('selectedtimer $jAwal + $jAkhir + $tMulaiForklift');
+      });
   }
 
+  // Future<void> selectDate(BuildContext context) async {
+  //   final DateTime picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime.parse(tMulaiForklift),
+  //       lastDate: DateTime(2900));
+  //   setState(() {
+  //     selectedDate = picked;
+  //   });
+  // }
+
+  // final String currentTimezone = await FlutterNativeTimezone.getLocalTimezone();
   String jAwal = DateFormat.Hm().format(DateTime.now());
   String jAkhir = DateFormat.Hm().format(DateTime.now());
 
-  Future<Null> selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+  Future selectWaktuh(BuildContext context) async {
+    final TimeOfDay pick = await showCustomTimePicker(
         context: context,
-        initialTime: selectedTime,
-        initialEntryMode: TimePickerEntryMode.input,
         builder: (BuildContext context, Widget child) {
           return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );
-        });
-    if (picked != null)
+        },
+        onFailValidation: (context) =>
+            errorDialog(context, 'Format Tanggal Salah'),
+        initialTime: selectedWaktu.replacing(
+            hour: _availableHoursAwal.first, minute: _availableMenitAwal.first),
+        selectableTimePredicate: (time) =>
+            _availableHoursAwal.indexOf(time.hour) != -1 &&
+            _availableMenitAwal.indexOf(time.minute) != -1
+            ).then((value) => value);
+    if (pick != null) {
       setState(() {
-        selectedTime = picked;
-        hour = selectedTime.hour.toString();
-        // minutes = selectedTime.minute.toString();
-        // time = hour + '.' + minutes;
-        time = hour + '.00';
+        time = pick?.format(context);
+        // selectedWaktu = pick;
+        // hour = selectedWaktu.hour.toString();
+        // hour = selectedWaktu.hour.toString();
+        // minutes = selectedWaktu.minute.toString();
+        // time = hour + ".00";
         timeController.text = time;
-        selectedTime = picked;
-        // timestart = time;
+        print('hey look at me $selectedWaktu ++ $time ++ $pick');
       });
+    }
   }
 
-  Future<Null> selectTimeSelesai(BuildContext context) async {
-    final TimeOfDay picked1 = await showTimePicker(
+  Future selectTimeSelesai(BuildContext context) async {
+    final TimeOfDay pick1 = await showCustomTimePicker(
         context: context,
-        initialTime: selectedTimeSelesai,
-        initialEntryMode: TimePickerEntryMode.input,
         builder: (BuildContext context, Widget child) {
           return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );
-        });
-    if (picked1 != null)
+        },
+        onFailValidation: (context) =>
+            errorDialog(context, 'Format Tanggal Salah'),
+        initialTime: selectedWaktu.replacing(
+            hour: _availableHoursSelesai.first, minute: _availableMenitSelesai.first),
+        selectableTimePredicate: (time) =>
+           _availableHoursSelesai.indexOf(time.hour) != -1 &&
+            _availableMenitSelesai.indexOf(time.minute) != -1).then((value) => value);
+    if (pick1 != null) {
       setState(() {
-        selectedTimeSelesai = picked1;
-        hour = selectedTimeSelesai.hour.toString();
-        // minutes = selectedTimeSelesai.minute.toString();
-        // time = hour + '.' + minutes;
-        time = hour + '.00';
-        timeControllerSelesai.text = time;
-        // timefinish = time;
+        timeselesai = pick1?.format(context);
+        // selectedTimeSelesai = pick;
+        // hour = selectedTimeSelesai.hour.toString();
+        // minutes = selectedWaktu.minute.toString();
+        // timeselesai = hour + ".00";
+        timeControllerSelesai.text = timeselesai;
+        print(
+            'hey look at me ke2 $selectedTimeSelesai ++ $timeselesai ++ $pick1');
       });
+    }
   }
+
+  // Future<Null> selectTime(BuildContext context) async {
+  //   final TimeOfDay picked = await showTimePicker(
+  //       context: context,
+  //       initialTime: selectedTime,
+  //       // initialEntryMode: TimePickerEntryMode.input,
+  //       builder: (BuildContext context, Widget child) {
+  //         return MediaQuery(
+  //           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+  //           child: child,
+  //         );
+  //       });
+  //   if (picked != null)
+  //     setState(() {
+  //       selectedTime = picked;
+  //       hour = selectedTime.hour.toString();
+  //       // minutes = selectedTime.minute.toString();
+  //       // time = hour + '.' + minutes;
+  //       time = hour + '.00';
+  //       timeController.text = time;
+  //       selectedTime = picked;
+  //       // timestart = time;
+  //     });
+  // }
+
+  // Future<Null> selectTimeSelesai(BuildContext context) async {
+  //   final TimeOfDay picked1 = await showTimePicker(
+  //       context: context,
+  //       initialTime: selectedTimeSelesai,
+  //       // initialEntryMode: TimePickerEntryMode.input,
+  //       builder: (BuildContext context, Widget child) {
+  //         return MediaQuery(
+  //           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+  //           child: child,
+  //         );
+  //       });
+  //   if (picked1 != null)
+  //     setState(() {
+  //       selectedTimeSelesai = picked1;
+  //       hour = selectedTimeSelesai.hour.toString();
+  //       // minutes = selectedTimeSelesai.minute.toString();
+  //       // time = hour + '.' + minutes;
+  //       time = hour + '.00';
+  //       timeControllerSelesai.text = time;
+  //       // timefinish = time;
+  //     });
+  // }
 
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
@@ -291,6 +328,10 @@ class _ProdukList extends State<ProdukList> {
         .round();
   }
 
+  // double difftime(TimeOfDay mulai, TimeOfDay selesai){
+  //   return ((selesai.tr))
+  // }
+
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
@@ -303,7 +344,7 @@ class _ProdukList extends State<ProdukList> {
         _tanggalAkhir =
             DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
         if (_date2.isAfter(_date1)) {
-          a = false;
+          showHidetanggalKontainer = false;
           initializeDateFormatting("id_ID", null).then((_) {
             mmtext = DateFormat.yMMMEd("id_ID").format(_date1);
             aatext = DateFormat.yMMMEd("id_ID").format(_date2);
@@ -442,9 +483,11 @@ class _ProdukList extends State<ProdukList> {
     _tanggalAkhir = _date2.toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
-    selectDate(context);
-    selectTime(context);
-    selectTimeSelesai(context);
+    // selectDate(context);
+    // selectTime(context);
+    // selectWaktuh(context);
+    // selectTimeSelesai(context);
+
     defaultProduk = dataProduk[0];
     print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
 
@@ -465,8 +508,8 @@ class _ProdukList extends State<ProdukList> {
     // timeControllerSelesai.text =
     //     durasiforklift.hour.toString() + "." + DateTime.now().minute.toString();
 
-    timeController.text = DateTime.now().hour.toString() + ".00";
-    timeControllerSelesai.text = durasiforklift.hour.toString() + ".00";
+    timeController.text = '-';
+    timeControllerSelesai.text = '-';
     _cekKoneksi();
     super.initState();
   }
@@ -479,10 +522,10 @@ class _ProdukList extends State<ProdukList> {
 
   void _visibilitymethod() {
     setState(() {
-      if (a) {
-        a = false;
+      if (showHidetanggalKontainer) {
+        showHidetanggalKontainer = false;
       } else {
-        a = true;
+        showHidetanggalKontainer = true;
       }
     });
   }
@@ -748,7 +791,7 @@ class _ProdukList extends State<ProdukList> {
                     SizedBox(
                       height: 10,
                     ),
-                    //iki tempat tanggal kontainer/forklift
+                    //ini tempat build tanggal kontainer/forklift
                     // _buildTanggal(),
                     // defaultProduk != dataProduk[0]
                     //     ? _buildTanggal()
@@ -765,8 +808,26 @@ class _ProdukList extends State<ProdukList> {
                   color: Colors.blue,
                   onPressed: () {
                     setState(() {
-                      FlagCari = 1;
-                      _search(context);
+                      // print('defaulnya1r $timehourawal ++ $timehourselesai');
+                      // timehourawal = time.toString().split(":")[0];
+                      // timehourselesai = timeselesai.toString().split(":")[0];
+                      // print('defaulnya$timehourawal++$timehourselesai');
+                      // var timeminute = time.toString().split(":")[1];
+                      // if (int.parse(timehourawal) > int.parse(timehourselesai) && cektanggal != '1') {
+                      //     return warningDialog(context,
+                      //         'Jam mulai tidak boleh lebih besar dari jam selesai !!! ');
+                      // } else if (int.parse(timehourawal) == int.parse(timehourselesai) && cektanggal != '1') {
+                      //     return warningDialog(context,
+                      //         'Jam mulai tidak boleh sama dengan jam selesai !!! ');
+                      // } 
+                      // else if (timehourawal == "" && timehourselesai == " " && cektanggal != '1') {
+                      //     return warningDialog(context,
+                      //         'Jam mulai dan jam selesai belum diset !!! ');
+                      // } 
+                      // else {
+                        FlagCari = 1;
+                        _search(context);
+                      // }
                     });
                   },
                   child: Text('Cari')),
@@ -786,10 +847,10 @@ class _ProdukList extends State<ProdukList> {
       // tanggalawal: _tanggalAwal,
       // tanggalakhir: _tanggalAkhir,
       tanggalawal: cektanggal == '0'
-          ? '${formatTglForklift.format(selectedDate)} $jAwal'
+          ? '${formatTglForklift.format(selectedDate)} $time'
           : _tanggalAwal,
       tanggalakhir: cektanggal == '0'
-          ? '${formatTglForklift.format(selectedDate)} $jAkhir'
+          ? '${formatTglForklift.format(selectedDate)} $timeselesai'
           : _tanggalAkhir,
       idlokasi: valKota,
       jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
@@ -813,10 +874,11 @@ class _ProdukList extends State<ProdukList> {
             List<JenisProduk> profiles = snapshot.data;
             print('stay alive $profiles');
             if (profiles != null) {
+              FlagCari = 0;
+              print('flagcari $FlagCari');
               return _buildListView(profiles);
-              // } else if (data = )){
-              //   return
             } else {
+              print('masuk sini2');
               return Center(
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -912,7 +974,8 @@ class _ProdukList extends State<ProdukList> {
                         borderRadius: new BorderRadius.circular(5)),
                     color: Colors.grey[200],
                     onPressed: () {
-                      selectTime(context);
+                      // selectTime(context);
+                      selectWaktuh(context);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1066,7 +1129,7 @@ class _ProdukList extends State<ProdukList> {
         SizedBox(
           height: 7,
         ),
-        a == true
+        showHidetanggalKontainer == true
             ? new Container(
                 child: Column(
                 children: [
@@ -1146,8 +1209,21 @@ class _ProdukList extends State<ProdukList> {
                                                 .toString()
                                                 .toLowerCase()
                                                 .contains('forklift')) {
-                                              // _popUpTroble(
-                                              //     context, jenisProduk);
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return FormInputOrder(
+                                                  jenisProduk: jenisProduk,
+                                                  tglawalforklift: selectedDate
+                                                      .format(
+                                                          format: 'yyyy-MM-dd')
+                                                      .toString(),
+                                                  jamawal: selectedWaktu
+                                                      .format(context),
+                                                  jamakhir: selectedTimeSelesai
+                                                      .format(context),
+                                                );
+                                              }));
                                             } else {
                                               Navigator.push(context,
                                                   MaterialPageRoute(

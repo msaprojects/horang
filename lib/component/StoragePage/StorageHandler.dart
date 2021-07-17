@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/component/StoragePage/StorageNonActive.List.dart';
+import 'package:horang/component/StoragePage/storageNonActiveDummy.dart';
 
 class StorageHandler extends StatelessWidget {
   final int initialIndex;
   StorageHandler({Key key, this.initialIndex}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,7 +46,9 @@ class StorageHandler extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              StorageNonActive1(),
+              // StorageNonActive1(),
+              StorageNonAktifDummy(
+              ),
               StorageActive1(),
               StorageExpired1(),
             ],

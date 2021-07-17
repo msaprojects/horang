@@ -29,6 +29,7 @@ import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/models/xendit.model.dart';
 import 'package:http/http.dart' show Client;
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 //CODE STRUCTURE
@@ -134,24 +135,25 @@ class ApiService {
 
   //LOAD MYSTORAGE
 
-  Future<List<MystorageModel>> listMystorageNew(
-      String token, var query) async {
+  Future<List<MystorageModel>> listMystorageNew(String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print(response.body + "togen" + token);
+    print("token dari apiservice"+response.body);
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
-      
+
       return storage
           .map((json) => MystorageModel.fromJson(json))
           .where((storage) {
-        final namaProdukLower = storage.noOrder.toLowerCase();
-        final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
-        final searchLower = query.toLowerCase();
+            final namaProdukLower = storage.noOrder.toLowerCase();
+            final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+            final searchLower = query.toLowerCase();
 
-        return namaProdukLower.contains(searchLower) ||
-            kodeKontainerLower.contains(searchLower);
-      }).where((element) => element.status == "NONAKTIF").toList();
+            return namaProdukLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower);
+          })
+          .where((element) => element.status == "NONAKTIF")
+          .toList();
     } else {
       throw Exception('gagal');
     }
@@ -590,6 +592,19 @@ class ApiService {
       return json.decode(response.body)['access_token'];
     } else {
       return "";
+    }
+  }
+
+  Future<String> ambildataSyaratKetentuan(sk) async {
+    http.Response response = await http
+        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+    // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
+    print("mmzzzrr" + response.statusCode.toString() +"+++" +response.body );
+    sk = response.body;
+    if (response.statusCode == 200) {
+      return sk;
+    } else {
+      return throw Exception('gagal');
     }
   }
 

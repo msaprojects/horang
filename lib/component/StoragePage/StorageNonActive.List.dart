@@ -85,6 +85,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
   void initState() {
     super.initState();
     cekToken();
+    print('HEI DAPET GA $access_token');
   }
 
   @override
@@ -266,7 +267,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
                                                   fontSize: 14),
                                             ),
                                             Text(
-                                              myStorage.idtransaksi_detail.toString(),
+                                              myStorage.nama_lokasi,
                                               // myStorage.nama_lokasi,
                                               style: GoogleFonts.inter(
                                                   fontSize: 14),

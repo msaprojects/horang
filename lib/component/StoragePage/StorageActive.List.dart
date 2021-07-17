@@ -84,6 +84,7 @@ class _StorageActive extends State<StorageActive1>
   void initState() {
     super.initState();
     cekToken();
+    print('hey ada gk ? $access_token');
   }
 
 // class OnGoing extends StatelessWidget {
@@ -100,6 +101,7 @@ class _StorageActive extends State<StorageActive1>
                     "9Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
+              print('hey ada gk1 ? $access_token');
               List<MystorageModel> profiles =
                   snapshot.data.where((i) => i.status == "AKTIF").toList();
               if (profiles.isNotEmpty) {
@@ -157,6 +159,7 @@ class _StorageActive extends State<StorageActive1>
                         } else {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => KonfirmasiLog(
+                                gambar: myStorage.gambar,
                                     kode_kontainer: myStorage.kode_kontainer,
                                     nama_kota: myStorage.nama_kota,
                                     noOrder: myStorage.noOrder,

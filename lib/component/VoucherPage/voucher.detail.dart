@@ -8,9 +8,10 @@ import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VoucherDetail extends StatefulWidget {
-  var voucherdet, kode_voucher, nominal, keterangan, gambar;
+  var sk, voucherdet, kode_voucher, nominal, keterangan, gambar;
   VoucherDetail(
-      {this.voucherdet,
+      {this.sk,
+        this.voucherdet,
       this.kode_voucher,
       this.nominal,
       this.keterangan,
@@ -30,7 +31,8 @@ class _VoucherDetailState extends State<VoucherDetail> {
       keterangan1,
       gambar1,
       nama_customer,
-      pin;
+      pin,
+      sk;
   ApiService _apiService = ApiService();
 
   cekToken() async {
@@ -76,11 +78,12 @@ class _VoucherDetailState extends State<VoucherDetail> {
   @override
   void initState() {
     super.initState();
+    sk = widget.sk;
     kode_voucher1 = widget.kode_voucher;
     nominal1 = widget.nominal;
     keterangan1 = widget.keterangan;
     gambar1 = widget.gambar;
-    print("cek gambar {$gambar1}");
+    // print("cek gambar {$gambar1}");
     cekToken();
   }
 
@@ -134,13 +137,13 @@ class _VoucherDetailState extends State<VoucherDetail> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.only(left: 20),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                    style: GoogleFonts.inter(fontSize: 12)),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.only(left: 20),
+                  alignment: Alignment.centerLeft,
+                  child: Text("$sk", style: GoogleFonts.inter(fontSize: 12)),
+                ),
               )
             ],
           ),

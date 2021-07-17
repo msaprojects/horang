@@ -228,8 +228,9 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) => Home()));
                                     } else {
+                                      print('${_apiService.responseCode.mMessage}');
                                       if (_apiService.responseCode.mMessage ==
-                                          "Email atau Password anda Salah! ") {
+                                          "Email atau Password anda Salah!") {
                                         warningDialog(context,
                                             "${_apiService.responseCode.mMessage}",
                                             title: "Warning!");
