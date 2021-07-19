@@ -90,6 +90,22 @@ class _VoucherDetailState extends State<VoucherDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Detail Voucher",
+          style: TextStyle(color: Colors.black),
+        ),
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ),
       body: Stack(
         children: [
           Column(
@@ -142,7 +158,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
                   margin: EdgeInsets.all(20),
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
-                  child: Text("$sk", style: GoogleFonts.inter(fontSize: 12)),
+                  child: Text(keterangan1, style: GoogleFonts.inter(fontSize: 12)),
                 ),
               )
             ],

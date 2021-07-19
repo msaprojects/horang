@@ -3,8 +3,6 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
-// import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/account_page/storageNonActiveDummy.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
@@ -217,11 +215,11 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Sksk(
-                      token: access_token,
-                    )));
-                  //   infoDialog(context,
-                  //       "Maaf, fitur masih dalam proses pengembangan !");
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Sksk(
+                    //   token: access_token,
+                    // )));
+                    infoDialog(context,
+                        "Maaf, fitur masih dalam proses pengembangan !");
                   },
                 ),
               ),

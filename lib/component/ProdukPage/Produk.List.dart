@@ -70,7 +70,9 @@ class _ProdukList extends State<ProdukList> {
       rtanggalAwal,
       rtanggalAkhir,
       pin,
-      defaultProduk = '', timehourawal, timehourselesai;
+      defaultProduk = '',
+      timehourawal,
+      timehourselesai;
   String _selectedDate,
       _dateCount,
       _range,
@@ -147,8 +149,8 @@ class _ProdukList extends State<ProdukList> {
             hour: _availableHoursAwal.first, minute: _availableMenitAwal.first),
         selectableTimePredicate: (time) =>
             _availableHoursAwal.indexOf(time.hour) != -1 &&
-            _availableMenitAwal.indexOf(time.minute) != -1
-            ).then((value) => value);
+            _availableMenitAwal.indexOf(time.minute) !=
+                -1).then((value) => value);
     if (pick != null) {
       setState(() {
         time = pick?.format(context);
@@ -175,10 +177,12 @@ class _ProdukList extends State<ProdukList> {
         onFailValidation: (context) =>
             errorDialog(context, 'Format Tanggal Salah'),
         initialTime: selectedWaktu.replacing(
-            hour: _availableHoursSelesai.first, minute: _availableMenitSelesai.first),
+            hour: _availableHoursSelesai.first,
+            minute: _availableMenitSelesai.first),
         selectableTimePredicate: (time) =>
-           _availableHoursSelesai.indexOf(time.hour) != -1 &&
-            _availableMenitSelesai.indexOf(time.minute) != -1).then((value) => value);
+            _availableHoursSelesai.indexOf(time.hour) != -1 &&
+            _availableMenitSelesai.indexOf(time.minute) !=
+                -1).then((value) => value);
     if (pick1 != null) {
       setState(() {
         timeselesai = pick1?.format(context);
@@ -813,18 +817,22 @@ class _ProdukList extends State<ProdukList> {
                       // timehourselesai = timeselesai.toString().split(":")[0];
                       // print('defaulnya$timehourawal++$timehourselesai');
                       // var timeminute = time.toString().split(":")[1];
-                      // if (int.parse(timehourawal) > int.parse(timehourselesai) && cektanggal != '1') {
-                      //     return warningDialog(context,
-                      //         'Jam mulai tidak boleh lebih besar dari jam selesai !!! ');
-                      // } else if (int.parse(timehourawal) == int.parse(timehourselesai) && cektanggal != '1') {
-                      //     return warningDialog(context,
-                      //         'Jam mulai tidak boleh sama dengan jam selesai !!! ');
-                      // } 
-                      // else if (timehourawal == "" && timehourselesai == " " && cektanggal != '1') {
-                      //     return warningDialog(context,
-                      //         'Jam mulai dan jam selesai belum diset !!! ');
-                      // } 
-                      // else {
+                      // if (int.parse(timehourawal) >
+                      //         int.parse(timehourselesai) &&
+                      //     cektanggal != '1') {
+                      //   return warningDialog(context,
+                      //       'Jam mulai tidak boleh lebih besar dari jam selesai !!! ');
+                      // } else if (int.parse(timehourawal) ==
+                      //         int.parse(timehourselesai) &&
+                      //     cektanggal != '1') {
+                      //   return warningDialog(context,
+                      //       'Jam mulai tidak boleh sama dengan jam selesai !!! ');
+                      // } else if (timehourawal == "" &&
+                      //     timehourselesai == " " &&
+                      //     cektanggal != '1') {
+                      //   return warningDialog(context,
+                      //       'Jam mulai dan jam selesai belum diset !!! ');
+                      // } else {
                         FlagCari = 1;
                         _search(context);
                       // }

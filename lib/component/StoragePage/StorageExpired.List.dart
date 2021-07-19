@@ -1,54 +1,57 @@
+import 'dart:async';
+
 import 'package:commons/commons.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/log/selesaiLog.dart';
+// import 'package:get/get.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:horang/widget/bottom_nav.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../api/models/log/selesaiLog.dart';
-import '../DashboardPage/home_page.dart';
-
-// ignore: must_be_immutable
 class StorageExpired1 extends StatefulWidget {
-  final TabController tabController;
-  var nama_kota, kode_kontainer;
+  // String token;
 
-  StorageExpired1(
-      {Key key, this.tabController, this.nama_kota, this.kode_kontainer})
-      : super(key: key);
+  // StorageNonAktifDummy({this.token});
   @override
-  _StorageExpired createState() => _StorageExpired();
+  _SearchListViewExampleState createState() => _SearchListViewExampleState();
 }
 
-class _StorageExpired extends State<StorageExpired1> {
+class _SearchListViewExampleState extends State<StorageExpired1> {
+  bool isLoading = false;
   SharedPreferences sp;
   ApiService _apiService = ApiService();
-  bool isSuccess = false;
-  bool _isLoading = false;
+  bool isSuccess = false, _loading = true;
   var access_token,
       refresh_token,
       idcustomer,
-      email,
+      iddetail_trans,
+      pin,
       nama,
       nama_customer,
       keterangan,
+      noOrder,
       kode_kontainer,
       nama_kota,
       nama_lokasi,
       tanggal_order,
       hari,
       aktif,
-      pin,
-      idtransaksii,
+      flag_noted,
       noted;
-  Color flag_noted;
 
-  Widget accbayar(BuildContext context, int accbyr, idtr, idtrd, String nam_kotaa, kod_kontanr) {
+  List<MystorageModel> storage = [];
+  String query = '', token = '';
+  Timer debouncer;
+
+  Widget accbayar(BuildContext context, int accbyr, idtr, idtrd,
+      String nam_kotaa, kod_kontanr) {
     if (accbyr == 1) {
       return Visibility(
         child: FlatButton(
@@ -80,21 +83,16 @@ class _StorageExpired extends State<StorageExpired1> {
                 // $idtr, $idtrd, $access_token",
                 showNeutralButton: false, positiveAction: () {
               setState(() {
-                _isLoading = true;
+                isLoading = true;
                 selesaiLog selesai =
                     selesaiLog(idtransaksi: idtr, token: access_token);
                 if (nam_kotaa != null || kod_kontanr != null) {
                   _apiService.SelesaiLog(selesai).then((isSuccess) {
-                    setState(() => _isLoading = false);
+                    setState(() => isLoading = false);
                     if (isSuccess) {
                       successDialog(context, "Berhasil",
-                          showNeutralButton: false, 
-                          positiveAction: () {
+                          showNeutralButton: false, positiveAction: () {
                         Navigator.pop(context);
-                        // Navigator.of(context).pushAndRemoveUntil(
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) => Home()),
-                        //     (Route<dynamic> route) => false);
                       }, positiveText: "Ok");
                     } else {
                       errorDialog(context, "Transaksi gagal dilakukan !");
@@ -145,6 +143,7 @@ class _StorageExpired extends State<StorageExpired1> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("tesacctoken $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -176,150 +175,167 @@ class _StorageExpired extends State<StorageExpired1> {
             }
           }));
     }
+    storage = await _apiService.listMystorageExpired(access_token, query);
+    print('yuhu ada gak $token ++ $access_token');
+    setState(() => this.storage = storage);
   }
 
   @override
-  void initState() {
-    super.initState();
+  initState() {
+    // token = widget.token;
     cekToken();
+    print('acctokenya $access_token ++ $token');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    debouncer?.cancel();
+    super.dispose();
+  }
+
+  void debounce(
+    VoidCallback callback, {
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
+    if (debouncer != null) {
+      debouncer.cancel();
+    }
+    debouncer = Timer(duration, callback);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-          future: _apiService.listMystorage(access_token),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<MystorageModel>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    "10Something wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List<MystorageModel> profiles =
-                  snapshot.data.where((i) => i.status == "EXPIRED").toList();
-              if (profiles.isNotEmpty) {
-                return _buildListview(profiles);
-              } else {
-                return Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/image/datanotfound.png"),
-                        Text(
-                          "Oppss..Maaf data kontainer expired kosong.",
-                          style: GoogleFonts.inter(color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          buildSearch(),
+          Expanded(
+            child: FutureBuilder(
+              future: _apiService.listMystorageExpired(access_token, query),
+              builder: (BuildContext context, index) {
+                print('sini ?x $access_token');
+                return ListView.builder(
+                  itemCount: storage.length,
+                  itemBuilder: (context, index) {
+                    final storages = storage[index];
+                    print('storagesxx2' + storages.nama);
+                    return buildmyStorage(storages);
+                  },
                 );
-              }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildListview(List<MystorageModel> dataIndex) {
-    return Scaffold(
-      body: Container(
-        child: Container(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 30),
-          color: Colors.grey[100],
-          child: (ListView.builder(
-            itemCount: dataIndex == null ? 0 : dataIndex.length,
-            itemBuilder: (BuildContext context, int index) {
-              MystorageModel myStorage = dataIndex[index];
-              return GestureDetector(
-                onTap: () {
-                  _openAlertDialog(
-                      context,
-                      myStorage.idtransaksi,
-                      myStorage.idtransaksi_detail,
-                      myStorage.nama_kota.toString(),
-                      myStorage.kode_kontainer.toString(),
-                      myStorage.nama.toString(),
-                      myStorage.nama_lokasi.toString(),
-                      myStorage.keterangan,
-                      myStorage.tanggal_order,
-                      myStorage.tanggal_mulai,
-                      myStorage.tanggal_akhir,
-                      myStorage.hari.toString(),
-                      myStorage.flag_selesai,
-                      myStorage.selesai);
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Card(
-                      child: Row(
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Cari...',
+        onChanged: searchmystorage,
+      );
+
+  Future searchmystorage(String query) async => debounce(() async {
+        print('token1 $access_token');
+        final storage =
+            await _apiService.listMystorageExpired(access_token, query);
+        if (!mounted) return;
+        setState(() {
+          this.storage = storage;
+          print("Execute search");
+        });
+      });
+
+  Widget buildmyStorage(MystorageModel storage) {
+    print('masuk sini xx $storage');
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+      color: Colors.grey[100],
+      child: GestureDetector(
+        onTap: () {
+          // setState(() => isLoading = true);
+          if (idcustomer == "0") {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+              duration: Duration(seconds: 10),
+            ));
+          } else {
+            _openAlertDialog(
+                context,
+                storage.idtransaksi,
+                storage.idtransaksi_detail,
+                storage.nama_kota,
+                storage.kode_kontainer,
+                storage.nama,
+                storage.nama_lokasi,
+                storage.keterangan,
+                storage.tanggal_order,
+                storage.tanggal_mulai,
+                storage.tanggal_akhir,
+                storage.hari,
+                storage.flag_selesai,
+                storage.selesai);
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Card(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'No. Order : ' + myStorage.noOrder,
-                                    style: GoogleFonts.inter(fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    'Kode Kontainer : ' +
-                                        myStorage.kode_kontainer,
-                                    style: GoogleFonts.inter(fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('Jenis Kontainer : ' + myStorage.nama,
-                                      style: GoogleFonts.inter(fontSize: 14)),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text('Lokasi : ' + myStorage.nama_lokasi,
-                                      style: GoogleFonts.inter(fontSize: 14)),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  getBayarBlm(myStorage.flag_selesai,
-                                      myStorage.selesai),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text(
-                                      "Ketuk untuk detail...",
-                                      style: GoogleFonts.lato(
-                                          fontSize: 12,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                          Text(
+                            'No. Order : ' + storage.noOrder,
+                            style: GoogleFonts.inter(fontSize: 14),
                           ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text(
+                            'Kode Kontainer : ' + storage.kode_kontainer,
+                            style: GoogleFonts.inter(fontSize: 14),
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text('Jenis Kontainer : ' + storage.nama,
+                              style: GoogleFonts.inter(fontSize: 14)),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text('Lokasi : ' + storage.nama_lokasi,
+                              style: GoogleFonts.inter(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          getBayarBlm(storage.flag_selesai, storage.selesai),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "Ketuk untuk detail...",
+                              style: GoogleFonts.lato(
+                                  fontSize: 12, fontStyle: FontStyle.italic),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  ],
-                ),
-              );
-            },
-          )),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -422,7 +438,7 @@ class _StorageExpired extends State<StorageExpired1> {
                           Container(
                               width: 900,
                               child: accbayar(
-                                context,
+                                  context,
                                   flagselesaii,
                                   idtransaksiz,
                                   idtransaksi_detailz,
@@ -452,28 +468,6 @@ class _StorageExpired extends State<StorageExpired1> {
                   ]),
             ),
           );
-        });
-  }
-
-  AccountValidation(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Lengkapi Profile anda"),
-      content: Text("Anda harus melengkapi akun sebelum melakukan transaksi!"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
         });
   }
 }

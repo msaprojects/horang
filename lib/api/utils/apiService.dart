@@ -135,25 +135,82 @@ class ApiService {
 
   //LOAD MYSTORAGE
 
-  Future<List<MystorageModel>> listMystorageNew(String token, var query) async {
+  Future<List<MystorageModel>> listMystorageForSearch(
+      String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice"+response.body);
+    print("token dari apiservice" + response.body + "$token");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
 
       return storage
           .map((json) => MystorageModel.fromJson(json))
           .where((storage) {
-            final namaProdukLower = storage.noOrder.toLowerCase();
+            final noOrderLower = storage.noOrder.toLowerCase();
             final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+            final jenisKontainer = storage.nama.toLowerCase();
+            final lokasi = storage.nama_lokasi.toLowerCase();
             final searchLower = query.toLowerCase();
 
-            return namaProdukLower.contains(searchLower) ||
-                kodeKontainerLower.contains(searchLower);
-          })
-          .where((element) => element.status == "NONAKTIF")
-          .toList();
+            return noOrderLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower) ||
+                jenisKontainer.contains(searchLower) ||
+                lokasi.contains(searchLower);
+          }).where((element) => element.status == "NONAKTIF").toList();
+    } else {
+      throw Exception('gagal');
+    }
+  }
+
+  Future<List<MystorageModel>> listMystorageActive(
+      String token, var query) async {
+    final response = await client.get("$baseUrl/mystorage",
+        headers: {"Authorization": "BEARER ${token}"});
+    print("token dari apiservice" + response.body + "$token");
+    if (response.statusCode == 200) {
+      List storage = json.decode(response.body);
+
+      return storage
+          .map((json) => MystorageModel.fromJson(json))
+          .where((storage) {
+            final noOrderLower = storage.noOrder.toLowerCase();
+            final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+            final jenisKontainer = storage.nama.toLowerCase();
+            final lokasi = storage.nama_lokasi.toLowerCase();
+            final searchLower = query.toLowerCase();
+
+            return noOrderLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower) ||
+                jenisKontainer.contains(searchLower) ||
+                lokasi.contains(searchLower);
+          }).where((element) => element.status == "AKTIF").toList();
+    } else {
+      throw Exception('gagal');
+    }
+  }
+
+  Future<List<MystorageModel>> listMystorageExpired(
+      String token, var query) async {
+    final response = await client.get("$baseUrl/mystorage",
+        headers: {"Authorization": "BEARER ${token}"});
+    print("token dari apiservice" + response.body + "$token");
+    if (response.statusCode == 200) {
+      List storage = json.decode(response.body);
+
+      return storage
+          .map((json) => MystorageModel.fromJson(json))
+          .where((storage) {
+            final noOrderLower = storage.noOrder.toLowerCase();
+            final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+            final jenisKontainer = storage.nama.toLowerCase();
+            final lokasi = storage.nama_lokasi.toLowerCase();
+            final searchLower = query.toLowerCase();
+
+            return noOrderLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower) ||
+                jenisKontainer.contains(searchLower) ||
+                lokasi.contains(searchLower);
+          }).where((element) => element.status == "EXPIRED").toList();
     } else {
       throw Exception('gagal');
     }
@@ -225,6 +282,28 @@ class ApiService {
       return null;
     }
   }
+
+  // Future<List<HistoryModel>> listHistory(String token, var query) async {
+  //   final response = await client.get("$baseUrl/histori",
+  //       headers: {"Authorization": "BEARER ${token}"});
+  //   print("token dari apiservice" + response.body + "$token");
+  //   if (response.statusCode == 200) {
+  //     List storage = json.decode(response.body);
+  //     return storage
+  //         .map((json) => HistoryModel.fromJson(json))
+  //         .where((storage) {
+  //           final noKontainerLower = storage.kode_kontainer.toLowerCase();
+  //           final noBayarLower = storage.kode_refrensi.toLowerCase();
+  //           final searchLower = query.toLowerCase();
+
+  //           return noKontainerLower.contains(searchLower) 
+  //           || noBayarLower.contains(searchLower)
+  //           ;
+  //         }).toList();
+  //   } else {
+  //     throw Exception('gagal');
+  //   }
+  // }
 
   //LOAD ASURANSI LIST
   Future<List<AsuransiModel>> listAsuransi(String token) async {
@@ -599,7 +678,7 @@ class ApiService {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
-    print("mmzzzrr" + response.statusCode.toString() +"+++" +response.body );
+    print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {
       return sk;
