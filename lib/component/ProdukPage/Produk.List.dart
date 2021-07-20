@@ -6,7 +6,6 @@ import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
-import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:http/http.dart' as http;
@@ -58,7 +57,7 @@ class _ProdukList extends State<ProdukList> {
   List<int> _availableHoursSelesai = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
   List<int> _availableMenitSelesai = [0];
   bool isSuccess = false;
-  int valKota, pilihProduk;
+  int valKota, pilihProduk, valuehasilperhitungandurasi = 0;
   var access_token,
       refresh_token,
       idcustomer,
@@ -91,10 +90,13 @@ class _ProdukList extends State<ProdukList> {
       pilihproduks = '',
       cektanggal = '',
       timestart = '',
-      timefinish = '';
+      timefinish = '',
+      valueawalperhitungandurasi = "",
+      valueakhirperhitungandurasi = "",
+      satuan = "";
   double height, width;
   var formatter = new DateFormat('yyyy-MM-dd'),
-      selectedTime = TimeOfDay.now(),
+      selectedTimeAwal = TimeOfDay.now(),
       selectedTimeSelesai =
           TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 180))),
       durasiforklift = DateTime.now().add(new Duration(minutes: 180));
@@ -119,22 +121,10 @@ class _ProdukList extends State<ProdukList> {
       });
   }
 
-  // Future<void> selectDate(BuildContext context) async {
-  //   final DateTime picked = await showDatePicker(
-  //       context: context,
-  //       initialDate: selectedDate,
-  //       firstDate: DateTime.parse(tMulaiForklift),
-  //       lastDate: DateTime(2900));
-  //   setState(() {
-  //     selectedDate = picked;
-  //   });
-  // }
-
-  // final String currentTimezone = await FlutterNativeTimezone.getLocalTimezone();
   String jAwal = DateFormat.Hm().format(DateTime.now());
   String jAkhir = DateFormat.Hm().format(DateTime.now());
 
-  Future selectWaktuh(BuildContext context) async {
+  Future selectTimeAwal(BuildContext context) async {
     final TimeOfDay pick = await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget child) {
@@ -154,11 +144,6 @@ class _ProdukList extends State<ProdukList> {
     if (pick != null) {
       setState(() {
         time = pick?.format(context);
-        // selectedWaktu = pick;
-        // hour = selectedWaktu.hour.toString();
-        // hour = selectedWaktu.hour.toString();
-        // minutes = selectedWaktu.minute.toString();
-        // time = hour + ".00";
         timeController.text = time;
         print('hey look at me $selectedWaktu ++ $time ++ $pick');
       });
@@ -186,63 +171,12 @@ class _ProdukList extends State<ProdukList> {
     if (pick1 != null) {
       setState(() {
         timeselesai = pick1?.format(context);
-        // selectedTimeSelesai = pick;
-        // hour = selectedTimeSelesai.hour.toString();
-        // minutes = selectedWaktu.minute.toString();
-        // timeselesai = hour + ".00";
         timeControllerSelesai.text = timeselesai;
         print(
             'hey look at me ke2 $selectedTimeSelesai ++ $timeselesai ++ $pick1');
       });
     }
   }
-
-  // Future<Null> selectTime(BuildContext context) async {
-  //   final TimeOfDay picked = await showTimePicker(
-  //       context: context,
-  //       initialTime: selectedTime,
-  //       // initialEntryMode: TimePickerEntryMode.input,
-  //       builder: (BuildContext context, Widget child) {
-  //         return MediaQuery(
-  //           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-  //           child: child,
-  //         );
-  //       });
-  //   if (picked != null)
-  //     setState(() {
-  //       selectedTime = picked;
-  //       hour = selectedTime.hour.toString();
-  //       // minutes = selectedTime.minute.toString();
-  //       // time = hour + '.' + minutes;
-  //       time = hour + '.00';
-  //       timeController.text = time;
-  //       selectedTime = picked;
-  //       // timestart = time;
-  //     });
-  // }
-
-  // Future<Null> selectTimeSelesai(BuildContext context) async {
-  //   final TimeOfDay picked1 = await showTimePicker(
-  //       context: context,
-  //       initialTime: selectedTimeSelesai,
-  //       // initialEntryMode: TimePickerEntryMode.input,
-  //       builder: (BuildContext context, Widget child) {
-  //         return MediaQuery(
-  //           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-  //           child: child,
-  //         );
-  //       });
-  //   if (picked1 != null)
-  //     setState(() {
-  //       selectedTimeSelesai = picked1;
-  //       hour = selectedTimeSelesai.hour.toString();
-  //       // minutes = selectedTimeSelesai.minute.toString();
-  //       // time = hour + '.' + minutes;
-  //       time = hour + '.00';
-  //       timeControllerSelesai.text = time;
-  //       // timefinish = time;
-  //     });
-  // }
 
   Future<List<JenisProduk>> url;
   DateTime sekarang = new DateTime.now();
@@ -331,10 +265,6 @@ class _ProdukList extends State<ProdukList> {
             24)
         .round();
   }
-
-  // double difftime(TimeOfDay mulai, TimeOfDay selesai){
-  //   return ((selesai.tr))
-  // }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
@@ -487,10 +417,6 @@ class _ProdukList extends State<ProdukList> {
     _tanggalAkhir = _date2.toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
-    // selectDate(context);
-    // selectTime(context);
-    // selectWaktuh(context);
-    // selectTimeSelesai(context);
 
     defaultProduk = dataProduk[0];
     print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
@@ -507,10 +433,6 @@ class _ProdukList extends State<ProdukList> {
       }
     });
     dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    // timeController.text =
-    //     DateTime.now().hour.toString() + "." + DateTime.now().minute.toString();
-    // timeControllerSelesai.text =
-    //     durasiforklift.hour.toString() + "." + DateTime.now().minute.toString();
 
     timeController.text = '-';
     timeControllerSelesai.text = '-';
@@ -747,7 +669,6 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   Widget build(BuildContext context) {
-    // print("ttawalakhir ${_tanggalAwal + _tanggalAkhir}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -770,12 +691,6 @@ class _ProdukList extends State<ProdukList> {
           padding: EdgeInsets.all(5),
           child: Column(
             children: <Widget>[
-              // Container(
-              //     child: GestureDetector(
-              //         onTap: () {
-              //           tesaja();
-              //         },
-              //         child: Text('klik disini'))),
               Container(
                 alignment: Alignment.center,
                 child: Column(
@@ -795,11 +710,6 @@ class _ProdukList extends State<ProdukList> {
                     SizedBox(
                       height: 10,
                     ),
-                    //ini tempat build tanggal kontainer/forklift
-                    // _buildTanggal(),
-                    // defaultProduk != dataProduk[0]
-                    //     ? _buildTanggal()
-                    //     : _buildTanggalFokrlift()
                     cektanggal == '1'
                         ? _buildTanggal()
                         : _buildTanggalFokrlift()
@@ -812,30 +722,8 @@ class _ProdukList extends State<ProdukList> {
                   color: Colors.blue,
                   onPressed: () {
                     setState(() {
-                      // print('defaulnya1r $timehourawal ++ $timehourselesai');
-                      // timehourawal = time.toString().split(":")[0];
-                      // timehourselesai = timeselesai.toString().split(":")[0];
-                      // print('defaulnya$timehourawal++$timehourselesai');
-                      // var timeminute = time.toString().split(":")[1];
-                      // if (int.parse(timehourawal) >
-                      //         int.parse(timehourselesai) &&
-                      //     cektanggal != '1') {
-                      //   return warningDialog(context,
-                      //       'Jam mulai tidak boleh lebih besar dari jam selesai !!! ');
-                      // } else if (int.parse(timehourawal) ==
-                      //         int.parse(timehourselesai) &&
-                      //     cektanggal != '1') {
-                      //   return warningDialog(context,
-                      //       'Jam mulai tidak boleh sama dengan jam selesai !!! ');
-                      // } else if (timehourawal == "" &&
-                      //     timehourselesai == " " &&
-                      //     cektanggal != '1') {
-                      //   return warningDialog(context,
-                      //       'Jam mulai dan jam selesai belum diset !!! ');
-                      // } else {
-                        FlagCari = 1;
-                        _search(context);
-                      // }
+                      FlagCari = 1;
+                      _search(context);
                     });
                   },
                   child: Text('Cari')),
@@ -983,7 +871,7 @@ class _ProdukList extends State<ProdukList> {
                     color: Colors.grey[200],
                     onPressed: () {
                       // selectTime(context);
-                      selectWaktuh(context);
+                      selectTimeAwal(context);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -1195,57 +1083,20 @@ class _ProdukList extends State<ProdukList> {
                                     child: Card(
                                       child: InkWell(
                                         onTap: () {
-                                          if (idcustomer == "" ||
-                                              idcustomer == null ||
-                                              idcustomer == "0") {
-                                            Scaffold.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                                              duration: Duration(seconds: 10),
-                                            ));
-//                        Navigator.pop(context, false);
-                                          } else if (jenisProduk.avail == 0) {
-                                            Scaffold.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Unit saat ini belum tersedia!, silahkan pilih tanggal dan kota yang lain'),
-                                              duration: Duration(seconds: 3),
-                                            ));
-                                          } else {
-                                            if (jenisProduk.kapasitas
-                                                .toString()
-                                                .toLowerCase()
-                                                .contains('forklift')) {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return FormInputOrder(
-                                                  jenisProduk: jenisProduk,
-                                                  tglawalforklift: selectedDate
-                                                      .format(
-                                                          format: 'yyyy-MM-dd')
-                                                      .toString(),
-                                                  jamawal: selectedWaktu
-                                                      .format(context),
-                                                  jamakhir: selectedTimeSelesai
-                                                      .format(context),
-                                                );
-                                              }));
-                                            } else {
-                                              Navigator.push(context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return FormInputOrder(
-                                                  jenisProduk: jenisProduk,
-                                                  tglawal12: _tanggalAwal,
-                                                  tglakhir12: _tanggalAkhir,
-                                                );
-                                              }));
-                                              print("hey arnold" +
-                                                  jenisProduk.toString());
-                                            }
-                                          }
+                                          itemClicked(
+                                              context,
+                                              jenisProduk.avail,
+                                              jenisProduk.kapasitas,
+                                              jenisProduk.idlokasi,
+                                              jenisProduk.idjenis_produk,
+                                              jenisProduk.harga,
+                                              jenisProduk.diskon,
+                                              jenisProduk.harganett,
+                                              jenisProduk.keterangan,
+                                              jenisProduk.gambar,
+                                              jenisProduk.nama_kota,
+                                              jenisProduk.nama_lokasi,
+                                              jenisProduk.min_sewa);
                                         },
                                         child: Column(
                                           mainAxisAlignment:
@@ -1505,24 +1356,78 @@ class _ProdukList extends State<ProdukList> {
         });
   }
 
-  Widget dateValidation(BuildContext context, kondisi) {
-    Widget okButton = FlatButton(
-        child: Text("Iya"),
-        onPressed: () {
-          Navigator.pop(context);
-        });
-    AlertDialog alert = AlertDialog(
-      title: Text("Minimum sewa 5 Hari"),
-      content: Text(
-          "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
+  itemClicked(
+      context,
+      int available,
+      String jenisproduk,
+      num idlokasi,
+      num idjenis_produk,
+      num harga,
+      num diskon,
+      num harganett,
+      String keterangan,
+      String gambar,
+      String nama_kota,
+      String nama_lokasi,
+      num min_sewa) {
+    if (idcustomer == "" || idcustomer == null || idcustomer == "0") {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content:
+            Text('Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+        duration: Duration(seconds: 10),
+      ));
+    } else {
+      if (available == 0) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Unit saat ini belum tersedia!, silahkan pilih tanggal dan kota yang lain'),
+          duration: Duration(seconds: 3),
+        ));
+      } else {
+        if (jenisproduk.toLowerCase().contains('forklift')) {
+          valueawalperhitungandurasi =
+              _tanggalAwal.toString() + " " + selectedTimeAwal.format(context);
+          valueakhirperhitungandurasi = _tanggalAkhir.toString() +
+              " " +
+              selectedTimeSelesai.format(context);
+          satuan = "/jam";
+        } else {
+          valueawalperhitungandurasi = _tanggalAwal;
+          valueakhirperhitungandurasi = _tanggalAkhir;
+          satuan = "/hari";
+        }
+        valuehasilperhitungandurasi = diffInDays(
+            DateTime.parse(valueawalperhitungandurasi),
+            DateTime.parse(valueakhirperhitungandurasi));
+        if (valuehasilperhitungandurasi < min_sewa) {
+          errorDialog(
+              context,
+              "Minimal sewa " +
+                  jenisproduk +
+                  " " +
+                  min_sewa.toString() +
+                  " " +
+                  satuan);
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return FormInputOrder(
+                tanggaljamawal: valueawalperhitungandurasi,
+                tanggaljamakhir: valueakhirperhitungandurasi,
+                idlokasi: idlokasi,
+                idjenis_produk: idjenis_produk,
+                harga: harga,
+                avail: available,
+                diskon: diskon,
+                harganett: harganett,
+                min_sewa: min_sewa,
+                kapasitas: jenisproduk,
+                keterangan: keterangan,
+                gambar: gambar,
+                nama_kota: nama_kota,
+                nama_lokasi: nama_lokasi);
+          }));
+        }
+      }
+    }
   }
 }

@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -19,15 +18,29 @@ import 'package:get/get.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputOrder extends StatefulWidget {
-  JenisProduk jenisProduk;
-  var tglawal12, tglakhir12, tglawalforklift, jamawal, jamakhir;
+  num idlokasi, idjenis_produk, harga, avail, diskon, harganett, min_sewa;
+  var tanggaljamawal,
+      tanggaljamakhir,
+      kapasitas,
+      keterangan,
+      gambar,
+      nama_kota,
+      nama_lokasi;
   FormInputOrder(
-      {this.jenisProduk,
-      this.tglawal12,
-      this.tglakhir12,
-      this.tglawalforklift,
-      this.jamawal,
-      this.jamakhir});
+      {this.tanggaljamawal,
+      this.tanggaljamakhir,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.harga,
+      this.avail,
+      this.diskon,
+      this.harganett,
+      this.min_sewa,
+      this.kapasitas,
+      this.keterangan,
+      this.gambar,
+      this.nama_kota,
+      this.nama_lokasi});
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -45,7 +58,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       flagvoucher = false,
       fieldnominalbarang,
       fieldketeranganbarang = false,
-      boolkontainer = false;
+      boolkontainer = true;
   var kapasitas,
       alamat,
       keterangan,
@@ -100,7 +113,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       potonganvoucher = 0,
       harganett = 0,
       diskon,
-      harga;
+      harga,
+      min_sewa = 0;
   DateTime dtAwal, dtAkhir;
   int ssk;
 
@@ -154,13 +168,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
     return;
   }
 
-    Future<String> _ambildataSK() async {
+  Future<String> _ambildataSK() async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
     print("mmzzzrr" + response.body);
     return sk = response.body;
   }
-
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -228,10 +241,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   settingJamOperasional() {
-    if (widget.jenisProduk.kapasitas
-        .toString()
-        .toLowerCase()
-        .contains('forklift')) {
+    if (kapasitas.toLowerCase().contains('forklift')) {
       return Visibility(child: Text(''));
     } else {
       return Column(
@@ -317,40 +327,30 @@ class _FormDetailOrder extends State<FormInputOrder> {
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
-    idjenis_produk = widget.jenisProduk.idjenis_produk;
-    kapasitas = widget.jenisProduk.kapasitas.toString();
-    harga_sewa = widget.jenisProduk.harga;
-    alamat = widget.jenisProduk.nama_lokasi;
-    keterangan = widget.jenisProduk.keterangan;
-    idlokasi = widget.jenisProduk.idlokasi;
-    produkimage = widget.jenisProduk.gambar;
-    harganett = widget.jenisProduk.harganett;
-    harga = widget.jenisProduk.harga;
-    diskon = widget.jenisProduk.diskon;
-    if (widget.jenisProduk.kapasitas
-        .toString()
-        .toLowerCase()
-        .contains('forklift')) {
-      boolkontainer = true;
+    idjenis_produk = widget.idjenis_produk;
+    kapasitas = widget.kapasitas.toString();
+    harga_sewa = widget.harga;
+    alamat = widget.nama_lokasi;
+    keterangan = widget.keterangan;
+    idlokasi = widget.idlokasi;
+    produkimage = widget.gambar;
+    harganett = widget.harganett;
+    harga = widget.harga;
+    diskon = widget.diskon;
+    valueawal = widget.tanggaljamawal;
+    valueakhir = widget.tanggaljamakhir;
+    min_sewa = widget.min_sewa;
+    minimaldeposit = min_sewa;
+    if (widget.kapasitas.toString().toLowerCase().contains('forklift')) {
+      boolkontainer = false;
       boolsk = false;
-      minimaldeposit = 0;
       vsatuan_sewa = "jam ";
-      tglawalforklift1 = widget.tglawalforklift.toString();
-      jamawal1 = widget.jamawal.toString();
-      jamakhir1 = widget.jamakhir.toString();
-      valueawal = tglawalforklift1 + " " + jamawal1;
-      valueakhir = tglawalforklift1 + " " + jamakhir1;
-      // jenisitem1 = 'forklift'.toLowerCase();
       vdurasi_sewa =
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     } else {
-      // jenisitem1 = 'kontainer'.toLowerCase();
-      minimaldeposit = 3;
+      boolkontainer = true;
+      boolsk = true;
       vsatuan_sewa = "hari ";
-      tglAwal = widget.tglawal12.toString();
-      tglAkhir = widget.tglakhir12.toString();
-      valueawal = tglAwal;
-      valueakhir = tglAkhir;
       vdurasi_sewa =
           diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
     }
@@ -382,7 +382,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: GestureDetector(
-          onTap: (){
+          onTap: () {
             print('klikSK $sk');
           },
           child: Text(
@@ -781,33 +781,35 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 showDialog(
                                                     barrierDismissible: false,
                                                     context: context,
-                                                    builder: (context) =>
+                                                    builder:
+                                                        (context) =>
                                                             WillPopScope(
-                                                              onWillPop: () async => false,
-                                                              child: AlertDialog(
+                                                              onWillPop:
+                                                                  () async =>
+                                                                      false,
+                                                              child:
+                                                                  AlertDialog(
                                                                 title: Text(
                                                                     'Syarat dan Ketentuan'),
                                                                 content:
                                                                     SingleChildScrollView(
                                                                   controller:
                                                                       scrollController,
-                                                                  child:
-                                                                      Text('$sk'),
+                                                                  child: Text(
+                                                                      '$sk'),
                                                                 ),
                                                                 actions: [
                                                                   Obx(() =>
                                                                       Visibility(
-                                                                          visible:
-                                                                              buttonVisible
-                                                                                  .value,
+                                                                          visible: buttonVisible
+                                                                              .value,
                                                                           child:
                                                                               ElevatedButton(
                                                                             child:
                                                                                 Text("Setuju"),
                                                                             onPressed:
                                                                                 () {
-                                                                              ssk =
-                                                                                  1;
+                                                                              ssk = 1;
                                                                               Navigator.pop(context);
                                                                               print('$boolsk');
                                                                             },
@@ -835,8 +837,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           fontSize: 12,
                                           color: Colors.blue,
                                           fontStyle: FontStyle.italic,
-                                          decoration:
-                                              TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                   ),
                                 ],
