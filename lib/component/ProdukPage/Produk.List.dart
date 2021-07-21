@@ -291,21 +291,21 @@ class _ProdukList extends State<ProdukList> {
             aatext = DateFormat.yMMMEd("id_ID").format(_date2);
           });
         }
-        // if (diffInDays(
-        //         DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
-        //     5) {
-        //   _date2 = _date1.add(Duration(days: 5));
-        //   _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
-        //   _tanggalAkhir =
-        //       DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        if (diffInDays(
+                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+            5) {
+          _date2 = _date1.add(Duration(days: 5));
+          _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+          _tanggalAkhir =
+              DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
 
-        //   warningDialog(
-        //     context,
-        //     "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
-        //     title: "minimal sewa 5 hari",
-        //     positiveAction: () {},
-        //   );
-        // }
+          warningDialog(
+            context,
+            "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
+            title: "minimal sewa 5 hari",
+            positiveAction: () {},
+          );
+        }
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
