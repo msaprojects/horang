@@ -86,7 +86,6 @@ class ApiService {
   Future<List<JenisProduk>> listJenisProduk(String token) async {
     final response = await client.get("$baseUrl/jenisprodukdanproduk",
         headers: {"Authorization": "BEARER ${token}"});
-    print('rampage' + response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -101,8 +100,6 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: PostProdukModelToJson(data),
     );
-    // response.body;
-    print('rampage1' + response.body);
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
@@ -156,7 +153,9 @@ class ApiService {
                 kodeKontainerLower.contains(searchLower) ||
                 jenisKontainer.contains(searchLower) ||
                 lokasi.contains(searchLower);
-          }).where((element) => element.status == "NONAKTIF").toList();
+          })
+          .where((element) => element.status == "NONAKTIF")
+          .toList();
     } else {
       throw Exception('gagal');
     }
@@ -183,7 +182,9 @@ class ApiService {
                 kodeKontainerLower.contains(searchLower) ||
                 jenisKontainer.contains(searchLower) ||
                 lokasi.contains(searchLower);
-          }).where((element) => element.status == "AKTIF").toList();
+          })
+          .where((element) => element.status == "AKTIF")
+          .toList();
     } else {
       throw Exception('gagal');
     }
@@ -210,7 +211,9 @@ class ApiService {
                 kodeKontainerLower.contains(searchLower) ||
                 jenisKontainer.contains(searchLower) ||
                 lokasi.contains(searchLower);
-          }).where((element) => element.status == "EXPIRED").toList();
+          })
+          .where((element) => element.status == "EXPIRED")
+          .toList();
     } else {
       throw Exception('gagal');
     }
@@ -296,7 +299,7 @@ class ApiService {
   //           final noBayarLower = storage.kode_refrensi.toLowerCase();
   //           final searchLower = query.toLowerCase();
 
-  //           return noKontainerLower.contains(searchLower) 
+  //           return noKontainerLower.contains(searchLower)
   //           || noBayarLower.contains(searchLower)
   //           ;
   //         }).toList();

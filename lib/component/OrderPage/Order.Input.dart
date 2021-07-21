@@ -171,7 +171,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   Future<String> _ambildataSK() async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-    print("mmzzzrr" + response.body);
     return sk = response.body;
   }
 
@@ -320,8 +319,34 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   void initState() {
     cekToken();
-    _ambildataSK();
-
+    print("VALUE ORDER? : " +
+        widget.tanggaljamawal +
+        " ~ " +
+        widget.tanggaljamakhir +
+        " ~ " +
+        widget.idlokasi.toString() +
+        " ~ " +
+        widget.idjenis_produk.toString() +
+        " ~ " +
+        widget.harga.toString() +
+        " ~ " +
+        widget.avail.toString() +
+        " ~ " +
+        widget.diskon.toString() +
+        " ~ " +
+        widget.harganett.toString() +
+        " ~ " +
+        widget.min_sewa.toString() +
+        " ~ " +
+        widget.kapasitas.toString() +
+        " ~ " +
+        widget.keterangan +
+        " ~ " +
+        widget.gambar +
+        " ~ " +
+        widget.nama_kota +
+        " ~ " +
+        widget.nama_lokasi);
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
@@ -339,21 +364,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
     valueakhir = widget.tanggaljamakhir;
     min_sewa = widget.min_sewa;
     minimaldeposit = min_sewa;
-    print("ORDER?? " +
-        idjenis_produk.toString() +
-        kapasitas.toString() +
-        harga_sewa.toString() +
-        alamat +
-        keterangan +
-        idlokasi.toString() +
-        produkimage +
-        harganett.toString() +
-        harga.toString() +
-        diskon.toString() +
-        valueawal +
-        valueakhir +
-        min_sewa.toString() +
-        minimaldeposit.toString());
     if (widget.kapasitas.toString().toLowerCase().contains('forklift')) {
       boolkontainer = false;
       boolsk = false;
@@ -365,7 +375,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       boolsk = true;
       vsatuan_sewa = "hari ";
       vdurasi_sewa =
-          diffInDays(DateTime.parse(tglAwal), DateTime.parse(tglAkhir));
+          diffInDays(DateTime.parse(valueawal), DateTime.parse(valueawal));
     }
     totalhariharga = vdurasi_sewa * harga_sewa;
     hargaxminimalsewadeposit = harga_sewa * minimaldeposit;
@@ -395,9 +405,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: GestureDetector(
-          onTap: () {
-            print('klikSK $sk');
-          },
           child: Text(
             "Lengkapi Data Sewa",
             style: TextStyle(color: Colors.black),
@@ -786,7 +793,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           value: boolsk,
                                           onChanged: (bool syaratketentuan) {
                                             setState(() {
-                                              print("$boolsk ss");
                                               boolsk = syaratketentuan;
                                               if (boolsk == true) {
                                                 ssk = 1;
@@ -1219,6 +1225,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     getAsuransi();
     getSaldo();
     getSetting(access_token, idlokasi);
+    _ambildataSK();
   }
 
   getSaldo() async {

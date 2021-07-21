@@ -291,21 +291,21 @@ class _ProdukList extends State<ProdukList> {
             aatext = DateFormat.yMMMEd("id_ID").format(_date2);
           });
         }
-        // if (diffInDays(
-        //         DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
-        //     5) {
-        //   _date2 = _date1.add(Duration(days: 5));
-        //   _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
-        //   _tanggalAkhir =
-        //       DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
+        if (diffInDays(
+                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+            5) {
+          _date2 = _date1.add(Duration(days: 5));
+          _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+          _tanggalAkhir =
+              DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
 
-        //   warningDialog(
-        //     context,
-        //     "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
-        //     title: "minimal sewa 5 hari",
-        //     positiveAction: () {},
-        //   );
-        // }
+          warningDialog(
+            context,
+            "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
+            title: "minimal sewa 5 hari",
+            positiveAction: () {},
+          );
+        }
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
@@ -429,12 +429,9 @@ class _ProdukList extends State<ProdukList> {
 
     _buildKomboProduk(pilihproduks);
     setState(() {
-      print('pilihproduk001 $defaultProduk');
       if (pilihproduks == 'forklift') {
-        print('inidapet001');
         return cektanggal = '0';
       } else {
-        print('inidapet011');
         return cektanggal = '1';
       }
     });
@@ -755,7 +752,6 @@ class _ProdukList extends State<ProdukList> {
       idlokasi: valKota,
       jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
     );
-    print('objectonexyz $data');
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -772,7 +768,6 @@ class _ProdukList extends State<ProdukList> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
-            print('stay alive $profiles');
             if (profiles != null) {
               FlagCari = 0;
               print('flagcari $FlagCari');
@@ -1058,7 +1053,6 @@ class _ProdukList extends State<ProdukList> {
   }
 
   Widget _buildListView(List<JenisProduk> dataIndex) {
-    print('object123 $dataIndex');
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -1082,7 +1076,6 @@ class _ProdukList extends State<ProdukList> {
                               child: ListView.builder(
                                 itemBuilder: (context, index) {
                                   JenisProduk jenisProduk = dataIndex[index];
-                                  print('coblos $dataIndex');
                                   return Container(
                                     child: Card(
                                       child: InkWell(
@@ -1256,7 +1249,6 @@ class _ProdukList extends State<ProdukList> {
           contentPadding:
               const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 5.0)),
       items: _dataKota.map((item) {
-        print('data kota $_dataKota');
         return DropdownMenuItem(
           // child: Text(item['nama_kota']),
           child: Padding(
@@ -1278,7 +1270,6 @@ class _ProdukList extends State<ProdukList> {
   }
 
   Widget _buildKomboProduk(String produks) {
-    print('defaultpro $defaultProduk');
     return DropdownButtonFormField(
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
@@ -1388,13 +1379,21 @@ class _ProdukList extends State<ProdukList> {
           duration: Duration(seconds: 3),
         ));
       } else {
+        print("masuk filter avail?");
         if (jenisproduk.toLowerCase().contains('forklift')) {
+          print("masuk filter forklift?");
           valueawalperhitungandurasi =
-              _tanggalAwal.toString() + " " + selectedTimeAwal.format(context);
-          valueakhirperhitungandurasi = _tanggalAkhir.toString() +
-              " " +
-              selectedTimeSelesai.format(context);
-
+              formatTglForklift.format(selectedDate).toString() +
+                  " " +
+                  selectedTimeAwal.format(context);
+          valueakhirperhitungandurasi =
+              formatTglForklift.format(selectedDate).toString() +
+                  " " +
+                  selectedTimeSelesai.format(context);
+          print("concat date" +
+              valueawalperhitungandurasi +
+              " ~ " +
+              valueakhirperhitungandurasi);
           valuehasilperhitungandurasi = diffInTime(
               DateTime.parse(valueawalperhitungandurasi),
               DateTime.parse(valueakhirperhitungandurasi));
@@ -1407,7 +1406,7 @@ class _ProdukList extends State<ProdukList> {
               DateTime.parse(valueawalperhitungandurasi));
           satuan = "/hari";
         }
-        print("CEKING TGL : " +
+        print("CHEKING TGL $jenisproduk : " +
             valueawalperhitungandurasi +
             " ~ " +
             valueakhirperhitungandurasi +
@@ -1423,6 +1422,34 @@ class _ProdukList extends State<ProdukList> {
                   " " +
                   satuan);
         } else {
+          print("VALUE PARAMETER? : " +
+              valueawalperhitungandurasi +
+              " ~ " +
+              valueakhirperhitungandurasi +
+              " ~ " +
+              idlokasi.toString() +
+              " ~ " +
+              idjenis_produk.toString() +
+              " ~ " +
+              harga.toString() +
+              " ~ " +
+              available.toString() +
+              " ~ " +
+              diskon.toString() +
+              " ~ " +
+              harganett.toString() +
+              " ~ " +
+              min_sewa.toString() +
+              " ~ " +
+              jenisproduk +
+              " ~ " +
+              keterangan +
+              " ~ " +
+              gambar +
+              " ~ " +
+              nama_kota +
+              " ~ " +
+              nama_lokasi);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormInputOrder(
                 tanggaljamawal: valueawalperhitungandurasi,
