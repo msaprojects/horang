@@ -320,8 +320,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
   @override
   void initState() {
     cekToken();
-    getSaldo();
-    // _apiService.ambildataSK(sk);
     _ambildataSK();
 
     // getSetting(access_token, idlokasi);
@@ -341,6 +339,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
     valueakhir = widget.tanggaljamakhir;
     min_sewa = widget.min_sewa;
     minimaldeposit = min_sewa;
+    print("ORDER?? " +
+        idjenis_produk.toString() +
+        kapasitas.toString() +
+        harga_sewa.toString() +
+        alamat +
+        keterangan +
+        idlokasi.toString() +
+        produkimage +
+        harganett.toString() +
+        harga.toString() +
+        diskon.toString() +
+        valueawal +
+        valueakhir +
+        min_sewa.toString() +
+        minimaldeposit.toString());
     if (widget.kapasitas.toString().toLowerCase().contains('forklift')) {
       boolkontainer = false;
       boolsk = false;
@@ -1171,6 +1184,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("Order: " + access_token);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);

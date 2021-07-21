@@ -84,7 +84,7 @@ class _ProdukList extends State<ProdukList> {
       setDate = "",
       hour = "",
       minutes = "",
-      time = "",
+      timeawal = "",
       timeselesai = "",
       dateTime,
       pilihproduks = '',
@@ -143,9 +143,9 @@ class _ProdukList extends State<ProdukList> {
                 -1).then((value) => value);
     if (pick != null) {
       setState(() {
-        time = pick?.format(context);
-        timeController.text = time;
-        print('hey look at me $selectedWaktu ++ $time ++ $pick');
+        timeawal = pick?.format(context);
+        timeController.text = timeawal;
+        print('hey look at me $selectedWaktu ++ $timeawal ++ $pick');
       });
     }
   }
@@ -266,6 +266,13 @@ class _ProdukList extends State<ProdukList> {
         .round();
   }
 
+  int diffInTime(tglAwal, tglAkhir) {
+    return ((Duration(hours: tglAkhir.hour) - Duration(hours: tglAwal.hour))
+            .inHours)
+        // .inMinutes)
+        .round();
+  }
+
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
@@ -284,22 +291,21 @@ class _ProdukList extends State<ProdukList> {
             aatext = DateFormat.yMMMEd("id_ID").format(_date2);
           });
         }
+        // if (diffInDays(
+        //         DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
+        //     5) {
+        //   _date2 = _date1.add(Duration(days: 5));
+        //   _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
+        //   _tanggalAkhir =
+        //       DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
 
-        if (diffInDays(
-                DateTime.parse(_tanggalAkhir), DateTime.parse(_tanggalAwal)) <
-            5) {
-          _date2 = _date1.add(Duration(days: 5));
-          _tanggalAwal = DateFormat('yyyy-MM-dd').format(_date1).toString();
-          _tanggalAkhir =
-              DateFormat('yyyy-MM-dd').format(_date2 ?? _date1).toString();
-
-          warningDialog(
-            context,
-            "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
-            title: "minimal sewa 5 hari",
-            positiveAction: () {},
-          );
-        }
+        //   warningDialog(
+        //     context,
+        //     "Mohon maaf pesanan harus minimum 5 hari, tanggal yang anda pilih akan secara otomatis di bulatkan menjadi 5 hari dari tanggal awal yang anda pilih, Setuju?",
+        //     title: "minimal sewa 5 hari",
+        //     positiveAction: () {},
+        //   );
+        // }
       } else if (args.value is DateTime) {
         _selectedDate = args.value;
       } else if (args.value is List<DateTime>) {
@@ -740,10 +746,8 @@ class _ProdukList extends State<ProdukList> {
   Widget _search(BuildContext context) {
     PostProdukModel data = PostProdukModel(
       token: access_token,
-      // tanggalawal: _tanggalAwal,
-      // tanggalakhir: _tanggalAkhir,
       tanggalawal: cektanggal == '0'
-          ? '${formatTglForklift.format(selectedDate)} $time'
+          ? '${formatTglForklift.format(selectedDate)} $timeawal'
           : _tanggalAwal,
       tanggalakhir: cektanggal == '0'
           ? '${formatTglForklift.format(selectedDate)} $timeselesai'
@@ -1390,15 +1394,25 @@ class _ProdukList extends State<ProdukList> {
           valueakhirperhitungandurasi = _tanggalAkhir.toString() +
               " " +
               selectedTimeSelesai.format(context);
+
+          valuehasilperhitungandurasi = diffInTime(
+              DateTime.parse(valueawalperhitungandurasi),
+              DateTime.parse(valueakhirperhitungandurasi));
           satuan = "/jam";
         } else {
           valueawalperhitungandurasi = _tanggalAwal;
           valueakhirperhitungandurasi = _tanggalAkhir;
+          valuehasilperhitungandurasi = diffInDays(
+              DateTime.parse(valueakhirperhitungandurasi),
+              DateTime.parse(valueawalperhitungandurasi));
           satuan = "/hari";
         }
-        valuehasilperhitungandurasi = diffInDays(
-            DateTime.parse(valueawalperhitungandurasi),
-            DateTime.parse(valueakhirperhitungandurasi));
+        print("CEKING TGL : " +
+            valueawalperhitungandurasi +
+            " ~ " +
+            valueakhirperhitungandurasi +
+            " ~ " +
+            valuehasilperhitungandurasi.toString());
         if (valuehasilperhitungandurasi < min_sewa) {
           errorDialog(
               context,
