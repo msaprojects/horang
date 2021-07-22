@@ -18,7 +18,7 @@ import 'package:get/get.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputOrder extends StatefulWidget {
-  num idlokasi, idjenis_produk, harga, avail, diskon, harganett, min_sewa;
+  num idlokasi, idjenis_produk, harga, avail, diskon, harganett, min_sewa, min_deposit;
   var tanggaljamawal,
       tanggaljamakhir,
       kapasitas,
@@ -40,7 +40,9 @@ class FormInputOrder extends StatefulWidget {
       this.keterangan,
       this.gambar,
       this.nama_kota,
-      this.nama_lokasi});
+      this.nama_lokasi,
+      this.min_deposit
+      });
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -114,7 +116,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       harganett = 0,
       diskon,
       harga,
-      min_sewa = 0;
+      min_sewa = 0,
+      min_deposit = 0
+      ;
   DateTime dtAwal, dtAkhir;
   int ssk;
 
@@ -363,7 +367,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
     valueawal = widget.tanggaljamawal;
     valueakhir = widget.tanggaljamakhir;
     min_sewa = widget.min_sewa;
-    minimaldeposit = min_sewa;
+    minimaldeposit = widget.min_deposit;
+    
     if (widget.kapasitas.toString().toLowerCase().contains('forklift')) {
       boolkontainer = false;
       boolsk = false;
@@ -372,10 +377,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
           diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     } else {
       boolkontainer = true;
-      boolsk = true;
+      boolsk = false;
       vsatuan_sewa = "hari ";
       vdurasi_sewa =
-          diffInDays(DateTime.parse(valueawal), DateTime.parse(valueawal));
+          diffInDays(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     }
     totalhariharga = vdurasi_sewa * harga_sewa;
     hargaxminimalsewadeposit = harga_sewa * minimaldeposit;
@@ -392,6 +397,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       });
     });
     hitungsemuaFunction();
+    
     super.initState();
   }
 //END INITSTATE
@@ -704,7 +710,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               SizedBox(
                                 height: 5,
                               ),
-                              boolkontainer == true
+                              // boolkontainer == true
+                              boolkontainer == false
                                   ? Text("")
                                   : Column(
                                       children: [

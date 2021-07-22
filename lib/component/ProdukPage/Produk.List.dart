@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:horang/api/models/produk/produk.model.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -726,12 +727,12 @@ class _ProdukList extends State<ProdukList> {
                   onPressed: () {
                     setState(() {
                       FlagCari = 1;
-                      _search(context);
+                      _search(context, pilihproduks);
                     });
                   },
                   child: Text('Cari')),
               FlagCari == 1
-                  ? _search(context)
+                  ? _search(context, pilihproduks)
                   : Text("Harap Pilih Tanggal dan Kota")
             ],
           ),
@@ -740,18 +741,72 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
-  Widget _search(BuildContext context) {
+  Widget _search(BuildContext context, String jenisproduk) {
+    if (jenisproduk == 'kontainer') {
+    // if (cektanggal == '1') {
+      // 1 untuk filter kontainer
+      valueawalperhitungandurasi = _tanggalAwal;
+      valueakhirperhitungandurasi = _tanggalAkhir;
+      } else if (jenisproduk == 'forklift') {
+    // } else if (cektanggal == '0') {
+      // 0 untuk filter forklift
+      print("Search filter forklift");
+      if (timeawal.toString() == '' || timeselesai.toString() == '') {
+        Fluttertoast.showToast(
+            msg: "Pastikan jam awal dan jam selesai sudah terisi !",
+            fontSize: 16,
+            // gravity: ToastGravity.CENTER,
+            toastLength: Toast.LENGTH_LONG,
+            timeInSecForIosWeb: 5,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        valueawalperhitungandurasi =
+            formatTglForklift.format(selectedDate) + " " + timeawal;
+        valueakhirperhitungandurasi =
+            formatTglForklift.format(selectedDate) + " " + timeselesai;
+        print("INVALID?2 " +
+            valueawalperhitungandurasi +
+            " ~ " +
+            valueakhirperhitungandurasi);
+        valuehasilperhitungandurasi = diffInTime(
+            DateTime.parse(valueawalperhitungandurasi),
+            DateTime.parse(valueakhirperhitungandurasi));
+
+        print("Hasil perhitungan : " + valueakhirperhitungandurasi.toString());
+        if (valuehasilperhitungandurasi < 1) {
+          Fluttertoast.showToast(
+              msg:
+                  "tanggal awal tidak boleh lebih kecil atau sama dengan tanggal akhir",
+              toastLength: Toast.LENGTH_LONG,
+              backgroundColor: Colors.black,
+              textColor: Colors.white);
+        }
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "Harap Pilih Jenis Produk Terlebih Dahulu!",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    }
     PostProdukModel data = PostProdukModel(
       token: access_token,
-      tanggalawal: cektanggal == '0'
-          ? '${formatTglForklift.format(selectedDate)} $timeawal'
-          : _tanggalAwal,
-      tanggalakhir: cektanggal == '0'
-          ? '${formatTglForklift.format(selectedDate)} $timeselesai'
-          : _tanggalAkhir,
+      tanggalawal: valueawalperhitungandurasi,
+      tanggalakhir: valueakhirperhitungandurasi,
       idlokasi: valKota,
-      jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
+      jenisitem: jenisproduk,
     );
+    // PostProdukModel data = PostProdukModel(
+    //   token: access_token,
+    //   tanggalawal: cektanggal == '0'
+    //       ? '${formatTglForklift.format(selectedDate)} $timeawal'
+    //       : _tanggalAwal,
+    //   tanggalakhir: cektanggal == '0'
+    //       ? '${formatTglForklift.format(selectedDate)} $timeselesai'
+    //       : _tanggalAkhir,
+    //   idlokasi: valKota,
+    //   jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
+    // );
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -774,6 +829,7 @@ class _ProdukList extends State<ProdukList> {
               return _buildListView(profiles);
             } else {
               print('masuk sini2');
+              FlagCari = 0;
               return Center(
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -1093,7 +1149,8 @@ class _ProdukList extends State<ProdukList> {
                                               jenisProduk.gambar,
                                               jenisProduk.nama_kota,
                                               jenisProduk.nama_lokasi,
-                                              jenisProduk.min_sewa);
+                                              jenisProduk.min_sewa,
+                                              jenisProduk.min_deposit);
                                         },
                                         child: Column(
                                           mainAxisAlignment:
@@ -1364,7 +1421,8 @@ class _ProdukList extends State<ProdukList> {
       String gambar,
       String nama_kota,
       String nama_lokasi,
-      num min_sewa) {
+      num min_sewa,
+      num min_deposit) {
     if (idcustomer == "" || idcustomer == null || idcustomer == "0") {
       Scaffold.of(context).showSnackBar(SnackBar(
         content:
@@ -1381,19 +1439,14 @@ class _ProdukList extends State<ProdukList> {
       } else {
         print("masuk filter avail?");
         if (jenisproduk.toLowerCase().contains('forklift')) {
-          print("masuk filter forklift?");
           valueawalperhitungandurasi =
               formatTglForklift.format(selectedDate).toString() +
                   " " +
-                  selectedTimeAwal.format(context);
+                  timeawal;
           valueakhirperhitungandurasi =
               formatTglForklift.format(selectedDate).toString() +
                   " " +
-                  selectedTimeSelesai.format(context);
-          print("concat date" +
-              valueawalperhitungandurasi +
-              " ~ " +
-              valueakhirperhitungandurasi);
+                  timeselesai;
           valuehasilperhitungandurasi = diffInTime(
               DateTime.parse(valueawalperhitungandurasi),
               DateTime.parse(valueakhirperhitungandurasi));
@@ -1449,23 +1502,27 @@ class _ProdukList extends State<ProdukList> {
               " ~ " +
               nama_kota +
               " ~ " +
-              nama_lokasi);
+              nama_lokasi +
+              " ~ " +
+              min_deposit.toString());
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormInputOrder(
-                tanggaljamawal: valueawalperhitungandurasi,
-                tanggaljamakhir: valueakhirperhitungandurasi,
-                idlokasi: idlokasi,
-                idjenis_produk: idjenis_produk,
-                harga: harga,
-                avail: available,
-                diskon: diskon,
-                harganett: harganett,
-                min_sewa: min_sewa,
-                kapasitas: jenisproduk,
-                keterangan: keterangan,
-                gambar: gambar,
-                nama_kota: nama_kota,
-                nama_lokasi: nama_lokasi);
+              tanggaljamawal: valueawalperhitungandurasi,
+              tanggaljamakhir: valueakhirperhitungandurasi,
+              idlokasi: idlokasi,
+              idjenis_produk: idjenis_produk,
+              harga: harga,
+              avail: available,
+              diskon: diskon,
+              harganett: harganett,
+              min_sewa: min_sewa,
+              kapasitas: jenisproduk,
+              keterangan: keterangan,
+              gambar: gambar,
+              nama_kota: nama_kota,
+              nama_lokasi: nama_lokasi,
+              min_deposit: min_deposit,
+            );
           }));
         }
       }

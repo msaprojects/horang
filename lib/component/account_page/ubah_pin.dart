@@ -145,24 +145,31 @@ class _UbahPinState extends State<UbahPin> {
                                 return warningDialog(context,
                                     "PIN baru dan Retype PIN tidak sama");
                               } else {
-                                print("cek masuk nggk2");
-                                _apiService.TambahPin(pintambah)
-                                    .then((isSuccess) {
-                                  setState(() => _isLoading = false);
-                                  if (!isSuccess) {
-                                    print("cek pin ubah3" + pin);
-                                    successDialog(context,
-                                        "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                        showNeutralButton: false,
-                                        positiveText: "Oke",
-                                        positiveAction: () {
-                                      Keluarr();
-                                    });
-                                  } else {
-                                    print("cek pin ubah4" + pin);
-                                    errorDialog(context,
-                                        "Data pin gagal ditambah, silahkan dicek ulang");
-                                  }
+                                warningDialog(context,
+                                    'Pastikan Pin yang anda masukkan sudah benar !',
+                                    showNeutralButton: false,
+                                    negativeText: 'Belum',
+                                    negativeAction: () {},
+                                    positiveText: 'Sudah', positiveAction: () {
+                                  print("cek masuk nggk2");
+                                  _apiService.TambahPin(pintambah)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (!isSuccess) {
+                                      print("cek pin ubah3" + pin);
+                                      successDialog(context,
+                                          "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                          showNeutralButton: false,
+                                          positiveText: "Oke",
+                                          positiveAction: () {
+                                        Keluarr();
+                                      });
+                                    } else {
+                                      print("cek pin ubah4" + pin);
+                                      errorDialog(context,
+                                          "Data pin gagal ditambah, silahkan dicek ulang");
+                                    }
+                                  });
                                 });
                               }
                             }
@@ -283,7 +290,7 @@ class _UbahPinState extends State<UbahPin> {
             ? null
             : "Retype Pin baru harus di isi",
       ),
-      obscureText: true,
+      // obscureText: true,
       validator: (confirmation) {
         return confirmation.isEmpty
             ? 'Konfirmasi password harus di isi'

@@ -100,6 +100,7 @@ class ApiService {
       headers: {"content-type": "application/json"},
       body: PostProdukModelToJson(data),
     );
+    print('respondotbody ${response.body}');
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
     } else {
