@@ -83,7 +83,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
             }
           }));
     }
-    storage = await _apiService.listMystorageForSearch(access_token, query);
+    storage = await _apiService.listMystorageNonActive(access_token, query);
     print('yuhu ada gak $token ++ $access_token');
     setState(() => this.storage = storage);
   }
@@ -120,17 +120,51 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
           buildSearch(),
           Expanded(
             child: FutureBuilder(
-              future: _apiService.listMystorageForSearch(access_token, query),
+              future: _apiService.listMystorageNonActive(access_token, query),
               builder: (BuildContext context, index) {
-                print('sini ?x $access_token');
-                return ListView.builder(
-                  itemCount: storage.length,
-                  itemBuilder: (context, index) {
-                    final storages = storage[index];
-                    print('storagesxx2' + storages.nama);
-                    return buildmyStorage(storages);
-                  },
-                );
+                print('sini ?x $access_token $index');
+                if (index.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (index.hasData) {
+                  print('jaxx $storage');
+                  if (storage.toString() != "[]") {
+                    print("true");
+                    return ListView.builder(
+                      itemCount: storage.length,
+                      itemBuilder: (context, index) {
+                        print('ada ?');
+                        final storages = storage[index];
+                        print('SOTO $storages $index');
+                        return buildmyStorage(storages);
+                      },
+                    );
+                  } else {
+                    print('masuk sini!');
+                    return Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/image/datanotfound.png"),
+                            Text(
+                              "Oppss..Maaf Data yang non aktif belum ada",
+                              style: GoogleFonts.inter(color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: Text('KOSONG'),
+                  );
+                }
               },
             ),
           ),
@@ -147,7 +181,8 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
 
   Future searchmystorage(String query) async => debounce(() async {
         print('token1 $access_token');
-        final storage = await _apiService.listMystorageForSearch(access_token, query);
+        final storage =
+            await _apiService.listMystorageNonActive(access_token, query);
         if (!mounted) return;
         setState(() {
           this.storage = storage;

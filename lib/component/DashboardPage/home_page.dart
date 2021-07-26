@@ -403,6 +403,13 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                height: 10,
+                color: Colors.grey[300],
+              ),
               Container(
                 padding:
                     EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
@@ -422,8 +429,8 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => StorageHandler(
-                                  initialIndex: 1,
-                                )
+                                      initialIndex: 1,
+                                    )
                                 // StorageActive()
                                 ));
                       },

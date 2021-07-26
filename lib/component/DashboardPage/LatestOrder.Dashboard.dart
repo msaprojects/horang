@@ -88,7 +88,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
     return SafeArea(
       child: FutureBuilder(
           // future: _apiService.listJenisProduk(access_token),
-          future: _apiService.listHistory(access_token),
+          future: _apiService.listHistoryDashboard(access_token),
           builder:
               // (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
               // ignore: missing_return

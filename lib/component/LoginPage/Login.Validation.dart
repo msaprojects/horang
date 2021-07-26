@@ -234,7 +234,8 @@ class _LoginPageState extends State<LoginPage> {
                                         warningDialog(context,
                                             "${_apiService.responseCode.mMessage}",
                                             title: "Warning!");
-                                      } else {
+                                      } else if (_apiService.responseCode.mMessage ==
+                                          "Akun masih aktif di device lain!") {
                                         warningDialog(context,
                                             "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",
                                             showNeutralButton: false,

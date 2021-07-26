@@ -425,7 +425,8 @@ class _ProdukList extends State<ProdukList> {
 
     _date1 = DateTime.parse(tMulaiForklift);
 
-    defaultProduk = dataProduk[0];
+    // defaultProduk = dataProduk[0];
+    defaultProduk = '-';
     print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
 
     _buildKomboProduk(pilihproduks);
@@ -743,12 +744,12 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _search(BuildContext context, String jenisproduk) {
     if (jenisproduk == 'kontainer') {
-    // if (cektanggal == '1') {
+      // if (cektanggal == '1') {
       // 1 untuk filter kontainer
       valueawalperhitungandurasi = _tanggalAwal;
       valueakhirperhitungandurasi = _tanggalAkhir;
-      } else if (jenisproduk == 'forklift') {
-    // } else if (cektanggal == '0') {
+    } else if (jenisproduk == 'forklift') {
+      // } else if (cektanggal == '0') {
       // 0 untuk filter forklift
       print("Search filter forklift");
       if (timeawal.toString() == '' || timeselesai.toString() == '') {
@@ -785,9 +786,15 @@ class _ProdukList extends State<ProdukList> {
       }
     } else {
       Fluttertoast.showToast(
-          msg: "Harap Pilih Jenis Produk Terlebih Dahulu!",
+          msg: "Pilih JENIS PRODUK tidak boleh kosong!",
           backgroundColor: Colors.black,
           textColor: Colors.white);
+      if (valKota == null ) {
+        Fluttertoast.showToast(
+            msg: "Pilih KOTA tidak boleh kosong!",
+            backgroundColor: Colors.black,
+            textColor: Colors.white);
+      }
     }
     PostProdukModel data = PostProdukModel(
       token: access_token,
@@ -1373,7 +1380,8 @@ class _ProdukList extends State<ProdukList> {
           print('object value $value');
           pilihproduks = value;
           if (value == null) {
-            return defaultProduk;
+            // return defaultProduk;
+            return null;
           } else if (pilihproduks == 'forklift') {
             print('hey');
             return cektanggal = '0';
