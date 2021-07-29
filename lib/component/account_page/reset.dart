@@ -40,6 +40,7 @@ class _ResetState extends State<Reset> {
       icone = Icon(Icons.lock_open_rounded, size: 50,);
     } else if (tipes == "ResetPin") {
       judul = "Reset Pin";
+      icone = Icon(Icons.lock_open_rounded, size: 50,);
     } else if (tipes == "ResetDevice") {
       judul = "Ganti Perangkat";
       icone = Icon(Icons.device_unknown_rounded, size: 50,);
@@ -209,6 +210,35 @@ class _ResetState extends State<Reset> {
                                         negativeText: "Tidak",
                                         negativeAction: () {});
                                   } else if (tipes == "ResetDevice") {
+                                    infoDialog(context,
+                                        "Apakah Email yang anda masukkan sudah benar?",
+                                        title: "Konfirmasi",
+                                        showNeutralButton: false,
+                                        positiveText: "Ya", positiveAction: () {
+                                      _apiService.LostDevice(reset)
+                                          .then((isSuccess) {
+                                        if (!isSuccess) {
+                                          errorDialog(context,
+                                              "${_apiService.responseCode.mMessage}");
+                                        } else {
+                                          successDialog(context,
+                                              "Konfirmasi Ganti Perangkat Berhasil dikirim, mohon verifikasi email anda !",
+                                              showNeutralButton: false,
+                                              positiveText: "OK",
+                                              positiveAction: () {
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WelcomePage()),
+                                                    (route) => false);
+                                          });
+                                        }
+                                      });
+                                    },
+                                        negativeText: "Edit",
+                                        negativeAction: () {});
+                                  } else if (tipes == "ResetPin") {
                                     infoDialog(context,
                                         "Apakah Email yang anda masukkan sudah benar?",
                                         title: "Konfirmasi",

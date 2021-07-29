@@ -49,7 +49,9 @@ class _HomePageState extends State<HomePage> {
       nama,
       pin,
       ceksaldo,
-      sk;
+      sk,
+      kirimKontainer = 'kontainer',
+      kirimForklift = 'forklift';
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -349,7 +351,9 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList();
+                              return ProdukList(
+                                ambilKontainer: kirimKontainer,
+                              );
                             }));
                           },
                           child: Container(
@@ -377,26 +381,36 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width / 20,
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 5,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey[300]),
-                              image: DecorationImage(
-                                scale: 6.0,
-                                fit: BoxFit.scaleDown,
-                                image: AssetImage('assets/image/forklift.png'),
-                              )),
-                          child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                'Forklift',
-                                style: GoogleFonts.lato(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
-                              )),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ProdukList(
+                                ambilForklift: kirimForklift,
+                              );
+                            }));
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 5,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]),
+                                image: DecorationImage(
+                                  scale: 6.0,
+                                  fit: BoxFit.scaleDown,
+                                  image: AssetImage('assets/image/forklift.png'),
+                                )),
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  'Forklift',
+                                  style: GoogleFonts.lato(
+                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                )),
+                          ),
                         ),
                       ],
                     ),

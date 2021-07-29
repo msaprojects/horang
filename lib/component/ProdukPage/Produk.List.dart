@@ -24,8 +24,12 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 
 class ProdukList extends StatefulWidget {
-  var tanggalAwal, tanggalAkhir;
-  ProdukList({this.tanggalAwal, this.tanggalAkhir});
+  var tanggalAwal, tanggalAkhir, ambilKontainer, ambilForklift;
+  ProdukList(
+      {this.tanggalAwal,
+      this.tanggalAkhir,
+      this.ambilKontainer,
+      this.ambilForklift});
   @override
   _ProdukList createState() => _ProdukList();
 }
@@ -72,7 +76,9 @@ class _ProdukList extends State<ProdukList> {
       pin,
       defaultProduk = '',
       timehourawal,
-      timehourselesai;
+      timehourselesai,
+      ambilKontainer1 = '',
+      ambilForklift1 = '';
   String _selectedDate,
       _dateCount,
       _range,
@@ -412,6 +418,18 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   void initState() {
+    ambilKontainer1 = widget.ambilKontainer;
+    ambilForklift1 = widget.ambilForklift;
+    print('ambilkontainer / ambil forklift $ambilKontainer1 $ambilForklift1');
+    defaultProduk = dataProduk[0];
+    if (ambilKontainer1 == 'kontainer') {
+      print('masuk ?');
+      defaultProduk = ambilKontainer1;
+    } else if (ambilForklift1 == 'forklift') {
+      print('masuk ?!?');
+      defaultProduk = ambilForklift1;
+    }
+
     initializeDateFormatting("id_ID", null).then((_) {
       mmtext = DateFormat.yMMMEd("id_ID").format(DateTime.now());
       aatext = DateFormat.yMMMEd("id_ID")
@@ -424,9 +442,6 @@ class _ProdukList extends State<ProdukList> {
     _tanggalAkhir = _date2.toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
-
-    // defaultProduk = dataProduk[0];
-    defaultProduk = '-';
     print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
 
     _buildKomboProduk(pilihproduks);
@@ -717,7 +732,10 @@ class _ProdukList extends State<ProdukList> {
                     ),
                     cektanggal == '1'
                         ? _buildTanggal()
-                        : _buildTanggalFokrlift()
+                        : _buildTanggalFokrlift(),
+                    // defaultProduk == 'kontainer'
+                    //     ? _buildTanggal()
+                    //     : _buildTanggalFokrlift()
                   ],
                 ),
               ),
@@ -728,12 +746,12 @@ class _ProdukList extends State<ProdukList> {
                   onPressed: () {
                     setState(() {
                       FlagCari = 1;
-                      _search(context, pilihproduks);
+                      _search(context, pilihproduks, defaultProduk);
                     });
                   },
                   child: Text('Cari')),
               FlagCari == 1
-                  ? _search(context, pilihproduks)
+                  ? _search(context, pilihproduks, defaultProduk)
                   : Text("Harap Pilih Tanggal dan Kota")
             ],
           ),
@@ -742,14 +760,22 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
-  Widget _search(BuildContext context, String jenisproduk) {
-    if (jenisproduk == 'kontainer') {
-      // if (cektanggal == '1') {
+  Widget _search(BuildContext context, String jenisproduk, ambilKontainers) {
+    print(
+        'masuk ke search apa nggak ? $defaultProduk ++ P$jenisproduk P - M$valKota M');
+    // if (jenisproduk == 'kontainer' || ambilKontainer1 == 'kontainer') {
+    if (cektanggal == '1') {
       // 1 untuk filter kontainer
       valueawalperhitungandurasi = _tanggalAwal;
       valueakhirperhitungandurasi = _tanggalAkhir;
-    } else if (jenisproduk == 'forklift') {
-      // } else if (cektanggal == '0') {
+      if (valKota == null) {
+        Fluttertoast.showToast(
+            msg: "Pilih KOTA tidak boleh kosong!",
+            backgroundColor: Colors.black,
+            textColor: Colors.white);
+      }
+      // } else if (jenisproduk == 'forklift') {
+    } else if (cektanggal == '0') {
       // 0 untuk filter forklift
       print("Search filter forklift");
       if (timeawal.toString() == '' || timeselesai.toString() == '') {
@@ -760,6 +786,12 @@ class _ProdukList extends State<ProdukList> {
             toastLength: Toast.LENGTH_LONG,
             timeInSecForIosWeb: 5,
             backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else if (valKota == null) {
+        print('masuk kota forklift');
+        Fluttertoast.showToast(
+            msg: "Pilih KOTA tidak boleh kosong!",
+            backgroundColor: Colors.black,
             textColor: Colors.white);
       } else {
         valueawalperhitungandurasi =
@@ -789,19 +821,15 @@ class _ProdukList extends State<ProdukList> {
           msg: "Pilih JENIS PRODUK tidak boleh kosong!",
           backgroundColor: Colors.black,
           textColor: Colors.white);
-      if (valKota == null ) {
-        Fluttertoast.showToast(
-            msg: "Pilih KOTA tidak boleh kosong!",
-            backgroundColor: Colors.black,
-            textColor: Colors.white);
-      }
     }
     PostProdukModel data = PostProdukModel(
       token: access_token,
       tanggalawal: valueawalperhitungandurasi,
       tanggalakhir: valueakhirperhitungandurasi,
       idlokasi: valKota,
-      jenisitem: jenisproduk,
+      jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
+      // jenisitem: jenisproduk,
+      // jenisitem: defaultProduk == '-' ? jenisproduk : defaultProduk,
     );
     // PostProdukModel data = PostProdukModel(
     //   token: access_token,

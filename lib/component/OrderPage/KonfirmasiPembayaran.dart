@@ -289,10 +289,10 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                                   width: 5,
                                 ),
                                 Text(
-                                    "Menunggu pembayaran Sebesar " +
+                                    "Menunggu pembayaran " +
                                         rupiah(hitungsemua),
                                     style: GoogleFonts.inter(
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold)),
                               ],
                             ),

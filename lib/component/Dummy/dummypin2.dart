@@ -7,6 +7,7 @@ import 'package:horang/api/models/pin/cek.pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:local_auth/local_auth.dart';
@@ -73,22 +74,22 @@ class _OtpScreenState extends State<OtpScreen> {
   //   }
   // }
 
-   void Keluarr() async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      cekToken();
-      _apiService.logout(access_token).then((value) => setState(() {
-            isSuccess = value;
-            if (isSuccess) {
-              preferences.clear();
-              if (preferences.getString("access_token") == null) {
-                print("SharePref berhasil di hapus");
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => WelcomePage()),
-                    (route) => false);
-              }
+  void Keluarr() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    cekToken();
+    _apiService.logout(access_token).then((value) => setState(() {
+          isSuccess = value;
+          if (isSuccess) {
+            preferences.clear();
+            if (preferences.getString("access_token") == null) {
+              print("SharePref berhasil di hapus");
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => WelcomePage()),
+                  (route) => false);
             }
-          }));
-    }
+          }
+        }));
+  }
 
   ////////////////////////////////// COBA FINGER
   Future<void> _checkBiometric() async {
@@ -177,14 +178,14 @@ class _OtpScreenState extends State<OtpScreen> {
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
                               title: "Sesi anda berakhir 1!",
                               showNeutralButton: false, positiveAction: () {
-                                Keluarr();
+                            Keluarr();
                             // _deleteAppDir();
                             // _deleteCacheDir();
                             // Navigator.of(context).pushReplacement(
                             //     MaterialPageRoute(
                             //         builder: (BuildContext context) =>
                             //             WelcomePage()));
-                                // (Route<dynamic> route) => false);
+                            // (Route<dynamic> route) => false);
                           }, positiveText: "Ok");
                         }
                       }));
@@ -234,10 +235,10 @@ class _OtpScreenState extends State<OtpScreen> {
     return SafeArea(
       child: Column(
         children: [
-          buildExitButton(),
+          // buildExitButton(),
           Expanded(
               child: Container(
-            alignment: Alignment(0, 0.5),
+            alignment: Alignment(0, 0.6),
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -257,6 +258,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
+  //close icon ditutup karena diganti resetpin, karena jika back maupun backpress app tidak dapat uuid dan token, update 29/07/2021
   // buildlist__() {
   //   return Column(
   //     children: [
@@ -282,12 +284,39 @@ class _OtpScreenState extends State<OtpScreen> {
   //   );
   // }
 
+  buildResetPin() {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        alignment: Alignment.topCenter,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Reset(
+                          tipe: "ResetPin",
+                        )));
+          },
+          child: Text(
+            'Lupa PIN ? Klik Disini !',
+            style: TextStyle(
+                color: Colors.white,
+                fontStyle: FontStyle.italic,
+                decoration: TextDecoration.underline,
+                fontSize: 14),
+          ),
+        ),
+      ),
+    );
+  }
+
   buildNumPad() {
     return Expanded(
       child: Container(
-        alignment: Alignment.center,
+        // alignment: Alignment.center,
         child: Padding(
-          padding: EdgeInsets.only(bottom: 32),
+          padding: EdgeInsets.only(bottom: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -391,9 +420,12 @@ class _OtpScreenState extends State<OtpScreen> {
                         color: Colors.white,
                       ),
                     ),
-                  )
+                  ),
+                  
                 ],
-              )
+              ),
+              SizedBox(height: 10,),
+              buildResetPin()
             ],
           ),
         ),
@@ -568,28 +600,28 @@ class _OtpScreenState extends State<OtpScreen> {
         ));
   }
 
-  buildExitButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MaterialButton(
-              height: 50.0,
-              minWidth: 50.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0)),
-              child: Icon(
-                Icons.clear,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-        )
-      ],
-    );
-  }
+  // buildExitButton() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: MaterialButton(
+  //             height: 50.0,
+  //             minWidth: 50.0,
+  //             shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(50.0)),
+  //             child: Icon(
+  //               Icons.clear,
+  //               color: Colors.white,
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             }),
+  //       )
+  //     ],
+  //   );
+  // }
 }
 
 class PINnumber extends StatelessWidget {

@@ -136,13 +136,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
-    Future<String> cekIPublic() async {
-      http.Response response =
-          await http.get(Uri.encodeFull('https://api.ipify.org'));
-      print("mmzzzrr" + response.body);
-      return ipPublic = response.body;
-    }
-
+    initPlatformState();
     NewVersion(
       androidId: 'com.cvdtc.horang',
       iOSId: 'com.cvdtc.horang',
@@ -176,7 +170,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                 ),
               ),
               Text('Version $_projectVersion'),
-              Text("IP PUBKUC $ipPublic"),
+              // Text("IP PUBKUC $ipPublic"),
               SizedBox(
                 height: 10,
               ),
@@ -232,8 +226,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  LoginPage(cekUUID: _uuid, email: email, nama: nama)));
+                              builder: (context) => LoginPage(
+                                  cekUUID: _uuid, email: email, nama: nama)));
                     }),
               ),
               SizedBox(
@@ -276,8 +270,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            LoginPage(cekUUID: _uuid, email: email, nama: nama)));
+                        builder: (context) => LoginPage(
+                            cekUUID: _uuid, email: email, nama: nama)));
               }
             }));
       });

@@ -128,10 +128,10 @@ class _VoucherDetailState extends State<VoucherDetail> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(kode_voucher1.toString(),
+                            Text("Kode Voucher : $kode_voucher1",
                                 style: GoogleFonts.inter(fontSize: 14)),
                             Divider(),
-                            Text(nominal1.toString(),
+                            Text("Nominal Voucher : $nominal1",
                                 style: GoogleFonts.inter(fontSize: 12))
                           ],
                         ),
