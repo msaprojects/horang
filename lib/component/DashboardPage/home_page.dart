@@ -9,21 +9,14 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
-// import 'package:horang/component/Dummy/cobakeyboard.dart';
-// import 'package:horang/component/HistoryPage/historypage.dart';
-// import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
-// import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
-// import 'package:http/http.dart' as http;
-
-// import '../../widget/bottom_nav.dart';
 import '../StoragePage/StorageHandler.dart';
 
 class HomePage extends StatefulWidget {
@@ -63,13 +56,6 @@ class _HomePageState extends State<HomePage> {
     }
     return result;
   }
-
-  // Future<String> _ambildataSK() async {
-  //   http.Response response = await http
-  //       .get(Uri.encodeFull('https://server.horang.id/adminmaster/sk.txt'));
-  //   print("mmzzzrr" + response.body);
-  //   return sk = response.body;
-  // }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -126,22 +112,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // NewVersion(
-    //   androidId: 'com.cvdtc.horang',
-    //   // iOSId: ,
-    //   context: context,
-    // ).showAlertIfNecessary();
-    // newVersion.showUpdateDialog(VersionStatus());
     cekToken();
     ReusableClasses().getSaldo(access_token);
     super.initState();
-    // _ambildataSK();
-    // ReusableClasses().sk();
   }
 
   @override
   void dispose() {
     _apiService.client.close();
+    ReusableClasses().getSaldo(access_token);
     super.dispose();
   }
 
@@ -176,7 +155,6 @@ class _HomePageState extends State<HomePage> {
                               end: Alignment.bottomLeft,
                               colors: [Colors.purple, Colors.blue],
                             ),
-                            // color: Colors.blue[400]
                           ),
                           child: Column(
                             children: [
@@ -197,10 +175,9 @@ class _HomePageState extends State<HomePage> {
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    // LogAktifitasNotif()));
-                                                    LogHandler()));
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        LogHandler()));
                                       },
                                       icon: (Icon(Icons.notifications)),
                                     )
@@ -303,8 +280,6 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            // print(_ambildataSK());
-                                            // popUpsk(context);
                                             Scaffold.of(context)
                                                 .showSnackBar(SnackBar(
                                               content: Text(
@@ -351,9 +326,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(
-                                ambilKontainer: kirimKontainer,
-                              );
+                              return ProdukList(jenisproduk: 'kontainer');
                             }));
                           },
                           child: Container(
@@ -385,9 +358,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(
-                                ambilForklift: kirimForklift,
-                              );
+                              return ProdukList(jenisproduk: 'forklift');
                             }));
                           },
                           child: Container(
@@ -401,14 +372,16 @@ class _HomePageState extends State<HomePage> {
                                 image: DecorationImage(
                                   scale: 6.0,
                                   fit: BoxFit.scaleDown,
-                                  image: AssetImage('assets/image/forklift.png'),
+                                  image:
+                                      AssetImage('assets/image/forklift.png'),
                                 )),
                             child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Text(
                                   'Forklift',
                                   style: GoogleFonts.lato(
-                                      fontSize: 12, fontWeight: FontWeight.bold),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
                                 )),
                           ),
                         ),

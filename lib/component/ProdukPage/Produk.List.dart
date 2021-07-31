@@ -24,12 +24,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 
 class ProdukList extends StatefulWidget {
-  var tanggalAwal, tanggalAkhir, ambilKontainer, ambilForklift;
-  ProdukList(
-      {this.tanggalAwal,
-      this.tanggalAkhir,
-      this.ambilKontainer,
-      this.ambilForklift});
+  var jenisproduk;
+  ProdukList({this.jenisproduk});
   @override
   _ProdukList createState() => _ProdukList();
 }
@@ -74,11 +70,10 @@ class _ProdukList extends State<ProdukList> {
       rtanggalAwal,
       rtanggalAkhir,
       pin,
-      defaultProduk = '',
+      defaultProduk = 'kontainer',
       timehourawal,
       timehourselesai,
-      ambilKontainer1 = '',
-      ambilForklift1 = '';
+      jenisproduk = 'kontainer';
   String _selectedDate,
       _dateCount,
       _range,
@@ -94,7 +89,6 @@ class _ProdukList extends State<ProdukList> {
       timeawal = "",
       timeselesai = "",
       dateTime,
-      pilihproduks = '',
       cektanggal = '',
       timestart = '',
       timefinish = '',
@@ -418,16 +412,12 @@ class _ProdukList extends State<ProdukList> {
 
   @override
   void initState() {
-    ambilKontainer1 = widget.ambilKontainer;
-    ambilForklift1 = widget.ambilForklift;
-    print('ambilkontainer / ambil forklift $ambilKontainer1 $ambilForklift1');
+    jenisproduk = widget.jenisproduk;
     defaultProduk = dataProduk[0];
-    if (ambilKontainer1 == 'kontainer') {
-      print('masuk ?');
-      defaultProduk = ambilKontainer1;
-    } else if (ambilForklift1 == 'forklift') {
-      print('masuk ?!?');
-      defaultProduk = ambilForklift1;
+    if (jenisproduk == 'kontainer') {
+      defaultProduk = dataProduk[0];
+    } else if (jenisproduk == 'forklift') {
+      defaultProduk = dataProduk[1];
     }
 
     initializeDateFormatting("id_ID", null).then((_) {
@@ -444,9 +434,9 @@ class _ProdukList extends State<ProdukList> {
     _date1 = DateTime.parse(tMulaiForklift);
     print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
 
-    _buildKomboProduk(pilihproduks);
+    _buildKomboProduk(defaultProduk);
     setState(() {
-      if (pilihproduks == 'forklift') {
+      if (defaultProduk == 'forklift') {
         return cektanggal = '0';
       } else {
         return cektanggal = '1';
@@ -718,7 +708,7 @@ class _ProdukList extends State<ProdukList> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
-                      child: _buildKomboProduk(pilihproduks),
+                      child: _buildKomboProduk(defaultProduk),
                     ),
                     SizedBox(
                       height: 10,
@@ -746,12 +736,12 @@ class _ProdukList extends State<ProdukList> {
                   onPressed: () {
                     setState(() {
                       FlagCari = 1;
-                      _search(context, pilihproduks, defaultProduk);
+                      _search(context, defaultProduk);
                     });
                   },
                   child: Text('Cari')),
               FlagCari == 1
-                  ? _search(context, pilihproduks, defaultProduk)
+                  ? _search(context, defaultProduk)
                   : Text("Harap Pilih Tanggal dan Kota")
             ],
           ),
@@ -760,10 +750,7 @@ class _ProdukList extends State<ProdukList> {
     );
   }
 
-  Widget _search(BuildContext context, String jenisproduk, ambilKontainers) {
-    print(
-        'masuk ke search apa nggak ? $defaultProduk ++ P$jenisproduk P - M$valKota M');
-    // if (jenisproduk == 'kontainer' || ambilKontainer1 == 'kontainer') {
+  Widget _search(BuildContext context, String jenisproduk) {
     if (cektanggal == '1') {
       // 1 untuk filter kontainer
       valueawalperhitungandurasi = _tanggalAwal;
@@ -777,7 +764,6 @@ class _ProdukList extends State<ProdukList> {
       // } else if (jenisproduk == 'forklift') {
     } else if (cektanggal == '0') {
       // 0 untuk filter forklift
-      print("Search filter forklift");
       if (timeawal.toString() == '' || timeselesai.toString() == '') {
         Fluttertoast.showToast(
             msg: "Pastikan jam awal dan jam selesai sudah terisi !",
@@ -827,21 +813,8 @@ class _ProdukList extends State<ProdukList> {
       tanggalawal: valueawalperhitungandurasi,
       tanggalakhir: valueakhirperhitungandurasi,
       idlokasi: valKota,
-      jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
-      // jenisitem: jenisproduk,
-      // jenisitem: defaultProduk == '-' ? jenisproduk : defaultProduk,
+      jenisitem: defaultProduk,
     );
-    // PostProdukModel data = PostProdukModel(
-    //   token: access_token,
-    //   tanggalawal: cektanggal == '0'
-    //       ? '${formatTglForklift.format(selectedDate)} $timeawal'
-    //       : _tanggalAwal,
-    //   tanggalakhir: cektanggal == '0'
-    //       ? '${formatTglForklift.format(selectedDate)} $timeselesai'
-    //       : _tanggalAkhir,
-    //   idlokasi: valKota,
-    //   jenisitem: pilihproduks == '' ? defaultProduk : pilihproduks,
-    // );
     return SafeArea(
       child: FutureBuilder(
         future: _apiService.listProduk(data),
@@ -1379,8 +1352,7 @@ class _ProdukList extends State<ProdukList> {
                       GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
             ],
           )),
-      value: pilihProduk == null ? null : dataProduk.join("$pilihproduks"),
-      // value: pilihproduks,
+      value: pilihProduk == null ? null : dataProduk.join("$defaultProduk"),
       decoration: InputDecoration(
           fillColor: Colors.grey[200],
           filled: true,
@@ -1406,14 +1378,13 @@ class _ProdukList extends State<ProdukList> {
       onChanged: (value) {
         setState(() {
           print('object value $value');
-          pilihproduks = value;
+          defaultProduk = value;
           if (value == null) {
-            // return defaultProduk;
             return null;
-          } else if (pilihproduks == 'forklift') {
+          } else if (defaultProduk == 'forklift') {
             print('hey');
             return cektanggal = '0';
-          } else if (pilihproduks == 'kontainer') {
+          } else if (defaultProduk == 'kontainer') {
             print('hey123');
             return cektanggal = '1';
           }
