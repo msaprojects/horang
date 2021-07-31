@@ -151,6 +151,8 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                             iddetail_orders: gcodezzzz.idtransaksi_det,
                           );
                         }));
+                      } else {
+                        return errorDialog(context, 'Open gagal dilakukan');
                       }
                     });
                   } else {

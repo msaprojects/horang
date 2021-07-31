@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -170,9 +172,26 @@ class _OtpScreenState extends State<OtpScreen> {
                         if (newtoken != "") {
                           sp.setString("access_token", newtoken);
                           access_token = newtoken;
-                          _checkBiometric();
-                          _getAvailableBiometrics();
-                          _authenticate();
+                          if (Platform.isIOS) {
+                            if (_availableBiometrics
+                                .contains(BiometricType.face)) {
+                              _checkBiometric();
+                              _getAvailableBiometrics();
+                              _authenticate();    
+                            } else if (_availableBiometrics
+                                .contains(BiometricType.fingerprint)) {
+                              _checkBiometric();
+                              _getAvailableBiometrics();
+                              _authenticate();
+                            }
+                          } else {
+                            _checkBiometric();
+                            _getAvailableBiometrics();
+                            _authenticate();
+                          }
+                          // _checkBiometric();
+                          // _getAvailableBiometrics();
+                          // _authenticate();
                         } else {
                           warningDialog(context,
                               "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini.",
@@ -191,13 +210,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       }));
             } else {
               print("cek debug 7");
-              // infoDialog(context, "hei");
-              // print(access_token);
-              // print(refresh_token);
               _checkBiometric();
               _getAvailableBiometrics();
               _authenticate();
-              // buildlist__();
             }
           }));
     }
@@ -232,28 +247,31 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     // print("access token $access_token");
     // print("refresh token $refresh_token");
-    return SafeArea(
-      child: Column(
-        children: [
-          // buildExitButton(),
-          Expanded(
-              child: Container(
-            alignment: Alignment(0, 0.6),
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // pinIndexSetup(),
-                buildSecurityText(),
-                SizedBox(
-                  height: 40.0,
-                ),
-                buildPinRow(),
-              ],
-            ),
-          )),
-          buildNumPad(),
-        ],
+    return WillPopScope(
+      onWillPop: ()=> Future.value(false),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // buildExitButton(),
+            Expanded(
+                child: Container(
+              alignment: Alignment(0, 0.6),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // pinIndexSetup(),
+                  buildSecurityText(),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  buildPinRow(),
+                ],
+              ),
+            )),
+            buildNumPad(),
+          ],
+        ),
       ),
     );
   }
@@ -421,10 +439,11 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                     ),
                   ),
-                  
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               buildResetPin()
             ],
           ),
@@ -516,16 +535,17 @@ class _OtpScreenState extends State<OtpScreen> {
                   (Route<dynamic> route) => false);
             } else if (!isSuccess && pinIndex >= 4) {
               print('Pin salah masku');
-              return showDialog(
-                  context: context,
-                  builder: (context) {
-                    Future.delayed(Duration(milliseconds: 100), () {
-                      Navigator.of(context).pop(true);
-                    });
-                    return AlertDialog(
-                      title: Text("Pin salah"),
-                    );
-                  });
+              return errorDialog(context, 'PIN yang anda masukkan salah !');
+              // showDialog(
+              //     context: context,
+              //     builder: (context) {
+              //       Future.delayed(Duration(milliseconds: 100), () {
+              //         Navigator.of(context).pop(true);
+              //       });
+              //       return AlertDialog(
+              //         title: Text("Pin salah"),
+              //       );
+              //     });
             }
           });
         });
