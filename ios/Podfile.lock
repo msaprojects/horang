@@ -45,6 +45,8 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.7)
     - Protobuf (>= 3.9.2, ~> 3.9)
   - Flutter (1.0.0)
+  - flutter_native_timezone (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -73,6 +75,8 @@ PODS:
     - Flutter
   - local_auth (0.0.1):
     - Flutter
+  - minimize_app (0.0.1):
+    - Flutter
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -99,10 +103,12 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - get_version (from `.symlinks/plugins/get_version/ios`)
   - imei_plugin (from `.symlinks/plugins/imei_plugin/ios`)
   - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - minimize_app (from `.symlinks/plugins/minimize_app/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share (from `.symlinks/plugins/share/ios`)
@@ -136,6 +142,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_native_timezone:
+    :path: ".symlinks/plugins/flutter_native_timezone/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   get_version:
@@ -144,6 +152,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/imei_plugin/ios"
   local_auth:
     :path: ".symlinks/plugins/local_auth/ios"
+  minimize_app:
+    :path: ".symlinks/plugins/minimize_app/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -167,12 +177,14 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: bd3ffc24367f901a43c063b36c640b345a4a5dd1
   FirebaseMessaging: 5eca4ef173de76253352511aafef774caa1cba2a
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_native_timezone: 5f05b2de06c9776b4cc70e1839f03de178394d22
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   get_version: 2bc18c4e26a265571662cab5d38f8b50dc8c1c77
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   imei_plugin: cb1af7c223ac2d82dcd1457a7137d93d65d2a3cd
   local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
+  minimize_app: 5195326a9325d307daa891410e876a01c34083b0
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
@@ -186,4 +198,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: ae2b375de7cffaf94429f776caa008445e375e9b
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

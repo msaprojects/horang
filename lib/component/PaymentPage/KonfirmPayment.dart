@@ -32,37 +32,35 @@ class KonfirmPayment extends StatefulWidget {
       tambahsaldopoint,
       persentase_asuransi,
       idpayment_gateway,
-      minimalsewahari
-      // jenisitem
-      ;
+      minimalsewahari,
+      harga_awal;
 
-  KonfirmPayment({
-    this.flagasuransi,
-    this.flagvoucher,
-    this.idlokasi,
-    this.idjenis_produk,
-    this.idvoucher,
-    this.idasuransi,
-    this.harga_sewa,
-    this.durasi_sewa,
-    this.valuesewaawal,
-    this.valuesewaakhir,
-    this.kapasitas,
-    this.alamat,
-    this.keterangan_barang,
-    this.nominal_barang,
-    this.nominal_voucher,
-    this.minimum_transaksi,
-    this.persentase_voucher,
-    this.totalharixharga,
-    this.saldopoint,
-    this.email_asuransi,
-    this.tambahsaldopoint,
-    this.persentase_asuransi,
-    this.idpayment_gateway,
-    this.minimalsewahari,
-    // this.jenisitem
-  });
+  KonfirmPayment(
+      {this.flagasuransi,
+      this.flagvoucher,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.idvoucher,
+      this.idasuransi,
+      this.harga_sewa,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.kapasitas,
+      this.alamat,
+      this.keterangan_barang,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.totalharixharga,
+      this.saldopoint,
+      this.email_asuransi,
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.idpayment_gateway,
+      this.minimalsewahari,
+      this.harga_awal});
 
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
@@ -99,9 +97,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kpersentase_asuransi,
       kidpayment_gateway,
       hitungsemua,
-      kminimalsewahari
-      // kjenisitem
-      ;
+      kminimalsewahari,
+      kharga_awal;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -149,17 +146,19 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   void hitungsemuaFunction() async {
     setState(() {
       hitungsemua = ReusableClasses().PerhitunganOrder(
-          kpersentase_voucher.toString(),
-          kminimum_transaksi.toString(),
-          kflagasuransi,
-          kflagvoucher,
-          knominal_voucher.toString(),
-          kharga_sewa.toString(),
-          kdurasi_sewa.toString(),
-          knominal_barang.toString(),
-          ksaldopoint.toString(),
-          kminimalsewahari.toString(),
-          kpersentase_asuransi.toString());
+        kpersentase_voucher.toString(),
+        kminimum_transaksi.toString(),
+        kflagasuransi,
+        kflagvoucher,
+        knominal_voucher.toString(),
+        kharga_awal.toString(),
+        kdurasi_sewa.toString(),
+        knominal_barang.toString(),
+        ksaldopoint.toString(),
+        kminimalsewahari.toString(),
+        kpersentase_asuransi.toString(),
+        kharga_sewa.toString(),
+      );
     });
   }
 
@@ -191,17 +190,17 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     kminimalsewahari = widget.minimalsewahari;
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
     totaldeposit = (kminimalsewahari * kharga_sewa);
-    // kjenisitem = widget.jenisitem;
+    kharga_awal = widget.harga_awal;
     cekToken();
     hitungsemuaFunction();
     super.initState();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +318,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       idpayment_gateway: kidpayment_gateway,
                       no_ovo: _noOvo.text.toString(),
                       minimalsewahari: kminimalsewahari,
-                      // jenisitem: kjenisitem,
+                      harga_awal: kharga_awal,
                     )));
       });
     }

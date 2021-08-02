@@ -35,9 +35,8 @@ class KonfirmasiPembayaran extends StatefulWidget {
       idpayment_gateway,
       saldodepositkurangnominaldeposit,
       no_ovo,
-      minimalsewahari
-      // jenisitem
-      ;
+      minimalsewahari,
+      harga_awal;
 
   KonfirmasiPembayaran(
       {this.token,
@@ -65,8 +64,7 @@ class KonfirmasiPembayaran extends StatefulWidget {
       this.saldodepositkurangnominaldeposit,
       this.no_ovo,
       this.minimalsewahari,
-      // this.jenisitem
-      });
+      this.harga_awal});
   @override
   _KonfirmasiPembayaran createState() => _KonfirmasiPembayaran();
 }
@@ -102,9 +100,8 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
       dno_ovo,
       hitungsemua,
       dminimalsewahari,
-      totaldeposit
-      // djenisitem
-      ;
+      totaldeposit,
+      dharga_awal;
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -114,12 +111,13 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
           dflagasuransi,
           dflagvoucher,
           dnominal_voucher.toString(),
-          dharga_sewa.toString(),
+          dharga_awal.toString(),
           ddurasi_sewa.toString(),
           dnominal_barang.toString(),
           dsaldopoint.toString(),
           dminimalsewahari.toString(),
-          dpersentase_asuransi.toString());
+          dpersentase_asuransi.toString(),
+          dharga_sewa.toString());
     });
   }
 
@@ -152,7 +150,7 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
         double.parse(dnominal_barang);
     totaldeposit = (dminimalsewahari * dharga_sewa); //as nominal m
-    // djenisitem = widget.jenisitem;
+    dharga_awal = widget.harga_awal;
     hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
       token: dtoken,
@@ -196,7 +194,8 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                     asuransi: total_asuransi)));
       } else {
         if (idorder == -1) {
-          errorDialog(context, "Kontainer tidak tersedia",
+          errorDialog(context,
+              "Item yang anda sewa tidak tersedia, harap ubah rincian transaksi anda, terima kasih.",
               positiveText: "OK", showNeutralButton: false, positiveAction: () {
             Navigator.pushReplacement(
                 context,
@@ -204,12 +203,11 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                     builder: (BuildContext context) => ProdukList()));
           });
         } else {
-          errorDialog(context, "Transaksi gagal disimpan",
+          errorDialog(context,
+              "Maaf, transaksi anda gagal, harap ulangi kembali, terima kasih.",
               positiveText: "OK", showNeutralButton: false, positiveAction: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProdukList()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (BuildContext context) => Home()));
           });
         }
       }
@@ -232,16 +230,6 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Container(
-              //   alignment: Alignment.topLeft,
-              //   child: GestureDetector(
-              //       onTap: () {
-              //         // Navigator.pop(context);
-              //         Navigator.push(context,
-              //             MaterialPageRoute(builder: (context) => Home()));
-              //       },
-              //       child: Icon(Icons.close_rounded)),
-              // ),
               Container(
                   child: Center(
                 child: Image.asset(

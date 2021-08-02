@@ -3,7 +3,6 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -128,9 +127,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       plastorder,
       pin,
       labeldiskon,
-      labelhargaawal,
-      dis,
-      harawl
+      labelhargaawal
       // pjenisitem
       ;
 
@@ -146,10 +143,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     });
   }
 
-  adaDiskonGakLabel(num diskonn, hargaa) {
+  labelDiskon(int diskonn) {
     if (diskonn != 0) {
       labeldiskon = 'Diskon :';
-      labelhargaawal = 'Harga Awal';
+      labelhargaawal = 'Harga Awal : ';
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -162,14 +159,17 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
   }
 
-  adaDiskonGak(num diskonn, hargaa) {
+  valueDiskon(String diskonn, String hargaawal) {
     if (diskonn != 0) {
-      dis = diskonn.toString();
-      harawl = hargaa.toString();
       return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(dis + '%'),
-          Text(rupiah(harawl, separator: ',', trailing: " /hari"),
+          Text(diskonn + '%'),
+          Text(
+              rupiah(hargaawal,
+                  separator: ',',
+                  trailing: " /" + satuanHariatauJam().toString()),
               style: TextStyle(decoration: TextDecoration.lineThrough)),
         ],
       );
@@ -188,25 +188,25 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           Row(
             children: [
               Text('Check In : '),
-              // Text(
-              //   pcekin.toString(),
-              // ),
+              Text(
+                pcekin.toString(),
+              ),
             ],
           ),
           Row(
             children: [
               Text('Check Out : '),
-              // Text(
-              //   pcekout.toString(),
-              // ),
+              Text(
+                pcekout.toString(),
+              ),
             ],
           ),
           Row(
             children: [
               Text('Last Order : '),
-              // Text(
-              //   plastorder.toString(),
-              // ),
+              Text(
+                plastorder.toString(),
+              ),
             ],
           ),
         ],
@@ -247,12 +247,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
   }
 
-  satuanHariatauJam(){
+  satuanHariatauJam() {
     if (pkapasitas.toString().toLowerCase().contains('forklift')) {
       return haurOrDay = ' Jam';
-  } else {
-    return haurOrDay = ' Hari';
-  }}
+    } else {
+      return haurOrDay = ' Hari';
+    }
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -296,51 +297,50 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
 
   @override
   void initState() {
-    setState(() {
-      pflagasuransi = widget.flagasuransi;
-      pflagvoucher = widget.flagvoucher;
-      pidlokasi = widget.idlokasi;
-      pidjenis_produk = widget.idjenis_produk;
-      pidvoucher = widget.idvoucher;
-      pidasuransi = widget.idasuransi;
-      pharga_sewa = widget.harga_sewa;
-      pharga_awal = widget.harga_awal;
-      pdiskon = widget.diskonn;
-      pdurasi_sewa = widget.durasi_sewa;
-      pvaluesewaawal = widget.valuesewaawal;
-      pvaluesewaakhir = widget.valuesewaakhir;
-      pkapasitas = widget.kapasitas;
-      palamat = widget.alamat;
-      pketerangan_barang = widget.keterangan_barang;
-      pnominal_barang = widget.nominal_barang;
-      pnominal_voucher = widget.nominal_voucher;
-      pminimum_transaksi = widget.minimum_transaksi;
-      ppersentase_voucher = widget.persentase_voucher;
-      ptotalharixharga = widget.totalharixharga;
-      psaldopoint = widget.saldopoint; //as saldo poin terpakai
-      pemail_asuransi = widget.email_asuransi;
-      ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
-      ppersentase_asuransi = widget.persentase_asuransi;
-      pminimalsewahari = widget.minimalsewahari;
-      pcekin = widget.cekin;
-      pcekout = widget.cekout;
-      plastorder = widget.lastorder;
-      ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
-              double.parse(pnominal_barang))
-          .toStringAsFixed(2);
-      totaldeposit = (pminimalsewahari * pharga_sewa);
-      // pjenisitem = widget.jenisitem;
-      cekToken();
-      hitungsemuaFunction();
-    });
+    pflagasuransi = widget.flagasuransi;
+    pflagvoucher = widget.flagvoucher;
+    pidlokasi = widget.idlokasi;
+    pidjenis_produk = widget.idjenis_produk;
+    pidvoucher = widget.idvoucher;
+    pidasuransi = widget.idasuransi;
+    pharga_sewa = widget.harga_sewa;
+    pharga_awal = widget.harga_awal;
+    pdiskon = widget.diskonn;
+    pdurasi_sewa = widget.durasi_sewa;
+    pvaluesewaawal = widget.valuesewaawal;
+    pvaluesewaakhir = widget.valuesewaakhir;
+    pkapasitas = widget.kapasitas;
+    palamat = widget.alamat;
+    pketerangan_barang = widget.keterangan_barang;
+    pnominal_barang = widget.nominal_barang;
+    pnominal_voucher = widget.nominal_voucher;
+    pminimum_transaksi = widget.minimum_transaksi;
+    ppersentase_voucher = widget.persentase_voucher;
+    ptotalharixharga = widget.totalharixharga;
+    psaldopoint = widget.saldopoint; //as saldo poin terpakai
+    pemail_asuransi = widget.email_asuransi;
+    ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
+    ppersentase_asuransi = widget.persentase_asuransi;
+    pminimalsewahari = widget.minimalsewahari;
+    pcekin = widget.cekin;
+    pcekout = widget.cekout;
+    plastorder = widget.lastorder;
+    ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
+            double.parse(pnominal_barang))
+        .toStringAsFixed(2);
+    totaldeposit = (pminimalsewahari * pharga_awal);
+    // pjenisitem = widget.jenisitem;
+    print("Flag Asuransi? " + pflagasuransi.toString());
+    cekToken();
+    hitungsemuaFunction();
     super.initState();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -350,12 +350,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           pflagasuransi,
           pflagvoucher,
           pnominal_voucher.toString(),
-          pharga_sewa.toString(),
+          pharga_awal.toString(),
           pdurasi_sewa.toString(),
           pnominal_barang.toString(),
           psaldopoint.toString(),
           pminimalsewahari.toString(),
-          ppersentase_asuransi.toString());
+          ppersentase_asuransi.toString(),
+          pharga_sewa.toString());
     });
   }
 
@@ -427,11 +428,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                       Text("Tgl. Mulai :"),
                                       Text("Tgl. Berakhir :"),
                                       Text("Durasi Sewa :"),
-                                      // Text("Check In :"),
-                                      // Text("Check Out :"),
-                                      // Text("Last Order :"),
                                       settingJamOperasionalLabel(),
-                                      adaDiskonGakLabel(pdiskon, pharga_awal)
+                                      labelDiskon(pdiskon)
                                     ],
                                   ),
                                 ],
@@ -449,11 +447,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   ),
                                   Text(pvaluesewaakhir,
                                       overflow: TextOverflow.ellipsis),
-                                  Text(
-                                    pdurasi_sewa.toString() + satuanHariatauJam()
-                                  ),
+                                  Text(pdurasi_sewa.toString() +
+                                      satuanHariatauJam()),
                                   settingJamOperasional(),
-                                  adaDiskonGak(pdiskon, pharga_awal)
+                                  valueDiskon(pdiskon.toString(),
+                                      pharga_awal.toString())
                                 ],
                               ),
                             ),
@@ -473,8 +471,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 rupiah(pharga_sewa,
-                                    separator: ',', trailing: " /"+satuanHariatauJam()),
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                                    separator: ',',
+                                    trailing: " /" + satuanHariatauJam()),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -507,7 +508,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 children: <Widget>[Text("Ket. Barang : ")],
                               ),
                             ),
-                            
                           ],
                         ),
                         // Container(
@@ -527,15 +527,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         //         ),
                         //       ),
                         //     ),
-                         Container(
+                        Container(
                           alignment: Alignment.topRight,
-                              padding: const EdgeInsets.only(
-                                  top: 0.0, right: 60, left: 40),
-                              child: Text(
-                                pketerangan_barang,
-                                maxLines: 10,
-                                overflow: TextOverflow.visible,
-                                textAlign: TextAlign.justify,),
+                          padding: const EdgeInsets.only(
+                              top: 0.0, right: 60, left: 40),
+                          child: Text(
+                            pketerangan_barang,
+                            maxLines: 10,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.justify,
+                          ),
                           // ],
                         ),
                         SizedBox(
@@ -1091,7 +1092,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         idpayment,
                                                     minimalsewahari:
                                                         pminimalsewahari,
-                                                        )));
+                                                    harga_awal: pharga_awal)));
                                   });
                                 })
                           ],
