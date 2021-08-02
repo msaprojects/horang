@@ -1,14 +1,12 @@
 import 'dart:io';
+
 import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/notification_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'component/Dummy/dummypin2.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,7 +34,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
-      // home: ProdukList(),
     );
   }
 }

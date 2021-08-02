@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,16 +9,15 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
-import 'package:horang/component/Dummy/cobakeyboard.dart';
-import 'package:horang/component/HistoryPage/historypage.dart';
-import 'package:horang/component/LogPage/log_aktifitas.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:indonesia/indonesia.dart';
+import '../StoragePage/StorageHandler.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
@@ -40,7 +41,10 @@ class _HomePageState extends State<HomePage> {
       nama_customer,
       nama,
       pin,
-      ceksaldo;
+      ceksaldo,
+      sk,
+      kirimKontainer = 'kontainer',
+      kirimForklift = 'forklift';
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -113,6 +117,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _apiService.client.close();
+    ReusableClasses().getSaldo(access_token);
+    super.dispose();
+  }
+
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
@@ -144,7 +155,6 @@ class _HomePageState extends State<HomePage> {
                               end: Alignment.bottomLeft,
                               colors: [Colors.purple, Colors.blue],
                             ),
-                            // color: Colors.blue[400]
                           ),
                           child: Column(
                             children: [
@@ -165,10 +175,9 @@ class _HomePageState extends State<HomePage> {
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    // LogAktifitasNotif()));
-                                                    LogHandler()));
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        LogHandler()));
                                       },
                                       icon: (Icon(Icons.notifications)),
                                     )
@@ -271,18 +280,12 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        CobaKeyboard()));
-                                            // Scaffold.of(context)
-                                            //     .showSnackBar(SnackBar(
-                                            //   content: Text(
-                                            //       "Fitur ini masih dalam proses pengembangan"),
-                                            //   duration: Duration(seconds: 5),
-                                            // ));
+                                            Scaffold.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Fitur ini masih dalam proses pengembangan"),
+                                              duration: Duration(seconds: 5),
+                                            ));
                                           }),
                                       Text(
                                         "Histori",
@@ -306,30 +309,118 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 18,
               ),
-
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, top: 24, bottom: 10),
-                      child: Text(
-                        'Kontainer Aktif',
-                        style: mTitleStyle,
-                      ),
+              Padding(
+                padding: const EdgeInsets.only(left: 25, right: 25),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child:
+                            Text('Order Sekarang Kuy !', style: mTitleStyle)),
+                    SizedBox(
+                      height: 20,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 160, top: 24, bottom: 10),
-                      child: SelectableText(
-                        "See All...",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StorageActive()));
-                        },
-                      ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ProdukList(jenisproduk: 'kontainer');
+                            }));
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 5,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]),
+                                image: DecorationImage(
+                                    scale: 6.0,
+                                    image: AssetImage(
+                                        'assets/image/container1.png'))),
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  'Kontainer',
+                                  style: GoogleFonts.lato(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ProdukList(jenisproduk: 'forklift');
+                            }));
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 5,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey[300]),
+                                image: DecorationImage(
+                                  scale: 6.0,
+                                  fit: BoxFit.scaleDown,
+                                  image:
+                                      AssetImage('assets/image/forklift.png'),
+                                )),
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  'Forklift',
+                                  style: GoogleFonts.lato(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                height: 10,
+                color: Colors.grey[300],
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Kontainer Aktif',
+                      style: mTitleStyle,
+                    ),
+                    SelectableText(
+                      "See All...",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StorageHandler(
+                                      initialIndex: 1,
+                                    )
+                                // StorageActive()
+                                ));
+                      },
                     ),
                   ],
                 ),
@@ -368,11 +459,11 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    // StorageHandler(
-                                    //       initialIndex: 2,
-                                    //     )
-                                    HistoryPage()));
+                                builder: (context) => StorageHandler(
+                                      initialIndex: 2,
+                                    )
+                                // HistoryPage()
+                                ));
                       },
                     ),
                   ],
@@ -395,6 +486,36 @@ class _HomePageState extends State<HomePage> {
             title: Text("Sesi Anda Berakhir!"),
             content: Text(
                 "Harap masukkan kembali email beserta nomor handphone untuk mengakses fitur di aplikasi ini."),
+            actions: [
+              FlatButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"))
+            ],
+          );
+        });
+  }
+
+  Future popUpsk(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sesi Anda Berakhir!"),
+            // content: Text("$sk"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      // height: 200,
+                      // width: 400,
+                      child: Text("$sk")),
+                ],
+              ),
+            ),
             actions: [
               FlatButton(
                   color: Colors.red,

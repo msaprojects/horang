@@ -3,7 +3,9 @@ import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
+import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
@@ -21,6 +23,8 @@ class FormInputPembayaran extends StatefulWidget {
       idvoucher,
       idasuransi,
       harga_sewa,
+      harga_awal,
+      diskonn,
       durasi_sewa,
       valuesewaawal,
       valuesewaakhir,
@@ -39,35 +43,41 @@ class FormInputPembayaran extends StatefulWidget {
       minimalsewahari,
       cekout,
       cekin,
-      lastorder;
+      lastorder
+      // jenisitem
+      ;
 
-  FormInputPembayaran(
-      {this.flagasuransi,
-      this.flagvoucher,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.idvoucher,
-      this.idasuransi,
-      this.harga_sewa,
-      this.durasi_sewa,
-      this.valuesewaawal,
-      this.valuesewaakhir,
-      this.kapasitas,
-      this.alamat,
-      this.keterangan_barang,
-      this.nominal_barang,
-      this.nominal_voucher,
-      this.minimum_transaksi,
-      this.persentase_voucher,
-      this.totalharixharga,
-      this.saldopoint,
-      this.email_asuransi,
-      this.tambahsaldopoint,
-      this.persentase_asuransi,
-      this.minimalsewahari,
-      this.cekout,
-      this.cekin,
-      this.lastorder});
+  FormInputPembayaran({
+    this.flagasuransi,
+    this.flagvoucher,
+    this.idlokasi,
+    this.idjenis_produk,
+    this.idvoucher,
+    this.idasuransi,
+    this.harga_sewa,
+    this.harga_awal,
+    this.diskonn,
+    this.durasi_sewa,
+    this.valuesewaawal,
+    this.valuesewaakhir,
+    this.kapasitas,
+    this.alamat,
+    this.keterangan_barang,
+    this.nominal_barang,
+    this.nominal_voucher,
+    this.minimum_transaksi,
+    this.persentase_voucher,
+    this.totalharixharga,
+    this.saldopoint,
+    this.email_asuransi,
+    this.tambahsaldopoint,
+    this.persentase_asuransi,
+    this.minimalsewahari,
+    this.cekout,
+    this.cekin,
+    this.lastorder,
+    // this.jenisitem
+  });
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -78,7 +88,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   ApiService _apiService = ApiService();
   int grup = 1, rgID = 1, _currentIndex = 1, rgIndex = 1, idorder = 0;
   bool _sel = false, isEnabled = true, asuransi = false, isSuccess = false;
-  String formatedate, formatedate2, rgValue = "";
+  String formatedate, formatedate2, rgValue = "", haurOrDay;
   var access_token,
       refresh_token,
       email,
@@ -90,6 +100,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pidvoucher,
       pidasuransi,
       pharga_sewa,
+      pharga_awal,
+      pdiskon,
       pdurasi_sewa,
       pvaluesewaawal,
       pvaluesewaakhir,
@@ -114,7 +126,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pcekout,
       pcekin,
       plastorder,
-      pin;
+      pin,
+      labeldiskon,
+      labelhargaawal,
+      dis,
+      harawl
+      // pjenisitem
+      ;
 
   enableButton() {
     setState(() {
@@ -127,6 +145,114 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       isEnabled = false;
     });
   }
+
+  adaDiskonGakLabel(num diskonn, hargaa) {
+    if (diskonn != 0) {
+      labeldiskon = 'Diskon :';
+      labelhargaawal = 'Harga Awal';
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(labeldiskon),
+          Text(labelhargaawal),
+        ],
+      );
+    } else {
+      return Visibility(visible: false, child: Text(""));
+    }
+  }
+
+  adaDiskonGak(num diskonn, hargaa) {
+    if (diskonn != 0) {
+      dis = diskonn.toString();
+      harawl = hargaa.toString();
+      return Column(
+        children: [
+          Text(dis + '%'),
+          Text(rupiah(harawl, separator: ',', trailing: " /hari"),
+              style: TextStyle(decoration: TextDecoration.lineThrough)),
+        ],
+      );
+    } else {
+      return Visibility(visible: false, child: Text(""));
+    }
+  }
+
+  settingJamOperasionalLabel() {
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return Visibility(visible: false, child: Text(""));
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('Check In : '),
+              // Text(
+              //   pcekin.toString(),
+              // ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Check Out : '),
+              // Text(
+              //   pcekout.toString(),
+              // ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Last Order : '),
+              // Text(
+              //   plastorder.toString(),
+              // ),
+            ],
+          ),
+        ],
+      );
+    }
+  }
+
+  settingJamOperasional() {
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return Visibility(visible: false, child: Text(""));
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                pcekin.toString(),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                pcekout.toString(),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                plastorder.toString(),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+  }
+
+  satuanHariatauJam(){
+    if (pkapasitas.toString().toLowerCase().contains('forklift')) {
+      return haurOrDay = ' Jam';
+  } else {
+    return haurOrDay = ' Hari';
+  }}
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -178,6 +304,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pidvoucher = widget.idvoucher;
       pidasuransi = widget.idasuransi;
       pharga_sewa = widget.harga_sewa;
+      pharga_awal = widget.harga_awal;
+      pdiskon = widget.diskonn;
       pdurasi_sewa = widget.durasi_sewa;
       pvaluesewaawal = widget.valuesewaawal;
       pvaluesewaakhir = widget.valuesewaakhir;
@@ -201,19 +329,26 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               double.parse(pnominal_barang))
           .toStringAsFixed(2);
       totaldeposit = (pminimalsewahari * pharga_sewa);
+      // pjenisitem = widget.jenisitem;
       cekToken();
       hitungsemuaFunction();
     });
     super.initState();
   }
 
+  @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
+
   void hitungsemuaFunction() async {
     setState(() {
       hitungsemua = ReusableClasses().PerhitunganOrder(
           ppersentase_voucher.toString(),
           pminimum_transaksi.toString(),
-          pflagvoucher,
           pflagasuransi,
+          pflagvoucher,
           pnominal_voucher.toString(),
           pharga_sewa.toString(),
           pdurasi_sewa.toString(),
@@ -272,7 +407,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           padding: const EdgeInsets.only(left: 30, bottom: 15),
                           child: Row(
                             children: <Widget>[
-                              Text("Detail Pesanan ",
+                              Text("Detail Pesanan",
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           ),
@@ -283,14 +418,22 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             Container(
                               padding: const EdgeInsets.only(left: 30),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text("Tgl. Mulai :"),
-                                  Text("Tgl. Berakhir :"),
-                                  Text("Durasi Sewa :"),
-                                  Text("Check In :"),
-                                  Text("Check Out :"),
-                                  Text("Last Order :"),
+                                children: [
+                                  // adaDiskonGak(pdiskon, pharga_awal),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text("Tgl. Mulai :"),
+                                      Text("Tgl. Berakhir :"),
+                                      Text("Durasi Sewa :"),
+                                      // Text("Check In :"),
+                                      // Text("Check Out :"),
+                                      // Text("Last Order :"),
+                                      settingJamOperasionalLabel(),
+                                      adaDiskonGakLabel(pdiskon, pharga_awal)
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -307,17 +450,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   Text(pvaluesewaakhir,
                                       overflow: TextOverflow.ellipsis),
                                   Text(
-                                    pdurasi_sewa.toString() + " Hari",
+                                    pdurasi_sewa.toString() + satuanHariatauJam()
                                   ),
-                                  Text(
-                                    pcekin.toString(),
-                                  ),
-                                  Text(
-                                    pcekout.toString(),
-                                  ),
-                                  Text(
-                                    plastorder.toString(),
-                                  ),
+                                  settingJamOperasional(),
+                                  adaDiskonGak(pdiskon, pharga_awal)
                                 ],
                               ),
                             ),
@@ -337,7 +473,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   const EdgeInsets.only(top: 0.0, right: 60),
                               child: Text(
                                 rupiah(pharga_sewa,
-                                    separator: ',', trailing: " /hari"),
+                                    separator: ',', trailing: " /"+satuanHariatauJam()),
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                             ),
@@ -371,22 +507,36 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 children: <Widget>[Text("Ket. Barang : ")],
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.only(
-                                  top: 0.0, right: 60, left: 20),
-                              child: SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                width: MediaQuery.of(context).size.height * 0.2,
-                                child: Text(
-                                  pketerangan_barang,
-                                  maxLines: 10,
-                                  overflow: TextOverflow.visible,
-                                  textAlign: TextAlign.justify,
-                                ),
-                              ),
-                            ),
+                            
                           ],
+                        ),
+                        // Container(
+                        //   alignment: Alignment.topRight,
+                        //       padding: const EdgeInsets.only(
+                        //           top: 10.0, right: 50, left: 50, ),
+                        //       child: Flexible(
+                        //         child: Column(
+                        //           children: [
+                        //             Text(
+                        //               pketerangan_barang,
+                        //               maxLines: 10,
+                        //               overflow: TextOverflow.visible,
+                        //               // textAlign: TextAlign.justify,
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                         Container(
+                          alignment: Alignment.topRight,
+                              padding: const EdgeInsets.only(
+                                  top: 0.0, right: 60, left: 40),
+                              child: Text(
+                                pketerangan_barang,
+                                maxLines: 10,
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.justify,),
+                          // ],
                         ),
                         SizedBox(
                           height: 8,
@@ -569,36 +719,139 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                     ),
                                   ),
                                 ),
-                                SafeArea(
-                                  child: FutureBuilder(
-                                      future: _apiService
-                                          .listPaymentGateway(access_token),
-                                      builder: (context,
-                                          AsyncSnapshot<List<PaymentGateway>>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error.toString());
-                                          return Center(
-                                            child: Text(
-                                                "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
-                                          );
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          List<PaymentGateway> payment =
-                                              snapshot.data;
-                                          return _listPaymentGateway(payment);
-                                        } else {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                      }),
-                                )
+                                Card(
+                                  child: Container(
+                                    child: ExpansionTile(
+                                      title: Text(
+                                        "Instant Payment : ",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SafeArea(
+                                              child: FutureBuilder(
+                                                  future: _apiService
+                                                      .listPaymentGateway(
+                                                          access_token),
+                                                  // .listPaymentGatewayVA(),
+                                                  builder: (context,
+                                                      // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
+                                                      AsyncSnapshot<
+                                                              List<
+                                                                  PaymentGateway>>
+                                                          snapshot) {
+                                                    if (snapshot.hasError) {
+                                                      print(snapshot.error
+                                                          .toString());
+                                                      return Center(
+                                                        child: Text(
+                                                            "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
+                                                      );
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    } else if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.done) {
+                                                      // List<PaymentGatewayVirtualAccount> payment =
+                                                      List<PaymentGateway>
+                                                          payment =
+                                                          snapshot.data;
+                                                      return _listPaymentGateway(
+                                                          payment);
+                                                    } else {
+                                                      return Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    }
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  // padding: EdgeInsets.only(
+                                  //   left: 16,
+                                  //   right: 16,
+                                  // ),
+                                  child: Card(
+                                    child: Container(
+                                      child: ExpansionTile(
+                                        title: Text(
+                                          "Virtual Account : ",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              SafeArea(
+                                                child: FutureBuilder(
+                                                    future: _apiService
+                                                        .listPaymentGatewayVA(),
+                                                    // .listPaymentGatewayVA(),
+                                                    builder: (context,
+                                                        // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
+                                                        AsyncSnapshot<
+                                                                List<
+                                                                    PaymentGatewayVirtualAccount>>
+                                                            snapshot) {
+                                                      if (snapshot.hasError) {
+                                                        print(snapshot.error
+                                                            .toString());
+                                                        return Center(
+                                                          child: Text(
+                                                              "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
+                                                        );
+                                                      } else if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      } else if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .done) {
+                                                        List<PaymentGatewayVirtualAccount>
+                                                            paymentz =
+                                                            snapshot.data;
+                                                        return _listPaymentGatewayVA(
+                                                            paymentz);
+                                                      } else {
+                                                        return Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      }
+                                                    }),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )
@@ -615,9 +868,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     );
   }
 
-  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+  Widget _listPaymentGatewayVA(List<PaymentGatewayVirtualAccount> dataIndex) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.30,
       child: Column(
         children: [
           Expanded(
@@ -628,6 +881,56 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
             ),
             child: ListView.builder(
               itemBuilder: (context, index) {
+                PaymentGatewayVirtualAccount pymentgtwyVA = dataIndex[index];
+                return Card(
+                  child: InkWell(
+                    onTap: () {
+                      _tripModalBottomSheet(context, pymentgtwyVA.code.toInt(),
+                          pymentgtwyVA.name);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Center(
+                            child: Text(pymentgtwyVA.code,
+                                style: GoogleFonts.inter(
+                                    fontSize: 15, color: Colors.black87)),
+                          ),
+                          selected: true,
+                          leading: Container(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(pymentgtwyVA.name)),
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+              itemCount: dataIndex.length,
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+
+  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.55,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+              child: Container(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                // PaymentGatewayVirtualAccount pymentgtwy = dataIndex[index];
                 PaymentGateway pymentgtwy = dataIndex[index];
                 // print("data index $dataIndex");
                 return Card(
@@ -642,6 +945,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         ListTile(
+                          title: Center(
+                            child: Text(pymentgtwy.nama_provider,
+                                style: GoogleFonts.inter(
+                                    fontSize: 15, color: Colors.black87)),
+                          ),
                           selected: true,
                           leading: Container(
                             padding: EdgeInsets.only(left: 20),
@@ -652,10 +960,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                           ),
                           trailing: Icon(Icons.keyboard_arrow_right),
-                          // Text(
-                          //   pymentgtwy.nama_provider,
-                          //   style: GoogleFonts.inter(
-                          //       fontSize: 15, color: Colors.black26)),
                         )
                       ],
                     ),
@@ -665,7 +969,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
               itemCount: dataIndex.length,
             ),
           )),
-          // Text("Kamu memilih Pembayaran menggunakan : $rgValue")
         ],
       ),
     );
@@ -743,6 +1046,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
+                                  // print('heeyyyyy ' + pjenisitem.toString());
                                   setState(() {
                                     Navigator.pushReplacement(
                                         context,
@@ -786,7 +1090,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                     idpayment_gateway:
                                                         idpayment,
                                                     minimalsewahari:
-                                                        pminimalsewahari)));
+                                                        pminimalsewahari,
+                                                        )));
                                   });
                                 })
                           ],

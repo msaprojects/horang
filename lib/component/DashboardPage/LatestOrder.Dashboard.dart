@@ -35,7 +35,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       tanggal_order,
       hari,
       aktif,
-      pin;
+      pin, query;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -88,9 +88,10 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
     return SafeArea(
       child: FutureBuilder(
           // future: _apiService.listJenisProduk(access_token),
-          future: _apiService.listHistory(access_token),
+          future: _apiService.listHistoryDashboard(access_token),
           builder:
               // (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
+              // ignore: missing_return
               (BuildContext context,
                   AsyncSnapshot<List<HistoryModel>> snapshot) {
             print("coba cek lagi : ${snapshot.connectionState}");

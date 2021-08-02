@@ -32,33 +32,38 @@ class KonfirmPayment extends StatefulWidget {
       tambahsaldopoint,
       persentase_asuransi,
       idpayment_gateway,
-      minimalsewahari;
+      minimalsewahari
+      // jenisitem
+      ;
 
-  KonfirmPayment(
-      {this.flagasuransi,
-      this.flagvoucher,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.idvoucher,
-      this.idasuransi,
-      this.harga_sewa,
-      this.durasi_sewa,
-      this.valuesewaawal,
-      this.valuesewaakhir,
-      this.kapasitas,
-      this.alamat,
-      this.keterangan_barang,
-      this.nominal_barang,
-      this.nominal_voucher,
-      this.minimum_transaksi,
-      this.persentase_voucher,
-      this.totalharixharga,
-      this.saldopoint,
-      this.email_asuransi,
-      this.tambahsaldopoint,
-      this.persentase_asuransi,
-      this.idpayment_gateway,
-      this.minimalsewahari});
+  KonfirmPayment({
+    this.flagasuransi,
+    this.flagvoucher,
+    this.idlokasi,
+    this.idjenis_produk,
+    this.idvoucher,
+    this.idasuransi,
+    this.harga_sewa,
+    this.durasi_sewa,
+    this.valuesewaawal,
+    this.valuesewaakhir,
+    this.kapasitas,
+    this.alamat,
+    this.keterangan_barang,
+    this.nominal_barang,
+    this.nominal_voucher,
+    this.minimum_transaksi,
+    this.persentase_voucher,
+    this.totalharixharga,
+    this.saldopoint,
+    this.email_asuransi,
+    this.tambahsaldopoint,
+    this.persentase_asuransi,
+    this.idpayment_gateway,
+    this.minimalsewahari,
+    // this.jenisitem
+  });
+
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
@@ -94,7 +99,9 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kpersentase_asuransi,
       kidpayment_gateway,
       hitungsemua,
-      kminimalsewahari;
+      kminimalsewahari
+      // kjenisitem
+      ;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -144,8 +151,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       hitungsemua = ReusableClasses().PerhitunganOrder(
           kpersentase_voucher.toString(),
           kminimum_transaksi.toString(),
-          kflagvoucher,
           kflagasuransi,
+          kflagvoucher,
           knominal_voucher.toString(),
           kharga_sewa.toString(),
           kdurasi_sewa.toString(),
@@ -184,10 +191,17 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     kminimalsewahari = widget.minimalsewahari;
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
     totaldeposit = (kminimalsewahari * kharga_sewa);
+    // kjenisitem = widget.jenisitem;
     cekToken();
     hitungsemuaFunction();
     super.initState();
   }
+
+  @override
+    void dispose() {
+      _apiService.client.close();
+      super.dispose();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -208,45 +222,48 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
         padding: EdgeInsets.all(30),
         child: Column(
           children: [
-            Expanded(
-                child: Column(
-              children: [
-                Text("Masukkan nomor yang terdaftar di OVO ",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold, fontSize: 14)),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  controller: _noOvo,
-                  // ignore: deprecated_member_use
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    hintText: "Ovo",
-                    labelText: "Ovo",
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text("Masukkan nomor yang terdaftar di OVO ",
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold, fontSize: 14)),
+                  SizedBox(
+                    height: 15,
                   ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
-                  style: GoogleFonts.inter(height: 1.5, fontSize: 14),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "2. Pastikan Anda melakukan pembayaran dalam waktu 30 detik untuk menghindari pembatalan secara otomatis.",
-                  style: GoogleFonts.inter(height: 1.5, fontSize: 14),
-                ),
-              ],
-            )),
+                  TextFormField(
+                    controller: _noOvo,
+                    // ignore: deprecated_member_use
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue),
+                      ),
+                      hintText: "Ovo",
+                      labelText: "Ovo",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
+                    style: GoogleFonts.inter(height: 1.5, fontSize: 14),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "2. Pastikan Anda melakukan pembayaran dalam waktu 30 detik untuk menghindari pembatalan secara otomatis.",
+                    style: GoogleFonts.inter(height: 1.5, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
             FlatButton(
               color: Colors.green,
               child: Text(
@@ -279,29 +296,31 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => KonfirmasiPembayaran(
-                    token: access_token,
-                    flagasuransi: kflagasuransi,
-                    flagvoucher: kflagvoucher,
-                    idlokasi: kidlokasi,
-                    idjenis_produk: kidjenis_produk,
-                    idvoucher: kidvoucher,
-                    idasuransi: kidasuransi,
-                    harga_sewa: kharga_sewa,
-                    durasi_sewa: kdurasi_sewa,
-                    valuesewaawal: kvaluesewaawal,
-                    valuesewaakhir: kvaluesewaakhir,
-                    keterangan_barang: kketerangan_barang,
-                    nominal_barang: knominal_barang,
-                    nominal_voucher: knominal_voucher,
-                    minimum_transaksi: kminimum_transaksi,
-                    persentase_voucher: kpersentase_voucher,
-                    saldopoint: ksaldopoint,
-                    email_asuransi: kemail_asuransi,
-                    tambahsaldopoint: ktambahsaldopoint,
-                    persentase_asuransi: kpersentase_asuransi,
-                    idpayment_gateway: kidpayment_gateway,
-                    no_ovo: _noOvo.text.toString(),
-                    minimalsewahari: kminimalsewahari)));
+                      token: access_token,
+                      flagasuransi: kflagasuransi,
+                      flagvoucher: kflagvoucher,
+                      idlokasi: kidlokasi,
+                      idjenis_produk: kidjenis_produk,
+                      idvoucher: kidvoucher,
+                      idasuransi: kidasuransi,
+                      harga_sewa: kharga_sewa,
+                      durasi_sewa: kdurasi_sewa,
+                      valuesewaawal: kvaluesewaawal,
+                      valuesewaakhir: kvaluesewaakhir,
+                      keterangan_barang: kketerangan_barang,
+                      nominal_barang: knominal_barang,
+                      nominal_voucher: knominal_voucher,
+                      minimum_transaksi: kminimum_transaksi,
+                      persentase_voucher: kpersentase_voucher,
+                      saldopoint: ksaldopoint,
+                      email_asuransi: kemail_asuransi,
+                      tambahsaldopoint: ktambahsaldopoint,
+                      persentase_asuransi: kpersentase_asuransi,
+                      idpayment_gateway: kidpayment_gateway,
+                      no_ovo: _noOvo.text.toString(),
+                      minimalsewahari: kminimalsewahari,
+                      // jenisitem: kjenisitem,
+                    )));
       });
     }
   }

@@ -69,15 +69,15 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-    // Scaffold(
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.blueAccent,
-    //     title: Text("Log Transaksi Aplikasi"),
-    //     bottom: PreferredSize(
-    //       child: Icon(Icons.linear_scale,size: 60.0,), 
-    //       preferredSize: Size.fromHeight(40.0)),
-    //   ),
-      // body: 
+      // Scaffold(
+      //   appBar: AppBar(
+      //     backgroundColor: Colors.blueAccent,
+      //     title: Text("Log Transaksi Aplikasi"),
+      //     bottom: PreferredSize(
+      //       child: Icon(Icons.linear_scale,size: 60.0,),
+      //       preferredSize: Size.fromHeight(40.0)),
+      //   ),
+      // body:
       child: FutureBuilder(
         future: _apiService.logAktifitasNotif_(access_token),
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
@@ -115,7 +115,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
         groupComparator: (group1, group2) => group2.compareTo(group1),
         itemComparator: (item1, item2) =>
             item1['keterangan_user'].compareTo(item2['keterangan_user']),
-        order: GroupedListOrder.DESC,
+        order: GroupedListOrder.ASC,
         useStickyGroupSeparators: true,
         groupSeparatorBuilder: (String value) => Padding(
           padding: EdgeInsets.all(8),
@@ -124,7 +124,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
             child: Text(
               value,
               // DateFormat("yyyy-MM-dd").parse(value).toString(),
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.center,
               // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               style: GoogleFonts.lato(fontSize: 18),
             ),
@@ -133,7 +133,8 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
         itemBuilder: (c, element) {
           return Card(
             elevation: 2.0,
-            margin: new EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 10),
+            margin:
+                new EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 10),
             child: Container(
               child: ListTile(
                 contentPadding:

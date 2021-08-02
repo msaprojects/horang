@@ -5,23 +5,27 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
-import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
-import 'package:horang/component/account_page/AccountChecker.dart';
+import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
+import 'package:minimize_app/minimize_app.dart';
 
 class LoginPage extends StatefulWidget {
+  var cekUUID, email, nama;
+  LoginPage({this.cekUUID, this.email, this.nama});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future futures;
   ApiService _apiService = ApiService();
   final firebaseMessaging = FirebaseMessaging();
   bool _fieldEmail,
@@ -30,7 +34,12 @@ class _LoginPageState extends State<LoginPage> {
       _obsecureText = true,
       _checkbio = false;
   String token = "";
-  var iddevice = "";
+  var iddevice = "",
+      uuidAnyar = "",
+      email = "",
+      emailaccountselection = "",
+      emaile,
+      namae = "";
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -43,16 +52,18 @@ class _LoginPageState extends State<LoginPage> {
   //FIREBASE
   @override
   void initState() {
+    namae = widget.nama;
+    uuidAnyar = widget.cekUUID;
+    emaile = widget.email;
+
+    print("askj : " + emailaccountselection.toString());
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         debugPrint('onMessage: $message');
-        // getDataFcm(message);
-        print("OS : " + Platform.operatingSystem);
         if (Platform.isIOS) {
-          print('HMM : ' + Platform.operatingSystem == 'ios');
           successDialog(context, message['alert']['body'],
               title: message['alert']['title']);
         } else if (Platform.isAndroid) {
@@ -77,6 +88,27 @@ class _LoginPageState extends State<LoginPage> {
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
+    super.initState();
+    setState(() {
+      if (emaile == "") {
+        emailaccountselection = _controllerEmail.text.toString();
+      } else {
+        emailaccountselection = emaile.toString();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void closeApp() {
+    if (Platform.isAndroid) {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else {
+      MinimizeApp.minimizeApp();
+    }
   }
 
   void getDataFcm(Map<String, dynamic> message) {
@@ -107,16 +139,34 @@ class _LoginPageState extends State<LoginPage> {
               SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    // Text(emaile + "-" +namae),
                     Text(
                       "Login",
-                      style: GoogleFonts.lato(
-                          fontSize: 25, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.lato(fontSize: 18),
                     ),
                     SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.02,
                     ),
-                    _buildTextFieldEmail(),
+                    emaile == ""
+                        ? _buildTextFieldEmail()
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Halo,",
+                                  style: GoogleFonts.lato(fontSize: 16)),
+                              Text(namae,
+                                  style: GoogleFonts.lato(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              Text(emaile,
+                                  style: GoogleFonts.lato(fontSize: 12)),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                            ],
+                          ),
                     _buildTextFieldPassword(),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10),
@@ -137,29 +187,37 @@ class _LoginPageState extends State<LoginPage> {
                             GetDeviceID().getDeviceID(context).then((ids) {
                               setState(() {
                                 iddevice = ids;
-                                if (_fieldEmail == null ||
+                                print(
+                                    'cek uudi $iddevice - $emailaccountselection');
+                                // if (emailaccountselection == null ||
+                                //     emailaccountselection == "" ||
+                                if (_controllerEmail == null ||
                                     _fieldPassword == null ||
-                                    !_fieldEmail ||
                                     !_fieldPassword) {
                                   warningDialog(
                                       context, "Pastikan Semua Kolom Terisi!");
                                 } else {
                                   setState(() {
-                                    print("IDDEVICE : " + iddevice.toString());
+                                    print("IDDEVICE : " +
+                                        iddevice.toString() +
+                                        "--- $emailaccountselection");
                                     _isLoading = true;
                                   });
-                                  String email =
+                                  String emailz =
                                       _controllerEmail.text.toString();
                                   String password =
                                       _controllerPassword.text.toString();
                                   PenggunaModel pengguna = PenggunaModel(
                                       uuid: iddevice,
-                                      email: email,
+                                      email: emailaccountselection != ""
+                                          ? emailaccountselection
+                                          : emailz,
                                       password: password,
                                       status: 0,
                                       notification_token: token,
                                       token_mail: "0",
                                       keterangan: "Uji Coba");
+                                  print("LOGIN? : " + pengguna.toString());
                                   _apiService
                                       .loginIn(pengguna)
                                       .then((isSuccess) {
@@ -170,9 +228,22 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) => Home()));
                                     } else {
-                                      warningDialog(context,
-                                          "${_apiService.responseCode.mMessage}",
-                                          title: "Warning!");
+                                      print('${_apiService.responseCode.mMessage}');
+                                      if (_apiService.responseCode.mMessage ==
+                                          "Email atau Password anda Salah!") {
+                                        warningDialog(context,
+                                            "${_apiService.responseCode.mMessage}",
+                                            title: "Warning!");
+                                      } else if (_apiService.responseCode.mMessage ==
+                                          "Akun masih aktif di device lain!") {
+                                        warningDialog(context,
+                                            "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",
+                                            showNeutralButton: false,
+                                            positiveText: "Oke",
+                                            positiveAction: () {
+                                          closeApp();
+                                        }, title: "Warning!");
+                                      }
                                     }
                                   });
                                 }
@@ -236,6 +307,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildTextFieldEmail() {
     return TextFieldContainer(
       child: TextField(
+        // enabled: uuidAnyar != "" ? false : true,
         controller: _controllerEmail,
         decoration: InputDecoration(
           icon: Icon(
@@ -250,6 +322,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;
+          print("JUJUJUJ : " + value.toString());
           if (isFieldValid != _fieldEmail) {
             setState(() => _fieldEmail = isFieldValid);
           }
@@ -299,7 +372,7 @@ void _popUpTroble(BuildContext context) {
         return AlertDialog(
           content: new Container(
             width: 250,
-            height: 250,
+            height: 270,
             decoration: new BoxDecoration(
               shape: BoxShape.rectangle,
               color: const Color(0xFFFFFF),
@@ -312,17 +385,35 @@ void _popUpTroble(BuildContext context) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 10,
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          height: 18.0,
+                          width: 18.0,
+                          color: Colors.red,
+                          child: new IconButton(
+                              padding: new EdgeInsets.all(0.0),
+                              icon: new Icon(
+                                Icons.close_rounded,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                        ),
                       ),
-                      Text("Lost Device",
-                          style: GoogleFonts.lato(
-                              fontSize: 14, fontWeight: FontWeight.bold)),
+                      Row(
+                        children: [
+                          Text("Ganti Perangkat",
+                              style: GoogleFonts.lato(
+                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                          "Lost Device digunakan ketika anda menginstall ulang aplikasi atau ganti perangkat.",
+                          "Ganti Perangkat digunakan ketika anda menginstall ulang aplikasi atau ganti perangkat.",
                           style: GoogleFonts.lato(fontSize: 12)),
                       Container(
                           width: 900,
@@ -337,7 +428,7 @@ void _popUpTroble(BuildContext context) {
                                             )));
                               },
                               child: Text(
-                                'Lost Device',
+                                'Ganti Perangkat',
                                 style: GoogleFonts.inter(
                                     fontSize: 14,
                                     color: Colors.white,

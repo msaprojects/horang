@@ -1,28 +1,29 @@
-import 'package:commons/commons.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/log/openLog.dart';
+// import 'package:get/get.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
-import 'package:horang/component/Key/KonfirmasiLog.dart';
+import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageNonActive1 extends StatefulWidget {
-  final TabController tabController1;
-  const StorageNonActive1({Key key, this.tabController1}) : super(key: key);
+  // String token;
+
+  // StorageNonAktifDummy({this.token});
   @override
-  _StorageNonActive createState() => _StorageNonActive();
+  _SearchListViewExampleState createState() => _SearchListViewExampleState();
 }
 
-class _StorageNonActive extends State<StorageNonActive1> {
+class _SearchListViewExampleState extends State<StorageNonActive1> {
   bool isLoading = false;
   SharedPreferences sp;
   ApiService _apiService = ApiService();
-  bool isSuccess = false;
+  bool isSuccess = false, _loading = true;
   var access_token,
       refresh_token,
       idcustomer,
@@ -39,6 +40,10 @@ class _StorageNonActive extends State<StorageNonActive1> {
       hari,
       aktif;
 
+  List<MystorageModel> storage = [];
+  String query = '', token = '';
+  Timer debouncer;
+
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -46,6 +51,7 @@ class _StorageNonActive extends State<StorageNonActive1> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("tesacctoken $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -77,212 +83,89 @@ class _StorageNonActive extends State<StorageNonActive1> {
             }
           }));
     }
+    storage = await _apiService.listMystorageNonActive(access_token, query);
+    print('yuhu ada gak $token ++ $access_token');
+    setState(() => this.storage = storage);
   }
 
   @override
-  void initState() {
-    super.initState();
+  initState() {
+    // token = widget.token;
     cekToken();
+    print('acctokenya $access_token ++ $token');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    debouncer?.cancel();
+    super.dispose();
+  }
+
+  void debounce(
+    VoidCallback callback, {
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
+    if (debouncer != null) {
+      debouncer.cancel();
+    }
+    debouncer = Timer(duration, callback);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-          future: _apiService.listMystorage(access_token),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<MystorageModel>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    "Something wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List<MystorageModel> profiles =
-                  snapshot.data.where((i) => i.status == "NONAKTIF").toList();
-              if (profiles.isNotEmpty) {
-                return _buildListview(profiles);
-              } else {
-                return Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/image/datanotfound.png"),
-                        Text(
-                          "Oppss..Maaf data kontainer belum aktif kosong.",
-                          style: GoogleFonts.inter(color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
-  }
-
-  Widget _buildListview(List<MystorageModel> dataIndex) {
     return Scaffold(
       body: Column(
         children: <Widget>[
+          buildSearch(),
           Expanded(
-            child: Container(
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 30),
-                color: Colors.grey[100],
-                child: (ListView.builder(
-                  itemCount: dataIndex == null ? 0 : dataIndex.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    MystorageModel myStorage = dataIndex[index];
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() => isLoading = true);
-                        if (idcustomer == "0") {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
-                            duration: Duration(seconds: 10),
-                          ));
-                        } else {
-                          _openAlertDialog(
-                            context,
-                            myStorage.idtransaksi_detail,
-                            myStorage.noOrder.toString(),
-                            myStorage.kode_kontainer.toString(),
-                            myStorage.nama_kota,
-                            myStorage.nama,
-                            myStorage.nama_lokasi.toString(),
-                            myStorage.keterangan,
-                            myStorage.tanggal_order,
-                            myStorage.tanggal_mulai,
-                            myStorage.tanggal_akhir,
-                            myStorage.hari.toString(),
-                          );
-                        }
+            child: FutureBuilder(
+              future: _apiService.listMystorageNonActive(access_token, query),
+              builder: (BuildContext context, index) {
+                print('sini ?x $access_token $index');
+                if (index.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (index.hasData) {
+                  print('jaxx $storage');
+                  if (storage.toString() != "[]") {
+                    print("true");
+                    return ListView.builder(
+                      itemCount: storage.length,
+                      itemBuilder: (context, index) {
+                        print('ada ?');
+                        final storages = storage[index];
+                        print('SOTO $storages $index');
+                        return buildmyStorage(storages);
                       },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Card(
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.all(20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'No. Order : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                myStorage.noOrder.toString(),
-                                                style: GoogleFonts.inter(
-                                                    fontSize: 14),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'Kode Kontainer : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.kode_kontainer,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              'Jenis Kontainer : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.nama,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
-                                              'Lokasi : ',
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              myStorage.nama_lokasi,
-                                              style: GoogleFonts.inter(
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Text(
-                                            "Ketuk untuk detail...",
-                                            style: GoogleFonts.lato(
-                                                fontSize: 12,
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    // );
-                                    //   },
-                                    // ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                    );
+                  } else {
+                    print('masuk sini!');
+                    return Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/image/datanotfound.png"),
+                            Text(
+                              "Oppss..Maaf Data yang non aktif belum ada",
+                              style: GoogleFonts.inter(color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
                       ),
                     );
-                  },
-                )),
-              ),
+                  }
+                } else {
+                  return Center(
+                    child: Text('KOSONG'),
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -290,26 +173,153 @@ class _StorageNonActive extends State<StorageNonActive1> {
     );
   }
 
-  AccountValidation(BuildContext context) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: Text("Lengkapi Profile anda"),
-      content: Text("Anda harus melengkapi akun sebelum melakukan transaksi!"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Cari...',
+        onChanged: searchmystorage,
+      );
+
+  Future searchmystorage(String query) async => debounce(() async {
+        print('token1 $access_token');
+        final storage =
+            await _apiService.listMystorageNonActive(access_token, query);
+        if (!mounted) return;
+        setState(() {
+          this.storage = storage;
+          print("Execute search");
         });
+      });
+
+  Widget buildmyStorage(MystorageModel storage) {
+    print('masuk sini xx $storage');
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+      color: Colors.grey[100],
+      child: GestureDetector(
+        onTap: () {
+          // setState(() => isLoading = true);
+          if (idcustomer == "0") {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  'Anda Harus Melengkapi profile untuk melakukan transaksi!'),
+              duration: Duration(seconds: 10),
+            ));
+          } else {
+            _openAlertDialog(
+              context,
+              storage.idtransaksi_detail,
+              storage.noOrder.toString(),
+              storage.kode_kontainer.toString(),
+              storage.nama_kota,
+              storage.nama,
+              storage.nama_lokasi.toString(),
+              storage.keterangan,
+              storage.tanggal_order,
+              storage.tanggal_mulai,
+              storage.tanggal_akhir,
+              storage.hari.toString(),
+            );
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Card(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'No. Order : ',
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  storage.noOrder.toString(),
+                                  style: GoogleFonts.inter(fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Kode Kontainer : ',
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                              Text(
+                                storage.kode_kontainer,
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Jenis Kontainer : ',
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                              Text(
+                                storage.nama,
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                // 'Lokasi : '+myStorage.idtransaksi_detail.toString(),
+                                'Lokasi : ',
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                              Text(
+                                storage.nama_lokasi.toString(),
+                                // myStorage.nama_lokasi,
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "Ketuk untuk detail...",
+                              style: GoogleFonts.lato(
+                                  fontSize: 12, fontStyle: FontStyle.italic),
+                            ),
+                          )
+                        ],
+                      ),
+                      // );
+                      //   },
+                      // ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _openAlertDialog(

@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_version/get_version.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
 import 'package:horang/component/account_page/ubah_profile.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:horang/widget/bottom_nav.dart';
+// import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,6 +23,11 @@ class _AccountState extends State<Account> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
+  String _projectVersion = '';
+  String _platformVersion = 'Unknown';
+  String _projectCode = '';
+  String _projectAppID = '';
+  String _projectName = '';
   var access_token,
       refresh_token,
       idcustomer,
@@ -38,6 +44,61 @@ class _AccountState extends State<Account> {
     final response = await http.get(ApiService().urlgetcustomer,
         headers: {"Authorization": "BEARER ${access_token}"});
     nmcust = json.decode(response.body)[0]['nama_customer'];
+  }
+
+  initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await GetVersion.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    String projectVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectVersion = await GetVersion.projectVersion;
+    } on PlatformException {
+      projectVersion = 'Failed to get project version.';
+    }
+
+    String projectCode;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectCode = await GetVersion.projectCode;
+    } on PlatformException {
+      projectCode = 'Failed to get build number.';
+    }
+
+    String projectAppID;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectAppID = await GetVersion.appID;
+    } on PlatformException {
+      projectAppID = 'Failed to get app ID.';
+    }
+
+    String projectName;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      projectName = await GetVersion.appName;
+    } on PlatformException {
+      projectName = 'Failed to get app name.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _projectVersion = projectVersion;
+      _platformVersion = platformVersion;
+      _projectCode = projectCode;
+      _projectAppID = projectAppID;
+      _projectName = projectName;
+    });
   }
 
   cekToken() async {
@@ -78,6 +139,7 @@ class _AccountState extends State<Account> {
             }
           }));
     }
+    initPlatformState();
   }
 
   @override
@@ -111,7 +173,7 @@ class _AccountState extends State<Account> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            "AKUN",
+            "Akun",
             style: TextStyle(color: Colors.black),
           ),
           elevation: 0,
@@ -216,6 +278,9 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Sksk(
+                    //   token: access_token,
+                    // )));
                     infoDialog(context,
                         "Maaf, fitur masih dalam proses pengembangan !");
                   },
@@ -241,7 +306,7 @@ class _AccountState extends State<Account> {
               height: 10.0,
             ),
             Center(
-              child: Text("Version 2.28.0"),
+              child: Text("Version $_projectVersion"),
             )
           ],
         ));

@@ -22,7 +22,14 @@ class _VoucherDashboard extends State<VoucherDashboard> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
-  var access_token, refresh_token, idcustomer, email, nama_customer, nama, pin;
+  var sk,
+      access_token,
+      refresh_token,
+      idcustomer,
+      email,
+      nama_customer,
+      nama,
+      pin;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -88,40 +95,38 @@ class _VoucherDashboard extends State<VoucherDashboard> {
         } else if (snapshot.connectionState == ConnectionState.done) {
           List<VoucherModel> voucher = snapshot.data;
           if (voucher.isNotEmpty) {
-          return _listPromo(voucher);  
+            return _listPromo(voucher);
           } else {
             return Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Card(
-                    child: GestureDetector(
-                      onTap: () {
-                      },
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline_rounded,
-                            color: Colors.orange,
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Anda Belum Ada Transaksi...",
-                            style: GoogleFonts.lato(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ),
-                );
+              margin: EdgeInsets.only(bottom: 20),
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Card(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Center(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline_rounded,
+                        color: Colors.orange,
+                        size: 18,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Anda Belum Ada Transaksi...",
+                        style: GoogleFonts.lato(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )),
+                ),
+              ),
+            );
           }
-          
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -170,15 +175,22 @@ class _VoucherDashboard extends State<VoucherDashboard> {
                 child: Container(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return VoucherDetail(
-                          nominal: voucher.min_nominal,
-                          gambar: voucher.gambar,
-                          keterangan: voucher.keterangan,
-                          kode_voucher: voucher.kode_voucher,
-                        );
-                      }));
+                      print('HEY YU $sk');
+                      _apiService
+                          .ambildataSyaratKetentuan(sk)
+                          .then((value) => setState(() {
+                                sk = value.toString();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VoucherDetail(
+                                            sk: sk,
+                                            nominal: voucher.min_nominal,
+                                            gambar: voucher.gambar,
+                                            keterangan: voucher.keterangan,
+                                            kode_voucher:
+                                                voucher.kode_voucher)));
+                              }));
                     },
                   ),
                   decoration: BoxDecoration(

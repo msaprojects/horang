@@ -12,7 +12,8 @@ class MystorageModel {
       nama_kota,
       nama_lokasi,
       keterangan,
-      status;
+      status,
+      gambar;
 
   MystorageModel(
       {this.hari,
@@ -29,7 +30,9 @@ class MystorageModel {
       this.keterangan,
       this.status,
       this.flag_selesai,
-      this.selesai});
+      this.selesai,
+      this.gambar
+      });
 
   factory MystorageModel.fromJson(Map<String, dynamic> map){
     return MystorageModel(
@@ -47,7 +50,8 @@ class MystorageModel {
       keterangan: map['keterangan'],
       status: map['status'],
       flag_selesai: map['flag_selesai'],
-      selesai: map['selesai']
+      selesai: map['selesai'],
+      gambar: map['gambar']
     );
   }
 
@@ -67,13 +71,14 @@ class MystorageModel {
       "keterangan": keterangan,
       "status": status,
       "flag_selesai": flag_selesai,
-      "selesai": selesai
+      "selesai": selesai,
+      "gambar": gambar
     };
   }
 
   @override
   String toString() {
-    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, no_order:$noOrder, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status, flag_selesai: $flag_selesai, selesai: $selesai}';
+    return 'MystorageModel{hari: $hari, idtransaksi: $idtransaksi, idtransaksi_detail: $idtransaksi_detail, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, tanggal_order: $tanggal_order, no_order:$noOrder, kode_kontainer: $kode_kontainer, nama: $nama, nama_kota: $nama_kota, nama_lokasi: $nama_lokasi, keterangan: $keterangan, status: $status, flag_selesai: $flag_selesai, selesai: $selesai, gambar: $gambar}';
   }
 }
 

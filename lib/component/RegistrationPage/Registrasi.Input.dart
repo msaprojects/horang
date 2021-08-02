@@ -6,6 +6,7 @@ import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
@@ -170,7 +171,9 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                                       .pushAndRemoveUntil(
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  LoginPage()),
+                                                                  // LoginPage()
+                                                                  WelcomePage()
+                                                                  ),
                                                           (route) => false);
                                                 });
                                               } else {

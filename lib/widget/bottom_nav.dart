@@ -10,19 +10,24 @@ import 'package:horang/component/account_page/account.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../component/ProdukPage/Produk.List.dart';
+import '../component/StoragePage/StorageHandler.dart';
+
 class Home extends StatefulWidget {
   final int initIndexHome;
-  const Home({Key key, this.initIndexHome}) : super(key: key);
+  PageController pages = PageController(initialPage: 0);
+  Home({Key key, this.initIndexHome, this.pages}) : super(key: key);
   
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  PageController _myPage = PageController(initialPage: 0);
   var initIndex;
    DateTime backbuttonpressedtime;
   int currentTab = 0;
-  final List<Widget> screen = [HomePage()];
+  List<Widget> screen = [HomePage()];
   Widget currentScreen = HomePage();
   final PageStorageBucket bucket = PageStorageBucket();
   SharedPreferences sp;
@@ -75,7 +80,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    currentTab = widget.initIndexHome;
+    currentTab = widget.initIndexHome ?? 0;    
     super.initState();
     cekToken();
   }
@@ -85,6 +90,7 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: PageStorage(
           bucket: bucket,
           child: currentScreen,
@@ -103,6 +109,7 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: BottomAppBar(
             shape: CircularNotchedRectangle(),
             child: Container(
+              
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -91,6 +91,12 @@ class _TambahProfileState extends State<TambahProfile> {
   }
 
   @override
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void Keluarr() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -155,70 +161,57 @@ class _TambahProfileState extends State<TambahProfile> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            infoDialog(
-                              context,
-                              "Pastikan data yang anda masukkan sudah benar !",
-                              negativeAction: () {},
-                              negativeText: "Batal",
-                              showNeutralButton: false,
-                              positiveText: "Ya",
-                              positiveAction: () {
-                                setState(() {
-                                  if (_isFieldNamaLengkap == null ||
-                                      _isFieldAlamat == null ||
-                                      _isFieldNoKtp == null ||
-                                      !_isFieldNamaLengkap ||
-                                      !_isFieldAlamat ||
-                                      !_isFieldNoKtp) {
-                                    warningDialog(
-                                        context, "Pastikan Semua Kolom Terisi");
-                                    return;
-                                  } else {
-                                    warningDialog(context,
-                                        "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
-                                        showNeutralButton: false,
-                                        negativeText: "Periksa Kembali",
-                                        negativeAction: () {},
-                                        positiveText: "OK", positiveAction: () {
-                                      setState(() => _isLoading = true);
-                                      Customers data = Customers(
-                                        namacustomer: _controllerNamaLengkap
-                                            .text
-                                            .toString(),
-                                        noktp: _controllerNoKtp.text.toString(),
-                                        alamat:
-                                            _controllerAlamat.text.toString(),
-                                        token: access_token,
-                                        blacklist: "0",
-                                        idkota: int.parse(valKota),
-                                      );
-                                      print("Tambah Customer : " +
-                                          data.toString());
-                                      _apiService.TambahCustomer(data)
-                                          .then((isSuccess) {
-                                        setState(() => _isLoading = false);
-                                        if (isSuccess) {
-                                          _controllerNamaLengkap.clear();
-                                          _controllerNoKtp.clear();
-                                          _controllerAlamat.clear();
-                                          successDialog(context,
-                                              "Profil anda berhasil disimpan",
-                                              showNeutralButton: false,
-                                              positiveText: "OK",
-                                              positiveAction: () {
-                                            Keluarr();
-                                          });
-                                          // Keluarr();
-                                        } else {
-                                          errorDialog(context,
-                                              "${_apiService.responseCode.mMessage}");
-                                        }
+                            setState(() {
+                              if (_isFieldNamaLengkap == null ||
+                                  _isFieldAlamat == null ||
+                                  _isFieldNoKtp == null ||
+                                  valKota == null ||
+                                  !_isFieldNamaLengkap ||
+                                  !_isFieldAlamat ||
+                                  !_isFieldNoKtp) {
+                                warningDialog(
+                                    context, "Pastikan Semua Kolom Terisi");
+                              } else {
+                                warningDialog(context,
+                                    "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
+                                    showNeutralButton: false,
+                                    negativeText: "Periksa Kembali",
+                                    negativeAction: () {},
+                                    positiveText: "OK", positiveAction: () {
+                                  setState(() => _isLoading = true);
+                                  Customers data = Customers(
+                                    namacustomer:
+                                        _controllerNamaLengkap.text.toString(),
+                                    noktp: _controllerNoKtp.text.toString(),
+                                    alamat: _controllerAlamat.text.toString(),
+                                    token: access_token,
+                                    blacklist: "0",
+                                    idkota: int.parse(valKota),
+                                  );
+                                  print("Tambah Customer : " + data.toString());
+                                  _apiService.TambahCustomer(data)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      _controllerNamaLengkap.clear();
+                                      _controllerNoKtp.clear();
+                                      _controllerAlamat.clear();
+                                      successDialog(context,
+                                          "Profil anda berhasil disimpan, tekan 'Ok' untuk login ulang aplikasi",
+                                          showNeutralButton: false,
+                                          positiveText: "OK",
+                                          positiveAction: () {
+                                        Keluarr();
                                       });
-                                    });
-                                  }
+                                      // Keluarr();
+                                    } else {
+                                      errorDialog(context,
+                                          "${_apiService.responseCode.mMessage}");
+                                    }
+                                  });
                                 });
-                              },
-                            );
+                              }
+                            });
                           },
                           color: Colors.blue,
                         ),
@@ -254,6 +247,7 @@ class _TambahProfileState extends State<TambahProfile> {
 
   Widget _buildTextFieldKtp() {
     return TextFormField(
+      maxLength: 16,
       controller: _controllerNoKtp,
       keyboardType: TextInputType.number,
       // ignore: deprecated_member_use

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class AsuransiModel {
-  num idasuransi, status;
+  num idasuransi=0, status=0;
   num nilai;
   String namaasuransi, perusahaan, alamat;
 

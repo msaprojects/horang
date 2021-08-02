@@ -1,22 +1,25 @@
 import 'dart:ui';
 
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:horang/api/models/log/generateKode.model.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-class ListLog extends StatefulWidget {
+class DummyCode extends StatefulWidget {
   @override
-  _ListLogState createState() => _ListLogState();
+  _DummyCodeState createState() => _DummyCodeState();
   var iddetail_orders;
-  ListLog({this.iddetail_orders});
+  DummyCode({this.iddetail_orders});
 }
 
-class _ListLogState extends State<ListLog> {
+class _DummyCodeState extends State<DummyCode> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
@@ -75,43 +78,38 @@ class _ListLogState extends State<ListLog> {
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(
-          future: _apiService.listloggs(access_token, idtransaksi_detail1),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<LogList>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                    "6Something wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List<LogList> logs1 = snapshot.data;
-              print(snapshot.data);
-              // print("iamcannor ${snapshot.data}");
-              return _buildListview(logs1);
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+        future: _apiService.generateCode(access_token, idtransaksi_detail1),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<GenerateCode>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                  "zzzSomething wrong with message ${snapshot.error.toString()}"),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<GenerateCode> logs1 = snapshot.data;
+            print(snapshot.data);
+            // print("iamcannor ${snapshot.data}");
+            return _buildListview(logs1);
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 
-  Widget _buildListview(List<LogList> dataIndex) {
+  Widget _buildListview(List<GenerateCode> dataIndex) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          "List Log",
+          "Dummy code",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
@@ -137,7 +135,7 @@ class _ListLogState extends State<ListLog> {
               child: (ListView.builder(
                 itemCount: dataIndex == null ? 0 : dataIndex.length,
                 itemBuilder: (BuildContext context, int index) {
-                  LogList log2 = dataIndex[index];
+                  GenerateCode log2 = dataIndex[index];
                   return TimelineTile(
                     axis: TimelineAxis.vertical,
                     alignment: TimelineAlign.manual,
@@ -166,16 +164,25 @@ class _ListLogState extends State<ListLog> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              log2.timestamp,
+                              log2.kode_aktivasi,
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
-                            Text(log2.status)
+                            // Text(log2.status)
                           ],
                         ),
                       )),
                     ),
                   );
+                  // successDialog(context, "${log2.kode_aktivasi}",
+                  //     showNeutralButton: false,
+                  //     positiveText: "Ok", positiveAction: () {
+                  //   Navigator.of(context).pushAndRemoveUntil(
+                  //       MaterialPageRoute(
+                  //           builder: (BuildContext context) => Home()),
+                  //       (Route<dynamic> route) => false);
+                  // });
+                  
                 },
               )),
             ),

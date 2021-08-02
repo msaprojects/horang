@@ -23,7 +23,7 @@ class _ResetState extends State<Reset> {
   ApiService _apiService = ApiService();
   bool _isLoading = false, _email, _isFieldEmail;
   String emails, tipes, judul;
-  var iddevice;
+  var iddevice, icone;
   TextEditingController _controlleremail = TextEditingController();
 
   @override
@@ -37,10 +37,13 @@ class _ResetState extends State<Reset> {
       judul = "Resend Email";
     } else if (tipes == "ResetPassword") {
       judul = "Reset Password";
+      icone = Icon(Icons.lock_open_rounded, size: 50,);
     } else if (tipes == "ResetPin") {
       judul = "Reset Pin";
+      icone = Icon(Icons.lock_open_rounded, size: 50,);
     } else if (tipes == "ResetDevice") {
-      judul = "Lost Device";
+      judul = "Ganti Perangkat";
+      icone = Icon(Icons.device_unknown_rounded, size: 50,);
     } else {
       Navigator.pop(context);
     }
@@ -69,10 +72,11 @@ class _ResetState extends State<Reset> {
               Container(
                   child: Column(
                 children: <Widget>[
-                  Text(
-                    judul.toString(),
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
+                  icone,
+                  // Text(
+                  //   judul.toString(),
+                  //   style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                  // ),
                   SizedBox(
                     height: 15,
                   ),
@@ -98,9 +102,9 @@ class _ResetState extends State<Reset> {
                     minWidth: MediaQuery.of(context).size.width,
                     height: 50,
                     child: RaisedButton(
-                        color: Colors.grey,
+                        color: Colors.blueAccent,
                         child: Text(
-                          'Submit',
+                          'Simpan',
                           style: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {
@@ -150,7 +154,9 @@ class _ResetState extends State<Reset> {
                                     infoDialog(
                                         context, "Yakin Mau Reset Password?",
                                         title: "Konfirmasi",
-                                        positiveText: "Ya", positiveAction: () {
+                                        showNeutralButton: false,
+                                        positiveText: "Ya", 
+                                        positiveAction: () {
                                       _apiService.ForgetPass(reset)
                                           .then((isSuccess) {
                                         setState(() => _isLoading = false);
@@ -216,7 +222,36 @@ class _ResetState extends State<Reset> {
                                               "${_apiService.responseCode.mMessage}");
                                         } else {
                                           successDialog(context,
-                                              "Konfirmasi Lost Device Berhasil dikirim, mohon verifikasi email anda !",
+                                              "Konfirmasi Ganti Perangkat Berhasil dikirim, mohon verifikasi email anda !",
+                                              showNeutralButton: false,
+                                              positiveText: "OK",
+                                              positiveAction: () {
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WelcomePage()),
+                                                    (route) => false);
+                                          });
+                                        }
+                                      });
+                                    },
+                                        negativeText: "Edit",
+                                        negativeAction: () {});
+                                  } else if (tipes == "ResetPin") {
+                                    infoDialog(context,
+                                        "Apakah Email yang anda masukkan sudah benar?",
+                                        title: "Konfirmasi",
+                                        showNeutralButton: false,
+                                        positiveText: "Ya", positiveAction: () {
+                                      _apiService.LostDevice(reset)
+                                          .then((isSuccess) {
+                                        if (!isSuccess) {
+                                          errorDialog(context,
+                                              "${_apiService.responseCode.mMessage}");
+                                        } else {
+                                          successDialog(context,
+                                              "Konfirmasi Ganti Perangkat Berhasil dikirim, mohon verifikasi email anda !",
                                               showNeutralButton: false,
                                               positiveText: "OK",
                                               positiveAction: () {

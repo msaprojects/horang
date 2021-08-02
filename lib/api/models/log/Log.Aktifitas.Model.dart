@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:commons/commons.dart';
+
 class logAktifitasNotif {
-  String keterangan_user, timestamp, timestamp_group;
+  String keterangan_user, timestamp,timestamp_group;
 
   logAktifitasNotif({this.keterangan_user, this.timestamp, this.timestamp_group});
 
