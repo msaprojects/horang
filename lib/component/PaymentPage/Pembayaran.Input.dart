@@ -143,41 +143,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     });
   }
 
-  labelDiskon(int diskonn) {
-    if (diskonn != 0) {
-      labeldiskon = 'Diskon :';
-      labelhargaawal = 'Harga Awal : ';
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(labeldiskon),
-          Text(labelhargaawal),
-        ],
-      );
-    } else {
-      return Visibility(visible: false, child: Text(""));
-    }
-  }
-
-  valueDiskon(String diskonn, String hargaawal) {
-    if (diskonn != 0) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(diskonn + '%'),
-          Text(
-              rupiah(hargaawal,
-                  separator: ',',
-                  trailing: " /" + satuanHariatauJam().toString()),
-              style: TextStyle(decoration: TextDecoration.lineThrough)),
-        ],
-      );
-    } else {
-      return Visibility(visible: false, child: Text(""));
-    }
-  }
-
   settingJamOperasionalLabel() {
     if (pkapasitas.toString().toLowerCase().contains('forklift')) {
       return Visibility(visible: false, child: Text(""));
@@ -330,7 +295,10 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
         .toStringAsFixed(2);
     totaldeposit = (pminimalsewahari * pharga_awal);
     // pjenisitem = widget.jenisitem;
-    print("Flag Asuransi? " + pflagasuransi.toString());
+    print("Flag Asuransi? " +
+        pflagasuransi.toString() +
+        " ~ " +
+        pdiskon.toString());
     cekToken();
     hitungsemuaFunction();
     super.initState();
@@ -428,8 +396,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                       Text("Tgl. Mulai :"),
                                       Text("Tgl. Berakhir :"),
                                       Text("Durasi Sewa :"),
-                                      settingJamOperasionalLabel(),
-                                      labelDiskon(pdiskon)
+                                      pdiskon != 0
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Diskon :"),
+                                                Text("Harga Awal :"),
+                                              ],
+                                            )
+                                          : Container()
                                     ],
                                   ),
                                 ],
@@ -449,9 +425,24 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                       overflow: TextOverflow.ellipsis),
                                   Text(pdurasi_sewa.toString() +
                                       satuanHariatauJam()),
-                                  settingJamOperasional(),
-                                  valueDiskon(pdiskon.toString(),
-                                      pharga_awal.toString())
+                                  // settingJamOperasional(),
+                                  pdiskon != 0
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(pdiskon.toString() + "%"),
+                                            Text(rupiah(pharga_awal.toString()),
+                                                style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .lineThrough))
+                                          ],
+                                        )
+                                      : Container()
+                                  // valueDiskon(pdiskon.toString(),
+                                  // pharga_awal.toString())
                                 ],
                               ),
                             ),
