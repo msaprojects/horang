@@ -153,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                         ? _buildTextFieldEmail()
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text("Halo,",
                                   style: GoogleFonts.lato(fontSize: 16)),
@@ -228,13 +229,15 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                               builder: (context) => Home()));
                                     } else {
-                                      print('${_apiService.responseCode.mMessage}');
+                                      print(
+                                          '${_apiService.responseCode.mMessage}');
                                       if (_apiService.responseCode.mMessage ==
                                           "Email atau Password anda Salah!") {
                                         warningDialog(context,
                                             "${_apiService.responseCode.mMessage}",
                                             title: "Warning!");
-                                      } else if (_apiService.responseCode.mMessage ==
+                                      } else if (_apiService
+                                              .responseCode.mMessage ==
                                           "Akun masih aktif di device lain!") {
                                         warningDialog(context,
                                             "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",

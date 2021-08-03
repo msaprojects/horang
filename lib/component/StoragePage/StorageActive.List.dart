@@ -123,43 +123,37 @@ class _SearchListViewExampleState extends State<StorageActive1> {
             child: FutureBuilder(
               future: _apiService.listMystorageActive(access_token, query),
               builder: (BuildContext context, index) {
-                print('sini ?x $access_token $index');
                 if (index.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (index.hasData) {
-                  print('jaxx $storage');
                   if (storage.toString() != "[]") {
-                    print("true");
                     return ListView.builder(
                       itemCount: storage.length,
                       itemBuilder: (context, index) {
-                        print('ada ?');
                         final storages = storage[index];
-                        print('SOTO $storages $index');
                         return buildmyStorage(storages);
                       },
                     );
                   } else {
-                    print('masuk sini!');
-                     return Center(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/image/datanotfound.png"),
-                      Text(
-                        "Oppss..Maaf Data yang sedang berjalan belum ada",
-                        style: GoogleFonts.inter(color: Colors.grey),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              );
+                    return Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/image/datanotfound.png"),
+                            Text(
+                              "Oppss..Maaf Data yang sedang berjalan belum ada",
+                              style: GoogleFonts.inter(color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
                   }
                 } else {
                   return Center(
@@ -181,18 +175,15 @@ class _SearchListViewExampleState extends State<StorageActive1> {
       );
 
   Future searchmystorage(String query) async => debounce(() async {
-        print('token1 $access_token');
         final storage =
             await _apiService.listMystorageActive(access_token, query);
         if (!mounted) return;
         setState(() {
           this.storage = storage;
-          print("Execute search");
         });
       });
 
   Widget buildmyStorage(MystorageModel storage) {
-    print('masuk sini xx $storage');
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 10),
       color: Colors.grey[100],
@@ -223,6 +214,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                       flag_selesai: storage.flag_selesai,
                       selesai: storage.selesai,
                     )));
+            print("ACTIVE GAMBAR? " + storage.gambar);
           }
         },
         child: Column(

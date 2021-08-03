@@ -48,8 +48,7 @@ class KonfirmasiLog extends StatefulWidget {
       this.idtransaksi_detail,
       this.flag_selesai,
       this.selesai,
-      this.gambar
-      });
+      this.gambar});
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -310,15 +309,16 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     keterangan = widget.keterangan;
     flag_selesai = widget.flag_selesai;
     selesai = widget.selesai;
+    print("Gambar? " + gambar1);
     super.initState();
     cekToken();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   Future<bool> _willPopCallback() async {
     ReusableClasses().showAlertDialog(context);
@@ -405,8 +405,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                      "Kota",
+                  Text("Kota",
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),

@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:commons/commons.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
-// import 'package:get/get.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/Key/KonfirmasiLog.dart';
 import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
@@ -16,9 +13,6 @@ import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageExpired1 extends StatefulWidget {
-  // String token;
-
-  // StorageNonAktifDummy({this.token});
   @override
   _SearchListViewExampleState createState() => _SearchListViewExampleState();
 }
@@ -127,10 +121,16 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
       noted = "-";
     }
     return Container(
-      height: MediaQuery.of(context).size.height * 0.06,
-      child: Text(
-        noted,
-        style: TextStyle(color: flag_noted, fontWeight: FontWeight.bold),
+      child: Row(
+        children: [
+          Text(
+            "Status Deposit : ",
+          ),
+          Text(
+            noted,
+            style: TextStyle(color: flag_noted, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
       color: Colors.transparent,
     );
