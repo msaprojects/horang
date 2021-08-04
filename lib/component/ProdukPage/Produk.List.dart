@@ -122,9 +122,6 @@ class _ProdukList extends State<ProdukList> {
       });
   }
 
-  String jAwal = DateFormat.Hm().format(DateTime.now());
-  String jAkhir = DateFormat.Hm().format(DateTime.now());
-
   Future selectTimeAwal(BuildContext context) async {
     final TimeOfDay pick = await showCustomTimePicker(
         context: context,
@@ -426,13 +423,18 @@ class _ProdukList extends State<ProdukList> {
           .format(DateTime.now().add(Duration(days: 5)));
     });
     cekToken();
+    // _date1 = DateTime.now();
+    // _date2 = DateTime.now().add(Duration(days: 5));
+    // _tanggalAwal = _date1.toString();
+    // _tanggalAkhir = _date2.toString();
     _date1 = DateTime.now();
     _date2 = DateTime.now().add(Duration(days: 5));
-    _tanggalAwal = _date1.toString();
-    _tanggalAkhir = _date2.toString();
+    _tanggalAwal = DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+    _tanggalAkhir = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 5))).toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
-    print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
+
+    print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk---hashling');
 
     _buildKomboProduk(defaultProduk);
     setState(() {

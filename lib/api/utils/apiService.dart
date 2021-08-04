@@ -686,6 +686,18 @@ class ApiService {
     }
   }
 
+  Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
+    http.Response response = await http
+        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+    print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
+    sk = response.body;
+    if (response.statusCode == 200) {
+      return sk;
+    } else {
+      return throw Exception('gagal');
+    }
+  }
+
   Future<bool> logout(String token) async {
     final response = await client.delete("$baseUrl/logout",
         headers: {"Authorization": "BEARER ${token}"});

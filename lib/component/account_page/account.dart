@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/account_page/syaratKetentuanApp.dart';
 import 'package:horang/component/account_page/tambah_profile.dart';
 import 'package:horang/component/account_page/ubah_password.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
@@ -28,7 +29,7 @@ class _AccountState extends State<Account> {
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
-  var access_token,
+  var access_token,sk,
       refresh_token,
       idcustomer,
       pin,
@@ -39,6 +40,12 @@ class _AccountState extends State<Account> {
       alamat,
       noktp,
       idkotas;
+
+  Future<String> _ambildataSK() async {
+    http.Response response = await http.get(
+        Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+    return sk = response.body;
+  }
 
   void getlistaprofile() async {
     final response = await http.get(ApiService().urlgetcustomer,
@@ -140,6 +147,7 @@ class _AccountState extends State<Account> {
           }));
     }
     initPlatformState();
+    _ambildataSK();
   }
 
   @override
@@ -278,11 +286,14 @@ class _AccountState extends State<Account> {
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Sksk(
-                    //   token: access_token,
-                    // )));
-                    infoDialog(context,
-                        "Maaf, fitur masih dalam proses pengembangan !");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SyaratKetentuan(
+                              skk: sk,
+                            )));
+                    // infoDialog(context,
+                    //     "Maaf, fitur masih dalam proses pengembangan !");
                   },
                 ),
               ),

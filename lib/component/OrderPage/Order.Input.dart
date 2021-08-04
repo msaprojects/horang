@@ -383,6 +383,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (kapasitas.toLowerCase().contains('forklift')) {
       boolkontainer = false;
       flagasuransi = false;
+      boolasuransi = false;
       boolsk = false;
       vsatuan_sewa = "jam ";
       vdurasi_sewa =
@@ -395,6 +396,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
       vdurasi_sewa =
           diffInDays(DateTime.parse(valueawal), DateTime.parse(valueakhir));
     }
+    print('flagasuransine? $flagasuransi');
     totalhariharga = vdurasi_sewa * harga_sewa;
     hargaxminimalsewadeposit = harga_awal * minimaldeposit;
     if (ceksaldo >= hargaxminimalsewadeposit) {
@@ -633,16 +635,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               Container(
                                 padding:
                                     const EdgeInsets.only(left: 20, top: 5),
-                                child: Row(
+                                child: kapasitas.toLowerCase().contains('kontainer') ? Row(
                                   children: <Widget>[
                                     Checkbox(
-                                      value: boolasuransi,
+                                      value:boolasuransi,
                                       onChanged: (bool asuransii) {
                                         setState(() {
                                           boolasuransi = asuransii;
                                           if (boolasuransi == true) {
                                             flagasuransi = true;
-                                            hitungsemuaFunction();
+                                            hitungsemuaFunction(); 
                                           } else {
                                             flagasuransi = false;
                                             hitungsemuaFunction();
@@ -657,7 +659,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         nomasuransi.toString() +
                                         "%)"),
                                   ],
-                                ),
+                                ) : Text(''),
                               ),
                               GestureDetector(
                                 onTap: () {
