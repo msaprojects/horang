@@ -956,8 +956,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    warningDialog(
-        context, "Hai, Maaf saldo poin anda tidak mencukupi, $kondisisaldo ",
+    warningDialog(context,
+        "Hai, Maaf saldo poin anda sebesar ${ceksaldo} tidak mencukupi untuk biaya deposit, $kondisisaldo ",
         title: "Saldo Poin Tidak Mencukupi",
         showNeutralButton: false,
         negativeText: "Batal",
@@ -1245,7 +1245,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     hargaxminimalsewadeposit - ceksaldo;
                 totaldeposit = ceksaldo;
                 kondisisaldo =
-                    "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(hargaxminimalsewadeposit)}?";
+                    "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)}?";
                 cekDeposit(context);
               }
             });
@@ -1268,7 +1268,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 hargaxminimalsewadeposit - ceksaldo;
             totaldeposit = ceksaldo;
             kondisisaldo =
-                "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(hargaxminimalsewadeposit)}?";
+                "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)}?";
             cekDeposit(context);
           }
         });
