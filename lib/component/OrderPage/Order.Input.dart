@@ -993,7 +993,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           cekout: jamcheckout,
           cekin: jamcheckin,
           lastorder: jamlastorder,
-          // jenisitem: jenisitem1
+          gambarproduk: produkimage
         );
       }));
     });
@@ -1038,7 +1038,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
           cekout: jamcheckout,
           cekin: jamcheckin,
           lastorder: jamlastorder,
-          // jenisitem: jenisitem1
+          gambarproduk: produkimage
         );
       }));
     });
@@ -1232,7 +1232,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         } else {
           if (boolsk == false) {
             warningDialog(context,
-                'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
+                'Mohon untuk menyetujui syarat dan ketentuan yang berlaku terlebih dahulu.',
+                title: "Perhatian");
           } else {
             setState(() {
               if (ceksaldo >= hargaxminimalsewadeposit) {
