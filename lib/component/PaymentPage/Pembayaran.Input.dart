@@ -297,8 +297,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     plastorder = widget.lastorder;
     pgambarproduk = widget.gambarproduk;
     ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
-            double.parse(pnominal_barang))
-        .toStringAsFixed(2);
+        double.parse(pnominal_barang));
     totaldeposit = (pminimalsewahari * pharga_awal);
     // pjenisitem = widget.jenisitem;
     print("Flag Asuransi? " +

@@ -137,10 +137,8 @@ class ApiService {
       String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice" + response.body + "$token");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
-
       return storage
           .map((json) => MystorageModel.fromJson(json))
           .where((storage) {
@@ -193,7 +191,7 @@ class ApiService {
       String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice" + response.body + "$token");
+    print("Masuk Search");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
       return storage
@@ -267,7 +265,6 @@ class ApiService {
       return null;
     }
   }
-
 
   //LOAD HISTORY LIST
   Future<List<HistoryModel>> listHistoryDashboard(String token) async {
@@ -687,8 +684,8 @@ class ApiService {
   }
 
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
-    http.Response response = await http
-        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+    http.Response response = await http.get(
+        Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {

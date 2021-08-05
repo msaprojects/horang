@@ -29,7 +29,8 @@ class _AccountState extends State<Account> {
   String _projectCode = '';
   String _projectAppID = '';
   String _projectName = '';
-  var access_token,sk,
+  var access_token,
+      sk,
       refresh_token,
       idcustomer,
       pin,
@@ -45,12 +46,6 @@ class _AccountState extends State<Account> {
     http.Response response = await http.get(
         Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
     return sk = response.body;
-  }
-
-  void getlistaprofile() async {
-    final response = await http.get(ApiService().urlgetcustomer,
-        headers: {"Authorization": "BEARER ${access_token}"});
-    nmcust = json.decode(response.body)[0]['nama_customer'];
   }
 
   initPlatformState() async {
@@ -153,8 +148,13 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
-    getlistaprofile();
     cekToken();
+  }
+
+  @override
+  void dispose() {
+    cekToken();
+    super.dispose();
   }
 
   @override
@@ -210,7 +210,7 @@ class _AccountState extends State<Account> {
                       width: 10,
                     ),
                     Text(
-                      "$nama_customer",
+                      nama_customer.toString().toUpperCase(),
                       style: TextStyle(
                           fontSize: 16,
                           color: Colors.black,
@@ -290,8 +290,8 @@ class _AccountState extends State<Account> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => SyaratKetentuan(
-                              skk: sk,
-                            )));
+                                  skk: sk,
+                                )));
                     // infoDialog(context,
                     //     "Maaf, fitur masih dalam proses pengembangan !");
                   },
