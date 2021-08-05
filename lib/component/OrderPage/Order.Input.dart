@@ -635,31 +635,35 @@ class _FormDetailOrder extends State<FormInputOrder> {
                               Container(
                                 padding:
                                     const EdgeInsets.only(left: 20, top: 5),
-                                child: kapasitas.toLowerCase().contains('kontainer') ? Row(
-                                  children: <Widget>[
-                                    Checkbox(
-                                      value:boolasuransi,
-                                      onChanged: (bool asuransii) {
-                                        setState(() {
-                                          boolasuransi = asuransii;
-                                          if (boolasuransi == true) {
-                                            flagasuransi = true;
-                                            hitungsemuaFunction(); 
-                                          } else {
-                                            flagasuransi = false;
-                                            hitungsemuaFunction();
-                                          }
-                                          print("Flag? " +
-                                              flagasuransi.toString());
-                                        });
-                                      },
-                                    ),
-                                    SizedBox(width: 8.0),
-                                    Text("Asuransi (" +
-                                        nomasuransi.toString() +
-                                        "%)"),
-                                  ],
-                                ) : Text(''),
+                                child: kapasitas
+                                        .toLowerCase()
+                                        .contains('kontainer')
+                                    ? Row(
+                                        children: <Widget>[
+                                          Checkbox(
+                                            value: boolasuransi,
+                                            onChanged: (bool asuransii) {
+                                              setState(() {
+                                                boolasuransi = asuransii;
+                                                if (boolasuransi == true) {
+                                                  flagasuransi = true;
+                                                  hitungsemuaFunction();
+                                                } else {
+                                                  flagasuransi = false;
+                                                  hitungsemuaFunction();
+                                                }
+                                                print("Flag? " +
+                                                    flagasuransi.toString());
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0),
+                                          Text("Asuransi (" +
+                                              nomasuransi.toString() +
+                                              "%)"),
+                                        ],
+                                      )
+                                    : Text(''),
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -965,36 +969,35 @@ class _FormDetailOrder extends State<FormInputOrder> {
         positiveText: "OK", positiveAction: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-          flagasuransi: flagasuransi,
-          flagvoucher: flagvoucher,
-          idlokasi: idlokasi,
-          idjenis_produk: idjenis_produk,
-          idvoucher: idvoucher,
-          idasuransi: idasuransi,
-          harga_sewa: harga_sewa,
-          harga_awal: harga_awal,
-          diskonn: diskon,
-          durasi_sewa: vdurasi_sewa,
-          valuesewaawal: valueawal,
-          valuesewaakhir: valueakhir,
-          kapasitas: kapasitas,
-          alamat: alamat,
-          keterangan_barang: _keteranganbarang.text.toString(),
-          nominal_barang: _nominalbarang.text.toString(),
-          nominal_voucher: potonganvoucher,
-          minimum_transaksi: vminimumtransaksi,
-          persentase_voucher: vpersentasevoucher,
-          totalharixharga: totalhariharga.toString(),
-          saldopoint: totaldeposit.toString(),
-          email_asuransi: email_asuransi.toString(),
-          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-          persentase_asuransi: nomasuransi.toString(),
-          minimalsewahari: minimaldeposit,
-          cekout: jamcheckout,
-          cekin: jamcheckin,
-          lastorder: jamlastorder,
-          gambarproduk: produkimage
-        );
+            flagasuransi: flagasuransi,
+            flagvoucher: flagvoucher,
+            idlokasi: idlokasi,
+            idjenis_produk: idjenis_produk,
+            idvoucher: idvoucher,
+            idasuransi: idasuransi,
+            harga_sewa: harga_sewa,
+            harga_awal: harga_awal,
+            diskonn: diskon,
+            durasi_sewa: vdurasi_sewa,
+            valuesewaawal: valueawal,
+            valuesewaakhir: valueakhir,
+            kapasitas: kapasitas,
+            alamat: alamat,
+            keterangan_barang: _keteranganbarang.text.toString(),
+            nominal_barang: _nominalbarang.text.toString(),
+            nominal_voucher: potonganvoucher,
+            minimum_transaksi: vminimumtransaksi,
+            persentase_voucher: vpersentasevoucher,
+            totalharixharga: totalhariharga.toString(),
+            saldopoint: totaldeposit.toString(),
+            email_asuransi: email_asuransi.toString(),
+            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+            persentase_asuransi: nomasuransi.toString(),
+            minimalsewahari: minimaldeposit,
+            cekout: jamcheckout,
+            cekin: jamcheckin,
+            lastorder: jamlastorder,
+            gambarproduk: produkimage);
       }));
     });
   }
@@ -1010,36 +1013,35 @@ class _FormDetailOrder extends State<FormInputOrder> {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return FormInputPembayaran(
-          flagasuransi: flagasuransi,
-          flagvoucher: flagvoucher,
-          idlokasi: idlokasi,
-          idjenis_produk: idjenis_produk,
-          idvoucher: idvoucher,
-          idasuransi: idasuransi,
-          harga_sewa: harga_sewa,
-          harga_awal: harga_awal,
-          diskonn: diskon,
-          durasi_sewa: vdurasi_sewa,
-          valuesewaawal: valueawal,
-          valuesewaakhir: valueakhir,
-          kapasitas: kapasitas,
-          alamat: alamat,
-          keterangan_barang: _keteranganbarang.text.toString(),
-          nominal_barang: _nominalbarang.text.toString(),
-          nominal_voucher: potonganvoucher,
-          minimum_transaksi: vminimumtransaksi,
-          persentase_voucher: vpersentasevoucher,
-          totalharixharga: totalhariharga.toString(),
-          saldopoint: totaldeposit.toString(),
-          email_asuransi: email_asuransi.toString(),
-          tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-          persentase_asuransi: nomasuransi.toString(),
-          minimalsewahari: minimaldeposit,
-          cekout: jamcheckout,
-          cekin: jamcheckin,
-          lastorder: jamlastorder,
-          gambarproduk: produkimage
-        );
+            flagasuransi: flagasuransi,
+            flagvoucher: flagvoucher,
+            idlokasi: idlokasi,
+            idjenis_produk: idjenis_produk,
+            idvoucher: idvoucher,
+            idasuransi: idasuransi,
+            harga_sewa: harga_sewa,
+            harga_awal: harga_awal,
+            diskonn: diskon,
+            durasi_sewa: vdurasi_sewa,
+            valuesewaawal: valueawal,
+            valuesewaakhir: valueakhir,
+            kapasitas: kapasitas,
+            alamat: alamat,
+            keterangan_barang: _keteranganbarang.text.toString(),
+            nominal_barang: _nominalbarang.text.toString(),
+            nominal_voucher: potonganvoucher,
+            minimum_transaksi: vminimumtransaksi,
+            persentase_voucher: vpersentasevoucher,
+            totalharixharga: totalhariharga.toString(),
+            saldopoint: totaldeposit.toString(),
+            email_asuransi: email_asuransi.toString(),
+            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+            persentase_asuransi: nomasuransi.toString(),
+            minimalsewahari: minimaldeposit,
+            cekout: jamcheckout,
+            cekin: jamcheckin,
+            lastorder: jamlastorder,
+            gambarproduk: produkimage);
       }));
     });
   }

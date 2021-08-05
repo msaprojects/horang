@@ -304,7 +304,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     print("Flag Asuransi? " +
         pflagasuransi.toString() +
         " ~ " +
-        pdiskon.toString());
+        pdiskon.toString() +
+        " ~ " +
+        pnominal_voucher.toString() +
+        " ~ " +
+        ptotal_asuransi.toString());
     cekToken();
     hitungsemuaFunction();
     super.initState();
