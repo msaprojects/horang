@@ -194,7 +194,7 @@ class _ProdukList extends State<ProdukList> {
     });
   }
 
-  var dataProduk = ['kontainer', 'forklift'];
+  var dataProduk = ['KONTAINER', 'FORKLIFT'];
 
   StreamSubscription connectivityStream;
   ConnectivityResult olders;

@@ -189,11 +189,39 @@ class ApiService {
     }
   }
 
+  // Future<List<MystorageModel>> listMystorageExpiredBuilder(
+  //     String token, var query) async {
+  //   final response = await client.get("$baseUrl/mystorage",
+  //       headers: {"Authorization": "BEARER ${token}"});
+  //   print("masuklistbuilder??");
+  //   if (response.statusCode == 200) {
+  //     List storage = json.decode(response.body);
+  //     return storage
+  //         .map((json) => MystorageModel.fromJson(json))
+  //         .where((storage) {
+  //           final noOrderLower = storage.noOrder.toLowerCase();
+  //           final kodeKontainerLower = storage.kode_kontainer.toLowerCase();
+  //           final jenisKontainer = storage.nama.toLowerCase();
+  //           final lokasi = storage.nama_lokasi.toLowerCase();
+  //           final searchLower = query.toLowerCase();
+  //           return noOrderLower.contains(searchLower) ||
+  //               kodeKontainerLower.contains(searchLower) ||
+  //               jenisKontainer.contains(searchLower) ||
+  //               lokasi.contains(searchLower);
+  //         })
+  //         .where((element) => element.status == "EXPIRED")
+  //         .toList();
+  //   } else {
+  //     throw Exception('gagal');
+  //   }
+  // }
+
+
   Future<List<MystorageModel>> listMystorageExpired(
       String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice" + response.body + "$token");
+    print("masuklist??");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
       return storage

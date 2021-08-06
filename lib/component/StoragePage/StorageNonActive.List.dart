@@ -40,7 +40,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
       hari,
       aktif;
 
-  List<MystorageModel> storage = [];
+  List<MystorageModel> storage, storage1 = [];
   String query = '', token = '';
   Timer debouncer;
 
@@ -85,6 +85,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
     }
     storage = await _apiService.listMystorageNonActive(access_token, query);
     print('yuhu ada gak $token ++ $access_token');
+    setState(() => this.storage1 = storage);
     setState(() => this.storage = storage);
   }
 
@@ -176,19 +177,44 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Cari...',
-        onChanged: searchmystorage,
+        onChanged: searchmystorage1,
       );
 
-  Future searchmystorage(String query) async => debounce(() async {
-        print('token1 $access_token');
-        final storage =
-            await _apiService.listMystorageNonActive(access_token, query);
+      Future searchmystorage1(String query) async => debounce(() async {
+        print('mystorage1 token1 $access_token');
+        final storagex =
+            storage1.where((storage1) {
+            final noOrderLower = storage1.noOrder.toLowerCase();
+            final kodeKontainerLower = storage1.kode_kontainer.toLowerCase();
+            final jenisKontainer = storage1.nama.toLowerCase();
+            final lokasi = storage1.nama_lokasi.toLowerCase();
+            final searchLower = query.toLowerCase();
+
+            return noOrderLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower) ||
+                jenisKontainer.contains(searchLower) ||
+                lokasi.contains(searchLower);
+          })
+          .where((element) => element.status == "EXPIRED")
+          .toList();
+            
         if (!mounted) return;
         setState(() {
-          this.storage = storage;
-          print("Execute search");
+          this.storage = storagex;
+          print("Execute search1");
         });
       });
+
+  // Future searchmystorage(String query) async => debounce(() async {
+  //       print('token1 $access_token');
+  //       final storage =
+  //           await _apiService.listMystorageNonActive(access_token, query);
+  //       if (!mounted) return;
+  //       setState(() {
+  //         this.storage = storage;
+  //         print("Execute search");
+  //       });
+  //     });
 
   Widget buildmyStorage(MystorageModel storage) {
     print('masuk sini xx $storage');
