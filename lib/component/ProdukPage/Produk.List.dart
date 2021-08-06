@@ -430,11 +430,14 @@ class _ProdukList extends State<ProdukList> {
     _date1 = DateTime.now();
     _date2 = DateTime.now().add(Duration(days: 5));
     _tanggalAwal = DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
-    _tanggalAkhir = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 5))).toString();
+    _tanggalAkhir = DateFormat('yyyy-MM-dd')
+        .format(DateTime.now().add(Duration(days: 5)))
+        .toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
 
-    print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk---hashling');
+    print(
+        'tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk---hashling');
 
     _buildKomboProduk(defaultProduk);
     setState(() {
@@ -744,7 +747,7 @@ class _ProdukList extends State<ProdukList> {
                   child: Text('Cari')),
               FlagCari == 1
                   ? _search(context, defaultProduk)
-                  : Text("Harap Pilih Tanggal dan Kota")
+                  : Text("Harap Pilih Tanggal dan Lokasi")
             ],
           ),
         ),
@@ -759,7 +762,7 @@ class _ProdukList extends State<ProdukList> {
       valueakhirperhitungandurasi = _tanggalAkhir;
       if (valKota == null) {
         Fluttertoast.showToast(
-            msg: "Pilih KOTA tidak boleh kosong!",
+            msg: "Harap pilih lokasi terlebih dahulu.",
             backgroundColor: Colors.black,
             textColor: Colors.white);
       }
@@ -776,9 +779,8 @@ class _ProdukList extends State<ProdukList> {
             backgroundColor: Colors.red,
             textColor: Colors.white);
       } else if (valKota == null) {
-        print('masuk kota forklift');
         Fluttertoast.showToast(
-            msg: "Pilih KOTA tidak boleh kosong!",
+            msg: "Harap pilih lokasi terlebih dahulu",
             backgroundColor: Colors.black,
             textColor: Colors.white);
       } else {
@@ -827,7 +829,7 @@ class _ProdukList extends State<ProdukList> {
             return Center(
               child: Text(
                   // "8Something wrong with message: ${snapshot.error.toString()}"
-                  "Harap pilih tanggal dan kota yang ingin anda sewa"),
+                  "Harap pilih tanggal dan lokasi yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -849,7 +851,7 @@ class _ProdukList extends State<ProdukList> {
                     children: [
                       Image.asset("assets/image/datanotfound.png"),
                       Text(
-                        "Oppss..Maaf Jenis Container yang anda cari tidak ditemukan, pilih tanggal dan kota lainya.",
+                        "Oppss..Maaf Jenis Container yang anda cari tidak ditemukan, pilih tanggal dan lokasi lainya.",
                         style: GoogleFonts.inter(color: Colors.grey),
                         textAlign: TextAlign.center,
                       )
@@ -1297,7 +1299,7 @@ class _ProdukList extends State<ProdukList> {
               SizedBox(
                 width: 7,
               ),
-              Text("Pilih Kota",
+              Text("Pilih Lokasi",
                   textAlign: TextAlign.end,
                   style:
                       GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
@@ -1442,7 +1444,7 @@ class _ProdukList extends State<ProdukList> {
       if (available == 0) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
-              'Unit saat ini belum tersedia!, silahkan pilih tanggal dan kota yang lain'),
+              'Unit saat ini belum tersedia!, silahkan pilih tanggal dan lokasi yang lain'),
           duration: Duration(seconds: 3),
         ));
       } else {

@@ -29,7 +29,7 @@ class ReusableClasses {
     if (boolvoucher == false) {
       nominalV = 0;
     } else {
-      if ((double.parse(durasi) * double.parse(hargasetelahdiskon)) >=
+      if ((num.parse(durasi) * double.parse(hargasetelahdiskon)) >=
           double.parse(minimumtransaksi)) {
         if (((double.parse(persentasevoucher) / 100) *
                 double.parse(harganormal) *
@@ -68,7 +68,6 @@ class ReusableClasses {
                 ceksaldoD -
                 nominalV)
             .toStringAsFixed(2);
-
     return hasilperhitungan;
   }
 
@@ -101,7 +100,7 @@ class ReusableClasses {
         nominalV = 0;
       }
     }
-    return nominalV;
+    return nominalV.toInt();
   }
 
   cekToken(String access_token, refresh_token, idcustomer, email, nama_customer,

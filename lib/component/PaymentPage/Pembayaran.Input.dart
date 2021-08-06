@@ -42,41 +42,39 @@ class FormInputPembayaran extends StatefulWidget {
       minimalsewahari,
       cekout,
       cekin,
-      lastorder
-      // jenisitem
-      ;
+      lastorder,
+      gambarproduk;
 
-  FormInputPembayaran({
-    this.flagasuransi,
-    this.flagvoucher,
-    this.idlokasi,
-    this.idjenis_produk,
-    this.idvoucher,
-    this.idasuransi,
-    this.harga_sewa,
-    this.harga_awal,
-    this.diskonn,
-    this.durasi_sewa,
-    this.valuesewaawal,
-    this.valuesewaakhir,
-    this.kapasitas,
-    this.alamat,
-    this.keterangan_barang,
-    this.nominal_barang,
-    this.nominal_voucher,
-    this.minimum_transaksi,
-    this.persentase_voucher,
-    this.totalharixharga,
-    this.saldopoint,
-    this.email_asuransi,
-    this.tambahsaldopoint,
-    this.persentase_asuransi,
-    this.minimalsewahari,
-    this.cekout,
-    this.cekin,
-    this.lastorder,
-    // this.jenisitem
-  });
+  FormInputPembayaran(
+      {this.flagasuransi,
+      this.flagvoucher,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.idvoucher,
+      this.idasuransi,
+      this.harga_sewa,
+      this.harga_awal,
+      this.diskonn,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.kapasitas,
+      this.alamat,
+      this.keterangan_barang,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.totalharixharga,
+      this.saldopoint,
+      this.email_asuransi,
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.minimalsewahari,
+      this.cekout,
+      this.cekin,
+      this.lastorder,
+      this.gambarproduk});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -127,9 +125,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       plastorder,
       pin,
       labeldiskon,
-      labelhargaawal
-      // pjenisitem
-      ;
+      labelhargaawal,
+      pgambarproduk;
 
   enableButton() {
     setState(() {
@@ -147,34 +144,42 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     if (pkapasitas.toString().toLowerCase().contains('forklift')) {
       return Visibility(visible: false, child: Text(""));
     } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text('Check In : '),
-              Text(
-                pcekin.toString(),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Check Out : '),
-              Text(
-                pcekout.toString(),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Last Order : '),
-              Text(
-                plastorder.toString(),
-              ),
-            ],
-          ),
-        ],
+      return Container(
+        padding: const EdgeInsets.only(left: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Jam Operasional : ",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Text('Check In : '),
+                Text(
+                  pcekin.toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text('Check Out : '),
+                Text(
+                  pcekout.toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text('Last Order : '),
+                Text(
+                  plastorder.toString(),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     }
   }
@@ -290,15 +295,19 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     pcekin = widget.cekin;
     pcekout = widget.cekout;
     plastorder = widget.lastorder;
+    pgambarproduk = widget.gambarproduk;
     ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
-            double.parse(pnominal_barang))
-        .toStringAsFixed(2);
+        double.parse(pnominal_barang));
     totaldeposit = (pminimalsewahari * pharga_awal);
     // pjenisitem = widget.jenisitem;
     print("Flag Asuransi? " +
         pflagasuransi.toString() +
         " ~ " +
-        pdiskon.toString());
+        pdiskon.toString() +
+        " ~ " +
+        pnominal_voucher.toString() +
+        " ~ " +
+        ptotal_asuransi.toString());
     cekToken();
     hitungsemuaFunction();
     super.initState();
@@ -358,26 +367,28 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                     child: new Column(
                       children: <Widget>[
                         new ListTile(
-                          leading: Icon(Icons.insert_drive_file),
+                          leading: CircleAvatar(
+                            radius: 35,
+                            backgroundColor: Colors.red,
+                            backgroundImage: NetworkImage(pgambarproduk),
+                          ),
                           title: new Text(
-                            pkapasitas,
+                            "Kapasitas : " + pkapasitas,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: new Text(
-                            palamat,
+                            "Lokasi : " + palamat,
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 8, left: 36, top: 8),
-                        ),
+                        Divider(color: Colors.grey),
                         Container(
-                          padding: const EdgeInsets.only(left: 30, bottom: 15),
+                          padding: const EdgeInsets.only(left: 30, bottom: 10),
                           child: Row(
                             children: <Widget>[
                               Text("Detail Pesanan",
-                                  style: TextStyle(fontWeight: FontWeight.bold))
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -501,23 +512,6 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                             ),
                           ],
                         ),
-                        // Container(
-                        //   alignment: Alignment.topRight,
-                        //       padding: const EdgeInsets.only(
-                        //           top: 10.0, right: 50, left: 50, ),
-                        //       child: Flexible(
-                        //         child: Column(
-                        //           children: [
-                        //             Text(
-                        //               pketerangan_barang,
-                        //               maxLines: 10,
-                        //               overflow: TextOverflow.visible,
-                        //               // textAlign: TextAlign.justify,
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
                         Container(
                           alignment: Alignment.topRight,
                           padding: const EdgeInsets.only(
@@ -530,14 +524,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                           ),
                           // ],
                         ),
+                        Divider(color: Colors.grey),
+                        pkapasitas.toString().toLowerCase().contains('forklift')
+                            ? Container()
+                            : settingJamOperasionalLabel(),
                         SizedBox(
-                          height: 8,
+                          height: 10,
                         ),
-                        Divider(
-                          height: 16,
-                        ),
+                        Divider(color: Colors.grey),
                         Container(
-                          padding: const EdgeInsets.only(left: 30, bottom: 15),
+                          padding: const EdgeInsets.only(left: 30, bottom: 10),
                           child: Row(
                             children: <Widget>[
                               Text("Detail Pembayaran",
@@ -660,8 +656,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                         SizedBox(
                           height: 8,
                         ),
-                        Divider(
-                          height: 16,
+                        Divider(color: Colors.grey),
+                        SizedBox(
+                          height: 15,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
