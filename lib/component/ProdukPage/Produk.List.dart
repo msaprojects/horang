@@ -70,10 +70,10 @@ class _ProdukList extends State<ProdukList> {
       rtanggalAwal,
       rtanggalAkhir,
       pin,
-      defaultProduk = 'kontainer',
+      defaultProduk = 'KONTAINER',
       timehourawal,
       timehourselesai,
-      jenisproduk = 'kontainer';
+      jenisproduk = 'KONTAINER';
   String _selectedDate,
       _dateCount,
       _range,
@@ -411,9 +411,9 @@ class _ProdukList extends State<ProdukList> {
   void initState() {
     jenisproduk = widget.jenisproduk;
     defaultProduk = dataProduk[0];
-    if (jenisproduk == 'kontainer') {
+    if (jenisproduk == 'KONTAINER') {
       defaultProduk = dataProduk[0];
-    } else if (jenisproduk == 'forklift') {
+    } else if (jenisproduk == 'FORKLIFT') {
       defaultProduk = dataProduk[1];
     }
 
@@ -441,7 +441,7 @@ class _ProdukList extends State<ProdukList> {
 
     _buildKomboProduk(defaultProduk);
     setState(() {
-      if (defaultProduk == 'forklift') {
+      if (defaultProduk == 'FORKLIFT') {
         return cektanggal = '0';
       } else {
         return cektanggal = '1';
@@ -1385,10 +1385,10 @@ class _ProdukList extends State<ProdukList> {
           defaultProduk = value;
           if (value == null) {
             return null;
-          } else if (defaultProduk == 'forklift') {
+          } else if (defaultProduk == 'FORKLIFT') {
             print('hey');
             return cektanggal = '0';
-          } else if (defaultProduk == 'kontainer') {
+          } else if (defaultProduk == 'KONTAINER') {
             print('hey123');
             return cektanggal = '1';
           }
@@ -1462,13 +1462,15 @@ class _ProdukList extends State<ProdukList> {
               DateTime.parse(valueawalperhitungandurasi),
               DateTime.parse(valueakhirperhitungandurasi));
           satuan = "/jam";
-        } else {
+          print('forkkk1');
+        } else if (jenisproduk.toLowerCase().contains('kontainer')) {
           valueawalperhitungandurasi = _tanggalAwal;
           valueakhirperhitungandurasi = _tanggalAkhir;
           valuehasilperhitungandurasi = diffInDays(
               DateTime.parse(valueakhirperhitungandurasi),
               DateTime.parse(valueawalperhitungandurasi));
           satuan = "/hari";
+          print('konten');
         }
         print("CHEKING TGL $jenisproduk : " +
             valueawalperhitungandurasi +

@@ -247,11 +247,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   settingJamOperasional() {
     if (kapasitas.toLowerCase().contains('forklift')) {
-      return Visibility(child: Text(''));
+      return Visibility(
+          child: Text(
+        '',
+        style: TextStyle(fontSize: 0),
+      ));
     } else {
       return Column(
         children: [
-          Divider(),
+          // Divider(),
           Container(
             child: Row(
               children: <Widget>[
@@ -283,7 +287,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 38),
-                child: Text("Jam Check In"),
+                child: Text("Jam Check In     "),
               ),
               Text(" : "),
               Container(
@@ -297,7 +301,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 38),
-                child: Text("Jam Check Out : "),
+                child: Text("Jam Check Out  "),
               ),
               Text(" : "),
               Container(
@@ -306,20 +310,29 @@ class _FormDetailOrder extends State<FormInputOrder> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(left: 38),
-                child: Text("Jam Close Order".toString()),
-              ),
-              Text(" : "),
-              Container(
-                padding: const EdgeInsets.only(left: 38),
-                child: Text(jamlastorder.toString()),
-              ),
-            ],
+          SizedBox(
+            height: 10,
           ),
+          Divider(
+            height: 20,
+            thickness: 10,
+            // indent: 20,
+            // endIndent: 20,
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     Container(
+          //       padding: const EdgeInsets.only(left: 38),
+          //       child: Text("Jam Close Order".toString()),
+          //     ),
+          //     Text(" : "),
+          //     Container(
+          //       padding: const EdgeInsets.only(left: 38),
+          //       child: Text(jamlastorder.toString()),
+          //     ),
+          //   ],
+          // ),
         ],
       );
     }
@@ -495,80 +508,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     ),
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 12,
                   ),
-                  Container(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    bottom: 8, left: 30, top: 8),
-                                child: Text(
-                                  "Durasi Sewa ",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 30),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(valueawal,
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text("s/d",
-                                        style: GoogleFonts.inter(fontSize: 14)),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(valueakhir,
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 30, top: 5),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                        "( " +
-                                            vdurasi_sewa.toString() +
-                                            " " +
-                                            vsatuan_sewa +
-                                            ")",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(
-                                        "+(Deposit " +
-                                            minimaldeposit.toString() +
-                                            " " +
-                                            vsatuan_sewa +
-                                            ")",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(),
+                  // Divider(
+                  //   height: 20,
+                  //   thickness: 2,
+                  // indent: 20,
+                  // endIndent: 20,
+                  // ),
                   Container(
                     child: Row(
                       children: <Widget>[
@@ -604,7 +551,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 38),
+                              padding: const EdgeInsets.only(left: 38, right: 38),
                               child: Text(keterangan),
                             )
                           ],
@@ -612,8 +559,16 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       ),
                     ],
                   ),
-                  settingJamOperasional(),
-                  Divider(),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Divider(
+                    height: 20,
+                    thickness: 10,
+                    color: Colors.grey[300],
+                    // indent: 20,
+                    // endIndent: 20,
+                  ),
                   Container(
                     child: Row(
                       children: <Widget>[
@@ -624,17 +579,170 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             children: <Widget>[
                               Container(
                                 padding: const EdgeInsets.only(
-                                    bottom: 3, left: 36, top: 8),
+                                    bottom: 8, left: 36, top: 8),
                                 child: Text(
-                                  "Addon Sewa",
+                                  "Durasi Sewa ",
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
+                                padding: EdgeInsets.only(left: 38),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(valueawal,
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14)),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text("s/d",
+                                        style: GoogleFonts.inter(fontSize: 14)),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(valueakhir,
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14,)),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 38, top: 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                        "( " +
+                                            vdurasi_sewa.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14)),
+                                    Text(
+                                        "+(Deposit " +
+                                            minimaldeposit.toString() +
+                                            " " +
+                                            vsatuan_sewa +
+                                            ")",
+                                        style: GoogleFonts.inter(
+                                            fontSize: 14)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  // Divider(
+                  //   height: 20,
+                  //   thickness: 2,
+                  // indent: 20,
+                  // endIndent: 20,
+                  // ),
+
+                  settingJamOperasional(),
+                  // Divider(),
+
+                  SizedBox(
+                    height: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {});
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                              height: MediaQuery.of(context).size.height * 0.50,
+                              decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: new BorderRadius.only(
+                                  topLeft: const Radius.circular(25.0),
+                                  topRight: const Radius.circular(25.0),
+                                ),
+                              ),
+                              child: SafeArea(
+                                  child: FutureBuilder(
+                                      future:
+                                          _apiService.listVoucher(access_token),
+                                      builder: (context,
+                                          AsyncSnapshot<List<VoucherModel>>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                                "Something wrong with message: ${snapshot.error.toString()}"),
+                                          );
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          List<VoucherModel> vclist =
+                                              snapshot.data;
+                                          return _buildListvoucher(vclist);
+                                        }
+                                      }))));
+                    },
+                    child: Container(
+                      padding:
+                          const EdgeInsets.only(left: 30, right: 30, top: 5),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.wallet_giftcard_outlined,
+                              color: Colors.blue),
+                          enabled: false,
+                          hintText:
+                              potonganvoucher.toString() == "0" ? getVoucher : "Potongan : " +rupiah(potonganvoucher.toString()),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Divider(
+                    height: 20,
+                    thickness: 10,
+                    // indent: 20,
+                    // endIndent: 20,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // Container(
+                              //   padding: const EdgeInsets.only(
+                              //       bottom: 3, left: 36, top: 8),
+                              //   child: Text(
+                              //     "Addon Sewa",
+                              //     style: TextStyle(
+                              //       fontWeight: FontWeight.bold,
+                              //     ),
+                              //   ),
+                              // ),
+                              Container(
                                 padding:
-                                    const EdgeInsets.only(left: 20, top: 5),
+                                    const EdgeInsets.only(left: 20, top: 0),
                                 child: kapasitas
                                         .toLowerCase()
                                         .contains('kontainer')
@@ -663,74 +771,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                               "%)"),
                                         ],
                                       )
-                                    : Text(''),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {});
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) => Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.50,
-                                          decoration: new BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: new BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(25.0),
-                                              topRight:
-                                                  const Radius.circular(25.0),
-                                            ),
-                                          ),
-                                          child: SafeArea(
-                                              child: FutureBuilder(
-                                                  future:
-                                                      _apiService.listVoucher(
-                                                          access_token),
-                                                  builder: (context,
-                                                      AsyncSnapshot<
-                                                              List<
-                                                                  VoucherModel>>
-                                                          snapshot) {
-                                                    if (snapshot.hasError) {
-                                                      return Center(
-                                                        child: Text(
-                                                            "Something wrong with message: ${snapshot.error.toString()}"),
-                                                      );
-                                                    } else if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState
-                                                            .waiting) {
-                                                      return Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                    } else if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState.done) {
-                                                      List<VoucherModel>
-                                                          vclist =
-                                                          snapshot.data;
-                                                      return _buildListvoucher(
-                                                          vclist);
-                                                    }
-                                                  }))));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 30, right: 30, top: 5),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      enabled: false,
-                                      hintText: "$getVoucher - " +
-                                          potonganvoucher.toString(),
-                                      border: const OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
+                                    : Text('', style: TextStyle(fontSize: 0),),
                               ),
                               SizedBox(
                                 height: 5,
@@ -930,14 +971,12 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 SizedBox(width: 10),
                 Container(
                   alignment: Alignment.center,
-                  width: 130,
+                  // width: 130,
+                  width: MediaQuery.of(context).size.width /3,
                   height: 100,
                   // margin: EdgeInsets.only(top: 3),
-                  child: OutlineButton(
-                    borderSide: BorderSide(color: Colors.green, width: 2),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    color: Colors.green,
+                  child: ElevatedButton(
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
                     onPressed: () {
                       LanjutkanPembayaranClick();
                     },
@@ -946,8 +985,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       textAlign: TextAlign.center,
                       style: (TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black)),
+                          fontSize: 14,
+                          color: Colors.white)),
                     ),
                   ),
                 ),

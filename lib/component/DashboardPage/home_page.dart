@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage> {
       pin,
       ceksaldo,
       sk,
-      kirimKontainer = 'kontainer',
-      kirimForklift = 'forklift';
+      kirimKontainer = 'KONTAINER',
+      kirimForklift = 'FORKLIFT';
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'kontainer');
+                              return ProdukList(jenisproduk: 'KONTAINER');
                             }));
                           },
                           child: Container(
@@ -358,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'forklift');
+                              return ProdukList(jenisproduk: 'FORKLIFT');
                             }));
                           },
                           child: Container(
