@@ -39,7 +39,7 @@ class _SearchListViewExampleState extends State<StorageExpired1>
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif,
       flag_noted,
       noted;
@@ -242,9 +242,9 @@ class _SearchListViewExampleState extends State<StorageExpired1>
                     return ListView.builder(
                       itemCount: storage.length,
                       itemBuilder: (context, index) {
-                        print('ada ?');
+                        print('ada yang?');
                         final storages = storage[index];
-                        print('soto expired');
+                        print('soto expired $storage');
                         // print('SOTO $storages $index');
                         return buildmyStorage(storages);
                       },
@@ -355,7 +355,7 @@ class _SearchListViewExampleState extends State<StorageExpired1>
                 storage.tanggal_order,
                 storage.tanggal_mulai,
                 storage.tanggal_akhir,
-                storage.hari,
+                storage.jumlah_sewa,
                 storage.flag_selesai,
                 storage.selesai);
           }
@@ -433,30 +433,25 @@ class _SearchListViewExampleState extends State<StorageExpired1>
       tanggal_order,
       tanggal_mulai,
       tanggal_akhir,
-      hari,
+      jumlah_sewa,
       int flagselesaii,
       selesaiz) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: new Container(
-              width: 260.0,
-              // height: 300.0,
-              height: MediaQuery.of(context).size.height * 0.6,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
+            content: SingleChildScrollView(
               child: new Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
@@ -492,8 +487,15 @@ class _SearchListViewExampleState extends State<StorageExpired1>
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Lama Order : " + hari.toString() + " Hari",
-                              style: GoogleFonts.lato(fontSize: 14)),
+                          Row(
+                            children: [
+                              Text("Lama Order : " + jumlah_sewa.toString(),
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                              Text((nama.toLowerCase().contains('forklift')
+                                  ? " Jam"
+                                  : " Hari"))
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),

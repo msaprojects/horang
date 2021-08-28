@@ -12,18 +12,19 @@ class Forgot_Password{
   factory Forgot_Password.fromJson(Map<String, dynamic> map){
     return Forgot_Password(
       email: map['email'],
-        uuid: map['uuid']
+        // uuid: map['uuid']
     );
   }
   Map<String, dynamic> toJson(){
     return{
       "email": email,
-      "uuid": uuid
+      // "uuid": uuid
     };
   }
   @override
   String toString() {
-    return 'Forgot_Password{email: $email, uuid: $uuid}';
+    return 'Forgot_Password{email: $email }';
+    // , uuid: $uuid}';
   }
 }
 

@@ -37,7 +37,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif;
 
   List<MystorageModel> storage, storage1 = [];
@@ -195,7 +195,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
                 jenisKontainer.contains(searchLower) ||
                 lokasi.contains(searchLower);
           })
-          .where((element) => element.status == "EXPIRED")
+          .where((element) => element.status == "NONAKTIF")
           .toList();
             
         if (!mounted) return;
@@ -243,7 +243,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
               storage.tanggal_order,
               storage.tanggal_mulai,
               storage.tanggal_akhir,
-              storage.hari.toString(),
+              storage.jumlah_sewa.toString(),
             );
           }
         },
@@ -360,7 +360,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
       tanggal_order,
       tanggal_mulai,
       tanggal_akhir,
-      hari) {
+      jumlah_sewa) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -420,7 +420,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Lama Order : " + hari.toString() + " Hari",
+                          Text("Lama Order : " + jumlah_sewa.toString() + " Hari",
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
@@ -498,7 +498,7 @@ class _SearchListViewExampleState extends State<StorageNonActive1> {
       tanggal_order,
       tanggal_mulai,
       tanggal_akhir,
-      hari) {
+      jumlah_sewa) {
     // var ket = _note.text.toString();
     Widget cancelButton = FlatButton(
       child: Text("Batal"),

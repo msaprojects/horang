@@ -130,17 +130,16 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future searchmystorage1(String query) async => debounce(() async {
         print('mystorage1 token1 $access_token');
-        final storagex = storage1
-            .where((storage1) {
-        final noOrderLower = storage1.no_order.toLowerCase();
-        final noKontainerLower = storage1.kode_kontainer.toLowerCase();
-        final noBayarLower = storage1.kode_refrensi.toLowerCase();
-        final searchLower = query.toLowerCase();
+        final storagex = storage1.where((storage1) {
+          final noOrderLower = storage1.no_order.toLowerCase();
+          final noKontainerLower = storage1.kode_kontainer.toLowerCase();
+          final noBayarLower = storage1.kode_refrensi.toLowerCase();
+          final searchLower = query.toLowerCase();
 
-        return noKontainerLower.contains(searchLower) ||
-            noBayarLower.contains(searchLower) ||
-            noOrderLower.contains(searchLower);
-      }).toList();
+          return noKontainerLower.contains(searchLower) ||
+              noBayarLower.contains(searchLower) ||
+              noOrderLower.contains(searchLower);
+        }).toList();
 
         if (!mounted) return;
         setState(() {
@@ -296,6 +295,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 storage.total_harga,
                 storage.harga,
                 storage.jumlah_sewa,
+                storage.nama,
                 storage.no_order,
                 storage.kode_refrensi,
                 storage.kode_kontainer,
@@ -387,7 +387,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           ),
                           Text(
                             // "No. Order : " + history.no_order,
-                            "No. Kontainer : " + storage.kode_kontainer,
+                            "No. Produk : " + storage.kode_kontainer,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black45,
@@ -408,14 +408,29 @@ class _HistoryPageState extends State<HistoryPage> {
                               color: Colors.black45,
                             ),
                           ),
-                          Text(
-                            "Jumlah Sewa : " +
-                                storage.jumlah_sewa.toString() +
-                                " /Hari",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black45,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                "Jumlah Sewa : " +
+                                    storage.jumlah_sewa.toString(),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                              Text(
+                                storage.nama
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains('kontainer')
+                                    ? ' /Hari'
+                                    : ' /Jam',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ],
                           ),
                           // Text(
                           //   "Harga : " +
@@ -468,6 +483,7 @@ class _HistoryPageState extends State<HistoryPage> {
       num total_harga,
       harga,
       jumlah_sewa,
+      String nama,
       String no_order,
       kode_refrensi,
       kode_kontainer,
@@ -551,8 +567,14 @@ class _HistoryPageState extends State<HistoryPage> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text("Jumlah Sewa : " + jumlah_sewa.toString(),
-                              style: GoogleFonts.lato(fontSize: 14)),
+                          Row(
+                            children: [
+                              Text("Jumlah Sewa : " + jumlah_sewa.toString(),
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                              Text(nama.toString().toLowerCase().contains('kontainer') ? ' /Hari' : ' /Jam',
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),

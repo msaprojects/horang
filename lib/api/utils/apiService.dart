@@ -137,7 +137,7 @@ class ApiService {
       String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice" + response.body + "$token");
+    print("token dari apiservice non aktif" + response.body + "$token");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
 
@@ -166,7 +166,7 @@ class ApiService {
       String token, var query) async {
     final response = await client.get("$baseUrl/mystorage",
         headers: {"Authorization": "BEARER ${token}"});
-    print("token dari apiservice" + response.body + "$token");
+    print("token dari apiservice active" + response.body + "$token");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
       return storage
@@ -215,7 +215,6 @@ class ApiService {
   //     throw Exception('gagal');
   //   }
   // }
-
 
   Future<List<MystorageModel>> listMystorageExpired(
       String token, var query) async {
@@ -296,14 +295,14 @@ class ApiService {
     }
   }
 
-
   //LOAD HISTORY LIST
-  Future<List<HistoryModel>> listHistoryDashboard(String token) async {
+  // Future<List<HistoryModel>> listHistoryDashboard(String token) async {
+    Future<List<MystorageModel>> listHistoryDashboard(String token) async {
     final response = await client
-        .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
+        .get("$baseUrl/mystorage", headers: {"Authorization": "BEARER ${token}"});
     // print(response.statusCode.toString()+" - TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
-      return HistoryFromJson(response.body);
+      return mystorageFromJson(response.body);
     } else {
       return null;
     }
@@ -336,6 +335,7 @@ class ApiService {
   Future<List<AsuransiModel>> listAsuransi(String token) async {
     final response = await client.get("$baseUrl/asuransi",
         headers: {"Authorization": "BEARER ${token}"});
+        print('INI LIST ASURANSI'+response.body);
     if (response.statusCode == 200) {
       return asuransiFromJson(response.body);
     } else {
@@ -622,9 +622,11 @@ class ApiService {
     final response = await client.post(
       "$baseUrl/forgotpassword",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),
+      body: ForgotPassToJson(data),      
     );
-    if (response.statusCode == 200) {
+    print('res? ${response.body}');
+    if (response.statusCode == 201) {
+      print("rescode?"+responseCode.mMessage.toString());
       return true;
     } else {
       return false;
@@ -637,7 +639,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return true;
     } else {
       return false;
@@ -650,7 +652,7 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return true;
     } else {
       return false;
@@ -670,7 +672,7 @@ class ApiService {
     }
   }
 
-  //////////////////////////////////////////////
+  /////////////////////// END PASSWORD ///////////////////////
 
   ////////////////////// END UBAH /////////////////////
 
@@ -704,6 +706,7 @@ class ApiService {
   Future<String> ambildataSyaratKetentuan(sk) async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+        // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
@@ -717,6 +720,8 @@ class ApiService {
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+        // .get(
+        //     Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {

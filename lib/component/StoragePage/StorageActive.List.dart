@@ -38,7 +38,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif;
 
   List<MystorageModel> storage, storage1 = [];
@@ -129,11 +129,13 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (index.hasData) {
+                  print("indexaktif $index");
                   if (storage.toString() != "[]") {
                     return ListView.builder(
                       itemCount: storage.length,
                       itemBuilder: (context, index) {
                         final storages = storage[index];
+                        print("indexaktif2 $storages");
                         return buildmyStorage(storages);
                       },
                     );
@@ -189,7 +191,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                 jenisKontainer.contains(searchLower) ||
                 lokasi.contains(searchLower);
           })
-          .where((element) => element.status == "EXPIRED")
+          .where((element) => element.status == "AKTIF")
           .toList();
             
         if (!mounted) return;

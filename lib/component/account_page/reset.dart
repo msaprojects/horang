@@ -35,15 +35,25 @@ class _ResetState extends State<Reset> {
   Widget build(BuildContext context) {
     if (tipes == "ResendEmail") {
       judul = "Resend Email";
+      icone = Icon(Icons.send_to_mobile);
     } else if (tipes == "ResetPassword") {
       judul = "Reset Password";
-      icone = Icon(Icons.lock_open_rounded, size: 50,);
+      icone = Icon(
+        Icons.lock_open_rounded,
+        size: 50,
+      );
     } else if (tipes == "ResetPin") {
       judul = "Reset Pin";
-      icone = Icon(Icons.lock_open_rounded, size: 50,);
+      icone = Icon(
+        Icons.lock_open_rounded,
+        size: 50,
+      );
     } else if (tipes == "ResetDevice") {
       judul = "Ganti Perangkat";
-      icone = Icon(Icons.device_unknown_rounded, size: 50,);
+      icone = Icon(
+        Icons.device_unknown_rounded,
+        size: 50,
+      );
     } else {
       Navigator.pop(context);
     }
@@ -143,6 +153,7 @@ class _ResetState extends State<Reset> {
                                                     (route) => false);
                                           });
                                         } else {
+                                          print('${_apiService.responseCode.mMessage} end?');
                                           errorDialog(context,
                                               "${_apiService.responseCode.mMessage}");
                                         }
@@ -151,16 +162,19 @@ class _ResetState extends State<Reset> {
                                         negativeText: "Ubah",
                                         negativeAction: () {});
                                   } else if (tipes == "ResetPassword") {
+                                    print('objectreset $reset');
                                     infoDialog(
                                         context, "Yakin Mau Reset Password?",
                                         title: "Konfirmasi",
                                         showNeutralButton: false,
-                                        positiveText: "Ya", 
-                                        positiveAction: () {
+                                        positiveText: "Ya", positiveAction: () {
                                       _apiService.ForgetPass(reset)
                                           .then((isSuccess) {
                                         setState(() => _isLoading = false);
-                                        if (isSuccess) {
+                                        if (!isSuccess) {
+                                          errorDialog(context,
+                                              "${_apiService.responseCode.mMessage}");
+                                        } else {
                                           successDialog(context,
                                               "Reset password berhasil dilakukan, cek email anda untuk verifikasi",
                                               showNeutralButton: false,
@@ -173,9 +187,6 @@ class _ResetState extends State<Reset> {
                                                             LoginPage()),
                                                     (route) => false);
                                           });
-                                        } else {
-                                          errorDialog(context,
-                                              "${_apiService.responseCode.mMessage}");
                                         }
                                       });
                                     },

@@ -6,6 +6,7 @@ import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
+import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
@@ -40,11 +41,11 @@ class _RegistrasiState extends State<RegistrasiPage> {
   }
 
   String data = '';
-  fetchFileData() async{
+  fetchFileData() async {
     String responseText;
-    responseText = await rootBundle.loadString('assets/res/syaratketentuan.txt');
+    responseText =
+        await rootBundle.loadString('assets/res/syaratketentuan.txt');
   }
-
 
   @override
   void initState() {
@@ -60,19 +61,20 @@ class _RegistrasiState extends State<RegistrasiPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(15.0),
-                // color: Colors.red,
-              ),
-              Container(
-                // padding: EdgeInsets.only(top: 50),
-                width: double.infinity,
-                height: size.height,
-                key: _scaffoldState,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(15.0),
+              // color: Colors.red,
+            ),
+            Container(
+              // padding: EdgeInsets.only(top: 50),
+              width: double.infinity,
+              height: size.height,
+              key: _scaffoldState,
+              child: Container(
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -172,8 +174,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   // LoginPage()
-                                                                  WelcomePage()
-                                                                  ),
+                                                                  WelcomePage()),
                                                           (route) => false);
                                                 });
                                               } else {
@@ -209,18 +210,23 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                 ),
                                 GestureDetector(
                                     onTap: () {},
-                                    child: Text(
-                                      "Kirim email ulang",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue[900]),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Reset(
+                                                      tipe: "ResendEmail",
+                                                    )));
+                                      },
+                                      child: Text(
+                                        "Kirim email ulang",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue[900]),
+                                      ),
                                     ))
                               ]),
-                          // GestureDetector(
-                          //   onTap: (){
-                          //     loadassets;
-                          //   },
-                          //   child: Text("Syarat dan Ketentuan")),
                           SizedBox(
                             height: 10,
                           ),
@@ -241,8 +247,8 @@ class _RegistrasiState extends State<RegistrasiPage> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -786,8 +786,10 @@ class _ProdukList extends State<ProdukList> {
       } else {
         valueawalperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeawal;
+            //  +":00";//dikasih :00 sementara biar data yang dikirim ke node tidak terjadi anonym data 'permintaan tgl 19/08/2021 '
         valueakhirperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeselesai;
+            //  +":00";
         print("INVALID?2 " +
             valueawalperhitungandurasi +
             " ~ " +
@@ -835,6 +837,7 @@ class _ProdukList extends State<ProdukList> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
+            print('soerabaja $data');
             if (profiles != null) {
               FlagCari = 0;
               print('flagcari $FlagCari');

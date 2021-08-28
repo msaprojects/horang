@@ -45,6 +45,7 @@ class _AccountState extends State<Account> {
   Future<String> _ambildataSK() async {
     http.Response response = await http.get(
         Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+        // Uri.encodeFull('https://server.horang.id/adminmaster/skaplikasi.txt'));
     return sk = response.body;
   }
 
