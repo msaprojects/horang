@@ -4,8 +4,8 @@
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":get_version" />
-        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.1.1" />
-        <option name="LAST_KNOWN_AGP_VERSION" value="4.1.1" />
+        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="3.6.2" />
+        <option name="LAST_KNOWN_AGP_VERSION" value="7.0.0" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -32,10 +32,11 @@
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../../../build/get_version/tmp/kotlin-classes/debug" />
-          <option name="classpath" value="$MODULE_DIR$/../../../../build/get_version/intermediates/compile_r_class_jar/debug/R.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/b0577b8709da5d8240f399b9b124a7c0/jetified-kotlin-stdlib-jdk7-1.2.20.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/6ddc643a09f539682b30cf407a89085a/jetified-kotlin-android-extensions-runtime-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/25b1dbfbaa1f0539f7826168cf507508/jetified-kotlin-stdlib-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/c97af80c0add2693c0f22b1c38d55358/jetified-kotlin-stdlib-common-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/a9e06e7783c93261b61e3df852fe6b0b/jetified-annotations-13.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/e6b7238d21d282fda841e1e7120bd5fa/jetified-flutter_embedding_debug-1.0.0-596bae264b0cfcf00a8ff90b8c84715ea1a06fed.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common-java8/2.2.0/cd3478503da69b1a7e0319bd2d1389943db9b364/lifecycle-common-java8-2.2.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/24610e1158368eb3c39072ba2b45cb3f/fragment-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/7022dbd27421567c8f10b5723dce92ab/jetified-activity-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/54b8ed471366c4c8ed95e915aeff8dc2/viewpager-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/697773534cb379b6ed3475f2aa16a8a4/loader-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/9384803ce64678fdd4b35eb58e7d9595/customview-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/7c2e7e1a84037308d404c4428d4f6c3e/core-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/fe8ea2ce7ad44c06f795b9da21751c9b/lifecycle-runtime-2.2.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/bcf5d2d8cd6735d3f2371f8898a15b62/jetified-savedstate-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/419ccee2ef056e8f61982e95e845ab93/lifecycle-livedata-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/5ac5b1fc8abe1ddcd3758a6ad5122dd9/lifecycle-livedata-core-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.2.0/4ef09a745007778eef83b92f8f23987a8ea59496/lifecycle-common-2.2.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/79af6c07594469863836e5b068870c80/core-runtime-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.1.0/b3152fc64428c9354344bd89848ecddc09b6f07e/core-common-2.1.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/4959bb1a0cd93a3a04253bf92be733ed/versionedparcelable-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar:/Users/cvdtc/.gradle/caches/transforms-2/files-2.1/3d8c2f1531cb04871f95853cd2615183/lifecycle-viewmodel-2.1.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.1.0/e3a6fb2f40e3a3842e6b7472628ba4ce416ea4c8/annotation-1.1.0.jar:/Users/cvdtc/Library/Android/sdk/platforms/android-29/android.jar" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/transforms-3/949b24ea6cb18b1515ba5cd1528ac8c8/transformed/jetified-kotlin-stdlib-jdk7-1.2.20.jar:/Users/cvdtc/.gradle/caches/transforms-3/2f4178ba759a1bb8c6c5ad3b6f8f6fa8/transformed/jetified-flutter_embedding_debug-1.0.0-241c87ad800beeab545ab867354d4683d5bfb6ce.jar:/Users/cvdtc/.gradle/caches/transforms-3/4b388d73b1ad872d4802c7903b782eaa/transformed/jetified-kotlin-android-extensions-runtime-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/5800bb3af90b880d43b7867b97dcfa19/transformed/jetified-kotlin-stdlib-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/7033a90d1828e099974f921d83efc7bf/transformed/jetified-kotlin-stdlib-common-1.4.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/7015cd8857c6ee57afa58aaf1351efb3/transformed/jetified-annotations-13.0.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common-java8/2.2.0/cd3478503da69b1a7e0319bd2d1389943db9b364/lifecycle-common-java8-2.2.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/689f58d754205fa1658e52333e0e2c95/transformed/fragment-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/4689e6bf3ec340e86a46bfc11b88e543/transformed/jetified-activity-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/f53d6d7914e254fc394d4cb36ed37a0f/transformed/viewpager-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/775f755b1b6c32952f76250eeaa8e0ff/transformed/loader-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/682b483b061d9564ffcea5c8c7114222/transformed/customview-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/752bb2a5ad131cd62a067f4a1d14bf0f/transformed/core-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/f4062b1527d2498c0cdc37d453e16b7a/transformed/lifecycle-runtime-2.2.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/97c551e7c2185c3051535a216b31f367/transformed/jetified-savedstate-1.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/821ddca718269480e681df9d7db2dd2b/transformed/lifecycle-livedata-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/transforms-3/cbe6cd97abff70145a50349db1040b8c/transformed/lifecycle-livedata-core-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.2.0/4ef09a745007778eef83b92f8f23987a8ea59496/lifecycle-common-2.2.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/257a694dbdb60a01d1ba23d9c177f58e/transformed/core-runtime-2.0.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.1.0/b3152fc64428c9354344bd89848ecddc09b6f07e/core-common-2.1.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/a0e9865ecf7fa8773e80706b0fa7aaaf/transformed/versionedparcelable-1.1.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar:/Users/cvdtc/.gradle/caches/transforms-3/4054cfe8d5c5f43f54651bc451b68b31/transformed/lifecycle-viewmodel-2.1.0-api.jar:/Users/cvdtc/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.1.0/e3a6fb2f40e3a3842e6b7472628ba4ce416ea4c8/annotation-1.1.0.jar:/Users/cvdtc/Library/Android/sdk/platforms/android-28/android.jar:/Users/cvdtc/Library/Android/sdk/build-tools/30.0.2/core-lambda-stubs.jar" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="get_version_debug" />
+          <option name="jvmTarget" value="1.6" />
           <option name="languageVersion" value="1.3" />
           <option name="apiVersion" value="1.3" />
           <option name="pluginOptions">
@@ -65,11 +66,11 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../../build/get_version/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../../build/get_version/intermediates/javac/debugUnitTest/classes" />
     <exclude-output />
-    <content url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2">
+    <content url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android">
       <sourceFolder url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android/src/main/kotlin" isTestSource="false" />
       <excludeFolder url="file://$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android/.gradle" />
     </content>
@@ -81,7 +82,9 @@
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/renderscript_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/renderscript_source_output_dir/debugAndroidTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/resValues/androidTest/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/resValues/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/resValues/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/resValues/debug" type="java-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/rs/androidTest/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/res/rs/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/get_version/generated/source/buildConfig/androidTest/debug" />
@@ -89,11 +92,11 @@
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.20" level="project" />
+    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-241c87ad800beeab545ab867354d4683d5bfb6ce" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.flutter:flutter_embedding_debug:1.0.0-596bae264b0cfcf00a8ff90b8c84715ea1a06fed" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common-java8:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-common:2.1.0" level="project" />
@@ -112,7 +115,6 @@
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-runtime:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.versionedparcelable:versionedparcelable:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-viewmodel:2.1.0@aar" level="project" />
-    <orderEntry type="module" module-name="android.package_info" />
-    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="module" module-name="io.flutter.plugins.packageinfo.android.package_info" />
   </component>
 </module>

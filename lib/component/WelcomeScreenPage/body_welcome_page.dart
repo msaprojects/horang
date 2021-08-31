@@ -169,7 +169,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               SizedBox(
                 height: 10,
               ),
-              Text("Hei, Selamat Datang !",
+              Text("Hai, Selamat Datang !",
                   style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,

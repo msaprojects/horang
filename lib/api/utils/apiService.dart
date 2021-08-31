@@ -38,8 +38,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  final String baseUrl = "https://dev.horang.id:9993/api/";
-  // final String baseUrl = "https://server.horang.id:9993/api/";
+  final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
+  // final String baseUrl = "https://dev.horang.id:9993/api/"; //DEVELOPMENT
+  // final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";
   final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
@@ -297,9 +298,9 @@ class ApiService {
 
   //LOAD HISTORY LIST
   // Future<List<HistoryModel>> listHistoryDashboard(String token) async {
-    Future<List<MystorageModel>> listHistoryDashboard(String token) async {
-    final response = await client
-        .get("$baseUrl/mystorage", headers: {"Authorization": "BEARER ${token}"});
+  Future<List<MystorageModel>> listHistoryDashboard(String token) async {
+    final response = await client.get("$baseUrl/mystorage",
+        headers: {"Authorization": "BEARER ${token}"});
     // print(response.statusCode.toString()+" - TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
@@ -335,7 +336,7 @@ class ApiService {
   Future<List<AsuransiModel>> listAsuransi(String token) async {
     final response = await client.get("$baseUrl/asuransi",
         headers: {"Authorization": "BEARER ${token}"});
-        print('INI LIST ASURANSI'+response.body);
+    print('INI LIST ASURANSI' + response.body);
     if (response.statusCode == 200) {
       return asuransiFromJson(response.body);
     } else {
@@ -622,11 +623,11 @@ class ApiService {
     final response = await client.post(
       "$baseUrl/forgotpassword",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),      
+      body: ForgotPassToJson(data),
     );
     print('res? ${response.body}');
     if (response.statusCode == 201) {
-      print("rescode?"+responseCode.mMessage.toString());
+      print("rescode?" + responseCode.mMessage.toString());
       return true;
     } else {
       return false;
@@ -706,7 +707,7 @@ class ApiService {
   Future<String> ambildataSyaratKetentuan(sk) async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
+    // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
@@ -718,10 +719,10 @@ class ApiService {
   }
 
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
-    http.Response response = await http
-        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
-        // .get(
-        //     Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
+    http.Response response = await http.get(
+        Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+    // .get(
+    //     Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {

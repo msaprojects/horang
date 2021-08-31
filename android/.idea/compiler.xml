@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="android.app" target="14" />
+      <module name="android.device_info" target="14" />
+      <module name="android.firebase_core" target="14" />
+      <module name="android.firebase_messaging" target="14" />
+      <module name="android.flutter_plugin_android_lifecycle" target="14" />
+      <module name="android.get_version" target="14" />
+      <module name="android.imei_plugin" target="14" />
+      <module name="android.local_auth" target="14" />
+      <module name="android.minimize_app" target="14" />
+      <module name="android.share" target="14" />
+      <module name="android.shared_preferences" target="14" />
+      <module name="android.url_launcher" target="14" />
+      <module name="com.example.FlutterToast.android.fluttertoast" target="14" />
+      <module name="io.flutter.plugins.connectivity.android.connectivity" target="14" />
+      <module name="io.flutter.plugins.packageinfo.android.package_info" target="14" />
+      <module name="io.flutter.plugins.pathprovider.android.path_provider" target="14" />
+    </bytecodeTargetLevel>
   </component>
 </project>

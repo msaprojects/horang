@@ -4,6 +4,7 @@ import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/notification_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
+      title: 'HORANG',
+      theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+            .apply(bodyColor: Colors.black),
+        canvasColor: Colors.transparent,
+      ),
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
     );

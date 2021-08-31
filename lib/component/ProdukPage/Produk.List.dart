@@ -786,10 +786,10 @@ class _ProdukList extends State<ProdukList> {
       } else {
         valueawalperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeawal;
-            //  +":00";//dikasih :00 sementara biar data yang dikirim ke node tidak terjadi anonym data 'permintaan tgl 19/08/2021 '
+        //  +":00";//dikasih :00 sementara biar data yang dikirim ke node tidak terjadi anonym data 'permintaan tgl 19/08/2021 '
         valueakhirperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeselesai;
-            //  +":00";
+        //  +":00";
         print("INVALID?2 " +
             valueawalperhitungandurasi +
             " ~ " +
@@ -819,7 +819,7 @@ class _ProdukList extends State<ProdukList> {
       tanggalawal: valueawalperhitungandurasi,
       tanggalakhir: valueakhirperhitungandurasi,
       idlokasi: valKota,
-      jenisitem: defaultProduk,
+      jenisitem: defaultProduk.toLowerCase(),
     );
     return SafeArea(
       child: FutureBuilder(

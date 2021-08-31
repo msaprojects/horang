@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
-import 'package:horang/api/models/responsecode/responcode.model.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
-import 'package:imei_plugin/imei_plugin.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -41,11 +38,6 @@ class _RegistrasiState extends State<RegistrasiPage> {
   }
 
   String data = '';
-  fetchFileData() async {
-    String responseText;
-    responseText =
-        await rootBundle.loadString('assets/res/syaratketentuan.txt');
-  }
 
   @override
   void initState() {
@@ -55,6 +47,11 @@ class _RegistrasiState extends State<RegistrasiPage> {
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -105,91 +102,14 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 40),
                                 onPressed: () async {
-                                  if (_fieldEmail == null ||
-                                      _fieldNo_Hp == null ||
-                                      _fieldPassword == null ||
-                                      !_fieldEmail ||
-                                      !_fieldNo_Hp ||
-                                      !_fieldPassword) {
-                                    warningDialog(context,
-                                        "Pastikan Semua Kolom Terisi!");
-                                    return;
-                                  } else {
-                                    String email =
-                                        _controllerEmail.text.toString();
-                                    String nohp =
-                                        _controllerNohp.text.toString();
-                                    String password =
-                                        _controllerPassword.text.toString();
-                                    String retypepassword =
-                                        _controllerPasswordRetype.text
-                                            .toString();
-                                    //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
-                                    if (password != retypepassword) {
-                                      warningDialog(context,
-                                          "Pastikan Password yang anda masukkan sama");
-                                    } else {
-                                      // setState(() {
-                                      //   _isLoading = true;
-                                      infoDialog(context,
-                                          "Data yang anda masukkan sudah benar ?",
-                                          showNeutralButton: false,
-                                          negativeText: "Batal",
-                                          negativeAction: () {},
-                                          positiveText: "Ya",
-                                          positiveAction: () {
-                                        GetDeviceID()
-                                            .getDeviceID(context)
-                                            .then((ids) {
-                                          setState(() {
-                                            iddevice = ids;
-                                            PenggunaModel pengguna =
-                                                PenggunaModel(
-                                                    uuid: iddevice,
-                                                    email: email,
-                                                    password: password,
-                                                    no_hp: nohp,
-                                                    status: 0,
-                                                    notification_token: "0",
-                                                    token_mail: "0",
-                                                    keterangan: "Uji Coba");
-                                            print("Registrasi Value : " +
-                                                pengguna.toString());
-                                            _apiService
-                                                .signup(pengguna)
-                                                .then((isSuccess) {
-                                              if (isSuccess) {
-                                                _controllerEmail.clear();
-                                                _controllerNohp.clear();
-                                                _controllerPassword.clear();
-                                                _controllerPasswordRetype
-                                                    .clear();
-                                                successDialog(context,
-                                                    "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
-                                                    showNeutralButton: false,
-                                                    positiveText: "OK",
-                                                    positiveAction: () {
-                                                  Navigator.of(context)
-                                                      .pushAndRemoveUntil(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  // LoginPage()
-                                                                  WelcomePage()),
-                                                          (route) => false);
-                                                });
-                                              } else {
-                                                errorDialog(context,
-                                                    "${_apiService.responseCode.mMessage}");
-                                              }
-                                            });
-                                          });
-                                        });
-                                        // print("IDDEVICE : " + iddevice.toString());
-                                        // });
-                                      });
-                                    }
-                                    return;
-                                  }
+                                  String email =
+                                      _controllerEmail.text.toString();
+                                  String nohp = _controllerNohp.text.toString();
+                                  String password =
+                                      _controllerPassword.text.toString();
+                                  String repassword =
+                                      _controllerPasswordRetype.text.toString();
+                                  RegistrasiClick();
                                 },
                                 child: Text(
                                   "Simpan",
@@ -356,5 +276,72 @@ class _RegistrasiState extends State<RegistrasiPage> {
         },
       ),
     );
+  }
+
+  RegistrasiClick() {
+    //condition for all input box not zero
+    if (!_fieldEmail ||
+        !_fieldNo_Hp ||
+        !_fieldPassword ||
+        !_fieldPasswordRetype) {
+      warningDialog(context, "Pastikan Semua Kolom Terisi!");
+      return;
+    } else {
+      //condition for filter equal password and retype password
+      if (_controllerPassword.text != _controllerPasswordRetype.text) {
+        warningDialog(context, "Pastikan Password yang anda masukkan sama");
+      } else {
+        infoDialog(context, "Data yang anda masukkan sudah benar ?",
+            showNeutralButton: false,
+            negativeText: "Batal",
+            negativeAction: () {},
+            positiveText: "Ya", positiveAction: () {
+          //get uuid if uuid success get l'll be sending data to api registrasi
+          GetDeviceID().getDeviceID(context).then((ids) {
+            setState(() {
+              PenggunaModel pengguna = PenggunaModel(
+                  uuid: ids,
+                  email: _controllerEmail.text,
+                  password: _controllerPassword.text,
+                  no_hp: _controllerNohp.text,
+                  status: 0,
+                  notification_token: "0",
+                  token_mail: "0",
+                  keterangan: "Registrasi ");
+              print("Registrasi Value : " + pengguna.toString());
+              //sending json to api
+              _apiService.signup(pengguna).then((isSuccess) {
+                //initiate if signup has been success all text box will be clear else signup failed will be show error dialog
+                if (isSuccess) {
+                  _controllerEmail.clear();
+                  _controllerNohp.clear();
+                  _controllerPassword.clear();
+                  _controllerPasswordRetype.clear();
+                  successDialog(context,
+                      "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                      showNeutralButton: false,
+                      positiveText: "OK", positiveAction: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => WelcomePage()),
+                        (route) => false);
+                  });
+                } else {
+                  errorDialog(context, "${_apiService.responseCode.mMessage}");
+                }
+              }).catchError((onError) {
+                //error dialog if way to api have problem(s)
+                print(onError);
+                errorDialog(context, "Terjadi masalah : " + onError.toString());
+              });
+            });
+          }).catchError((onError) {
+            //error dialog if UUID failed for get
+            print(onError);
+            errorDialog(context, "Tidak dapat UUID " + onError);
+          });
+        });
+      }
+      return;
+    }
   }
 }
