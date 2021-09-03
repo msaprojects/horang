@@ -625,9 +625,10 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
-    print('res? ${response.body}');
+    Map message = jsonDecode(response.body);
+    responseCode = ResponseCodeCustom.fromJson(message);
+
     if (response.statusCode == 201) {
-      print("rescode?" + responseCode.mMessage.toString());
       return true;
     } else {
       return false;
@@ -640,6 +641,9 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
+    Map message = jsonDecode(response.body);
+    responseCode = ResponseCodeCustom.fromJson(message);
+
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -653,6 +657,8 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
+    Map message = jsonDecode(response.body);
+    responseCode = ResponseCodeCustom.fromJson(message);
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -666,6 +672,9 @@ class ApiService {
       headers: {"Content-type": "application/json"},
       body: ForgotPassToJson(data),
     );
+    Map message = jsonDecode(response.body);
+    responseCode = ResponseCodeCustom.fromJson(message);
+    print(response.body);
     if (response.statusCode == 201) {
       return true;
     } else {
