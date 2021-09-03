@@ -23,8 +23,12 @@ class _UbahPassState extends State<UbahPass> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool _isLoading = false,
-      _obsecureText = true,
-      _obsecureText1 = true,
+      _obsecureTextpasslama = true,
+      _obsecureTextpaslama = true,
+      _obsecureTextpassbaru = true,
+      _obsecureTextpasbaru = true,
+      _obsecureTextpassretype = true,
+      _obsecureTextpasretype = true,
       _isFieldpassLama,
       _isFieldpassBaru,
       _isFieldpassRetype,
@@ -96,10 +100,25 @@ class _UbahPassState extends State<UbahPass> {
     cekToken();
   }
 
-  void _toggle() {
+  void _togglepasslama() {
     setState(() {
-      _obsecureText = !_obsecureText;
-      _obsecureText1 = !_obsecureText1;
+      _obsecureTextpasslama = !_obsecureTextpasslama;
+      _obsecureTextpaslama = !_obsecureTextpaslama;
+    });
+  }
+
+  //tambahan toogle untuk show/hiden text (req. 30/08/21 by sahrul)
+  void _togglepassbaru() {
+    setState(() {
+      _obsecureTextpassbaru = !_obsecureTextpassbaru;
+      _obsecureTextpasbaru = !_obsecureTextpasbaru;
+    });
+  }
+
+  void _toggleretype() {
+    setState(() {
+      _obsecureTextpassretype = !_obsecureTextpassretype;
+      _obsecureTextpasretype = !_obsecureTextpasretype;
     });
   }
 
@@ -212,12 +231,12 @@ class _UbahPassState extends State<UbahPass> {
     return TextField(
       controller: _controllerPasslama,
       keyboardType: TextInputType.text,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpasslama,
       decoration: InputDecoration(
         suffixIcon: IconButton(
-          onPressed: _toggle,
+          onPressed: _togglepasslama,
           icon: new Icon(
-              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+              _obsecureTextpasslama ? Icons.remove_red_eye : Icons.visibility_off),
         ),
         labelText: "Password lama",
         errorText: _isFieldpassLama == null || _isFieldpassLama
@@ -236,13 +255,13 @@ class _UbahPassState extends State<UbahPass> {
   Widget _buildTextFieldPassBaru() {
     return TextFormField(
       controller: _controllerPassbaru,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpassbaru,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           suffixIcon: IconButton(
-            onPressed: _toggle,
+            onPressed: _togglepassbaru,
             icon: new Icon(
-                _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+                _obsecureTextpassbaru ? Icons.remove_red_eye : Icons.visibility_off),
           ),
           labelText: "Password baru",
           errorText: _isFieldpassBaru == null || _isFieldpassBaru
@@ -261,12 +280,12 @@ class _UbahPassState extends State<UbahPass> {
     return TextFormField(
       controller: _controllerPassretype,
       keyboardType: TextInputType.text,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpassretype,
       decoration: InputDecoration(
         suffixIcon: IconButton(
-          onPressed: _toggle,
+          onPressed: _toggleretype,
           icon: new Icon(
-              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+              _obsecureTextpassretype ? Icons.remove_red_eye : Icons.visibility_off),
         ),
         labelText: "Retype Password",
         errorText: _isFieldpassRetype == null || _isFieldpassRetype

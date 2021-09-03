@@ -9,6 +9,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/pinauth.dart';
 import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
+import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,7 +170,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               SizedBox(
                 height: 10,
               ),
-              Text("Hai, Selamat Datang !",
+              Text("Hei, Selamat Datang !",
                   style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -227,6 +228,39 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               ),
               SizedBox(
                 height: 15,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Tidak menerima email Registrasi ? ",
+                      style: GoogleFonts.lato(),
+                    ),
+                    GestureDetector(
+                        onTap: () {},
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Reset(
+                                          tipe: "ResendEmail",
+                                        )));
+                          },
+                          child: Text(
+                            "Kirim email ulang",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                color: Colors.blue[900]),
+                          ),
+                        ))
+                  ]),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
               ),
               access_token != null
                   ? CircularProgressIndicator(

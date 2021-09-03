@@ -648,7 +648,6 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   // indent: 20,
                   // endIndent: 20,
                   // ),
-
                   settingJamOperasional(),
                   // Divider(),
 

@@ -5,6 +5,7 @@ import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.password.dart';
 import 'package:horang/api/models/history/history.model.dart';
+import 'package:horang/api/models/history/history.model.deposit.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/log/Log.Aktifitas.Model.dart';
 import 'package:horang/api/models/log/Log.dart';
@@ -329,6 +330,17 @@ class ApiService {
       }).toList();
     } else {
       throw Exception('gagal');
+    }
+  }
+
+  //LOAD LIST HISTORY DEPOSIT
+  Future<List<HistoryDepositModel>> listHistoryDepo(String access_token) async {
+    final response = await client.get("$baseUrl/historideposit",
+        headers: {"Authorization": "BEARER ${access_token}"});
+    if (response.statusCode == 200) {
+      return historyFromJson(response.body);
+    } else {
+      return null;
     }
   }
 

@@ -9,6 +9,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
+import 'package:horang/component/HistoryPage/historypage.deposit.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
@@ -64,13 +65,15 @@ class _HomePageState extends State<HomePage> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
+    print("cek tokennya gais $access_token" + "--------*****----------" + pin);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    //checking pin bcz user required set pin before using apps
     if (pin == '0') {
+      // print("your eyes broke");
       infoDialog(context,
           "Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.",
-          title: "Pin Belum Disetting!",
           showNeutralButton: false,
+          negativeAction: () {},
+          negativeText: "Nanti saja",
           positiveText: "Setting sekarang", positiveAction: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => UbahPin()));
@@ -278,12 +281,13 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Scaffold.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  "Fitur ini masih dalam proses pengembangan"),
-                                              duration: Duration(seconds: 5),
-                                            ));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> HistoryDeposit()));
+                                            // Scaffold.of(context)
+                                            //     .showSnackBar(SnackBar(
+                                            //   content: Text(
+                                            //       "Fitur ini masih dalam proses pengembangan"),
+                                            //   duration: Duration(seconds: 5),
+                                            // ));
                                           }),
                                       Text(
                                         "Histori",
