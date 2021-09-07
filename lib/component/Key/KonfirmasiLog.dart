@@ -464,9 +464,15 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         children: [
                           Icon(Icons.lock_open_outlined),
                           // Text("Open $idtransaksi_det",
-                          Text("Open",
+                          Text(
+                              nama_kota1
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains('forklift')
+                                  ? "Aktivasi"
+                                  : "Open",
                               style: GoogleFonts.inter(
-                                  fontSize: 16, fontWeight: FontWeight.bold))
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       color: Colors.orange,

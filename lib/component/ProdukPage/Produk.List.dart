@@ -1296,6 +1296,7 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _buildKombokota(int kotaaaa) {
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Row(
@@ -1347,6 +1348,7 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _buildKomboProduk(String produks) {
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Row(
