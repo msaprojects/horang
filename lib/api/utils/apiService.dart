@@ -39,8 +39,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // - UBAH
 
 class ApiService {
-  final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
-  // final String baseUrl = "https://dev.horang.id:9993/api/"; //DEVELOPMENT
+  // final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
+  final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
   // final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";

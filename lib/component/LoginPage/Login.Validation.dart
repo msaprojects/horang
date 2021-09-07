@@ -302,58 +302,57 @@ class _LoginPageState extends State<LoginPage> {
 
   LoginClick() {
     //checking if email or password empty
-    if (!_fieldEmail || !_fieldPassword) {
-      warningDialog(context, "Pastikan Semua Kolom Terisi!");
-    } else {
-      //getting uuid for validation
-      GetDeviceID().getDeviceID(context).then((ids) {
-        setState(() {
-          // set variable
-          iddevice = ids;
-          _isLoading = true;
-          String email = _controllerEmail.text.toString();
-          String password = _controllerPassword.text.toString();
-          // set model value for json
-          PenggunaModel pengguna = PenggunaModel(
-              uuid: iddevice,
-              email:
-                  emailaccountselection != "" ? emailaccountselection : email,
-              password: password,
-              status: 0,
-              notification_token: token,
-              token_mail: "0",
-              keterangan: "Login");
+    // if (!_fieldEmail || !_fieldPassword) {
+    //   warningDialog(context, "Pastikan Semua Kolom Terisi!");
+    // } else {
+    //getting uuid for validation
+    GetDeviceID().getDeviceID(context).then((ids) {
+      setState(() {
+        // set variable
+        iddevice = ids;
+        _isLoading = true;
+        String email = _controllerEmail.text.toString();
+        String password = _controllerPassword.text.toString();
+        // set model value for json
+        PenggunaModel pengguna = PenggunaModel(
+            uuid: iddevice,
+            email: emailaccountselection != "" ? emailaccountselection : email,
+            password: password,
+            status: 0,
+            notification_token: token,
+            token_mail: "0",
+            keterangan: "Login");
 
-          //execute sending json to api url
-          print("LOGIN? : " + pengguna.toString());
-          _apiService.loginIn(pengguna).then((isSuccess) {
-            setState(() => _isLoading = false);
-            // if login success page will be route to home page
-            if (isSuccess) {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Home()));
-            } else {
-              // if login failed will be show message json from api url
-              print('${_apiService.responseCode.mMessage}');
-              if (_apiService.responseCode.mMessage ==
-                  "Email atau Password anda Salah!") {
-                warningDialog(context, "${_apiService.responseCode.mMessage}",
-                    title: "Warning!");
-              } else if (_apiService.responseCode.mMessage ==
-                  "Akun masih aktif di device lain!") {
-                warningDialog(context,
-                    "${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.",
-                    showNeutralButton: false,
-                    positiveText: "Oke",
-                    positiveAction: () {},
-                    title: "Pemberitahuan!");
-              }
+        //execute sending json to api url
+        print("LOGIN? : " + pengguna.toString());
+        _apiService.loginIn(pengguna).then((isSuccess) {
+          setState(() => _isLoading = false);
+          // if login success page will be route to home page
+          if (isSuccess) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          } else {
+            // if login failed will be show message json from api url
+            print('${_apiService.responseCode.mMessage}');
+            if (_apiService.responseCode.mMessage ==
+                "Email atau Password anda Salah!") {
+              warningDialog(context, "${_apiService.responseCode.mMessage}",
+                  title: "Warning!");
+            } else if (_apiService.responseCode.mMessage ==
+                "Akun masih aktif di device lain!") {
+              warningDialog(context,
+                  "${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.",
+                  showNeutralButton: false,
+                  positiveText: "Oke",
+                  positiveAction: () {},
+                  title: "Pemberitahuan!");
             }
-          });
+          }
         });
       });
-    }
+    });
   }
+  // }
 }
 
 void _popUpTroble(BuildContext context) {

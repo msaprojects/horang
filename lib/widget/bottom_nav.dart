@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
   final int initIndexHome;
   PageController pages = PageController(initialPage: 0);
   Home({Key key, this.initIndexHome, this.pages}) : super(key: key);
-  
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -25,9 +25,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   PageController _myPage = PageController(initialPage: 0);
   var initIndex;
-   DateTime backbuttonpressedtime;
+  DateTime backbuttonpressedtime;
   int currentTab = 0;
-  List<Widget> screen = [HomePage()];
   Widget currentScreen = HomePage();
   final PageStorageBucket bucket = PageStorageBucket();
   SharedPreferences sp;
@@ -45,7 +44,7 @@ class _HomeState extends State<Home> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    
+
     if (access_token == null) {
       // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
@@ -80,7 +79,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    currentTab = widget.initIndexHome ?? 0;    
+    currentTab = widget.initIndexHome ?? 0;
     super.initState();
     cekToken();
   }
@@ -109,7 +108,6 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: BottomAppBar(
             shape: CircularNotchedRectangle(),
             child: Container(
-              
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -233,7 +231,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-   Future<bool> _onBackPressed() async {
+  Future<bool> _onBackPressed() async {
     DateTime currenttime = DateTime.now();
     bool backbutton = backbuttonpressedtime == null ||
         currenttime.difference(backbuttonpressedtime) > Duration(seconds: 3);

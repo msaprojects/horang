@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/history/history.model.deposit.dart';
@@ -25,11 +23,15 @@ class _HistoryDepositState extends State<HistoryDeposit> {
   String query = '', token = '';
   Timer debouncer;
 
-  Text debitorkredit(int dk){
-    if(dk == 0){
-      return Text('Kredit', style: GoogleFonts.lato(fontSize: 12, color: Colors.red));
+  Text debitorkredit(int dk) {
+    if (dk == 0) {
+      return Text('(-)',
+          style: GoogleFonts.lato(
+              fontSize: 16, color: Colors.red, fontWeight: FontWeight.bold));
     } else {
-      return Text('Debit', style: GoogleFonts.lato(fontSize: 12, color: Colors.green));
+      return Text('+',
+          style: GoogleFonts.lato(
+              fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold));
     }
   }
 
@@ -72,7 +74,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
           }));
     }
     depo = await _apiService.listHistoryDepo(access_token);
-    setState(()=> this.depo = depo);
+    setState(() => this.depo = depo);
   }
 
   @override
@@ -175,34 +177,46 @@ class _HistoryDepositState extends State<HistoryDeposit> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(depositModel.created,
-                                style: GoogleFonts.lato(fontSize: 12)),
-                            Text('.',
-                                style: GoogleFonts.lato(
-                                    fontSize: 12, fontWeight: FontWeight.bold)),
-                            Container(
-                              child: debitorkredit(depositModel.debit),
-                            )
-                          ],
+                        Text(depositModel.created,
+                            style: GoogleFonts.lato(fontSize: 12)),
+                        SizedBox(
+                          height: 10,
                         ),
-                        SizedBox(height: 10,),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(depositModel.noOrder, style: GoogleFonts.lato(fontSize: 16, fontWeight: FontWeight.bold)),
-                                  Text(depositModel.nominal.toString(), style: GoogleFonts.lato(fontSize: 16)),
+                                  Text(depositModel.noOrder,
+                                      style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold)),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        child:
+                                            debitorkredit(depositModel.debit),
+                                      ),
+                                      Text(depositModel.nominal.toString(),
+                                          style:
+                                              GoogleFonts.lato(fontSize: 16)),
+                                    ],
+                                  ),
                                 ],
                               ),
-                              SizedBox(height: 2,),
-                              Text(depositModel.keterangan, style: GoogleFonts.lato(fontSize: 12, color: Colors.black54)),
-                              SizedBox(height: 10,),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(depositModel.keterangan,
+                                  style: GoogleFonts.lato(
+                                      fontSize: 12, color: Colors.black54)),
+                              SizedBox(
+                                height: 10,
+                              ),
                             ],
                           ),
                         )

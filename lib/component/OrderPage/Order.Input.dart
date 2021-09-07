@@ -175,7 +175,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   Future<String> _ambildataSK() async {
     http.Response response = await http
         .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        // .get(Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+    // .get(Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 
@@ -552,7 +552,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              padding: const EdgeInsets.only(left: 38, right: 38),
+                              padding:
+                                  const EdgeInsets.only(left: 38, right: 38),
                               child: Text(keterangan),
                             )
                           ],
@@ -594,8 +595,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(valueawal,
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14)),
+                                        style: GoogleFonts.inter(fontSize: 14)),
                                     SizedBox(
                                       width: 10,
                                     ),
@@ -606,7 +606,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                     ),
                                     Text(valueakhir,
                                         style: GoogleFonts.inter(
-                                            fontSize: 14,)),
+                                          fontSize: 14,
+                                        )),
                                   ],
                                 ),
                               ),
@@ -620,16 +621,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             " " +
                                             vsatuan_sewa +
                                             ")",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14)),
+                                        style: GoogleFonts.inter(fontSize: 14)),
                                     Text(
                                         "+(Deposit " +
                                             minimaldeposit.toString() +
                                             " " +
                                             vsatuan_sewa +
                                             ")",
-                                        style: GoogleFonts.inter(
-                                            fontSize: 14)),
+                                        style: GoogleFonts.inter(fontSize: 14)),
                                   ],
                                 ),
                               ),
@@ -703,8 +702,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           prefixIcon: Icon(Icons.wallet_giftcard_outlined,
                               color: Colors.blue),
                           enabled: false,
-                          hintText:
-                              potonganvoucher.toString() == "0" ? getVoucher : "Potongan : " +rupiah(potonganvoucher.toString()),
+                          hintText: potonganvoucher.toString() == "0"
+                              ? getVoucher
+                              : "Potongan : " +
+                                  rupiah(potonganvoucher.toString()),
                           border: const OutlineInputBorder(),
                         ),
                       ),
@@ -771,7 +772,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                               "%)"),
                                         ],
                                       )
-                                    : Text('', style: TextStyle(fontSize: 0),),
+                                    : Text(
+                                        '',
+                                        style: TextStyle(fontSize: 0),
+                                      ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -972,11 +976,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 Container(
                   alignment: Alignment.center,
                   // width: 130,
-                  width: MediaQuery.of(context).size.width /3,
+                  width: MediaQuery.of(context).size.width / 3,
                   height: 100,
                   // margin: EdgeInsets.only(top: 3),
                   child: ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueAccent)),
                     onPressed: () {
                       LanjutkanPembayaranClick();
                     },
@@ -1042,7 +1048,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   orderConfirmation(BuildContext context) {
-    successDialog(context,
+    infoDialog(context,
         "Harap periksa kembali pesanan anda, pastikan anda data yang anda masukkan sesuai",
         title: "Konfirmasi Pesanan",
         showNeutralButton: false,

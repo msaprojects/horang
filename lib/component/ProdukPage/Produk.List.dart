@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:intl/intl.dart';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
@@ -53,6 +54,7 @@ class _ProdukList extends State<ProdukList> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   DateTime selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
   List<int> _availableHoursAwal = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   List<int> _availableMenitAwal = [0];
   List<int> _availableHoursSelesai = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
@@ -798,7 +800,9 @@ class _ProdukList extends State<ProdukList> {
             DateTime.parse(valueawalperhitungandurasi),
             DateTime.parse(valueakhirperhitungandurasi));
 
-        print("Hasil perhitungan : " + valueakhirperhitungandurasi.toString());
+        print("Hasil perhitungan : " +
+            valueakhirperhitungandurasi.toString() +
+            "--   $formattedDate $valuehasilperhitungandurasi");
         if (valuehasilperhitungandurasi < 1) {
           Fluttertoast.showToast(
               msg:
