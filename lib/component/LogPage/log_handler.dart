@@ -16,18 +16,18 @@ class LogHandler extends StatelessWidget {
           appBar: AppBar(
             bottom: TabBar(
               unselectedLabelColor: Colors.redAccent,
-              indicatorSize: TabBarIndicatorSize.label,
+              indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(0),
                   color: Colors.redAccent),
               tabs: [
                 Tab(
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.050,
                     width: MediaQuery.of(context).size.height * 0.150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(color: Colors.redAccent, width: 1)),
+                    // decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(00),
+                    //     border: Border.all(color: Colors.redAccent, width: 1)),
                     child: Align(
                       alignment: Alignment.center,
                       child: Text("Apps"),
@@ -36,11 +36,11 @@ class LogHandler extends StatelessWidget {
                 ),
                 Tab(
                   child: Container(
-                     height: MediaQuery.of(context).size.height * 0.050,
+                    height: MediaQuery.of(context).size.height * 0.050,
                     width: MediaQuery.of(context).size.height * 0.150,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(color: Colors.redAccent, width: 1)),
+                    // decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(50),
+                    //     border: Border.all(color: Colors.redAccent, width: 1)),
                     child: Align(
                       alignment: Alignment.center,
                       child: Text("Promo"),
@@ -49,8 +49,8 @@ class LogHandler extends StatelessWidget {
                 ),
               ],
             ),
-            title:
-                Text('Log Aktifitas Aplikasi', style: (TextStyle(color: Colors.black))),
+            title: Text('Log Aktifitas Aplikasi',
+                style: (TextStyle(color: Colors.black))),
             elevation: 0,
             leading: IconButton(
                 icon: Icon(
@@ -63,11 +63,7 @@ class LogHandler extends StatelessWidget {
             backgroundColor: Colors.white,
           ),
           body: TabBarView(
-            children: [
-             LogAktifitasNotif(),
-             LogAktifitasNotif()
-            
-            ],
+            children: [LogAktifitasNotif(), LogAktifitasNotif()],
           ),
         ),
       ),

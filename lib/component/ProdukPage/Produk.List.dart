@@ -802,7 +802,7 @@ class _ProdukList extends State<ProdukList> {
 
         print("Hasil perhitungan : " +
             valueakhirperhitungandurasi.toString() +
-            "--   $formattedDate $valuehasilperhitungandurasi");
+            "--   $formattedDate $valueawalperhitungandurasi");
         if (valuehasilperhitungandurasi < 1) {
           Fluttertoast.showToast(
               msg:
@@ -1449,6 +1449,9 @@ class _ProdukList extends State<ProdukList> {
             Text('Anda Harus Melengkapi profile untuk melakukan transaksi!'),
         duration: Duration(seconds: 10),
       ));
+    } else if (jenisproduk.toLowerCase().contains('forklift') &&(DateTime.parse(valueawalperhitungandurasi)
+        .isBefore(DateTime.parse(formattedDate)))) {
+      infoDialog(context, "Jam Awal tidak boleh kurang dari jam sekarang !");
     } else {
       if (available == 0) {
         Scaffold.of(context).showSnackBar(SnackBar(
@@ -1471,7 +1474,6 @@ class _ProdukList extends State<ProdukList> {
               DateTime.parse(valueawalperhitungandurasi),
               DateTime.parse(valueakhirperhitungandurasi));
           satuan = "/jam";
-          print('forkkk1');
         } else if (jenisproduk.toLowerCase().contains('kontainer')) {
           valueawalperhitungandurasi = _tanggalAwal;
           valueakhirperhitungandurasi = _tanggalAkhir;

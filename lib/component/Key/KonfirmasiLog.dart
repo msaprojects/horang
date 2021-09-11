@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:commons/commons.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -127,29 +129,28 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     _apiService.CekPin(pin_cek1).then((isSuccess) {
                       _isLoading = true;
                       print("ezz0 $idtransaksi_det, $access_token");
-                      GenerateCode gcodezzzz = GenerateCode(
-                          idtransaksi_det: idtransaksi_det,
-                          token: access_token);
                       if (isSuccess) {
-                        //  return successDialog(context, "KOde aktivasine ${gcodezzzz.kode_aktivasi}");
-                        //  return buildCode(context);
-
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          Flushbar(
-                            message: "Ok masuk",
-                            flushbarPosition: FlushbarPosition.BOTTOM,
-                            icon: Icon(Icons.ac_unit),
-                            flushbarStyle: FlushbarStyle.GROUNDED,
-                            duration: Duration(seconds: 5),
-                          )..show(_scaffoldState.currentState.context);
-                        });
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return DummyCode(
-                            iddetail_orders: gcodezzzz.idtransaksi_det,
-                          );
+                        _apiService.generateCode(access_token, idtransaksi_det).then((value) => setState((){
+                           return successDialog(context, "Kode aktivasine" + value.toString());  
+                          
                         }));
+                        //  return buildCode(context);
+                        // WidgetsBinding.instance
+                        //     .addPostFrameCallback((timeStamp) {
+                        //   Flushbar(
+                        //     message: "Ok masuk",
+                        //     flushbarPosition: FlushbarPosition.BOTTOM,
+                        //     icon: Icon(Icons.ac_unit),
+                        //     flushbarStyle: FlushbarStyle.GROUNDED,
+                        //     duration: Duration(seconds: 5),
+                        //   )..show(_scaffoldState.currentState.context);
+                        // });
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return DummyCode(
+                        //     iddetail_orders: gcodezzzz.idtransaksi_det,
+                        //   );
+                        // }));
                       } else {
                         return errorDialog(context, 'Open gagal dilakukan');
                       }
@@ -465,7 +466,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                           Icon(Icons.lock_open_outlined),
                           // Text("Open $idtransaksi_det",
                           Text(
-                              nama_kota1
+                              nama1
                                       .toString()
                                       .toLowerCase()
                                       .contains('forklift')

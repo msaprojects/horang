@@ -549,14 +549,12 @@ class ApiService {
   //       headers: {"Content-type": "application/json"},
   //       body: generateCodeToJson(data));
   //   print('dollars' + response.body);
-
   //   if (response.statusCode == 200) {
   //     return true;
   //   } else {
   //     return false;
   //   }
   // }
-
   Future<List<GenerateCode>> generateCode(
       String access_token, idtransaksi_det) async {
     final response = await client.post(
@@ -567,9 +565,11 @@ class ApiService {
         "idtransaksi_detail": "${idtransaksi_det}"
       }),
     );
-    print('isoGAK ${response.body}');
+    Map GenerateForklift = jsonDecode(response.body);
+    var kode_aktivasi = GenerateCode.fromJson(GenerateForklift);
+    print("Test Split3 "+ GenerateForklift.toString());
     if (response.statusCode == 200) {
-      return generateCodeFromJson(response.body);
+      return generateCodeFromJson(response.body.split(" : ")[0]);
     } else {
       return null;
     }

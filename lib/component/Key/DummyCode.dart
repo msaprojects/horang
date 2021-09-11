@@ -163,11 +163,11 @@ class _DummyCodeState extends State<DummyCode> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              log2.kode_aktivasi,
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
+                            // Text(
+                            //   log2.kode_aktivasi,
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
                             // Text(log2.status)
                           ],
                         ),

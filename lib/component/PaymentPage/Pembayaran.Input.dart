@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
@@ -230,7 +231,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   Future<bool> _backPressed() {
     return Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => Home(
-          initIndexHome: 1,
+          initIndexHome: 1, callpage: ProdukList(), //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
         )),
         (Route<dynamic> route) => false);
   }

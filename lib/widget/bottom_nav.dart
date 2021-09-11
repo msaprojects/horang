@@ -15,19 +15,20 @@ import '../component/StoragePage/StorageHandler.dart';
 
 class Home extends StatefulWidget {
   final int initIndexHome;
-  PageController pages = PageController(initialPage: 0);
-  Home({Key key, this.initIndexHome, this.pages}) : super(key: key);
+  final Widget callpage; //CONSTRUKTOR UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+  Home({Key key, this.initIndexHome, this.callpage}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  PageController _myPage = PageController(initialPage: 0);
+  // PageController _myPage = PageController(initialPage: 0);
   var initIndex;
   DateTime backbuttonpressedtime;
   int currentTab = 0;
-  Widget currentScreen = HomePage();
+  Widget currentScreen; //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+  // Widget currentScreen = HomePage();
   final PageStorageBucket bucket = PageStorageBucket();
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -80,6 +81,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     currentTab = widget.initIndexHome ?? 0;
+    currentScreen = widget.callpage ?? HomePage(); //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
     super.initState();
     cekToken();
   }
