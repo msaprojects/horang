@@ -131,8 +131,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                       print("ezz0 $idtransaksi_det, $access_token");
                       if (isSuccess) {
                         _apiService.generateCode(access_token, idtransaksi_det).then((value) => setState((){
-                           return successDialog(context, "Kode aktivasine" + value.toString());  
-                          
+                           return successDialog(context, "Kode aktivasine" + value.toString());
                         }));
                         //  return buildCode(context);
                         // WidgetsBinding.instance
@@ -212,46 +211,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
               ),
             ],
           );
-        });
-  }
-
-  Widget buildCode(BuildContext context) {
-    print("optimus prime1");
-    return SafeArea(
-      child: FutureBuilder(
-          future: _apiService.generateCode(access_token, idtransaksi_det),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<GenerateCode>> snapshot) {
-            if (snapshot.hasError) {
-              print("optimus prime2");
-              return Center(
-                child: Text(
-                    "zzSomething wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              print("optimus prime3");
-              List<GenerateCode> zcode = snapshot.data;
-              // print(snapshot.data);
-              print("iamcannor ${snapshot.data}");
-              return _designviewCode(zcode);
-            } else {
-              print("optimus prime4");
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
-  }
-
-  Widget _designviewCode(List<GenerateCode> dataIndex) {
-    print("optimus prime");
-    return ListView.builder(
-        itemCount: dataIndex == null ? 0 : dataIndex.length,
-        itemBuilder: (BuildContext context, int index) {
-          GenerateCode gCode2 = dataIndex[index];
-          return successDialog(
-              context, "Kode Aktivasi anda ${gCode2.kode_aktivasi}");
         });
   }
 

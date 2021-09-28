@@ -4,16 +4,17 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f6da705b6c107815fa05c244ee6cf17/jetified-firebase-components-16.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f6da705b6c107815fa05c244ee6cf17/jetified-firebase-components-16.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f6da705b6c107815fa05c244ee6cf17/jetified-firebase-components-16.0.0/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c95e74c02c34df92cf61d7ffeab7e6cd/jetified-firebase-components-16.0.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/AndroidManifest.xml" />
+      <root url="file://C:/gradle-6.9.1/bin/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/AndroidManifest.xml" />
+      <root url="file://C:/gradle-6.9.1/bin/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/res" />
+      <root url="jar://C:/gradle-6.9.1/bin/caches/transforms-3/dcb896f3c3f520532805cdca1fa1e94c/transformed/jetified-firebase-components-16.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-components/16.0.0/f1f25eec68651b3cbe494a265507ac945fdb9e61/firebase-components-16.0.0-javadoc.jar!/" />
+      <root url="jar://C:/gradle-6.9.1/bin/caches/modules-2/files-2.1/com.google.firebase/firebase-components/16.0.0/f1f25eec68651b3cbe494a265507ac945fdb9e61/firebase-components-16.0.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-components/16.0.0/f5456d4823243672c7135dff6b3a35cd39617610/firebase-components-16.0.0-sources.jar!/" />
+      <root url="jar://C:/gradle-6.9.1/bin/caches/modules-2/files-2.1/com.google.firebase/firebase-components/16.0.0/f5456d4823243672c7135dff6b3a35cd39617610/firebase-components-16.0.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

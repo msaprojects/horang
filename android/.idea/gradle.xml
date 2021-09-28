@@ -10,22 +10,6 @@
         <option name="gradleJvm" value="Android Studio java home" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-3.0.3/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-0.4.2+10/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.3/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.3/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_native_timezone-2.0.0/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.6/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/get_version-0.2.2/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/imei_plugin-1.2.0/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/local_auth-0.6.3+4/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/minimize_app-0.1.1/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-0.4.3+4/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.28/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/share-0.6.5+4/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12+4/android" />
-            <option value="$USER_HOME$/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.7.10/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
           </set>

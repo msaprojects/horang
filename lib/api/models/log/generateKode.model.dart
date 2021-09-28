@@ -21,4 +21,5 @@ class GenerateCode {
 List<GenerateCode> generateCodeFromJson(String jsonData) {
   final data = json.decode(jsonData);
   return List<GenerateCode>.from(data.map((item) => GenerateCode.fromJson(item)));
+  // return List<GenerateCode>.from(data);
 }

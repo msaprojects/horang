@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8">
-      <module name="android.app" target="14" />
+    <bytecodeTargetLevel target="11">
       <module name="android.device_info" target="14" />
       <module name="android.firebase_core" target="14" />
       <module name="android.firebase_messaging" target="14" />

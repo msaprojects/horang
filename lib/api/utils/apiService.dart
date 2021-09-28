@@ -543,19 +543,7 @@ class ApiService {
     }
   }
 
-  // Future<bool> generateCode(GenerateCode data) async {
-  //   // Future<GenerateCode> generateKodeForklift(String token) async {
-  //   final response = await client.post("$baseUrl/generateforklift",
-  //       headers: {"Content-type": "application/json"},
-  //       body: generateCodeToJson(data));
-  //   print('dollars' + response.body);
-  //   if (response.statusCode == 200) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  Future<List<GenerateCode>> generateCode(
+  Future<String> generateCode(
       String access_token, idtransaksi_det) async {
     final response = await client.post(
       "$baseUrl/generateforklift",
@@ -565,11 +553,14 @@ class ApiService {
         "idtransaksi_detail": "${idtransaksi_det}"
       }),
     );
-    Map GenerateForklift = jsonDecode(response.body);
-    var kode_aktivasi = GenerateCode.fromJson(GenerateForklift);
-    print("Test Split3 "+ GenerateForklift.toString());
+    var jscode = jsonDecode(response.body);
+    var gcode =  GenerateCode.fromJson(jscode);
+    print("tesGCODE"+response.body[0]);
+    print("tesGCODE2"+gcode.toString());
+    print("tesGCODE3 ${gcode.kode_aktivasi}");
     if (response.statusCode == 200) {
-      return generateCodeFromJson(response.body.split(" : ")[0]);
+      // return generateCodeFromJson(gcode.kode_aktivasi.toString());
+      return gcode.kode_aktivasi;
     } else {
       return null;
     }
