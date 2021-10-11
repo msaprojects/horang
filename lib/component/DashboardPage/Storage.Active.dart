@@ -147,19 +147,31 @@ class _StorageActive extends State<StorageActive> {
                     duration: Duration(seconds: 10),
                   ));
                 } else {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return KonfirmasiLog(
-                      noOrder: kontainerActive.noOrder,
-                      tglakhir: kontainerActive.tanggal_akhir,
-                      tglmulai: kontainerActive.tanggal_mulai,
-                      tglorder: kontainerActive.tanggal_order,
-                      keterangan: kontainerActive.keterangan,
-                      kode_kontainer: kontainerActive.kode_kontainer,
-                      nama_kota: kontainerActive.nama_kota,
-                      idtransaksi_detail: kontainerActive.idtransaksi_detail,
-                      nama: kontainerActive.nama,
-                    );
-                  }));
+                  _openAlertDialog(
+                      context,
+                      kontainerActive.noOrder,
+                      kontainerActive.kode_kontainer,
+                      kontainerActive.nama_lokasi,
+                      kontainerActive.keterangan,
+                      kontainerActive.jumlah_sewa,
+                      kontainerActive.nama,
+                      kontainerActive.tanggal_order,
+                      kontainerActive.tanggal_mulai,
+                      kontainerActive.tanggal_akhir);
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //     return KonfirmasiLog(
+                  //       noOrder: kontainerActive.noOrder,
+                  //       tglakhir: kontainerActive.tanggal_akhir,
+                  //       tglmulai: kontainerActive.tanggal_mulai,
+                  //       tglorder: kontainerActive.tanggal_order,
+                  //       keterangan: kontainerActive.keterangan,
+                  //       kode_kontainer: kontainerActive.kode_kontainer,
+                  //       nama_kota: kontainerActive.nama_kota,
+                  //       idtransaksi_detail: kontainerActive.idtransaksi_detail,
+                  //       nama: kontainerActive.nama,
+                  //     );
+                  //   }));
+                  // }
                 }
               },
               child: Container(
@@ -220,5 +232,124 @@ class _StorageActive extends State<StorageActive> {
         },
       ),
     );
+  }
+
+  void _openAlertDialog(
+    BuildContext context,
+    String no_order,
+    // kode_refrensi,
+    kode_kontainer,
+    // nama_provider,
+    nama_lokasi,
+    keterangan,
+    jumlah_sewa,
+    nama,
+    tanggal_order,
+    tanggal_mulai,
+    tanggal_akhir,
+    // int total_harga,
+    // harga,
+    // jumlah_sewa,
+  ) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Detail Pesanan...",
+                              style: GoogleFonts.lato(fontSize: 12),
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text("Kode kontainer : " + kode_kontainer,
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("No. Order : " + no_order,
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          // Text("No. Bayar : " + kode_refrensi,
+                          Text("Lokasi : " + nama_lokasi,
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Keterangan : " + keterangan.toString(),
+                              // Text("Nominal Bayar : " + rupiah(total_harga.toString()),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text("Jumlah Sewa : " + jumlah_sewa.toString(),
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                              Text((nama.toLowerCase().contains('forklift'))
+                                  ? " Jam"
+                                  : " Hari")
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          // Text("Harga : " + rupiah(harga.toString()),
+                          //     style: GoogleFonts.lato(fontSize: 14)),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          Text("Tgl Order : " + tanggal_order.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Tanggal Awal : " + tanggal_mulai.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text("Tanggal Akhir : " + tanggal_akhir.toString(),
+                              style: GoogleFonts.lato(fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              width: 900,
+                              child: FlatButton(
+                                  color: Colors.blue,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Ok',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ))),
+                        ],
+                      ),
+                    )
+                  ]),
+            ),
+          );
+        });
   }
 }

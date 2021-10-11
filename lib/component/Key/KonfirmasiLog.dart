@@ -16,6 +16,7 @@ import 'package:horang/component/Key/DummyCode.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/ListLog.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
+import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
@@ -130,9 +131,12 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                       _isLoading = true;
                       print("ezz0 $idtransaksi_det, $access_token");
                       if (isSuccess) {
-                        _apiService.generateCode(access_token, idtransaksi_det).then((value) => setState((){
-                           return successDialog(context, "Kode aktivasine" + value.toString());
-                        }));
+                        _apiService
+                            .generateCode(access_token, idtransaksi_det)
+                            .then((value) => setState(() {
+                                  return successDialog(context,
+                                      "Kode aktivasine" + value.toString());
+                                }));
                         //  return buildCode(context);
                         // WidgetsBinding.instance
                         //     .addPostFrameCallback((timeStamp) {
@@ -503,14 +507,24 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                               _apiService.SelesaiLog(selesai).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  successDialog(context, "Berhasil",
-                                      showNeutralButton: false,
-                                      positiveAction: () {
-                                    Navigator.of(context)
-                                        .pushReplacement(MaterialPageRoute(
-                                            // builder: (context) => HomePage()));
-                                            builder: (context) => HomePage()));
-                                  }, positiveText: "Ok");
+                                  setState(() {
+                                    successDialog(
+                                      context, 
+                                      "Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.",
+                                      title: "Berhasil",
+                                        showNeutralButton: false,
+                                        positiveAction: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StorageHandler(
+                                                    initialIndex: 2,
+                                                  )
+                                              // StorageActive()
+                                              ));
+                                    }, positiveText: "Ok");
+                                  });
                                 } else {
                                   errorDialog(
                                       context, "Transaksi gagal dilakukan !");

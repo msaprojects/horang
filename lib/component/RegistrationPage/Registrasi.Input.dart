@@ -67,8 +67,8 @@ class _RegistrasiState extends State<RegistrasiPage> {
 
   Future<String> _ambildataSK() async {
     http.Response response = await http.get(
-        Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt'));
-    // .get(Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+        // Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt'));
+    Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 

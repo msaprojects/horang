@@ -1,7 +1,8 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:horang/api/models/forgot/forgot.password.dart';
+import 'package:horang/api/models/forgot/forgot.security.dart';
+import 'package:horang/api/models/forgot/lost.device.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
@@ -12,7 +13,7 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class Reset extends StatefulWidget {
   var tipe;
-  Forgot_Password respass, respin, resemail;
+  Forgot_Security respass, respin, resemail;
   var resetpass, resetpin, resendemail;
   Reset({this.resetpass, this.resetpin, this.resendemail, this.tipe});
   @override
@@ -125,14 +126,16 @@ class _ResetState extends State<Reset> {
         uuid = value;
         print("UUID? " + value);
         print("Tipe3? " + tipes + "UUID? " + uuid.toString());
-        Forgot_Password reset = Forgot_Password(
+        LostDevices gantiperangkat = LostDevices(
             email: _controlleremail.text.toString(), uuid: uuid.toString());
+        Forgot_Security maintenSecure =
+            Forgot_Security(email: _controlleremail.text.toString());
         if (_controlleremail.text.toString() == "" ||
             uuid.toString() == "0" ||
             uuid.toString() == "") {
           errorDialog(context, "Harap isi email anda terlebih dahulu");
         } else {
-          print("Model Reset" + reset.toString());
+          print("Model Reset" + maintenSecure.toString());
           infoDialog(context, "Email sudah benar?",
               title: "Konfirmasi",
               showNeutralButton: false,
@@ -140,44 +143,50 @@ class _ResetState extends State<Reset> {
               negativeAction: () {},
               positiveText: "Benar", positiveAction: () {
             if (tipes == "ResendEmail") {
-              _apiService.ForgetPass(reset).then((isSuccess) {
+              print('tes resend $maintenSecure');
+              _apiService.ResendEmail(maintenSecure).then((isSuccess) {
+                print('suksesnya $isSuccess');
                 setState(() => _isLoading = false);
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
                 } else {
                   successDialog(context,
-                      "Reset password berhasil dilakukan, Harap cek email anda untuk verifikasi",
+                      // "Reset password berhasil dilakukan, Harap cek email anda untuk verifikasi",
+                      "${_apiService.responseCode.mMessage}",
                       showNeutralButton: false,
                       positiveText: "OK", positiveAction: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                        (route) => false);
+                        Navigator.pop(context, true);
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //     MaterialPageRoute(builder: (context) => LoginPage()),
+                    //     (route) => false);
                   });
                 }
               });
             } else if (tipes == "ResetPassword") {
-              _apiService.ForgetPass(reset).then((isSuccess) {
+              _apiService.ForgetPass(maintenSecure).then((isSuccess) {
                 setState(() => _isLoading = false);
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
+                  // errorDialog(context, "Maaf, Email gagal dikirim !");
                 } else {
                   successDialog(context,
                       "Reset password berhasil dilakukan, cek email anda untuk verifikasi",
                       showNeutralButton: false,
                       positiveText: "OK", positiveAction: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                        (route) => false);
+                        Navigator.pop(context, true);
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //     MaterialPageRoute(builder: (context) => LoginPage()),
+                    //     (route) => false);
                   });
                 }
               });
             } else if (tipes == "ResetPin") {
-              _apiService.LostDevice(reset).then((isSuccess) {
+              _apiService.ForgetPin(maintenSecure).then((isSuccess) {
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
                 } else {
                   successDialog(context,
-                      "Konfirmasi Ganti Perangkat Berhasil dikirim, mohon verifikasi email anda !",
+                      "Konfirmasi Ganti Pin Berhasil dikirim, mohon verifikasi email anda !",
                       showNeutralButton: false,
                       positiveText: "OK", positiveAction: () {
                     Navigator.of(context).pushAndRemoveUntil(
@@ -187,7 +196,7 @@ class _ResetState extends State<Reset> {
                 }
               });
             } else if (tipes == "ResetDevice") {
-              _apiService.LostDevice(reset).then((isSuccess) {
+              _apiService.LostDevice(gantiperangkat).then((isSuccess) {
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
                 } else {

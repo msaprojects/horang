@@ -3,7 +3,8 @@ import 'package:commons/commons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
-import 'package:horang/api/models/forgot/forgot.password.dart';
+import 'package:horang/api/models/forgot/forgot.security.dart';
+import 'package:horang/api/models/forgot/lost.device.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/history/history.model.deposit.dart';
 import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
@@ -40,11 +41,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
-  final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
-  // final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
+  // final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
+  final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";
-  final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
+  // final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
   Client client = Client();
   // ResponseCode responseCode;
   ResponseCodeCustom responseCode;
@@ -71,7 +72,7 @@ class ApiService {
 
   /////////////////////// LIST /////////////////////////
 
-  Future<List<xenditmodel>> xenditUrl() async {
+  Future<List<Xenditmodel>> xenditUrl() async {
     String username =
         'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
     String password = '';
@@ -543,8 +544,7 @@ class ApiService {
     }
   }
 
-  Future<String> generateCode(
-      String access_token, idtransaksi_det) async {
+  Future<String> generateCode(String access_token, idtransaksi_det) async {
     final response = await client.post(
       "$baseUrl/generateforklift",
       headers: {"content-type": "application/json"},
@@ -554,9 +554,9 @@ class ApiService {
       }),
     );
     var jscode = jsonDecode(response.body);
-    var gcode =  GenerateCode.fromJson(jscode);
-    print("tesGCODE"+response.body[0]);
-    print("tesGCODE2"+gcode.toString());
+    var gcode = GenerateCode.fromJson(jscode);
+    print("tesGCODE" + response.body[0]);
+    print("tesGCODE2" + gcode.toString());
     print("tesGCODE3 ${gcode.kode_aktivasi}");
     if (response.statusCode == 200) {
       // return generateCodeFromJson(gcode.kode_aktivasi.toString());
@@ -622,58 +622,61 @@ class ApiService {
   }
 
   ///////////////////// FORGET ///////////////////////
-  Future<bool> ForgetPass(Forgot_Password data) async {
+  Future<bool> ForgetPass(Forgot_Security data) async {
     final response = await client.post(
       "$baseUrl/forgotpassword",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),
+      body: Forgot_SecurityToJson(data),
     );
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
 
-    if (response.statusCode == 201) {
+    // if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
   }
 
-  Future<bool> ForgetPin(Forgot_Password data) async {
+  Future<bool> ForgetPin(Forgot_Security data) async {
     final response = await client.post(
       "$baseUrl/forgotpin",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),
+      body: Forgot_SecurityToJson(data),
     );
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
 
-    if (response.statusCode == 201) {
+    // if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
   }
 
-  Future<bool> ResendEmail(Forgot_Password data) async {
+  Future<bool> ResendEmail(Forgot_Security data) async {
     final response = await client.post(
       "$baseUrl/resendemailaktivasi",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),
+      body: Forgot_SecurityToJson(data),
     );
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
-    if (response.statusCode == 201) {
+    print('resbody $message ++ $responseCode');
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
   }
 
-  Future<bool> LostDevice(Forgot_Password data) async {
+  Future<bool> LostDevice(LostDevices data) async {
     final response = await client.post(
       "$baseUrl/lostdevice",
       headers: {"Content-type": "application/json"},
-      body: ForgotPassToJson(data),
+      body: LostDeviceToJson(data),
     );
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
@@ -718,8 +721,8 @@ class ApiService {
 
   Future<String> ambildataSyaratKetentuan(sk) async {
     http.Response response = await http
-        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-    // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
+        // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+        .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
@@ -732,9 +735,9 @@ class ApiService {
 
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
     http.Response response = await http.get(
-        Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
-    // .get(
-    //     Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
+        // Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+        // .get(
+        Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {

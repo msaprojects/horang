@@ -122,10 +122,13 @@ class _SearchListViewExampleState extends State<StorageExpired1>
     if (fselesai == 0 && selesai == 0) {
       noted = "Harap Konfirmasi Selesai";
       flag_noted = Colors.red[600];
-    } else if (fselesai == 1 && selesai == 0) {
+    } else if (fselesai == 0 && selesai == 1) { // untuk perintah selesai mobile jika dibagian web sudah diselesaikan
+      noted = "Harap Konfirmasi Selesai";
+      flag_noted = Colors.indigo;
+    } else if (fselesai == 1 && selesai == 0) { // untuk perintah selesai bagian web jika dibagian mobile sudah diselesaikan
       noted = "Menunggu Konfirmasi";
       flag_noted = Colors.indigo;
-    } else if (fselesai == 1 && selesai == 1) {
+    } else if (fselesai == 1 && selesai == 1) { // untuk mengetahui jika bagian web dan bagian mobile sudah dislesaikan 2-2nya
       noted = "Berhasil Dikonfirmasi";
       flag_noted = Colors.green;
     } else {

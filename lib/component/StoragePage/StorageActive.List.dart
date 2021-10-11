@@ -231,7 +231,6 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                       kode_kontainer: storage.kode_kontainer,
                       nama_kota: storage.nama_kota,
                       noOrder: storage.noOrder,
-                      // idtransaksi_detail: ,
                       idtransaksi_detail: storage.idtransaksi_detail,
                       idtransaksi: storage.idtransaksi,
                       nama: storage.nama,

@@ -360,6 +360,7 @@ class _UbahProfileState extends State<UbahProfile> {
     // _controlleridkota.text = kotaaaa;
     valKota = idkotaa;
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Text(kotaaaa),
       value: valKota,
       items: _dataKota.map((item) {

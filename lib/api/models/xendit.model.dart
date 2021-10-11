@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-class xenditmodel{
+class Xenditmodel{
   String balance;
 
-  factory xenditmodel.fromJson(Map<String, dynamic> map){
-    return xenditmodel(
+  factory Xenditmodel.fromJson(Map<String, dynamic> map){
+    return Xenditmodel(
         balance: map["balance"]
     );
   }
@@ -15,7 +15,7 @@ class xenditmodel{
     };
   }
 
-  xenditmodel({
+  Xenditmodel({
     this.balance
   });
 
@@ -26,12 +26,12 @@ class xenditmodel{
 
 }
 
-List<xenditmodel> xenditFromJson(String jsonData){
+List<Xenditmodel> xenditFromJson(String jsonData){
   final data = json.decode(jsonData);
-  return List<xenditmodel>.from(data.map((item) => xenditmodel.fromJson(item)));
+  return List<Xenditmodel>.from(data.map((item) => Xenditmodel.fromJson(item)));
 }
 
-String xenditToJson(xenditmodel data){
+String xenditToJson(Xenditmodel data){
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }

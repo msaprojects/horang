@@ -499,7 +499,7 @@ class _HistoryPageState extends State<HistoryPage> {
           return AlertDialog(
             content: new Container(
               width: 260.0,
-              height: MediaQuery.of(context).size.height * 0.55,
+              height: MediaQuery.of(context).size.height * 0.56,
               decoration: new BoxDecoration(
                 shape: BoxShape.rectangle,
                 color: const Color(0xFFFFFF),

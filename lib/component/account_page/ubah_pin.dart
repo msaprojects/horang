@@ -1,5 +1,6 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -33,7 +34,7 @@ class _UbahPinState extends State<UbahPin> {
       refresh_token,
       idcustomer = "",
       nama_customer,
-      pin;
+      pin = "";
 
   TextEditingController _controllerPassLama = TextEditingController();
   TextEditingController _controllerPassBaru = TextEditingController();
@@ -260,10 +261,15 @@ class _UbahPinState extends State<UbahPin> {
   }
 
   Widget _buildTextFieldPinBaru() {
+    final int maxlength = 4;
     return TextFormField(
       maxLength: 4,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
       controller: _controllerPassBaru,
       keyboardType: TextInputType.phone,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.deny(RegExp(r'0000')),
+      ],
       decoration: InputDecoration(
         labelText: "Pin Baru",
         errorText: _isFieldPinBaru == null || _isFieldPinBaru
