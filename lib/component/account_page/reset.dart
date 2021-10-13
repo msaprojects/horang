@@ -145,7 +145,7 @@ class _ResetState extends State<Reset> {
             if (tipes == "ResendEmail") {
               print('tes resend $maintenSecure');
               _apiService.ResendEmail(maintenSecure).then((isSuccess) {
-                print('suksesnya $isSuccess');
+                print('suksesnya $isSuccess $maintenSecure');
                 setState(() => _isLoading = false);
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
@@ -197,6 +197,7 @@ class _ResetState extends State<Reset> {
               });
             } else if (tipes == "ResetDevice") {
               _apiService.LostDevice(gantiperangkat).then((isSuccess) {
+                print('gantiperangkat $gantiperangkat');
                 if (!isSuccess) {
                   errorDialog(context, "${_apiService.responseCode.mMessage}");
                 } else {

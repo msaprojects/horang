@@ -33,7 +33,8 @@ class KonfirmPayment extends StatefulWidget {
       persentase_asuransi,
       idpayment_gateway,
       minimalsewahari,
-      harga_awal;
+      harga_awal,
+      namaprovider;
 
   KonfirmPayment(
       {this.flagasuransi,
@@ -60,7 +61,9 @@ class KonfirmPayment extends StatefulWidget {
       this.persentase_asuransi,
       this.idpayment_gateway,
       this.minimalsewahari,
-      this.harga_awal});
+      this.harga_awal,
+      this.namaprovider
+      });
 
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
@@ -98,7 +101,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kidpayment_gateway,
       hitungsemua,
       kminimalsewahari,
-      kharga_awal;
+      kharga_awal,
+      knamaprovider;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
@@ -191,6 +195,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
     totaldeposit = (kminimalsewahari * kharga_sewa);
     kharga_awal = widget.harga_awal;
+    knamaprovider = widget.namaprovider;
     cekToken();
     hitungsemuaFunction();
     super.initState();
@@ -224,7 +229,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Text("Masukkan nomor yang terdaftar di OVO ",
+                  Text("Masukkan nomor yang terdaftar di $knamaprovider ",
                       textAlign: TextAlign.left,
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold, fontSize: 14)),
@@ -242,15 +247,15 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue),
                       ),
-                      hintText: "Ovo",
-                      labelText: "Ovo",
+                      hintText: "$knamaprovider",
+                      labelText: "$knamaprovider",
                     ),
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
-                    "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
+                    "1. Buka aplikasi $knamaprovider dan cek notifikasi untuk menyelesaikan pembayaran.",
                     style: GoogleFonts.inter(height: 1.5, fontSize: 14),
                   ),
                   SizedBox(

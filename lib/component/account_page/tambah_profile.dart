@@ -292,6 +292,7 @@ class _TambahProfileState extends State<TambahProfile> {
   Widget _buildKomboKota(String kotaaaa) {
     _controlleridkota = TextEditingController(text: kotaaaa);
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Text("Pilih Kota"),
       value: valKota,
       items: _dataKota.map((item) {

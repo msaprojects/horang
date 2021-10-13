@@ -450,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Latest Order',
+                      'Transaksi Terakhir',
                       style: mTitleStyle,
                     ),
                     SelectableText(

@@ -261,14 +261,13 @@ class _UbahPinState extends State<UbahPin> {
   }
 
   Widget _buildTextFieldPinBaru() {
-    final int maxlength = 4;
     return TextFormField(
       maxLength: 4,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
       controller: _controllerPassBaru,
       keyboardType: TextInputType.phone,
       inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.deny(RegExp(r'0000')),
+        FilteringTextInputFormatter.deny(RegExp(r'00000')),
       ],
       decoration: InputDecoration(
         labelText: "Pin Baru",

@@ -1107,7 +1107,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         idpayment,
                                                     minimalsewahari:
                                                         pminimalsewahari,
-                                                    harga_awal: pharga_awal)));
+                                                    harga_awal: pharga_awal,
+                                                    namaprovider: namaprovider,
+                                                    )));
                                   });
                                 })
                           ],
