@@ -3,6 +3,7 @@ import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -175,7 +176,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
   Future<String> _ambildataSK() async {
     http.Response response = await http
         // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-    .get(Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+        .get(
+            Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 
@@ -445,7 +447,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
         iconTheme: IconThemeData(color: Colors.black),
         title: GestureDetector(
           child: Text(
-            "Checkout",
+            "Periksa Sewa",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -673,6 +675,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                   child: FutureBuilder(
                                       future:
                                           _apiService.listVoucher(access_token),
+                                      // ignore: missing_return
                                       builder: (context,
                                           AsyncSnapshot<List<VoucherModel>>
                                               snapshot) {
@@ -1124,6 +1127,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   onTap: () {
                     setState(() {
                       if (tekanvoucher) {
+                        print("hitungsemua? $hitungsemua -- ${voucherlist.min_nominal}");
                         gambarvoucher = voucherlist.gambar;
                         idvoucher = voucherlist.idvoucher;
                         vminimumtransaksi = voucherlist.min_nominal;
@@ -1140,6 +1144,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
                             vdurasi_sewa.toString());
                         Navigator.pop(context);
                         hitungsemuaFunction();
+                        if (num.parse(hitungsemua) < voucherlist.min_nominal) {
+                          print('masukmas? ');
+                          Fluttertoast.showToast(
+                              msg: "Maaf nominal transaksi anda tidak memenuhi nominal transaksi minimum",
+                              backgroundColor: Colors.black,
+                              textColor: Colors.white);
+                        }
                       }
                     });
                   },

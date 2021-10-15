@@ -231,7 +231,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   Future<bool> _backPressed() {
     return Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => Home(
-          initIndexHome: 1, callpage: ProdukList(), //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+          initIndexHome: 1, callpage: ProdukList(), //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(log trello [03-09-2021] (solved Upd.fadil 7/09/21))
         )),
         (Route<dynamic> route) => false);
   }
@@ -351,7 +351,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
   @override
   Widget build(BuildContext context) {
     var asuransitxt, vouchertxt;
-    if (pflagasuransi == 1) {
+    if (pflagasuransi == true) {
       asuransitxt = "Ya";
     } else {
       asuransitxt = "Tidak";

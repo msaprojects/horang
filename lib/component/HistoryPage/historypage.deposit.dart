@@ -96,7 +96,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          "History Deposit",
+          "Riwayat Deposit",
           style: GoogleFonts.lato(color: Colors.black),
         ),
         elevation: 0,

@@ -268,7 +268,7 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.phonelink_lock),
-                  title: Text("Ubah Password",
+                  title: Text("Ubah Kata Sandi",
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {
@@ -304,7 +304,7 @@ class _AccountState extends State<Account> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.loop),
-                  title: Text("Logout",
+                  title: Text("Keluar",
                       style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   trailing: Icon(Icons.keyboard_arrow_right),
                   onTap: () {

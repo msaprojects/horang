@@ -691,7 +691,7 @@ class _ProdukList extends State<ProdukList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "Halaman Order",
+          "Sewa",
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -778,7 +778,7 @@ class _ProdukList extends State<ProdukList> {
             // gravity: ToastGravity.CENTER,
             toastLength: Toast.LENGTH_LONG,
             timeInSecForIosWeb: 5,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.black,
             textColor: Colors.white);
       } else if (valKota == null) {
         Fluttertoast.showToast(
@@ -1196,9 +1196,7 @@ class _ProdukList extends State<ProdukList> {
                                                           image: DecorationImage(
                                                               fit: BoxFit
                                                                   .contain,
-                                                              image: NetworkImage(
-                                                                  jenisProduk
-                                                                      .gambar))),
+                                                              image: NetworkImage(jenisProduk.gambar == null ? Icons.image : jenisProduk.gambar))),
                                                     ),
                                                   ),
                                                 ),

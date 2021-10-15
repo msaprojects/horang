@@ -132,7 +132,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'Home',
+                          'Beranda',
                           style: TextStyle(
                             color: currentTab == 0
                                 ? Colors.blue[300]
@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'My Order',
+                          'Sewa',
                           style: TextStyle(
                             color: currentTab == 1
                                 ? Colors.blue[300]
@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'History',
+                          'Riwayat',
                           style: TextStyle(
                             color: currentTab == 2
                                 ? Colors.blue[300]
@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'Profil',
+                          'Akun',
                           style: TextStyle(
                             color: currentTab == 3
                                 ? Colors.blue[300]

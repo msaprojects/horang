@@ -290,7 +290,7 @@ class _HomePageState extends State<HomePage> {
                                             // ));
                                           }),
                                       Text(
-                                        "Histori",
+                                        "Riwayat",
                                         style: GoogleFonts.inter(
                                             fontSize: 14, color: Colors.black),
                                       )
@@ -410,7 +410,7 @@ class _HomePageState extends State<HomePage> {
                       style: mTitleStyle,
                     ),
                     SelectableText(
-                      "See All...",
+                      "Lihat semua...",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {
@@ -454,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                       style: mTitleStyle,
                     ),
                     SelectableText(
-                      "See All...",
+                      "Lihat semua...",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {
