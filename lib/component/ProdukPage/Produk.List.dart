@@ -1155,6 +1155,7 @@ class _ProdukList extends State<ProdukList> {
                                     child: Card(
                                       child: InkWell(
                                         onTap: () {
+                                          print('gambarnya ada nggak ? ${jenisProduk.gambar}');
                                           itemClicked(
                                               context,
                                               jenisProduk.avail,
@@ -1196,7 +1197,9 @@ class _ProdukList extends State<ProdukList> {
                                                           image: DecorationImage(
                                                               fit: BoxFit
                                                                   .contain,
-                                                              image: NetworkImage(jenisProduk.gambar == null ? Icons.image : jenisProduk.gambar))),
+                                                              image: 
+                                                              NetworkImage(jenisProduk.gambar =='' ? 'https://picsum.photos/250?image=9' : jenisProduk.gambar)
+                                                              )),
                                                     ),
                                                   ),
                                                 ),
@@ -1447,8 +1450,9 @@ class _ProdukList extends State<ProdukList> {
             Text('Anda Harus Melengkapi profile untuk melakukan transaksi!'),
         duration: Duration(seconds: 10),
       ));
-    } else if (jenisproduk.toLowerCase().contains('forklift') &&(DateTime.parse(valueawalperhitungandurasi)
-        .isBefore(DateTime.parse(formattedDate)))) {
+    } else if (jenisproduk.toLowerCase().contains('forklift') &&
+        (DateTime.parse(valueawalperhitungandurasi)
+            .isBefore(DateTime.parse(formattedDate)))) {
       infoDialog(context, "Jam Awal tidak boleh kurang dari jam sekarang !");
     } else {
       if (available == 0) {

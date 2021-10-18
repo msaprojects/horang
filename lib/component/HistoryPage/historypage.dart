@@ -48,7 +48,7 @@ class _HistoryPageState extends State<HistoryPage> {
       return FlatButton(
         onPressed: () {},
         child: Text(
-          'Expired',
+          'Gagal',
           style: TextStyle(color: Colors.white),
         ),
         color: Colors.orange,
