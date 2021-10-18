@@ -2,15 +2,17 @@ import 'dart:ui';
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:horang/api/models/jenisproduk/jenisproduk.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgateway.model.dart';
 import 'package:horang/api/models/paymentgateway/paymentgatewayVA.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
+import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+import 'package:horang/widget/bottom_nav.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,41 +45,39 @@ class FormInputPembayaran extends StatefulWidget {
       minimalsewahari,
       cekout,
       cekin,
-      lastorder
-      // jenisitem
-      ;
+      lastorder,
+      gambarproduk;
 
-  FormInputPembayaran({
-    this.flagasuransi,
-    this.flagvoucher,
-    this.idlokasi,
-    this.idjenis_produk,
-    this.idvoucher,
-    this.idasuransi,
-    this.harga_sewa,
-    this.harga_awal,
-    this.diskonn,
-    this.durasi_sewa,
-    this.valuesewaawal,
-    this.valuesewaakhir,
-    this.kapasitas,
-    this.alamat,
-    this.keterangan_barang,
-    this.nominal_barang,
-    this.nominal_voucher,
-    this.minimum_transaksi,
-    this.persentase_voucher,
-    this.totalharixharga,
-    this.saldopoint,
-    this.email_asuransi,
-    this.tambahsaldopoint,
-    this.persentase_asuransi,
-    this.minimalsewahari,
-    this.cekout,
-    this.cekin,
-    this.lastorder,
-    // this.jenisitem
-  });
+  FormInputPembayaran(
+      {this.flagasuransi,
+      this.flagvoucher,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.idvoucher,
+      this.idasuransi,
+      this.harga_sewa,
+      this.harga_awal,
+      this.diskonn,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.kapasitas,
+      this.alamat,
+      this.keterangan_barang,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.totalharixharga,
+      this.saldopoint,
+      this.email_asuransi,
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.minimalsewahari,
+      this.cekout,
+      this.cekin,
+      this.lastorder,
+      this.gambarproduk});
 
   @override
   _FormInputPembayaran createState() => _FormInputPembayaran();
@@ -129,10 +129,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
       pin,
       labeldiskon,
       labelhargaawal,
-      dis,
-      harawl
-      // pjenisitem
-      ;
+      pgambarproduk;
 
   enableButton() {
     setState(() {
@@ -146,70 +143,46 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     });
   }
 
-  adaDiskonGakLabel(num diskonn, hargaa) {
-    if (diskonn != 0) {
-      labeldiskon = 'Diskon :';
-      labelhargaawal = 'Harga Awal';
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(labeldiskon),
-          Text(labelhargaawal),
-        ],
-      );
-    } else {
-      return Visibility(visible: false, child: Text(""));
-    }
-  }
-
-  adaDiskonGak(num diskonn, hargaa) {
-    if (diskonn != 0) {
-      dis = diskonn.toString();
-      harawl = hargaa.toString();
-      return Column(
-        children: [
-          Text(dis + '%'),
-          Text(rupiah(harawl, separator: ',', trailing: " /hari"),
-              style: TextStyle(decoration: TextDecoration.lineThrough)),
-        ],
-      );
-    } else {
-      return Visibility(visible: false, child: Text(""));
-    }
-  }
-
   settingJamOperasionalLabel() {
     if (pkapasitas.toString().toLowerCase().contains('forklift')) {
       return Visibility(visible: false, child: Text(""));
     } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text('Check In : '),
-              // Text(
-              //   pcekin.toString(),
-              // ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Check Out : '),
-              // Text(
-              //   pcekout.toString(),
-              // ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Last Order : '),
-              // Text(
-              //   plastorder.toString(),
-              // ),
-            ],
-          ),
-        ],
+      return Container(
+        padding: const EdgeInsets.only(left: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Jam Operasional : ",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Text('Check In : '),
+                Text(
+                  pcekin.toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text('Check Out : '),
+                Text(
+                  pcekout.toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text('Last Order : '),
+                Text(
+                  plastorder.toString(),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     }
   }
@@ -247,12 +220,21 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
   }
 
-  satuanHariatauJam(){
+  satuanHariatauJam() {
     if (pkapasitas.toString().toLowerCase().contains('forklift')) {
       return haurOrDay = ' Jam';
-  } else {
-    return haurOrDay = ' Hari';
-  }}
+    } else {
+      return haurOrDay = ' Hari';
+    }
+  }
+
+  Future<bool> _backPressed() {
+    return Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => Home(
+          initIndexHome: 1, callpage: ProdukList(), //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(log trello [03-09-2021] (solved Upd.fadil 7/09/21))
+        )),
+        (Route<dynamic> route) => false);
+  }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -296,51 +278,57 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
 
   @override
   void initState() {
-    setState(() {
-      pflagasuransi = widget.flagasuransi;
-      pflagvoucher = widget.flagvoucher;
-      pidlokasi = widget.idlokasi;
-      pidjenis_produk = widget.idjenis_produk;
-      pidvoucher = widget.idvoucher;
-      pidasuransi = widget.idasuransi;
-      pharga_sewa = widget.harga_sewa;
-      pharga_awal = widget.harga_awal;
-      pdiskon = widget.diskonn;
-      pdurasi_sewa = widget.durasi_sewa;
-      pvaluesewaawal = widget.valuesewaawal;
-      pvaluesewaakhir = widget.valuesewaakhir;
-      pkapasitas = widget.kapasitas;
-      palamat = widget.alamat;
-      pketerangan_barang = widget.keterangan_barang;
-      pnominal_barang = widget.nominal_barang;
-      pnominal_voucher = widget.nominal_voucher;
-      pminimum_transaksi = widget.minimum_transaksi;
-      ppersentase_voucher = widget.persentase_voucher;
-      ptotalharixharga = widget.totalharixharga;
-      psaldopoint = widget.saldopoint; //as saldo poin terpakai
-      pemail_asuransi = widget.email_asuransi;
-      ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
-      ppersentase_asuransi = widget.persentase_asuransi;
-      pminimalsewahari = widget.minimalsewahari;
-      pcekin = widget.cekin;
-      pcekout = widget.cekout;
-      plastorder = widget.lastorder;
-      ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
-              double.parse(pnominal_barang))
-          .toStringAsFixed(2);
-      totaldeposit = (pminimalsewahari * pharga_sewa);
-      // pjenisitem = widget.jenisitem;
-      cekToken();
-      hitungsemuaFunction();
-    });
+    pflagasuransi = widget.flagasuransi;
+    pflagvoucher = widget.flagvoucher;
+    pidlokasi = widget.idlokasi;
+    pidjenis_produk = widget.idjenis_produk;
+    pidvoucher = widget.idvoucher;
+    pidasuransi = widget.idasuransi;
+    pharga_sewa = widget.harga_sewa;
+    pharga_awal = widget.harga_awal;
+    pdiskon = widget.diskonn;
+    pdurasi_sewa = widget.durasi_sewa;
+    pvaluesewaawal = widget.valuesewaawal;
+    pvaluesewaakhir = widget.valuesewaakhir;
+    pkapasitas = widget.kapasitas;
+    palamat = widget.alamat;
+    pketerangan_barang = widget.keterangan_barang;
+    pnominal_barang = widget.nominal_barang;
+    pnominal_voucher = widget.nominal_voucher;
+    pminimum_transaksi = widget.minimum_transaksi;
+    ppersentase_voucher = widget.persentase_voucher;
+    ptotalharixharga = widget.totalharixharga;
+    psaldopoint = widget.saldopoint; //as saldo poin terpakai
+    pemail_asuransi = widget.email_asuransi;
+    ptambahsaldopoint = widget.tambahsaldopoint; //as tambah saldo poin
+    ppersentase_asuransi = widget.persentase_asuransi;
+    pminimalsewahari = widget.minimalsewahari;
+    pcekin = widget.cekin;
+    pcekout = widget.cekout;
+    plastorder = widget.lastorder;
+    pgambarproduk = widget.gambarproduk;
+    ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
+        double.parse(pnominal_barang));
+    totaldeposit = (pminimalsewahari * pharga_awal);
+    // pjenisitem = widget.jenisitem;
+    print("Flag Asuransi? " +
+        pflagasuransi.toString() +
+        " ~ " +
+        pdiskon.toString() +
+        " ~ " +
+        pnominal_voucher.toString() +
+        " ~ " +
+        ptotal_asuransi.toString());
+    cekToken();
+    hitungsemuaFunction();
     super.initState();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   void hitungsemuaFunction() async {
     setState(() {
@@ -350,449 +338,403 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
           pflagasuransi,
           pflagvoucher,
           pnominal_voucher.toString(),
-          pharga_sewa.toString(),
+          pharga_awal.toString(),
           pdurasi_sewa.toString(),
           pnominal_barang.toString(),
           psaldopoint.toString(),
           pminimalsewahari.toString(),
-          ppersentase_asuransi.toString());
+          ppersentase_asuransi.toString(),
+          pharga_sewa.toString());
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var asuransitxt, vouchertxt;
-    if (pflagasuransi == 1) {
+    if (pflagasuransi == true) {
       asuransitxt = "Ya";
     } else {
       asuransitxt = "Tidak";
     }
     // var media = MediaQuery.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Rincian Data Sewa",
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      onWillPop: _backPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Rincian Data Sewa",
+            style: TextStyle(color: Colors.black),
+          ),
+          //Blocking Back
+          automaticallyImplyLeading: false,
         ),
-        //Blocking Back
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              controller: ScrollController(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Card(
-                    child: new Column(
-                      children: <Widget>[
-                        new ListTile(
-                          leading: Icon(Icons.insert_drive_file),
-                          title: new Text(
-                            pkapasitas,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: new Text(
-                            palamat,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 8, left: 36, top: 8),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 30, bottom: 15),
-                          child: Row(
-                            children: <Widget>[
-                              Text("Detail Pesanan",
-                                  style: TextStyle(fontWeight: FontWeight.bold))
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Column(
-                                children: [
-                                  // adaDiskonGak(pdiskon, pharga_awal),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text("Tgl. Mulai :"),
-                                      Text("Tgl. Berakhir :"),
-                                      Text("Durasi Sewa :"),
-                                      // Text("Check In :"),
-                                      // Text("Check Out :"),
-                                      // Text("Last Order :"),
-                                      settingJamOperasionalLabel(),
-                                      adaDiskonGakLabel(pdiskon, pharga_awal)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    pvaluesewaawal,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(pvaluesewaakhir,
-                                      overflow: TextOverflow.ellipsis),
-                                  Text(
-                                    pdurasi_sewa.toString() + satuanHariatauJam()
-                                  ),
-                                  settingJamOperasional(),
-                                  adaDiskonGak(pdiskon, pharga_awal)
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Harga Sewa :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(pharga_sewa,
-                                    separator: ',', trailing: " /"+satuanHariatauJam()),
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Asuransi :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                asuransitxt,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Ket. Barang : ")],
-                              ),
-                            ),
-                            
-                          ],
-                        ),
-                        // Container(
-                        //   alignment: Alignment.topRight,
-                        //       padding: const EdgeInsets.only(
-                        //           top: 10.0, right: 50, left: 50, ),
-                        //       child: Flexible(
-                        //         child: Column(
-                        //           children: [
-                        //             Text(
-                        //               pketerangan_barang,
-                        //               maxLines: 10,
-                        //               overflow: TextOverflow.visible,
-                        //               // textAlign: TextAlign.justify,
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                         Container(
-                          alignment: Alignment.topRight,
-                              padding: const EdgeInsets.only(
-                                  top: 0.0, right: 60, left: 40),
-                              child: Text(
-                                pketerangan_barang,
-                                maxLines: 10,
-                                overflow: TextOverflow.visible,
-                                textAlign: TextAlign.justify,),
-                          // ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Divider(
-                          height: 16,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 30, bottom: 15),
-                          child: Row(
-                            children: <Widget>[
-                              Text("Detail Pembayaran",
-                                  style: TextStyle(fontWeight: FontWeight.bold))
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Subtotal :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(ptotalharixharga, separator: ','),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Minimum Deposit :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(totaldeposit, separator: ','),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[
-                                  Text("Poin Deposit Terpakai : ")
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                "-" + rupiah(psaldopoint, separator: ','),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[Text("Nominal Voucher :")],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                "-" + rupiah(pnominal_voucher),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[
-                                  Text("Nominal Asuransi (" +
-                                      ppersentase_asuransi.toString() +
-                                      "%) :")
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(top: 0.0, right: 60),
-                              child: Text(
-                                rupiah(
-                                  ptotal_asuransi,
-                                ),
-                                overflow: TextOverflow.clip,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                "( Nominal Barang : " +
-                                    rupiah(pnominal_barang + " )"),
-                                style: TextStyle(fontStyle: FontStyle.italic),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Divider(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                children: <Widget>[
-                                  Text("Total :",
-                                      style: (TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)))
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(right: 60),
-                              child: Text(
-                                rupiah(hitungsemua),
-                                style: (TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: SingleChildScrollView(
-                      child: Row(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                controller: ScrollController(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Card(
+                      child: new Column(
                         children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          new ListTile(
+                            leading: CircleAvatar(
+                              radius: 35,
+                              backgroundColor: Colors.red,
+                              backgroundImage: NetworkImage(pgambarproduk),
+                            ),
+                            title: new Text(
+                              "Kapasitas : " + pkapasitas,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: new Text(
+                              "Lokasi : " + palamat,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          Divider(color: Colors.grey),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 30, bottom: 10),
+                            child: Row(
                               children: <Widget>[
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 8, left: 36, top: 8),
-                                  child: Text(
-                                    "Pilih Metode Pembayaran : ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Card(
-                                  child: Container(
-                                    child: ExpansionTile(
-                                      title: Text(
-                                        "Instant Payment : ",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                Text("Detail Pesanan",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Column(
+                                  children: [
+                                    // adaDiskonGak(pdiskon, pharga_awal),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SafeArea(
-                                              child: FutureBuilder(
-                                                  future: _apiService
-                                                      .listPaymentGateway(
-                                                          access_token),
-                                                  // .listPaymentGatewayVA(),
-                                                  builder: (context,
-                                                      // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
-                                                      AsyncSnapshot<
-                                                              List<
-                                                                  PaymentGateway>>
-                                                          snapshot) {
-                                                    if (snapshot.hasError) {
-                                                      print(snapshot.error
-                                                          .toString());
-                                                      return Center(
-                                                        child: Text(
-                                                            "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
-                                                      );
-                                                    } else if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState
-                                                            .waiting) {
-                                                      return Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      );
-                                                    } else if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState.done) {
-                                                      // List<PaymentGatewayVirtualAccount> payment =
-                                                      List<PaymentGateway>
-                                                          payment =
-                                                          snapshot.data;
-                                                      return _listPaymentGateway(
-                                                          payment);
-                                                    } else {
-                                                      return Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      );
-                                                    }
-                                                  }),
-                                            ),
-                                          ],
-                                        ),
+                                        Text("Tgl. Mulai :"),
+                                        Text("Tgl. Berakhir :"),
+                                        Text("Durasi Sewa :"),
+                                        pdiskon != 0
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text("Diskon :"),
+                                                  Text("Harga Awal :"),
+                                                ],
+                                              )
+                                            : Container()
                                       ],
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                Container(
-                                  // padding: EdgeInsets.only(
-                                  //   left: 16,
-                                  //   right: 16,
-                                  // ),
-                                  child: Card(
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      pvaluesewaawal,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(pvaluesewaakhir,
+                                        overflow: TextOverflow.ellipsis),
+                                    Text(pdurasi_sewa.toString() +
+                                        satuanHariatauJam()),
+                                    // settingJamOperasional(),
+                                    pdiskon != 0
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(pdiskon.toString() + "%"),
+                                              Text(
+                                                  rupiah(
+                                                      pharga_awal.toString()),
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .lineThrough))
+                                            ],
+                                          )
+                                        : Container()
+                                    // valueDiskon(pdiskon.toString(),
+                                    // pharga_awal.toString())
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Harga Sewa :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  rupiah(pharga_sewa,
+                                      separator: ',',
+                                      trailing: " /" + satuanHariatauJam()),
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Asuransi :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  asuransitxt,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Ket. Barang : ")],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            alignment: Alignment.topRight,
+                            padding: const EdgeInsets.only(
+                                top: 0.0, right: 60, left: 40),
+                            child: Text(
+                              pketerangan_barang,
+                              maxLines: 10,
+                              overflow: TextOverflow.visible,
+                              textAlign: TextAlign.justify,
+                            ),
+                            // ],
+                          ),
+                          Divider(color: Colors.grey),
+                          pkapasitas
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains('forklift')
+                              ? Container()
+                              : settingJamOperasionalLabel(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Divider(color: Colors.grey),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 30, bottom: 10),
+                            child: Row(
+                              children: <Widget>[
+                                Text("Detail Pembayaran",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold))
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Subtotal :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  rupiah(ptotalharixharga, separator: ','),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Minimum Deposit :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  rupiah(totaldeposit, separator: ','),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text("Poin Deposit Terpakai : ")
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  "-" + rupiah(psaldopoint, separator: ','),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[Text("Nominal Voucher :")],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  "-" + rupiah(pnominal_voucher),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text("Nominal Asuransi (" +
+                                        ppersentase_asuransi.toString() +
+                                        "%) :")
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 60),
+                                child: Text(
+                                  rupiah(
+                                    ptotal_asuransi,
+                                  ),
+                                  overflow: TextOverflow.clip,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  "( Nominal Barang : " +
+                                      rupiah(pnominal_barang + " )"),
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Divider(color: Colors.grey),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text("Total :",
+                                        style: (TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)))
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(right: 60),
+                                child: Text(
+                                  rupiah(hitungsemua),
+                                  style: (TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: SingleChildScrollView(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8, left: 36, top: 8),
+                                    child: Text(
+                                      "Pilih Metode Pembayaran : ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Card(
                                     child: Container(
                                       child: ExpansionTile(
                                         title: Text(
-                                          "Virtual Account : ",
+                                          "Instant Payment : ",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -801,17 +743,18 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: <Widget>[
+                                            children: [
                                               SafeArea(
                                                 child: FutureBuilder(
                                                     future: _apiService
-                                                        .listPaymentGatewayVA(),
+                                                        .listPaymentGateway(
+                                                            access_token),
                                                     // .listPaymentGatewayVA(),
                                                     builder: (context,
                                                         // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
                                                         AsyncSnapshot<
                                                                 List<
-                                                                    PaymentGatewayVirtualAccount>>
+                                                                    PaymentGateway>>
                                                             snapshot) {
                                                       if (snapshot.hasError) {
                                                         print(snapshot.error
@@ -832,11 +775,12 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                               .connectionState ==
                                                           ConnectionState
                                                               .done) {
-                                                        List<PaymentGatewayVirtualAccount>
-                                                            paymentz =
+                                                        // List<PaymentGatewayVirtualAccount> payment =
+                                                        List<PaymentGateway>
+                                                            payment =
                                                             snapshot.data;
-                                                        return _listPaymentGatewayVA(
-                                                            paymentz);
+                                                        return _listPaymentGateway(
+                                                            payment);
                                                       } else {
                                                         return Center(
                                                           child:
@@ -846,24 +790,95 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                     }),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                                  Container(
+                                    // padding: EdgeInsets.only(
+                                    //   left: 16,
+                                    //   right: 16,
+                                    // ),
+                                    child: Card(
+                                      child: Container(
+                                        child: ExpansionTile(
+                                          title: Text(
+                                            "Virtual Account : ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SafeArea(
+                                                  child: FutureBuilder(
+                                                      future: _apiService
+                                                          .listPaymentGatewayVA(),
+                                                      // .listPaymentGatewayVA(),
+                                                      builder: (context,
+                                                          // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
+                                                          AsyncSnapshot<
+                                                                  List<
+                                                                      PaymentGatewayVirtualAccount>>
+                                                              snapshot) {
+                                                        if (snapshot.hasError) {
+                                                          print(snapshot.error
+                                                              .toString());
+                                                          return Center(
+                                                            child: Text(
+                                                                "Koneksi anda bermasalah harap kembali ke halaman sebelumnya."),
+                                                          );
+                                                        } else if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return Center(
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          );
+                                                        } else if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .done) {
+                                                          List<PaymentGatewayVirtualAccount>
+                                                              paymentz =
+                                                              snapshot.data;
+                                                          print(
+                                                              'aqua ${snapshot.data}');
+                                                          return _listPaymentGatewayVA(
+                                                              paymentz);
+                                                        } else {
+                                                          return Center(
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          );
+                                                        }
+                                                      }),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -979,6 +994,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
+            color: Colors.white,
             height: MediaQuery.of(context).size.height * 100,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -1091,7 +1107,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         idpayment,
                                                     minimalsewahari:
                                                         pminimalsewahari,
-                                                        )));
+                                                    harga_awal: pharga_awal,
+                                                    namaprovider: namaprovider,
+                                                    )));
                                   });
                                 })
                           ],

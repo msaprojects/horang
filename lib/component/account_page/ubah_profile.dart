@@ -180,7 +180,8 @@ class _UbahProfileState extends State<UbahProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        _buildKomboKota(customer[0].namakota.toString(), customer[0].idkota.toString()),
+                        _buildKomboKota(customer[0].namakota.toString(),
+                            customer[0].idkota.toString()),
                         // Text("kamu memilih kota $valKota"),
                       ],
                     ),
@@ -200,51 +201,58 @@ class _UbahProfileState extends State<UbahProfile> {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        successDialog(context,
-                            "Apakah Data yang anda masukkan sudah sesuai?",
-                            showNeutralButton: false,
-                            title: "Konfirmasi Perubahan Data",
-                            positiveText: "Sudah Benar", positiveAction: () {
-                          String alamat = _controllerAlamat.text.toString();
-                          setState(() {
-                            alamat.isEmpty
-                                ? _fieldAlamat = true
-                                : _fieldAlamat = false;
-                          });
-                          setState(() => _isLoading = true);
-                          Customers customer1 = Customers(
-                            namacustomer:
-                                _controllerNamaLengkap.text.toString(),
-                            noktp: _controllerNoktp.text.toString(),
-                            alamat: _controllerAlamat.text.toString(),
-                            blacklist: "0",
-                            token: access_token,
-                            idkota: int.parse(valKota),
-                          );
-                          print('MASUK ${customer1}');
-                          _apiService.UpdateCustomer(customer1)
-                              .then((isSuccess) {
-                            setState(() => _isLoading = true);
-                            if (isSuccess) {
-                              successDialog(
-                                  context, "Data profile berhasil disimpan",
-                                  showNeutralButton: false,
-                                  positiveText: "Ok", positiveAction: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => Home(
-                                              initIndexHome: 0,
-                                            )),
-                                    (route) => false);
-                              });
-                            } else {
-                              errorDialog(
-                                  context,
-                                  "Data profile gagal disimpan, " +
-                                      _apiService.responseCode.mMessage);
-                            }
-                          });
-                        }, negativeText: "Cek Lagi", negativeAction: () {});
+                        _controllerAlamat.text == ""
+                            ? infoDialog(context,
+                                'Pastikan kolom alamat tidak boleh kosong !')
+                            : successDialog(context,
+                                "Apakah Data yang anda masukkan sudah sesuai? ${_controllerAlamat.text} -- $_fieldAlamat",
+                                showNeutralButton: false,
+                                title: "Konfirmasi Perubahan Data",
+                                positiveText: "Sudah Benar",
+                                positiveAction: () {
+                                String alamat =
+                                    _controllerAlamat.text.toString();
+                                setState(() {
+                                  alamat.isEmpty
+                                      ? _fieldAlamat = true
+                                      : _fieldAlamat = false;
+                                });
+                                setState(() => _isLoading = true);
+                                Customers customer1 = Customers(
+                                  namacustomer:
+                                      _controllerNamaLengkap.text.toString(),
+                                  noktp: _controllerNoktp.text.toString(),
+                                  alamat: _controllerAlamat.text.toString(),
+                                  blacklist: "0",
+                                  token: access_token,
+                                  idkota: int.parse(valKota),
+                                );
+                                print('MASUK ${customer1}');
+                                _apiService.UpdateCustomer(customer1)
+                                    .then((isSuccess) {
+                                  setState(() => _isLoading = true);
+                                  if (isSuccess) {
+                                    successDialog(context,
+                                        "Data profile berhasil disimpan",
+                                        showNeutralButton: false,
+                                        positiveText: "Ok", positiveAction: () {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) => Home(
+                                                    initIndexHome: 0,
+                                                  )),
+                                          (route) => false);
+                                    });
+                                  } else {
+                                    errorDialog(
+                                        context,
+                                        "Data profile gagal disimpan, " +
+                                            _apiService.responseCode.mMessage);
+                                  }
+                                });
+                              },
+                                negativeText: "Cek Lagi",
+                                negativeAction: () {});
                       },
                     ),
                   ),
@@ -347,19 +355,20 @@ class _UbahProfileState extends State<UbahProfile> {
       keyboardType: TextInputType.multiline,
       maxLines: 2,
       decoration: InputDecoration(
-        hintText: val,
+        hintText: 'Masukkan Alamat',
         labelText: "Masukkan Alamat",
         border: OutlineInputBorder(),
-        errorText: _fieldAlamat ? "Alamat Harus Diiisi" : null,
+        errorText: _fieldAlamat == null ? "Alamat Harus Diiisi" : null,
       ),
     );
   }
 
-  Widget _buildKomboKota(String kotaaaa, String idkotaa) {    
+  Widget _buildKomboKota(String kotaaaa, String idkotaa) {
     print("buildkombokota : $_dataKota");
     // _controlleridkota.text = kotaaaa;
     valKota = idkotaa;
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Text(kotaaaa),
       value: valKota,
       items: _dataKota.map((item) {

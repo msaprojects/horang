@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:intl/intl.dart';
 import 'package:commons/commons.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/scheduler.dart';
@@ -53,6 +54,7 @@ class _ProdukList extends State<ProdukList> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   DateTime selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now());
   List<int> _availableHoursAwal = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   List<int> _availableMenitAwal = [0];
   List<int> _availableHoursSelesai = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
@@ -70,10 +72,10 @@ class _ProdukList extends State<ProdukList> {
       rtanggalAwal,
       rtanggalAkhir,
       pin,
-      defaultProduk = 'kontainer',
+      defaultProduk = 'KONTAINER',
       timehourawal,
       timehourselesai,
-      jenisproduk = 'kontainer';
+      jenisproduk = 'KONTAINER';
   String _selectedDate,
       _dateCount,
       _range,
@@ -121,9 +123,6 @@ class _ProdukList extends State<ProdukList> {
         // print('selectedtimer $jAwal + $jAkhir + $tMulaiForklift');
       });
   }
-
-  String jAwal = DateFormat.Hm().format(DateTime.now());
-  String jAkhir = DateFormat.Hm().format(DateTime.now());
 
   Future selectTimeAwal(BuildContext context) async {
     final TimeOfDay pick = await showCustomTimePicker(
@@ -197,7 +196,7 @@ class _ProdukList extends State<ProdukList> {
     });
   }
 
-  var dataProduk = ['kontainer', 'forklift'];
+  var dataProduk = ['KONTAINER', 'FORKLIFT'];
 
   StreamSubscription connectivityStream;
   ConnectivityResult olders;
@@ -414,9 +413,9 @@ class _ProdukList extends State<ProdukList> {
   void initState() {
     jenisproduk = widget.jenisproduk;
     defaultProduk = dataProduk[0];
-    if (jenisproduk == 'kontainer') {
+    if (jenisproduk == 'KONTAINER') {
       defaultProduk = dataProduk[0];
-    } else if (jenisproduk == 'forklift') {
+    } else if (jenisproduk == 'FORKLIFT') {
       defaultProduk = dataProduk[1];
     }
 
@@ -426,17 +425,25 @@ class _ProdukList extends State<ProdukList> {
           .format(DateTime.now().add(Duration(days: 5)));
     });
     cekToken();
+    // _date1 = DateTime.now();
+    // _date2 = DateTime.now().add(Duration(days: 5));
+    // _tanggalAwal = _date1.toString();
+    // _tanggalAkhir = _date2.toString();
     _date1 = DateTime.now();
     _date2 = DateTime.now().add(Duration(days: 5));
-    _tanggalAwal = _date1.toString();
-    _tanggalAkhir = _date2.toString();
+    _tanggalAwal = DateFormat('yyyy-MM-dd').format(DateTime.now()).toString();
+    _tanggalAkhir = DateFormat('yyyy-MM-dd')
+        .format(DateTime.now().add(Duration(days: 5)))
+        .toString();
 
     _date1 = DateTime.parse(tMulaiForklift);
-    print('tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk');
+
+    print(
+        'tanggalawalnya $_tanggalAwal ++ $_tanggalAkhir ++ $defaultProduk---hashling');
 
     _buildKomboProduk(defaultProduk);
     setState(() {
-      if (defaultProduk == 'forklift') {
+      if (defaultProduk == 'FORKLIFT') {
         return cektanggal = '0';
       } else {
         return cektanggal = '1';
@@ -684,7 +691,7 @@ class _ProdukList extends State<ProdukList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "Halaman Order",
+          "Sewa",
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -742,7 +749,7 @@ class _ProdukList extends State<ProdukList> {
                   child: Text('Cari')),
               FlagCari == 1
                   ? _search(context, defaultProduk)
-                  : Text("Harap Pilih Tanggal dan Kota")
+                  : Text("Harap Pilih Tanggal dan Lokasi")
             ],
           ),
         ),
@@ -757,7 +764,7 @@ class _ProdukList extends State<ProdukList> {
       valueakhirperhitungandurasi = _tanggalAkhir;
       if (valKota == null) {
         Fluttertoast.showToast(
-            msg: "Pilih KOTA tidak boleh kosong!",
+            msg: "Harap pilih lokasi terlebih dahulu.",
             backgroundColor: Colors.black,
             textColor: Colors.white);
       }
@@ -771,19 +778,20 @@ class _ProdukList extends State<ProdukList> {
             // gravity: ToastGravity.CENTER,
             toastLength: Toast.LENGTH_LONG,
             timeInSecForIosWeb: 5,
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.black,
             textColor: Colors.white);
       } else if (valKota == null) {
-        print('masuk kota forklift');
         Fluttertoast.showToast(
-            msg: "Pilih KOTA tidak boleh kosong!",
+            msg: "Harap pilih lokasi terlebih dahulu",
             backgroundColor: Colors.black,
             textColor: Colors.white);
       } else {
         valueawalperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeawal;
+        //  +":00";//dikasih :00 sementara biar data yang dikirim ke node tidak terjadi anonym data 'permintaan tgl 19/08/2021 '
         valueakhirperhitungandurasi =
             formatTglForklift.format(selectedDate) + " " + timeselesai;
+        //  +":00";
         print("INVALID?2 " +
             valueawalperhitungandurasi +
             " ~ " +
@@ -792,7 +800,9 @@ class _ProdukList extends State<ProdukList> {
             DateTime.parse(valueawalperhitungandurasi),
             DateTime.parse(valueakhirperhitungandurasi));
 
-        print("Hasil perhitungan : " + valueakhirperhitungandurasi.toString());
+        print("Hasil perhitungan : " +
+            valueakhirperhitungandurasi.toString() +
+            "--   $formattedDate $valueawalperhitungandurasi");
         if (valuehasilperhitungandurasi < 1) {
           Fluttertoast.showToast(
               msg:
@@ -813,7 +823,7 @@ class _ProdukList extends State<ProdukList> {
       tanggalawal: valueawalperhitungandurasi,
       tanggalakhir: valueakhirperhitungandurasi,
       idlokasi: valKota,
-      jenisitem: defaultProduk,
+      jenisitem: defaultProduk.toLowerCase(),
     );
     return SafeArea(
       child: FutureBuilder(
@@ -825,12 +835,13 @@ class _ProdukList extends State<ProdukList> {
             return Center(
               child: Text(
                   // "8Something wrong with message: ${snapshot.error.toString()}"
-                  "Harap pilih tanggal dan kota yang ingin anda sewa"),
+                  "Harap pilih tanggal dan lokasi yang ingin anda sewa"),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<JenisProduk> profiles = snapshot.data;
+            print('soerabaja $data');
             if (profiles != null) {
               FlagCari = 0;
               print('flagcari $FlagCari');
@@ -847,7 +858,7 @@ class _ProdukList extends State<ProdukList> {
                     children: [
                       Image.asset("assets/image/datanotfound.png"),
                       Text(
-                        "Oppss..Maaf Jenis Container yang anda cari tidak ditemukan, pilih tanggal dan kota lainya.",
+                        "Oppss..Maaf Jenis Container yang anda cari tidak ditemukan, pilih tanggal dan lokasi lainya.",
                         style: GoogleFonts.inter(color: Colors.grey),
                         textAlign: TextAlign.center,
                       )
@@ -1144,6 +1155,7 @@ class _ProdukList extends State<ProdukList> {
                                     child: Card(
                                       child: InkWell(
                                         onTap: () {
+                                          print('gambarnya ada nggak ? ${jenisProduk.gambar}');
                                           itemClicked(
                                               context,
                                               jenisProduk.avail,
@@ -1185,9 +1197,9 @@ class _ProdukList extends State<ProdukList> {
                                                           image: DecorationImage(
                                                               fit: BoxFit
                                                                   .contain,
-                                                              image: NetworkImage(
-                                                                  jenisProduk
-                                                                      .gambar))),
+                                                              image: 
+                                                              NetworkImage(jenisProduk.gambar =='' ? 'https://picsum.photos/250?image=9' : jenisProduk.gambar)
+                                                              )),
                                                     ),
                                                   ),
                                                 ),
@@ -1285,6 +1297,7 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _buildKombokota(int kotaaaa) {
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Row(
@@ -1295,7 +1308,7 @@ class _ProdukList extends State<ProdukList> {
               SizedBox(
                 width: 7,
               ),
-              Text("Pilih Kota",
+              Text("Pilih Lokasi",
                   textAlign: TextAlign.end,
                   style:
                       GoogleFonts.inter(color: Colors.grey[800], fontSize: 14)),
@@ -1336,6 +1349,7 @@ class _ProdukList extends State<ProdukList> {
 
   Widget _buildKomboProduk(String produks) {
     return DropdownButtonFormField(
+      dropdownColor: Colors.white,
       hint: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Row(
@@ -1381,10 +1395,10 @@ class _ProdukList extends State<ProdukList> {
           defaultProduk = value;
           if (value == null) {
             return null;
-          } else if (defaultProduk == 'forklift') {
+          } else if (defaultProduk == 'FORKLIFT') {
             print('hey');
             return cektanggal = '0';
-          } else if (defaultProduk == 'kontainer') {
+          } else if (defaultProduk == 'KONTAINER') {
             print('hey123');
             return cektanggal = '1';
           }
@@ -1436,11 +1450,15 @@ class _ProdukList extends State<ProdukList> {
             Text('Anda Harus Melengkapi profile untuk melakukan transaksi!'),
         duration: Duration(seconds: 10),
       ));
+    } else if (jenisproduk.toLowerCase().contains('forklift') &&
+        (DateTime.parse(valueawalperhitungandurasi)
+            .isBefore(DateTime.parse(formattedDate)))) {
+      infoDialog(context, "Jam Awal tidak boleh kurang dari jam sekarang !");
     } else {
       if (available == 0) {
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text(
-              'Unit saat ini belum tersedia!, silahkan pilih tanggal dan kota yang lain'),
+              'Unit saat ini belum tersedia!, silahkan pilih tanggal dan lokasi yang lain'),
           duration: Duration(seconds: 3),
         ));
       } else {
@@ -1458,13 +1476,14 @@ class _ProdukList extends State<ProdukList> {
               DateTime.parse(valueawalperhitungandurasi),
               DateTime.parse(valueakhirperhitungandurasi));
           satuan = "/jam";
-        } else {
+        } else if (jenisproduk.toLowerCase().contains('kontainer')) {
           valueawalperhitungandurasi = _tanggalAwal;
           valueakhirperhitungandurasi = _tanggalAkhir;
           valuehasilperhitungandurasi = diffInDays(
               DateTime.parse(valueakhirperhitungandurasi),
               DateTime.parse(valueawalperhitungandurasi));
           satuan = "/hari";
+          print('konten');
         }
         print("CHEKING TGL $jenisproduk : " +
             valueawalperhitungandurasi +

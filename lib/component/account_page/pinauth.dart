@@ -177,7 +177,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 .contains(BiometricType.face)) {
                               _checkBiometric();
                               _getAvailableBiometrics();
-                              _authenticate();    
+                              _authenticate();
                             } else if (_availableBiometrics
                                 .contains(BiometricType.fingerprint)) {
                               _checkBiometric();
@@ -248,7 +248,7 @@ class _OtpScreenState extends State<OtpScreen> {
     // print("access token $access_token");
     // print("refresh token $refresh_token");
     return WillPopScope(
-      onWillPop: ()=> Future.value(false),
+      onWillPop: () => Future.value(false),
       child: SafeArea(
         child: Column(
           children: [
@@ -452,6 +452,12 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
+  clearpin1() {
+    pinIndex = 0;
+    // setPin(pinIndex, "");
+    // currentPin[ - 4] = "";
+  }
+
   clearPin() {
     if (pinIndex == 0)
       pinIndex = 0;
@@ -459,10 +465,12 @@ class _OtpScreenState extends State<OtpScreen> {
       setPin(pinIndex, "");
       currentPin[pinIndex - 1] = "";
       pinIndex--;
+      print('1satu');
     } else {
       setPin(pinIndex, "");
       currentPin[pinIndex - 1] = "";
       pinIndex--;
+      print('2dua');
     }
   }
 
@@ -535,7 +543,15 @@ class _OtpScreenState extends State<OtpScreen> {
                   (Route<dynamic> route) => false);
             } else if (!isSuccess && pinIndex >= 4) {
               print('Pin salah masku');
-              return errorDialog(context, 'PIN yang anda masukkan salah !');
+              return errorDialog(context, 'PIN yang anda masukkan salah !',
+                  showNeutralButton: false,
+                  positiveText: "Coba lagi !", positiveAction: () {
+                pinsatuController.clear();
+                pinduaController.clear();
+                pintigaController.clear();
+                pinempatController.clear();
+                clearpin1();
+              });
               // showDialog(
               //     context: context,
               //     builder: (context) {

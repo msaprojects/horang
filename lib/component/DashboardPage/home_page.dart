@@ -9,6 +9,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
 import 'package:horang/component/DashboardPage/Voucher.Dashboard.dart';
+import 'package:horang/component/HistoryPage/historypage.deposit.dart';
 import 'package:horang/component/LogPage/log_handler.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/component/account_page/ubah_pin.dart';
@@ -43,8 +44,8 @@ class _HomePageState extends State<HomePage> {
       pin,
       ceksaldo,
       sk,
-      kirimKontainer = 'kontainer',
-      kirimForklift = 'forklift';
+      kirimKontainer = 'KONTAINER',
+      kirimForklift = 'FORKLIFT';
   String token = '';
   final scaffoldState = GlobalKey<ScaffoldState>();
   final controllerTopic = TextEditingController();
@@ -280,15 +281,16 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Scaffold.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  "Fitur ini masih dalam proses pengembangan"),
-                                              duration: Duration(seconds: 5),
-                                            ));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> HistoryDeposit()));
+                                            // Scaffold.of(context)
+                                            //     .showSnackBar(SnackBar(
+                                            //   content: Text(
+                                            //       "Fitur ini masih dalam proses pengembangan"),
+                                            //   duration: Duration(seconds: 5),
+                                            // ));
                                           }),
                                       Text(
-                                        "Histori",
+                                        "Riwayat",
                                         style: GoogleFonts.inter(
                                             fontSize: 14, color: Colors.black),
                                       )
@@ -326,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'kontainer');
+                              return ProdukList(jenisproduk: 'KONTAINER');
                             }));
                           },
                           child: Container(
@@ -358,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'forklift');
+                              return ProdukList(jenisproduk: 'FORKLIFT');
                             }));
                           },
                           child: Container(
@@ -408,7 +410,7 @@ class _HomePageState extends State<HomePage> {
                       style: mTitleStyle,
                     ),
                     SelectableText(
-                      "See All...",
+                      "Lihat semua...",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {
@@ -448,11 +450,11 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Latest Order',
+                      'Transaksi Terakhir',
                       style: mTitleStyle,
                     ),
                     SelectableText(
-                      "See All...",
+                      "Lihat semua...",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       onTap: () {

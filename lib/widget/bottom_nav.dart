@@ -15,20 +15,20 @@ import '../component/StoragePage/StorageHandler.dart';
 
 class Home extends StatefulWidget {
   final int initIndexHome;
-  PageController pages = PageController(initialPage: 0);
-  Home({Key key, this.initIndexHome, this.pages}) : super(key: key);
-  
+  final Widget callpage; //CONSTRUKTOR UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+  Home({Key key, this.initIndexHome, this.callpage}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  PageController _myPage = PageController(initialPage: 0);
+  // PageController _myPage = PageController(initialPage: 0);
   var initIndex;
-   DateTime backbuttonpressedtime;
+  DateTime backbuttonpressedtime;
   int currentTab = 0;
-  List<Widget> screen = [HomePage()];
-  Widget currentScreen = HomePage();
+  Widget currentScreen; //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+  // Widget currentScreen = HomePage();
   final PageStorageBucket bucket = PageStorageBucket();
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
     idcustomer = sp.getString("idcustomer");
     nama_customer = sp.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    
+
     if (access_token == null) {
       // showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
@@ -80,7 +80,8 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    currentTab = widget.initIndexHome ?? 0;    
+    currentTab = widget.initIndexHome ?? 0;
+    currentScreen = widget.callpage ?? HomePage(); //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
     super.initState();
     cekToken();
   }
@@ -109,7 +110,6 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: BottomAppBar(
             shape: CircularNotchedRectangle(),
             child: Container(
-              
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -132,7 +132,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'Home',
+                          'Beranda',
                           style: TextStyle(
                             color: currentTab == 0
                                 ? Colors.blue[300]
@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'My Order',
+                          'Sewa',
                           style: TextStyle(
                             color: currentTab == 1
                                 ? Colors.blue[300]
@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'History',
+                          'Riwayat',
                           style: TextStyle(
                             color: currentTab == 2
                                 ? Colors.blue[300]
@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
                               : Colors.grey[400],
                         ),
                         Text(
-                          'Profil',
+                          'Akun',
                           style: TextStyle(
                             color: currentTab == 3
                                 ? Colors.blue[300]
@@ -233,7 +233,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-   Future<bool> _onBackPressed() async {
+  Future<bool> _onBackPressed() async {
     DateTime currenttime = DateTime.now();
     bool backbutton = backbuttonpressedtime == null ||
         currenttime.difference(backbuttonpressedtime) > Duration(seconds: 3);

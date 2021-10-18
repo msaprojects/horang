@@ -106,8 +106,8 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
 
   Widget _buildListView(List dataindex) {
     // print('objectsssssssssssss ${dataIndex}');
-    var strTMp = dataindex;
-    print('timpstmpnya $strTMp');
+    // var strTMp = dataindex;
+    // print('timpstmpnya $strTMp');
     return Scaffold(
       body: GroupedListView<dynamic, String>(
         elements: dataindex,
@@ -123,9 +123,7 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
             padding: const EdgeInsets.only(left: 20),
             child: Text(
               value,
-              // DateFormat("yyyy-MM-dd").parse(value).toString(),
               textAlign: TextAlign.center,
-              // style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               style: GoogleFonts.lato(fontSize: 18),
             ),
           ),

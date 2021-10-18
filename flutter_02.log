@@ -1,0 +1,98 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run -v
+
+## exception
+
+ProcessException: ProcessException: Process exited abnormally:
+adb.exe: error: device 'TXUFG18801001163' not found
+  Command: C:\Users\HP\AppData\Local\Android\Sdk\platform-tools\adb.exe -s TXUFG18801001163 forward --remove tcp:49461
+
+```
+#0      RunResult.throwException (package:flutter_tools/src/base/process.dart:171:5)
+#1      AndroidDevicePortForwarder.unforward (package:flutter_tools/src/android/android_device.dart:1318:15)
+<asynchronous suspension>
+#2      AndroidDevicePortForwarder.dispose (package:flutter_tools/src/android/android_device.dart:1324:7)
+<asynchronous suspension>
+#3      AndroidDevice.dispose (package:flutter_tools/src/android/android_device.dart:821:5)
+<asynchronous suspension>
+#4      HotRunner.cleanupAtFinish (package:flutter_tools/src/run_hot.dart:1176:7)
+<asynchronous suspension>
+#5      ResidentRunner.waitForAppToFinish (package:flutter_tools/src/resident_runner.dart:1394:5)
+<asynchronous suspension>
+#6      HotRunner.attach (package:flutter_tools/src/run_hot.dart:297:16)
+<asynchronous suspension>
+#7      RunCommand.runCommand (package:flutter_tools/src/commands/run.dart:639:26)
+<asynchronous suspension>
+#8      FlutterCommand.verifyThenRunCommand (package:flutter_tools/src/runner/flutter_command.dart:1157:12)
+<asynchronous suspension>
+#9      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1009:27)
+<asynchronous suspension>
+#10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#11     AppContext.run (package:flutter_tools/src/base/context.dart:149:12)
+<asynchronous suspension>
+#12     CommandRunner.runCommand (package:args/command_runner.dart:197:13)
+<asynchronous suspension>
+#13     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:278:9)
+<asynchronous suspension>
+#14     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#15     AppContext.run (package:flutter_tools/src/base/context.dart:149:12)
+<asynchronous suspension>
+#16     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:234:5)
+<asynchronous suspension>
+#17     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:64:9)
+<asynchronous suspension>
+#18     run.<anonymous closure> (package:flutter_tools/runner.dart:62:12)
+<asynchronous suspension>
+#19     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#20     AppContext.run (package:flutter_tools/src/base/context.dart:149:12)
+<asynchronous suspension>
+#21     runInContext (package:flutter_tools/src/context_runner.dart:73:10)
+<asynchronous suspension>
+#22     main (package:flutter_tools/executable.dart:90:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 2.0.3, on Microsoft Windows [Version 10.0.19042.1110], locale en-ID)
+    • Flutter version 2.0.3 at D:\KERJA\flutter
+    • Framework revision 4d7946a68d (5 months ago), 2021-03-18 17:24:33 -0700
+    • Engine revision 3459eb2436
+    • Dart version 2.12.2
+
+[!] Android toolchain - develop for Android devices (Android SDK version 30.0.2)
+    • Android SDK at C:\Users\HP\AppData\Local\Android\Sdk
+    • Platform android-30, build-tools 30.0.2
+    • ANDROID_HOME = C:\Users\HP\AppData\Local\Android\Sdk
+    • Java binary at: D:\Android Studio 29092020\jre\bin\java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_242-release-1644-b01)
+    ✗ Android license status unknown.
+      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+      See https://flutter.dev/docs/get-started/install/windows#android-setup for more details.
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+[✓] Android Studio (version 4.1.0)
+    • Android Studio at D:\Android Studio 29092020
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 1.8.0_242-release-1644-b01)
+
+[✓] Connected device (3 available)
+    • INE LX2 (mobile) • TXUFG18801001163 • android-arm64  • Android 9 (API 28)
+    • Chrome (web)     • chrome           • web-javascript • Google Chrome 92.0.4515.131
+    • Edge (web)       • edge             • web-javascript • Microsoft Edge 92.0.902.67
+
+! Doctor found issues in 1 category.
+```

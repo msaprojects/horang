@@ -55,8 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     namae = widget.nama;
     uuidAnyar = widget.cekUUID;
     emaile = widget.email;
-
-    print("askj : " + emailaccountselection.toString());
+    print(emaile);
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
@@ -149,10 +148,12 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: size.height * 0.02,
                     ),
+                    // filter jika profile belum lengkap maka ketika login user harus masuk dengan mengetikkan email secara manual
                     emaile == ""
                         ? _buildTextFieldEmail()
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text("Halo,",
                                   style: GoogleFonts.lato(fontSize: 16)),
@@ -184,71 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                               vertical: 20, horizontal: 40),
                           color: primaryColor,
                           onPressed: () {
-                            GetDeviceID().getDeviceID(context).then((ids) {
-                              setState(() {
-                                iddevice = ids;
-                                print(
-                                    'cek uudi $iddevice - $emailaccountselection');
-                                // if (emailaccountselection == null ||
-                                //     emailaccountselection == "" ||
-                                if (_controllerEmail == null ||
-                                    _fieldPassword == null ||
-                                    !_fieldPassword) {
-                                  warningDialog(
-                                      context, "Pastikan Semua Kolom Terisi!");
-                                } else {
-                                  setState(() {
-                                    print("IDDEVICE : " +
-                                        iddevice.toString() +
-                                        "--- $emailaccountselection");
-                                    _isLoading = true;
-                                  });
-                                  String emailz =
-                                      _controllerEmail.text.toString();
-                                  String password =
-                                      _controllerPassword.text.toString();
-                                  PenggunaModel pengguna = PenggunaModel(
-                                      uuid: iddevice,
-                                      email: emailaccountselection != ""
-                                          ? emailaccountselection
-                                          : emailz,
-                                      password: password,
-                                      status: 0,
-                                      notification_token: token,
-                                      token_mail: "0",
-                                      keterangan: "Uji Coba");
-                                  print("LOGIN? : " + pengguna.toString());
-                                  _apiService
-                                      .loginIn(pengguna)
-                                      .then((isSuccess) {
-                                    setState(() => _isLoading = false);
-                                    if (isSuccess) {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()));
-                                    } else {
-                                      print('${_apiService.responseCode.mMessage}');
-                                      if (_apiService.responseCode.mMessage ==
-                                          "Email atau Password anda Salah!") {
-                                        warningDialog(context,
-                                            "${_apiService.responseCode.mMessage}",
-                                            title: "Warning!");
-                                      } else if (_apiService.responseCode.mMessage ==
-                                          "Akun masih aktif di device lain!") {
-                                        warningDialog(context,
-                                            "${_apiService.responseCode.mMessage} ,Tutup dan buka aplikasi anda terlebih dahulu !",
-                                            showNeutralButton: false,
-                                            positiveText: "Oke",
-                                            positiveAction: () {
-                                          closeApp();
-                                        }, title: "Warning!");
-                                      }
-                                    }
-                                  });
-                                }
-                              });
-                            });
+                            LoginClick();
                           },
                         ),
                       ),
@@ -322,7 +259,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;
-          print("JUJUJUJ : " + value.toString());
           if (isFieldValid != _fieldEmail) {
             setState(() => _fieldEmail = isFieldValid);
           }
@@ -363,6 +299,60 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  LoginClick() {
+    //checking if email or password empty
+    // if (!_fieldEmail || !_fieldPassword) {
+    //   warningDialog(context, "Pastikan Semua Kolom Terisi!");
+    // } else {
+    //getting uuid for validation
+    GetDeviceID().getDeviceID(context).then((ids) {
+      setState(() {
+        // set variable
+        iddevice = ids;
+        _isLoading = true;
+        String email = _controllerEmail.text.toString();
+        String password = _controllerPassword.text.toString();
+        // set model value for json
+        PenggunaModel pengguna = PenggunaModel(
+            uuid: iddevice,
+            email: emailaccountselection != "" ? emailaccountselection : email,
+            password: password,
+            status: 0,
+            notification_token: token,
+            token_mail: "0",
+            keterangan: "Login");
+
+        //execute sending json to api url
+        print("LOGIN? : " + pengguna.toString());
+        _apiService.loginIn(pengguna).then((isSuccess) {
+          setState(() => _isLoading = false);
+          // if login success page will be route to home page
+          if (isSuccess) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          } else {
+            // if login failed will be show message json from api url
+            print('${_apiService.responseCode.mMessage}');
+            if (_apiService.responseCode.mMessage ==
+                "Email atau Password anda Salah!") {
+              warningDialog(context, "${_apiService.responseCode.mMessage}",
+                  title: "Warning!");
+            } else if (_apiService.responseCode.mMessage ==
+                "Akun masih aktif di device lain!") {
+              warningDialog(context,
+                  "${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.",
+                  showNeutralButton: false,
+                  positiveText: "Oke",
+                  positiveAction: () {},
+                  title: "Pemberitahuan!");
+            }
+          }
+        });
+      });
+    });
+  }
+  // }
 }
 
 void _popUpTroble(BuildContext context) {

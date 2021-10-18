@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:commons/commons.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:horang/component/Key/DummyCode.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/ListLog.dart';
 import 'package:horang/component/StoragePage/StorageActive.List.dart';
+import 'package:horang/component/StoragePage/StorageHandler.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
@@ -48,8 +51,7 @@ class KonfirmasiLog extends StatefulWidget {
       this.idtransaksi_detail,
       this.flag_selesai,
       this.selesai,
-      this.gambar
-      });
+      this.gambar});
 
   @override
   _KonfirmasiLogState createState() => _KonfirmasiLogState();
@@ -128,29 +130,30 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                     _apiService.CekPin(pin_cek1).then((isSuccess) {
                       _isLoading = true;
                       print("ezz0 $idtransaksi_det, $access_token");
-                      GenerateCode gcodezzzz = GenerateCode(
-                          idtransaksi_det: idtransaksi_det,
-                          token: access_token);
                       if (isSuccess) {
-                        //  return successDialog(context, "KOde aktivasine ${gcodezzzz.kode_aktivasi}");
+                        _apiService
+                            .generateCode(access_token, idtransaksi_det)
+                            .then((value) => setState(() {
+                                  return successDialog(context,
+                                      "Kode aktivasine" + value.toString());
+                                }));
                         //  return buildCode(context);
-
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          Flushbar(
-                            message: "Ok masuk",
-                            flushbarPosition: FlushbarPosition.BOTTOM,
-                            icon: Icon(Icons.ac_unit),
-                            flushbarStyle: FlushbarStyle.GROUNDED,
-                            duration: Duration(seconds: 5),
-                          )..show(_scaffoldState.currentState.context);
-                        });
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return DummyCode(
-                            iddetail_orders: gcodezzzz.idtransaksi_det,
-                          );
-                        }));
+                        // WidgetsBinding.instance
+                        //     .addPostFrameCallback((timeStamp) {
+                        //   Flushbar(
+                        //     message: "Ok masuk",
+                        //     flushbarPosition: FlushbarPosition.BOTTOM,
+                        //     icon: Icon(Icons.ac_unit),
+                        //     flushbarStyle: FlushbarStyle.GROUNDED,
+                        //     duration: Duration(seconds: 5),
+                        //   )..show(_scaffoldState.currentState.context);
+                        // });
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return DummyCode(
+                        //     iddetail_orders: gcodezzzz.idtransaksi_det,
+                        //   );
+                        // }));
                       } else {
                         return errorDialog(context, 'Open gagal dilakukan');
                       }
@@ -215,46 +218,6 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
         });
   }
 
-  Widget buildCode(BuildContext context) {
-    print("optimus prime1");
-    return SafeArea(
-      child: FutureBuilder(
-          future: _apiService.generateCode(access_token, idtransaksi_det),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<GenerateCode>> snapshot) {
-            if (snapshot.hasError) {
-              print("optimus prime2");
-              return Center(
-                child: Text(
-                    "zzSomething wrong with message ${snapshot.error.toString()}"),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              print("optimus prime3");
-              List<GenerateCode> zcode = snapshot.data;
-              // print(snapshot.data);
-              print("iamcannor ${snapshot.data}");
-              return _designviewCode(zcode);
-            } else {
-              print("optimus prime4");
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
-  }
-
-  Widget _designviewCode(List<GenerateCode> dataIndex) {
-    print("optimus prime");
-    return ListView.builder(
-        itemCount: dataIndex == null ? 0 : dataIndex.length,
-        itemBuilder: (BuildContext context, int index) {
-          GenerateCode gCode2 = dataIndex[index];
-          return successDialog(
-              context, "Kode Aktivasi anda ${gCode2.kode_aktivasi}");
-        });
-  }
-
   cekToken() async {
     sp = await SharedPreferences.getInstance();
     access_token = sp.getString("access_token");
@@ -310,15 +273,16 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
     keterangan = widget.keterangan;
     flag_selesai = widget.flag_selesai;
     selesai = widget.selesai;
+    print("Gambar? " + gambar1);
     super.initState();
     cekToken();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   Future<bool> _willPopCallback() async {
     ReusableClasses().showAlertDialog(context);
@@ -405,8 +369,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                      "Kota",
+                  Text("Kota",
                       style:
                           GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
                   Text(nama_kota1.toString(),
@@ -465,9 +428,15 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         children: [
                           Icon(Icons.lock_open_outlined),
                           // Text("Open $idtransaksi_det",
-                          Text("Open",
+                          Text(
+                              nama1
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains('forklift')
+                                  ? "Aktivasi"
+                                  : "Open",
                               style: GoogleFonts.inter(
-                                  fontSize: 16, fontWeight: FontWeight.bold))
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       color: Colors.orange,
@@ -538,14 +507,24 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                               _apiService.SelesaiLog(selesai).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  successDialog(context, "Berhasil",
-                                      showNeutralButton: false,
-                                      positiveAction: () {
-                                    Navigator.of(context)
-                                        .pushReplacement(MaterialPageRoute(
-                                            // builder: (context) => HomePage()));
-                                            builder: (context) => HomePage()));
-                                  }, positiveText: "Ok");
+                                  setState(() {
+                                    successDialog(
+                                      context, 
+                                      "Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.",
+                                      title: "Berhasil",
+                                        showNeutralButton: false,
+                                        positiveAction: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StorageHandler(
+                                                    initialIndex: 2,
+                                                  )
+                                              // StorageActive()
+                                              ));
+                                    }, positiveText: "Ok");
+                                  });
                                 } else {
                                   errorDialog(
                                       context, "Transaksi gagal dilakukan !");

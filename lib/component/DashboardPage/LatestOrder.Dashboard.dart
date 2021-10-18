@@ -33,9 +33,10 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif,
-      pin, query;
+      pin,
+      query;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -92,8 +93,9 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
           builder:
               // (BuildContext context, AsyncSnapshot<List<JenisProduk>> snapshot) {
               // ignore: missing_return
+              // (BuildContext context,AsyncSnapshot<List<HistoryModel>> snapshot) {
               (BuildContext context,
-                  AsyncSnapshot<List<HistoryModel>> snapshot) {
+                  AsyncSnapshot<List<MystorageModel>> snapshot) {
             print("coba cek lagi : ${snapshot.connectionState}");
             if (snapshot.hasError) {
               print(snapshot.error.toString());
@@ -102,8 +104,10 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                     "1Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<HistoryModel> profiles = snapshot.data;
+              // List<HistoryModel> profiles = snapshot.data;
+              List<MystorageModel> profiles = snapshot.data;
               if (profiles.isNotEmpty) {
+                print("harmony $profiles");
                 return _buildlistview(profiles);
               } else {
                 return Container(
@@ -144,7 +148,8 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
     );
   }
 
-  Widget _buildlistview(List<HistoryModel> dataIndex) {
+  // Widget _buildlistview(List<HistoryModel> dataIndex) {
+  Widget _buildlistview(List<MystorageModel> dataIndex) {
     return Container(
       // padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       // height: MediaQuery.of(context).size.height * 0.35,
@@ -154,7 +159,8 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
         scrollDirection: Axis.horizontal,
         itemCount: dataIndex.length,
         itemBuilder: (context, index) {
-          HistoryModel mystorageModel = dataIndex[index];
+          MystorageModel mystorageModel = dataIndex[index];
+          // HistoryModel mystorageModel = dataIndex[index];
           return GestureDetector(
             onTap: () {
               if (idcustomer == "0") {
@@ -168,18 +174,22 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => HistoryPage()));
                 _openAlertDialog(
-                  context,
-                  mystorageModel.no_order,
-                  mystorageModel.kode_refrensi,
-                  mystorageModel.kode_kontainer,
-                  mystorageModel.nama_provider,
-                  mystorageModel.tanggal_order,
-                  mystorageModel.tanggal_akhir,
-                  mystorageModel.tanggal_mulai,
-                  mystorageModel.total_harga,
-                  mystorageModel.harga,
-                  mystorageModel.jumlah_sewa,
-                );
+                    context,
+                    // mystorageModel.no_order,
+                    mystorageModel.noOrder,
+                    // mystorageModel.kode_refrensi,
+                    mystorageModel.kode_kontainer,
+                    // mystorageModel.nama_provider,
+                    mystorageModel.nama_lokasi,
+                    mystorageModel.keterangan,
+                    mystorageModel.jumlah_sewa,
+                    mystorageModel.nama,
+                    mystorageModel.tanggal_order,
+                    mystorageModel.tanggal_akhir,
+                    mystorageModel.tanggal_mulai
+                    // mystorageModel.total_harga,
+                    // mystorageModel.harga,
+                    );
               }
             },
             child: Container(
@@ -199,7 +209,8 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      mystorageModel.no_order,
+                      // mystorageModel.no_order,
+                      mystorageModel.noOrder,
                       // "cek",
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
@@ -240,28 +251,25 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
   void _openAlertDialog(
     BuildContext context,
     String no_order,
-    kode_refrensi,
+    // kode_refrensi,
     kode_kontainer,
-    nama_provider,
+    // nama_provider,
+    nama_lokasi,
+    keterangan,
+    jumlah_sewa,
+    nama,
     tanggal_order,
     tanggal_mulai,
     tanggal_akhir,
-    int total_harga,
-    harga,
-    jumlah_sewa,
+    // int total_harga,
+    // harga,
+    // jumlah_sewa,
   ) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: new Container(
-              width: 260.0,
-              height: 370.0,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
+            content: SingleChildScrollView(
               child: new Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
@@ -289,31 +297,33 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("No. Bayar : " + kode_refrensi,
+                          // Text("No. Bayar : " + kode_refrensi,
+                          Text("Lokasi : " + nama_lokasi,
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text(
-                              "Nominal Bayar : " +
-                                  rupiah(total_harga.toString()),
+                          Text("Keterangan : " + keterangan.toString(),
+                              // Text("Nominal Bayar : " + rupiah(total_harga.toString()),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(
                             height: 5,
                           ),
-                          Text(
-                              "Jumlah Sewa : " +
-                                  jumlah_sewa.toString() +
-                                  " Hari",
-                              style: GoogleFonts.lato(fontSize: 14)),
+                          Row(
+                            children: [
+                              Text("Jumlah Sewa : " + jumlah_sewa.toString(),
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                              Text((nama.toLowerCase().contains('forklift')) ? " Jam" : " Hari")
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Harga : " + rupiah(harga.toString()),
-                              style: GoogleFonts.lato(fontSize: 14)),
-                          SizedBox(
-                            height: 5,
-                          ),
+                          // Text("Harga : " + rupiah(harga.toString()),
+                          //     style: GoogleFonts.lato(fontSize: 14)),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
                           Text("Tgl Order : " + tanggal_order.toString(),
                               style: GoogleFonts.lato(fontSize: 14)),
                           SizedBox(

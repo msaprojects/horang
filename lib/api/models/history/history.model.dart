@@ -12,7 +12,8 @@ class HistoryModel {
       tanggal_mulai,
       tanggal_akhir,
       waktu_bayar,
-      nama_lokasi;
+      nama_lokasi,
+      nama;
 
   HistoryModel(
       {this.flag_bayar,
@@ -27,7 +28,8 @@ class HistoryModel {
       this.tanggal_mulai,
       this.tanggal_akhir,
       this.waktu_bayar,
-      this.nama_lokasi
+      this.nama_lokasi,
+      this.nama
       });
 
   factory HistoryModel.fromJson(Map<String, dynamic> map) {
@@ -46,6 +48,7 @@ class HistoryModel {
         tanggal_akhir: map['tanggal_akhir'],
         waktu_bayar: map['waktu_bayar'],
         nama_lokasi: map['nama_lokasi'],
+        nama: map['nama'],
         );
   }
   Map<String, dynamic> toJson() {
@@ -62,13 +65,14 @@ class HistoryModel {
       "tanggal_mulai": tanggal_mulai,
       "tanggal_akhir": tanggal_akhir,
       "waktu_bayar": waktu_bayar,
-      "nama_lokasi": nama_lokasi
+      "nama_lokasi": nama_lokasi,
+      "nama": nama
     };
   }
 
   @override
   String toString() {
-    return 'HistoryModel{flag_bayar: $flag_bayar ,no_order: $no_order, kode_refrensi: $kode_refrensi, kode_kontainer: $kode_kontainer, nama_provider: $nama_provider, total_harga: $total_harga, jumlah_sewa: $jumlah_sewa, harga: $harga, tanggal_order: $tanggal_order, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, waktu_bayar: $waktu_bayar, nama_lokasi: $nama_lokasi}';
+    return 'HistoryModel{flag_bayar: $flag_bayar ,no_order: $no_order, kode_refrensi: $kode_refrensi, kode_kontainer: $kode_kontainer, nama_provider: $nama_provider, total_harga: $total_harga, jumlah_sewa: $jumlah_sewa, harga: $harga, tanggal_order: $tanggal_order, tanggal_mulai: $tanggal_mulai, tanggal_akhir: $tanggal_akhir, waktu_bayar: $waktu_bayar, nama_lokasi: $nama_lokasi, nama: $nama}';
   }
 }
 

@@ -9,18 +9,18 @@ import 'package:http/http.dart' as http;
 
 class ReusableClasses {
   PerhitunganOrder(
-    String persentasevoucher,
-    String minimumtransaksi,
-    bool boolasuransi,
-    bool boolvoucher,
-    String nominalVoucher,
-    String harga,
-    String durasi,
-    String nominalbaranginput,
-    String ceksaldopoint,
-    String minimaldeposit,
-    String asuransi,
-  ) {
+      String persentasevoucher,
+      String minimumtransaksi,
+      bool boolasuransi,
+      bool boolvoucher,
+      String nominalVoucher,
+      String harganormal,
+      String durasi,
+      String nominalbaranginput,
+      String ceksaldopoint,
+      String minimaldeposit,
+      String asuransi,
+      String hargasetelahdiskon) {
     var hasilperhitungan;
     num nominalV = 0;
     num ceksaldoD = 0;
@@ -29,16 +29,16 @@ class ReusableClasses {
     if (boolvoucher == false) {
       nominalV = 0;
     } else {
-      if ((double.parse(durasi) * double.parse(harga)) >=
+      if ((num.parse(durasi) * double.parse(hargasetelahdiskon)) >=
           double.parse(minimumtransaksi)) {
         if (((double.parse(persentasevoucher) / 100) *
-                double.parse(harga) *
+                double.parse(harganormal) *
                 double.parse(durasi)) >=
             double.parse(nominalVoucher)) {
           nominalV = double.parse(nominalVoucher);
         } else {
           nominalV = (double.parse(persentasevoucher) / 100) *
-              double.parse(harga) *
+              double.parse(harganormal) *
               double.parse(durasi);
         }
       } else {
@@ -46,29 +46,29 @@ class ReusableClasses {
       }
     }
 
-    if (((double.parse(harga) * double.parse(durasi)) +
+    if (((double.parse(hargasetelahdiskon) * double.parse(durasi)) +
             ((double.parse(asuransi) / 100) *
                 double.parse(nominalbaranginput)) +
-            int.parse(minimaldeposit) * double.parse(harga) -
+            int.parse(minimaldeposit) * double.parse(harganormal) -
             nominalV) >=
         double.parse(ceksaldopoint)) {
       ceksaldoD = double.parse(ceksaldopoint);
     } else {
-      ceksaldoD = ((double.parse(harga) * double.parse(durasi)) +
+      ceksaldoD = ((double.parse(hargasetelahdiskon) * double.parse(durasi)) +
           ((double.parse(asuransi) / 100) * double.parse(nominalbaranginput)) +
-          int.parse(minimaldeposit) * double.parse(harga) -
+          int.parse(minimaldeposit) * double.parse(harganormal) -
           nominalV);
     }
 
-    hasilperhitungan = ((double.parse(harga) * double.parse(durasi)) +
-            ((double.parse(asuransi) / 100) *
-                double.parse(nominalbaranginput)) +
-            int.parse(minimaldeposit) * double.parse(harga) -
-            ceksaldoD -
-            nominalV)
-        .toStringAsFixed(2);
-
-   return hasilperhitungan;
+    hasilperhitungan =
+        ((double.parse(hargasetelahdiskon) * double.parse(durasi)) +
+                ((double.parse(asuransi) / 100) *
+                    double.parse(nominalbaranginput)) +
+                int.parse(minimaldeposit) * double.parse(harganormal) -
+                ceksaldoD -
+                nominalV)
+            .toStringAsFixed(2);
+    return hasilperhitungan;
   }
 
   hitungvoucher(
@@ -100,7 +100,7 @@ class ReusableClasses {
         nominalV = 0;
       }
     }
-    return nominalV;
+    return nominalV.toInt();
   }
 
   cekToken(String access_token, refresh_token, idcustomer, email, nama_customer,

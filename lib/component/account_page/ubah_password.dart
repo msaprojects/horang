@@ -23,8 +23,12 @@ class _UbahPassState extends State<UbahPass> {
   SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool _isLoading = false,
-      _obsecureText = true,
-      _obsecureText1 = true,
+      _obsecureTextpasslama = true,
+      _obsecureTextpaslama = true,
+      _obsecureTextpassbaru = true,
+      _obsecureTextpasbaru = true,
+      _obsecureTextpassretype = true,
+      _obsecureTextpasretype = true,
       _isFieldpassLama,
       _isFieldpassBaru,
       _isFieldpassRetype,
@@ -96,10 +100,25 @@ class _UbahPassState extends State<UbahPass> {
     cekToken();
   }
 
-  void _toggle() {
+  void _togglepasslama() {
     setState(() {
-      _obsecureText = !_obsecureText;
-      _obsecureText1 = !_obsecureText1;
+      _obsecureTextpasslama = !_obsecureTextpasslama;
+      _obsecureTextpaslama = !_obsecureTextpaslama;
+    });
+  }
+
+  //tambahan toogle untuk show/hiden text (req. 30/08/21 by sahrul)
+  void _togglepassbaru() {
+    setState(() {
+      _obsecureTextpassbaru = !_obsecureTextpassbaru;
+      _obsecureTextpasbaru = !_obsecureTextpasbaru;
+    });
+  }
+
+  void _toggleretype() {
+    setState(() {
+      _obsecureTextpassretype = !_obsecureTextpassretype;
+      _obsecureTextpasretype = !_obsecureTextpasretype;
     });
   }
 
@@ -109,7 +128,7 @@ class _UbahPassState extends State<UbahPass> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          "Ubah Password",
+          "Ubah Kata Sandi",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
@@ -140,6 +159,8 @@ class _UbahPassState extends State<UbahPass> {
                     child: RaisedButton(
                       child: Text("Simpan"),
                       onPressed: () {
+                        print(
+                            'tessuhu ${_controllerPasslama.text} 9$_isFieldpassLama 9');
                         // if (!tekan1x) {
                         // return warningDialog(context, "tekan lebih 1x");
                         //   return true;
@@ -150,51 +171,53 @@ class _UbahPassState extends State<UbahPass> {
                             _isFieldpassBaru == null ||
                             !_isFieldpassLama ||
                             !_isFieldpassBaru) {
-                          _scaffoldState.currentState.showSnackBar(SnackBar(
-                            content: Text("Please Fill all field"),
-                          ));
+                          warningDialog(
+                              context, "Pastikan semua kolom terisi !");
                           // return;
-                        }
-                        setState(() => _isLoading = true);
-                        Password password = Password(
-                            passwordlama: _controllerPasslama.text.toString(),
-                            passwordbaru: _controllerPassbaru.text.toString(),
-                            token: access_token);
-                        print("MUI $password");
-                        if (_controllerPassbaru.text !=
-                            _controllerPassretype.text) {
-                          warningDialog(context,
-                              "Password baru tidak sama dengan retype password",
-                              showNeutralButton: false,
-                              positiveText: 'Ok',
-                              positiveAction: () {});
                         } else {
-                          _apiService.UbahPassword(password).then((isSuccess) {
-                            setState(() => _isLoading = false);
-                            print("dede ${_apiService.responseCode}");
-                            if (isSuccess) {
-                              print("sukses");
-                              successDialog(
-                                  context, "Ubah password berhasil disimpan",
-                                  showNeutralButton: false,
-                                  positiveText: "Okeh", positiveAction: () {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) => Home(
-                                              initIndexHome: 0,
-                                            )),
-                                    (Route<dynamic> route) => false);
-                              });
-                            } else {
-                              if (_apiService.responseCode == "401") {
+                          setState(() => _isLoading = true);
+                          Password password = Password(
+                              passwordlama: _controllerPasslama.text.toString(),
+                              passwordbaru: _controllerPassbaru.text.toString(),
+                              token: access_token);
+                          print("MUI $password");
+                          if (_controllerPassbaru.text !=
+                              _controllerPassretype.text) {
+                            warningDialog(context,
+                                "Password baru tidak sama dengan retype password",
+                                showNeutralButton: false,
+                                positiveText: 'Ok',
+                                positiveAction: () {});
+                          } else {
+                            _apiService.UbahPassword(password)
+                                .then((isSuccess) {
+                              setState(() => _isLoading = false);
+                              print("dede ${_apiService.responseCode}");
+                              if (isSuccess) {
+                                print("sukses");
+                                successDialog(
+                                    context, "Ubah password berhasil disimpan",
+                                    showNeutralButton: false,
+                                    positiveText: "Okeh", positiveAction: () {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              Home(
+                                                initIndexHome: 0,
+                                              )),
+                                      (Route<dynamic> route) => false);
+                                });
+                              } else {
+                                if (_apiService.responseCode == "401") {
+                                  errorDialog(context,
+                                      "Password lama yang anda masukkan salah.");
+                                }
                                 errorDialog(context,
-                                    "Password lama yang anda masukkan salah.");
+                                    "Ubah Password gagal disimpan, silahkan dicek ulang");
                               }
-                              errorDialog(context,
-                                  "Ubah Password gagal disimpan, silahkan dicek ulang");
-                            }
-                          });
+                            });
+                          }
                         }
                       },
                     ),
@@ -212,12 +235,13 @@ class _UbahPassState extends State<UbahPass> {
     return TextField(
       controller: _controllerPasslama,
       keyboardType: TextInputType.text,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpasslama,
       decoration: InputDecoration(
         suffixIcon: IconButton(
-          onPressed: _toggle,
-          icon: new Icon(
-              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+          onPressed: _togglepasslama,
+          icon: new Icon(_obsecureTextpasslama
+              ? Icons.remove_red_eye
+              : Icons.visibility_off),
         ),
         labelText: "Password lama",
         errorText: _isFieldpassLama == null || _isFieldpassLama
@@ -236,13 +260,14 @@ class _UbahPassState extends State<UbahPass> {
   Widget _buildTextFieldPassBaru() {
     return TextFormField(
       controller: _controllerPassbaru,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpassbaru,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           suffixIcon: IconButton(
-            onPressed: _toggle,
-            icon: new Icon(
-                _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+            onPressed: _togglepassbaru,
+            icon: new Icon(_obsecureTextpassbaru
+                ? Icons.remove_red_eye
+                : Icons.visibility_off),
           ),
           labelText: "Password baru",
           errorText: _isFieldpassBaru == null || _isFieldpassBaru
@@ -261,12 +286,13 @@ class _UbahPassState extends State<UbahPass> {
     return TextFormField(
       controller: _controllerPassretype,
       keyboardType: TextInputType.text,
-      obscureText: _obsecureText,
+      obscureText: _obsecureTextpassretype,
       decoration: InputDecoration(
         suffixIcon: IconButton(
-          onPressed: _toggle,
-          icon: new Icon(
-              _obsecureText ? Icons.remove_red_eye : Icons.visibility_off),
+          onPressed: _toggleretype,
+          icon: new Icon(_obsecureTextpassretype
+              ? Icons.remove_red_eye
+              : Icons.visibility_off),
         ),
         labelText: "Retype Password",
         errorText: _isFieldpassRetype == null || _isFieldpassRetype

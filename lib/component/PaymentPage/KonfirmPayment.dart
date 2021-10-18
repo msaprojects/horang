@@ -7,9 +7,11 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KonfirmPayment extends StatefulWidget {
+  
   bool flagasuransi, flagvoucher;
   var idlokasi,
       idjenis_produk,
@@ -32,46 +34,49 @@ class KonfirmPayment extends StatefulWidget {
       tambahsaldopoint,
       persentase_asuransi,
       idpayment_gateway,
-      minimalsewahari
-      // jenisitem
-      ;
+      minimalsewahari,
+      harga_awal,
+      namaprovider;
 
-  KonfirmPayment({
-    this.flagasuransi,
-    this.flagvoucher,
-    this.idlokasi,
-    this.idjenis_produk,
-    this.idvoucher,
-    this.idasuransi,
-    this.harga_sewa,
-    this.durasi_sewa,
-    this.valuesewaawal,
-    this.valuesewaakhir,
-    this.kapasitas,
-    this.alamat,
-    this.keterangan_barang,
-    this.nominal_barang,
-    this.nominal_voucher,
-    this.minimum_transaksi,
-    this.persentase_voucher,
-    this.totalharixharga,
-    this.saldopoint,
-    this.email_asuransi,
-    this.tambahsaldopoint,
-    this.persentase_asuransi,
-    this.idpayment_gateway,
-    this.minimalsewahari,
-    // this.jenisitem
-  });
+  KonfirmPayment(
+      {this.flagasuransi,
+      this.flagvoucher,
+      this.idlokasi,
+      this.idjenis_produk,
+      this.idvoucher,
+      this.idasuransi,
+      this.harga_sewa,
+      this.durasi_sewa,
+      this.valuesewaawal,
+      this.valuesewaakhir,
+      this.kapasitas,
+      this.alamat,
+      this.keterangan_barang,
+      this.nominal_barang,
+      this.nominal_voucher,
+      this.minimum_transaksi,
+      this.persentase_voucher,
+      this.totalharixharga,
+      this.saldopoint,
+      this.email_asuransi,
+      this.tambahsaldopoint,
+      this.persentase_asuransi,
+      this.idpayment_gateway,
+      this.minimalsewahari,
+      this.harga_awal,
+      this.namaprovider});
 
   @override
   _KonfirmPaymentState createState() => _KonfirmPaymentState();
 }
 
 class _KonfirmPaymentState extends State<KonfirmPayment> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   ApiService _apiService = ApiService();
   SharedPreferences sp;
   var access_token, refresh_token, email, nama_customer, idcustomer, pin;
+  
 
   var kflagasuransi,
       kflagvoucher,
@@ -99,12 +104,14 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
       kpersentase_asuransi,
       kidpayment_gateway,
       hitungsemua,
-      kminimalsewahari
-      // kjenisitem
-      ;
+      kminimalsewahari,
+      kharga_awal,
+      knamaprovider;
 
   bool isSuccess = false;
   TextEditingController _noOvo = TextEditingController();
+  String initCOuntry = 'ID';
+  PhoneNumber number = PhoneNumber(isoCode: 'ID');
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -149,17 +156,19 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   void hitungsemuaFunction() async {
     setState(() {
       hitungsemua = ReusableClasses().PerhitunganOrder(
-          kpersentase_voucher.toString(),
-          kminimum_transaksi.toString(),
-          kflagasuransi,
-          kflagvoucher,
-          knominal_voucher.toString(),
-          kharga_sewa.toString(),
-          kdurasi_sewa.toString(),
-          knominal_barang.toString(),
-          ksaldopoint.toString(),
-          kminimalsewahari.toString(),
-          kpersentase_asuransi.toString());
+        kpersentase_voucher.toString(),
+        kminimum_transaksi.toString(),
+        kflagasuransi,
+        kflagvoucher,
+        knominal_voucher.toString(),
+        kharga_awal.toString(),
+        kdurasi_sewa.toString(),
+        knominal_barang.toString(),
+        ksaldopoint.toString(),
+        kminimalsewahari.toString(),
+        kpersentase_asuransi.toString(),
+        kharga_sewa.toString(),
+      );
     });
   }
 
@@ -191,21 +200,23 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     kminimalsewahari = widget.minimalsewahari;
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
     totaldeposit = (kminimalsewahari * kharga_sewa);
-    // kjenisitem = widget.jenisitem;
+    kharga_awal = widget.harga_awal;
+    knamaprovider = widget.namaprovider;
     cekToken();
     hitungsemuaFunction();
     super.initState();
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: formKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -225,33 +236,54 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Text("Masukkan nomor yang terdaftar di OVO ",
+                  Text("Masukkan nomor yang terdaftar di $knamaprovider ",
                       textAlign: TextAlign.left,
                       style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold, fontSize: 14)),
                   SizedBox(
                     height: 15,
                   ),
-                  TextFormField(
-                    controller: _noOvo,
-                    // ignore: deprecated_member_use
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      hintText: "Ovo",
-                      labelText: "Ovo",
+                  InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      print(number.phoneNumber);
+                    },
+                    onInputValidated: (bool value) {
+                      print(value);
+                    },
+                    selectorConfig: SelectorConfig(
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                      backgroundColor: Colors.white,
                     ),
+                    ignoreBlank: false,
+                    autoValidateMode: AutovalidateMode.disabled,
+                    selectorTextStyle: TextStyle(color: Colors.black),
+                    initialValue: number,
+                    formatInput: false,
+                    maxLength: 13,
+                    textFieldController: _noOvo,
+                    inputBorder: OutlineInputBorder(),
                   ),
+                  // TextFormField(
+                  //   controller: _noOvo,
+                  //   // ignore: deprecated_member_use
+                  //   inputFormatters: [
+                  //     WhitelistingTextInputFormatter.digitsOnly,
+                  //     new LengthLimitingTextInputFormatter(15)
+                  //   ],
+                  //   keyboardType: TextInputType.number,
+                  //   decoration: InputDecoration(
+                  //     border: OutlineInputBorder(
+                  //       borderSide: BorderSide(color: Colors.blue),
+                  //     ),
+                  //     hintText: "$knamaprovider",
+                  //     labelText: "$knamaprovider",
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
-                    "1. Buka aplikasi OVO dan cek notifikasi untuk menyelesaikan pembayaran.",
+                    "1. Buka aplikasi $knamaprovider dan cek notifikasi untuk menyelesaikan pembayaran.",
                     style: GoogleFonts.inter(height: 1.5, fontSize: 14),
                   ),
                   SizedBox(
@@ -272,6 +304,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
               ),
               onPressed: () {
                 setState(() {
+                  // formKey.currentState.validate();
                   OrderConfirmation(context, _noOvo.text.toString());
                 });
               },
@@ -319,7 +352,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                       idpayment_gateway: kidpayment_gateway,
                       no_ovo: _noOvo.text.toString(),
                       minimalsewahari: kminimalsewahari,
-                      // jenisitem: kjenisitem,
+                      harga_awal: kharga_awal,
                     )));
       });
     }

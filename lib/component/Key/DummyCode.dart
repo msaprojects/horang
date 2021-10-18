@@ -79,29 +79,29 @@ class _DummyCodeState extends State<DummyCode> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: FutureBuilder(
-        future: _apiService.generateCode(access_token, idtransaksi_detail1),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<GenerateCode>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                  "zzzSomething wrong with message ${snapshot.error.toString()}"),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            List<GenerateCode> logs1 = snapshot.data;
-            print(snapshot.data);
-            // print("iamcannor ${snapshot.data}");
-            return _buildListview(logs1);
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+    // return SafeArea(
+    //   child: FutureBuilder(
+    //     future: _apiService.generateCode(access_token, idtransaksi_detail1),
+    //     builder:
+    //         (BuildContext context, AsyncSnapshot<List<GenerateCode>> snapshot) {
+    //       if (snapshot.hasError) {
+    //         return Center(
+    //           child: Text(
+    //               "zzzSomething wrong with message ${snapshot.error.toString()}"),
+    //         );
+    //       } else if (snapshot.connectionState == ConnectionState.done) {
+    //         List<GenerateCode> logs1 = snapshot.data;
+    //         print(snapshot.data);
+    //         // print("iamcannor ${snapshot.data}");
+    //         return _buildListview(logs1);
+    //       } else {
+    //         return Center(
+    //           child: CircularProgressIndicator(),
+    //         );
+    //       }
+    //     },
+    //   ),
+    // );
   }
 
   Widget _buildListview(List<GenerateCode> dataIndex) {
@@ -163,11 +163,11 @@ class _DummyCodeState extends State<DummyCode> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              log2.kode_aktivasi,
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
+                            // Text(
+                            //   log2.kode_aktivasi,
+                            //   style: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
                             // Text(log2.status)
                           ],
                         ),

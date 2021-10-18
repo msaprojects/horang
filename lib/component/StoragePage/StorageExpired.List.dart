@@ -1,29 +1,27 @@
 import 'dart:async';
 
 import 'package:commons/commons.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/log/selesaiLog.dart';
-// import 'package:get/get.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/Key/KonfirmasiLog.dart';
 import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/reusable.class.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageExpired1 extends StatefulWidget {
-  // String token;
-
-  // StorageNonAktifDummy({this.token});
   @override
   _SearchListViewExampleState createState() => _SearchListViewExampleState();
 }
 
-class _SearchListViewExampleState extends State<StorageExpired1> {
+class _SearchListViewExampleState extends State<StorageExpired1>
+//  with AutomaticKeepAliveClientMixin<StorageExpired1>
+{
   bool isLoading = false;
   SharedPreferences sp;
   ApiService _apiService = ApiService();
@@ -41,12 +39,12 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif,
       flag_noted,
       noted;
 
-  List<MystorageModel> storage = [];
+  List<MystorageModel> storage, storage1 = []; //jian tambah ini
   String query = '', token = '';
   Timer debouncer;
 
@@ -75,12 +73,11 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
         visible: false,
       );
     } else {
-      return FlatButton(
-          color: Colors.green,
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: Colors.green),
           onPressed: () {
             infoDialog(context,
                 "Apakah anda yakin ingin menyelesaikan transaksi ini ? $nam_kotaa, $kod_kontanr",
-                // $idtr, $idtrd, $access_token",
                 showNeutralButton: false, positiveAction: () {
               setState(() {
                 isLoading = true;
@@ -90,9 +87,17 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
                   _apiService.SelesaiLog(selesai).then((isSuccess) {
                     setState(() => isLoading = false);
                     if (isSuccess) {
+                      //  final storage2 = await _apiService.listMystorageExpired(access_token, query);
+                      _apiService
+                          .listMystorageExpired(access_token, query)
+                          .then((value) {
+                        setState(() {
+                          this.storage = value;
+                        });
+                      });
                       successDialog(context, "Berhasil",
                           showNeutralButton: false, positiveAction: () {
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       }, positiveText: "Ok");
                     } else {
                       errorDialog(context, "Transaksi gagal dilakukan !");
@@ -117,20 +122,29 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
     if (fselesai == 0 && selesai == 0) {
       noted = "Harap Konfirmasi Selesai";
       flag_noted = Colors.red[600];
-    } else if (fselesai == 1 && selesai == 0) {
+    } else if (fselesai == 0 && selesai == 1) { // untuk perintah selesai mobile jika dibagian web sudah diselesaikan
+      noted = "Harap Konfirmasi Selesai";
+      flag_noted = Colors.indigo;
+    } else if (fselesai == 1 && selesai == 0) { // untuk perintah selesai bagian web jika dibagian mobile sudah diselesaikan
       noted = "Menunggu Konfirmasi";
       flag_noted = Colors.indigo;
-    } else if (fselesai == 1 && selesai == 1) {
+    } else if (fselesai == 1 && selesai == 1) { // untuk mengetahui jika bagian web dan bagian mobile sudah dislesaikan 2-2nya
       noted = "Berhasil Dikonfirmasi";
       flag_noted = Colors.green;
     } else {
       noted = "-";
     }
     return Container(
-      height: MediaQuery.of(context).size.height * 0.06,
-      child: Text(
-        noted,
-        style: TextStyle(color: flag_noted, fontWeight: FontWeight.bold),
+      child: Row(
+        children: [
+          Text(
+            "Status Deposit : ",
+          ),
+          Text(
+            noted,
+            style: TextStyle(color: flag_noted, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
       color: Colors.transparent,
     );
@@ -176,9 +190,14 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
           }));
     }
     storage = await _apiService.listMystorageExpired(access_token, query);
+    // storage1 = await _apiService.listMystorageExpired(access_token, query);
     print('yuhu ada gak $token ++ $access_token');
+    setState(() => this.storage1 = storage); //jian tambah ini
     setState(() => this.storage = storage);
   }
+
+  // @override
+  // bool get wantKeepAlive => false;
 
   @override
   initState() {
@@ -220,15 +239,16 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (index.hasData) {
-                  print('jaxx $storage');
+                  // print('jaxx $storage');
                   if (storage.toString() != "[]") {
                     print("true");
                     return ListView.builder(
                       itemCount: storage.length,
                       itemBuilder: (context, index) {
-                        print('ada ?');
+                        print('ada yang?');
                         final storages = storage[index];
-                        print('SOTO $storages $index');
+                        print('soto expired $storage');
+                        // print('SOTO $storages $index');
                         return buildmyStorage(storages);
                       },
                     );
@@ -268,25 +288,54 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Cari...',
-        onChanged: searchmystorage,
+        // onChanged: searchmystorage,
+        onChanged: searchmystorage1, //jian tambah ini
       );
 
-  Future searchmystorage(String query) async => debounce(() async {
-        print('token1 $access_token');
-        final storage =
-            await _apiService.listMystorageExpired(access_token, query);
+  //jian tambah ini
+  Future searchmystorage1(String query) async => debounce(() async {
+        print('mystorage1 token1 $access_token');
+        final storagex = storage1
+            .where((storage1) {
+              final noOrderLower = storage1.noOrder.toLowerCase();
+              final kodeKontainerLower = storage1.kode_kontainer.toLowerCase();
+              final jenisKontainer = storage1.nama.toLowerCase();
+              final lokasi = storage1.nama_lokasi.toLowerCase();
+              final searchLower = query.toLowerCase();
+
+              return noOrderLower.contains(searchLower) ||
+                  kodeKontainerLower.contains(searchLower) ||
+                  jenisKontainer.contains(searchLower) ||
+                  lokasi.contains(searchLower);
+            })
+            .where((element) => element.status == "EXPIRED")
+            .toList();
+
         if (!mounted) return;
         setState(() {
-          this.storage = storage;
-          print("Execute search");
+          this.storage = storagex;
+          print("Execute search1");
         });
       });
 
+  // Future searchmystorage(String query) async => debounce(() async {
+  //       print('token1 $access_token');
+  //       final storage =
+  //           await _apiService.listMystorageExpired(access_token, query);
+
+  //       if (!mounted) return;
+  //       setState(() {
+  //         this.storage = storage;
+  //         print("Execute search");
+  //       });
+  //     });
+
   Widget buildmyStorage(MystorageModel storage) {
-    print('masuk sini xx $storage');
+    // print('masuk sini xx $storage');
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 10),
       color: Colors.grey[100],
+      // child: GestureDetector(
       child: GestureDetector(
         onTap: () {
           // setState(() => isLoading = true);
@@ -309,7 +358,7 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
                 storage.tanggal_order,
                 storage.tanggal_mulai,
                 storage.tanggal_akhir,
-                storage.hari,
+                storage.jumlah_sewa,
                 storage.flag_selesai,
                 storage.selesai);
           }
@@ -387,30 +436,25 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
       tanggal_order,
       tanggal_mulai,
       tanggal_akhir,
-      hari,
+      jumlah_sewa,
       int flagselesaii,
       selesaiz) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: new Container(
-              width: 260.0,
-              // height: 300.0,
-              height: MediaQuery.of(context).size.height * 0.6,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: const Color(0xFFFFFF),
-                borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
-              ),
+            content: SingleChildScrollView(
               child: new Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
@@ -446,8 +490,15 @@ class _SearchListViewExampleState extends State<StorageExpired1> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Lama Order : " + hari.toString() + " Hari",
-                              style: GoogleFonts.lato(fontSize: 14)),
+                          Row(
+                            children: [
+                              Text("Lama Order : " + jumlah_sewa.toString(),
+                                  style: GoogleFonts.lato(fontSize: 14)),
+                              Text((nama.toLowerCase().contains('forklift')
+                                  ? " Jam"
+                                  : " Hari"))
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),

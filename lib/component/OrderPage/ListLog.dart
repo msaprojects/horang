@@ -75,10 +75,10 @@ class _ListLogState extends State<ListLog> {
   }
 
   @override
-    void dispose() {
-      _apiService.client.close();
-      super.dispose();
-    }
+  void dispose() {
+    _apiService.client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

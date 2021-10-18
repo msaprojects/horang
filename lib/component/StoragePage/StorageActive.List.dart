@@ -38,10 +38,10 @@ class _SearchListViewExampleState extends State<StorageActive1> {
       nama_kota,
       nama_lokasi,
       tanggal_order,
-      hari,
+      jumlah_sewa,
       aktif;
 
-  List<MystorageModel> storage = [];
+  List<MystorageModel> storage, storage1 = [];
   String query = '', token = '';
   Timer debouncer;
 
@@ -86,6 +86,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
     }
     storage = await _apiService.listMystorageActive(access_token, query);
     print('yuhu ada gak $token ++ $access_token');
+    setState(() => this.storage1 = storage);
     setState(() => this.storage = storage);
   }
 
@@ -123,43 +124,39 @@ class _SearchListViewExampleState extends State<StorageActive1> {
             child: FutureBuilder(
               future: _apiService.listMystorageActive(access_token, query),
               builder: (BuildContext context, index) {
-                print('sini ?x $access_token $index');
                 if (index.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (index.hasData) {
-                  print('jaxx $storage');
+                  print("indexaktif $index");
                   if (storage.toString() != "[]") {
-                    print("true");
                     return ListView.builder(
                       itemCount: storage.length,
                       itemBuilder: (context, index) {
-                        print('ada ?');
                         final storages = storage[index];
-                        print('SOTO $storages $index');
+                        print("indexaktif2 $storages");
                         return buildmyStorage(storages);
                       },
                     );
                   } else {
-                    print('masuk sini!');
-                     return Center(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/image/datanotfound.png"),
-                      Text(
-                        "Oppss..Maaf Data yang sedang berjalan belum ada",
-                        style: GoogleFonts.inter(color: Colors.grey),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              );
+                    return Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("assets/image/datanotfound.png"),
+                            Text(
+                              "Oppss..Maaf Data yang sedang berjalan belum ada",
+                              style: GoogleFonts.inter(color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
                   }
                 } else {
                   return Center(
@@ -177,22 +174,44 @@ class _SearchListViewExampleState extends State<StorageActive1> {
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Cari...',
-        onChanged: searchmystorage,
+        onChanged: searchmystorage1,
       );
+      Future searchmystorage1(String query) async => debounce(() async {
+        print('mystorage1 token1 $access_token');
+        final storagex =
+            storage1.where((storage1) {
+            final noOrderLower = storage1.noOrder.toLowerCase();
+            final kodeKontainerLower = storage1.kode_kontainer.toLowerCase();
+            final jenisKontainer = storage1.nama.toLowerCase();
+            final lokasi = storage1.nama_lokasi.toLowerCase();
+            final searchLower = query.toLowerCase();
 
-  Future searchmystorage(String query) async => debounce(() async {
-        print('token1 $access_token');
-        final storage =
-            await _apiService.listMystorageActive(access_token, query);
+            return noOrderLower.contains(searchLower) ||
+                kodeKontainerLower.contains(searchLower) ||
+                jenisKontainer.contains(searchLower) ||
+                lokasi.contains(searchLower);
+          })
+          .where((element) => element.status == "AKTIF")
+          .toList();
+            
         if (!mounted) return;
         setState(() {
-          this.storage = storage;
-          print("Execute search");
+          this.storage = storagex;
+          print("Execute search1");
         });
       });
 
+
+  // Future searchmystorage(String query) async => debounce(() async {
+  //       final storage =
+  //           await _apiService.listMystorageActive(access_token, query);
+  //       if (!mounted) return;
+  //       setState(() {
+  //         this.storage = storage;
+  //       });
+  //     });
+
   Widget buildmyStorage(MystorageModel storage) {
-    print('masuk sini xx $storage');
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 10),
       color: Colors.grey[100],
@@ -212,7 +231,6 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                       kode_kontainer: storage.kode_kontainer,
                       nama_kota: storage.nama_kota,
                       noOrder: storage.noOrder,
-                      // idtransaksi_detail: ,
                       idtransaksi_detail: storage.idtransaksi_detail,
                       idtransaksi: storage.idtransaksi,
                       nama: storage.nama,
@@ -223,6 +241,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                       flag_selesai: storage.flag_selesai,
                       selesai: storage.selesai,
                     )));
+            print("ACTIVE GAMBAR? " + storage.gambar);
           }
         },
         child: Column(
