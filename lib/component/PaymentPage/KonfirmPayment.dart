@@ -11,7 +11,6 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KonfirmPayment extends StatefulWidget {
-  
   bool flagasuransi, flagvoucher;
   var idlokasi,
       idjenis_produk,
@@ -76,7 +75,6 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   ApiService _apiService = ApiService();
   SharedPreferences sp;
   var access_token, refresh_token, email, nama_customer, idcustomer, pin;
-  
 
   var kflagasuransi,
       kflagvoucher,
@@ -112,6 +110,16 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   TextEditingController _noOvo = TextEditingController();
   String initCOuntry = 'ID';
   PhoneNumber number = PhoneNumber(isoCode: 'ID');
+  final regex = RegExp('\\b0|(\\+62)[0-9]{9,12}\\b');
+
+  // bool validasiNomorHp(String value){
+  //   final regex = RegExp('\\b0|(\+62)[0-9]{9,12}\\b');
+  //   if (!regex.hasMatch(value) || value == null){
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -260,6 +268,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     initialValue: number,
                     formatInput: false,
                     maxLength: 13,
+                    hintText: 'e.g 0810-0011-1222',
+                    textStyle: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                     textFieldController: _noOvo,
                     inputBorder: OutlineInputBorder(),
                   ),
@@ -319,42 +329,47 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     if (notelp == "") {
       return infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
     } else {
-      return infoDialog(
-          context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
-          showNeutralButton: false,
-          negativeAction: () {},
-          negativeText: "Batal",
-          positiveText: "Ok", positiveAction: () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => KonfirmasiPembayaran(
-                      token: access_token,
-                      flagasuransi: kflagasuransi,
-                      flagvoucher: kflagvoucher,
-                      idlokasi: kidlokasi,
-                      idjenis_produk: kidjenis_produk,
-                      idvoucher: kidvoucher,
-                      idasuransi: kidasuransi,
-                      harga_sewa: kharga_sewa,
-                      durasi_sewa: kdurasi_sewa,
-                      valuesewaawal: kvaluesewaawal,
-                      valuesewaakhir: kvaluesewaakhir,
-                      keterangan_barang: kketerangan_barang,
-                      nominal_barang: knominal_barang,
-                      nominal_voucher: knominal_voucher,
-                      minimum_transaksi: kminimum_transaksi,
-                      persentase_voucher: kpersentase_voucher,
-                      saldopoint: ksaldopoint,
-                      email_asuransi: kemail_asuransi,
-                      tambahsaldopoint: ktambahsaldopoint,
-                      persentase_asuransi: kpersentase_asuransi,
-                      idpayment_gateway: kidpayment_gateway,
-                      no_ovo: _noOvo.text.toString(),
-                      minimalsewahari: kminimalsewahari,
-                      harga_awal: kharga_awal,
-                    )));
-      });
+      print('notelp : $notelp');
+      if (regex.hasMatch(notelp) == false) {
+        return infoDialog(context, 'Mohon maaf, format telepon yang anda masukkan tidak sesuai');
+      } else {
+        return infoDialog(
+            context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
+            showNeutralButton: false,
+            negativeAction: () {},
+            negativeText: "Batal",
+            positiveText: "Ok", positiveAction: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => KonfirmasiPembayaran(
+                        token: access_token,
+                        flagasuransi: kflagasuransi,
+                        flagvoucher: kflagvoucher,
+                        idlokasi: kidlokasi,
+                        idjenis_produk: kidjenis_produk,
+                        idvoucher: kidvoucher,
+                        idasuransi: kidasuransi,
+                        harga_sewa: kharga_sewa,
+                        durasi_sewa: kdurasi_sewa,
+                        valuesewaawal: kvaluesewaawal,
+                        valuesewaakhir: kvaluesewaakhir,
+                        keterangan_barang: kketerangan_barang,
+                        nominal_barang: knominal_barang,
+                        nominal_voucher: knominal_voucher,
+                        minimum_transaksi: kminimum_transaksi,
+                        persentase_voucher: kpersentase_voucher,
+                        saldopoint: ksaldopoint,
+                        email_asuransi: kemail_asuransi,
+                        tambahsaldopoint: ktambahsaldopoint,
+                        persentase_asuransi: kpersentase_asuransi,
+                        idpayment_gateway: kidpayment_gateway,
+                        no_ovo: _noOvo.text.toString(),
+                        minimalsewahari: kminimalsewahari,
+                        harga_awal: kharga_awal,
+                      )));
+        });
+      }
     }
   }
 }

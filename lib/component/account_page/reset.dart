@@ -4,10 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:horang/api/models/forgot/forgot.security.dart';
 import 'package:horang/api/models/forgot/lost.device.dart';
 import 'package:horang/api/utils/apiService.dart';
-import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/deviceinfo.dart';
-import 'package:imei_plugin/imei_plugin.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 

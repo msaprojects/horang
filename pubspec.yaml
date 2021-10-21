@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # version: 2.1.0+1
-version: 2.0.4+9
+version: 2.0.5+10
 
 environment:
   sdk: ">=2.7.0+1 <3.0.0"
@@ -28,41 +28,41 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: any
-  cupertino_icons: 1.0.2
-  flushbar: 1.10.4
-  http: any
-  minimize_app: ^0.1.1
-  shared_preferences: ^0.5.12+4
+  cupertino_icons: 1.0.2 #untuk mengambil beberapa style icon
+  flushbar: 1.10.4 #untuk desain flushbar dipakai di log
+  http: any #untuk koneksi http
+  minimize_app: ^0.1.1 #untuk fungsi minimaze app 
+  shared_preferences: ^0.5.12+4 #untuk fungsi sharepreference
+  indonesia: 1.0.1 #untuk fungsi format rupiah 
+  flutter_launcher_icons: 0.9.0 #untuk fungsi icon louncher
+  local_auth: ^0.6.3+4 #untuk fungsi fingerprint
+  google_fonts: ^1.1.2 #untuk ambil font dari googlefont
+  flutter_swiper: 1.1.6 #untuk fungsi swiper di desain voucher
+  email_validator: 2.0.1 #untuk fungsi format penulisan email
+  timeline_tile: ^2.0.0 #untuk fungsi desain timeline eg : dipakai di file log
+  connectivity: 3.0.3 #untuk fungsi pengecekan koneksi
+  commons: ^0.7.8+3 #untuk alert notif 
+  syncfusion_flutter_datepicker: ^19.2.46 #fungsi syncfusion tanggal di order list
+  fluttertoast: 7.1.6 #untuk fungsi toast
+  firebase_messaging: ^7.0.3 #untuk fungsi notifikasi yang diambil dari firebase
+  time_picker_widget: ^1.0.0+9 #untuk fungsi mengambil timepicker
+  intl_phone_number_input: any #untuk fungsi textfield dengan kode phone di berbagai negara e.g : dipakai di konfirmpayment
+  grouped_list: 4.1.0 #untuk fungsi grouping berdasarkan suatu parameter e.g : dipakai di logaktivitas
+  new_version: any #untuk pengecekan latest version di playstore / di appstore
+  get: ^4.1.4 #untuk fungsi obx pada saat scrolling sk
+
+  # pin_code_text_field: 1.8.0
   # http: ^0.12.1
   # shared_preferences: ^0.5.7
-  indonesia: 1.0.1
-  flutter_launcher_icons: 0.9.0
-  local_auth: ^0.6.3+4
-  pin_code_text_field: 1.8.0
-  google_fonts: ^1.1.2
-  flutter_swiper: 1.1.6
-  email_validator: 2.0.1
-  date_format: ^1.0.9
-  timeline_tile: ^2.0.0
-  connectivity: 3.0.3
-  numeric_keyboard: ^1.1.0
-  pin_code_view: 0.2.1
-  commons: ^0.7.8+3
-  syncfusion_flutter_datepicker: ^19.2.46
-  fluttertoast: 7.1.6
-  firebase_messaging: ^7.0.3
-  time_picker_widget: ^1.0.0+9
-  flutter_native_timezone: ^2.0.0
-  intl_phone_number_input: any
-    
-  imei_plugin: ^1.2.0
-  grouped_list: 4.1.0
-  ffi: ^1.0.0
+  # date_format: ^1.0.9
+  # numeric_keyboard: ^1.1.0
+  # pin_code_view: 0.2.1
+  # flutter_native_timezone: ^2.0.0
+  # imei_plugin: ^1.2.0
+  # ffi: ^1.0.0
   # upgrader: ^2.8.1
   # in_app_update: ^2.0.0
-  get_version: ^0.2.2
-  new_version: any
-  get: ^4.1.4
+  # get_version: ^0.2.2
 
 dev_dependencies:
   flutter_test:

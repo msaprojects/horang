@@ -11,7 +11,6 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
-import 'package:imei_plugin/imei_plugin.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -67,8 +66,8 @@ class _RegistrasiState extends State<RegistrasiPage> {
 
   Future<String> _ambildataSK() async {
     http.Response response = await http.get(
-        // Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt'));
-    Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+        Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt'));
+    // Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 
