@@ -175,9 +175,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   Future<String> _ambildataSK() async {
     http.Response response = await http
-        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        // .get(
-            // Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+        // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+        .get(
+            Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 

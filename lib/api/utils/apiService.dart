@@ -41,8 +41,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
-  final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
-  // final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
+  // final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
+  final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
   final String baseUrlVA =
       "https://api.xendit.co/available_virtual_account_banks/";
   // final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
@@ -721,8 +721,8 @@ class ApiService {
 
   Future<String> ambildataSyaratKetentuan(sk) async {
     http.Response response = await http
-        .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
+        // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
+        .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
@@ -735,9 +735,9 @@ class ApiService {
 
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
     http.Response response = await http.get(
-        Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
+        // Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
         // .get(
-        // Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
+        Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {

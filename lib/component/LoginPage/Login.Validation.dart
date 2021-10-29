@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:commons/commons.dart';
@@ -38,8 +39,9 @@ class _LoginPageState extends State<LoginPage> {
       uuidAnyar = "",
       email = "",
       emailaccountselection = "",
-      emaile,
+      // emaile,
       namae = "";
+  Timer timer;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -49,13 +51,52 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  Future refreshLogin() async {
+    await Future.delayed(Duration(seconds: 15));
+    print('masuk1');
+    if (this.mounted) {
+      setState(() {
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        print('masuk3');
+        GetDeviceID().getDeviceID(context).then((cekuuids) {
+          print('masuk4');
+          uuidAnyar = cekuuids;
+          CekLoginUUID uuid = CekLoginUUID(uuid: uuidAnyar);
+          _apiService.cekLoginUUID(uuid).then((value) => setState(() {
+                print("HEM : " + value);
+                if (value == "") {
+                  email = "";
+                  print('masuk2');
+                } else {
+                  print('masuk5');
+                  email = value.split(":")[0].toString();
+                  namae = value.split(":")[1].toString();
+                  // return value;
+                  // return email.toString();
+                }
+              }));
+        });
+        // });
+      });
+    }
+  }
+
   //FIREBASE
   @override
   void initState() {
     namae = widget.nama;
     uuidAnyar = widget.cekUUID;
-    emaile = widget.email;
-    print(emaile);
+    // emaile = widget.email;
+    email = widget.email;
+    print("flo $email");
+    timer = Timer.periodic(Duration(seconds: 15), (Timer t) => refreshLogin());
+    // if (emaile == "") {
+
+    // } else {
+    // if(emaile != ""){
+
+    // }
+    // }
     firebaseMessaging.getToken().then((token) => setState(() {
           this.token = token;
         }));
@@ -89,10 +130,13 @@ class _LoginPageState extends State<LoginPage> {
     });
     super.initState();
     setState(() {
-      if (emaile == "") {
+      // if (emaile == "") {
+      if (email == "") {
         emailaccountselection = _controllerEmail.text.toString();
       } else {
-        emailaccountselection = emaile.toString();
+        // emailaccountselection = emaile.toString();
+        emailaccountselection = email.toString();
+        print('cektes $emailaccountselection');
       }
     });
   }
@@ -149,24 +193,32 @@ class _LoginPageState extends State<LoginPage> {
                       height: size.height * 0.02,
                     ),
                     // filter jika profile belum lengkap maka ketika login user harus masuk dengan mengetikkan email secara manual
-                    emaile == ""
+                    // emaile == ""
+                    email == ""
                         ? _buildTextFieldEmail()
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Halo,",
-                                  style: GoogleFonts.lato(fontSize: 16)),
-                              Text(namae,
-                                  style: GoogleFonts.lato(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Text(emaile,
-                                  style: GoogleFonts.lato(fontSize: 12)),
-                              SizedBox(
-                                height: size.height * 0.01,
+                        : Padding(
+                            padding: EdgeInsets.only(left: 50),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("Halo,",
+                                      style: GoogleFonts.lato(fontSize: 16)),
+                                  Text(namae,
+                                      style: GoogleFonts.lato(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  // Text(emaile,
+                                  Text(email,
+                                      style: GoogleFonts.lato(fontSize: 12)),
+                                  SizedBox(
+                                    height: size.height * 0.01,
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                     _buildTextFieldPassword(),
                     Container(
@@ -196,10 +248,14 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Ada masalah login ?",
-                          style: GoogleFonts.lato(fontSize: 16),
-                          textAlign: TextAlign.center,
+                        Column(
+                          children: [
+                            Text(
+                              "Ada masalah login ?",
+                              style: GoogleFonts.lato(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                         SizedBox(width: 5),
                         GestureDetector(
@@ -311,13 +367,14 @@ class _LoginPageState extends State<LoginPage> {
         // set variable
         iddevice = ids;
         _isLoading = true;
-        String email = _controllerEmail.text.toString();
-        String password = _controllerPassword.text.toString();
+        String email1 = _controllerEmail.text.toString();
+        String password1 = _controllerPassword.text.toString();
+        print('tescek1 $email ~ $email1 ~ $emailaccountselection');
         // set model value for json
         PenggunaModel pengguna = PenggunaModel(
             uuid: iddevice,
-            email: emailaccountselection != "" ? emailaccountselection : email,
-            password: password,
+            email: emailaccountselection != "" ? email : emailaccountselection,
+            password: password1,
             status: 0,
             notification_token: token,
             token_mail: "0",
