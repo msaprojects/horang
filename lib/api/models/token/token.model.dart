@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 class Token{
-  num idcustomer, pin;
+  late num idcustomer, pin;
   String message, access_token, refresh_token, nama_customer;
 
   Token({
     this.idcustomer = 0,
-    this.message,
-    this.access_token,
-    this.refresh_token,
-    this.pin,
-    this.nama_customer,
+    required this.message,
+    required this.access_token,
+    required this.refresh_token,
+    required this.pin,
+    required this.nama_customer,
   });
 
-  factory Token.fromJson(Map<String, dynamic> map){
+  factory Token.fromJson(Map<dynamic, dynamic> map){
     return Token(
       message: map["message"],
-      access_token: map["access_token"],
-      refresh_token: map["refresh_token"],
+      access_token: map["access_token"].toString(),
+      refresh_token: map["refresh_token"].toString(),
       idcustomer: map["idcustomer"],
       pin: map["pin"],
       nama_customer: map["nama_customer"],

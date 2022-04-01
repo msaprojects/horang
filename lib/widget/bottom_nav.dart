@@ -16,7 +16,7 @@ import '../component/StoragePage/StorageHandler.dart';
 class Home extends StatefulWidget {
   final int initIndexHome;
   final Widget callpage; //CONSTRUKTOR UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
-  Home({Key key, this.initIndexHome, this.callpage}) : super(key: key);
+  Home({Key? key, required this.initIndexHome, required this.callpage}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -25,12 +25,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   // PageController _myPage = PageController(initialPage: 0);
   var initIndex;
-  DateTime backbuttonpressedtime;
+  DateTime? backbuttonpressedtime;
   int currentTab = 0;
-  Widget currentScreen; //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+  Widget? currentScreen; //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
   // Widget currentScreen = HomePage();
-  final PageStorageBucket bucket = PageStorageBucket();
-  SharedPreferences sp;
+  late PageStorageBucket bucket = PageStorageBucket();
+  SharedPreferences? sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
 
@@ -39,11 +39,11 @@ class _HomeState extends State<Home> {
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
-    refresh_token = sp.getString("refresh_token");
-    pin = sp.getString("pin");
-    idcustomer = sp.getString("idcustomer");
-    nama_customer = sp.getString("nama_customer");
+    access_token = sp!.getString("access_token");
+    refresh_token = sp!.getString("refresh_token");
+    pin = sp!.getString("pin");
+    idcustomer = sp!.getString("idcustomer");
+    nama_customer = sp!.getString("nama_customer");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
 
     if (access_token == null) {
@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
+                          sp!.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
                           // showAlertDialog(context);
@@ -80,8 +80,10 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    currentTab = widget.initIndexHome ?? 0;
-    currentScreen = widget.callpage ?? HomePage(); //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+    currentTab = widget.initIndexHome;
+    currentScreen = widget.callpage; //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
+    // currentTab = widget.initIndexHome ?? 0;
+    // currentScreen = widget.callpage ?? HomePage(); //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(Upd.fadil 7/09/21)
     super.initState();
     cekToken();
   }
@@ -94,14 +96,15 @@ class _HomeState extends State<Home> {
         resizeToAvoidBottomInset: false,
         body: PageStorage(
           bucket: bucket,
-          child: currentScreen,
+          child: currentScreen!,
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.shopping_basket),
           backgroundColor: Colors.blue[300],
           onPressed: () {
             setState(() {
-              currentScreen = StorageHandler();
+              // currentScreen = StorageHandler();
+              currentScreen = StorageHandler(initialIndexz: 3);
               currentTab = 4;
             });
           },
@@ -236,7 +239,7 @@ class _HomeState extends State<Home> {
   Future<bool> _onBackPressed() async {
     DateTime currenttime = DateTime.now();
     bool backbutton = backbuttonpressedtime == null ||
-        currenttime.difference(backbuttonpressedtime) > Duration(seconds: 3);
+        currenttime.difference(backbuttonpressedtime!) > Duration(seconds: 3);
 
     if (backbutton) {
       backbuttonpressedtime = currenttime;

@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 class CekLoginUUID {
-  String uuid, email;
+  String uuid, email, status;
   
   CekLoginUUID(
-      {this.uuid, this.email});
+      {required this.uuid,required  this.email,required  this.status});
 
   factory CekLoginUUID.fromJson(Map<String, dynamic> map){
     return CekLoginUUID(
       uuid: map['uuid'],
-      email: map['email']
+      email: map['email'],
+      status: map['status']
     );
   }
 
@@ -21,7 +22,7 @@ class CekLoginUUID {
 
   @override
   String toString() {
-    return 'CekLoginUUID{uuid: $uuid, email: $email}';
+    return 'CekLoginUUID{uuid: $uuid, email: $email, status: $status}';
   }
 }
 

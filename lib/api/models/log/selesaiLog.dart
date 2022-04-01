@@ -7,7 +7,7 @@ class selesaiLog{
 
   selesaiLog({
     this.idtransaksi = 0,
-    this.token,
+    required this.token,
   });
 
   factory selesaiLog.fromJson(Map<String, dynamic> map){

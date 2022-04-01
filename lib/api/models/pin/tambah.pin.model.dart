@@ -4,8 +4,8 @@ class TambahPin_model{
   String pin, token;
 
   TambahPin_model({
-    this.pin,
-    this.token,
+    required this.pin,
+    required this.token,
   });
 
   factory TambahPin_model.fromJson(Map<String, dynamic> map){

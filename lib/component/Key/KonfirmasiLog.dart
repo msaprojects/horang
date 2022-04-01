@@ -1,8 +1,7 @@
 import 'dart:convert';
-
-import 'package:commons/commons.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/log/Log.dart';
 import 'package:horang/api/models/log/generateKode.model.dart';
@@ -21,6 +20,8 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/dialog.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -58,13 +59,14 @@ class KonfirmasiLog extends StatefulWidget {
 }
 
 class _KonfirmasiLogState extends State<KonfirmasiLog> {
-  SharedPreferences sp;
-  bool _isLoading = false,
+  late SharedPreferences sp;
+  late bool _isLoading = false,
       isSuccess = true,
       _isFieldNoKontainer,
       _isFieldLokasi;
   ApiService _apiService = ApiService();
-  PaymentGateway statussk = PaymentGateway();
+  PaymentGateway statussk = PaymentGateway(
+      password: '', nama_provider: '', token_provider: '', gambar: '');
   var token = "",
       newtoken = "",
       code,
@@ -119,7 +121,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                   print('mmass $_inputPin');
                   Pin_Model_Cek pin_cek1 = Pin_Model_Cek(
                     pin_cek: _inputPin.text,
-                    token_cek: access_token,
+                    token_cek: access_token, notifikasi_token: '',
                     // token_notifikasi: token_notifikasi
                   );
                   if (widget.nama
@@ -134,8 +136,20 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         _apiService
                             .generateCode(access_token, idtransaksi_det)
                             .then((value) => setState(() {
-                                  return successDialog(context,
-                                      "Kode aktivasine" + value.toString());
+                                  AwesomeDialog(
+                                      context: context,
+                                      animType: AnimType.LEFTSLIDE,
+                                      headerAnimationLoop: false,
+                                      dialogType: DialogType.SUCCES,
+                                      showCloseIcon: true,
+                                      title: 'Success',
+                                      desc:
+                                          "Kode aktivasine" + value.toString(),
+                                      btnOkIcon: Icons.check_circle,
+                                      btnOkOnPress: () {})
+                                    ..show();
+                                  // return successDialog(context,
+                                  //     "Kode aktivasine" + value.toString());
                                 }));
                         //  return buildCode(context);
                         // WidgetsBinding.instance
@@ -155,7 +169,17 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                         //   );
                         // }));
                       } else {
-                        return errorDialog(context, 'Open gagal dilakukan');
+                        return AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.ERROR,
+                            animType: AnimType.RIGHSLIDE,
+                            headerAnimationLoop: true,
+                            title: 'Error',
+                            desc: 'Open gagal dilakukan',
+                            btnOkOnPress: () {},
+                            btnOkIcon: Icons.cancel,
+                            btnOkColor: Colors.red)
+                          ..show();
                       }
                     });
                   } else {
@@ -173,29 +197,77 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                               _apiService.OpenLog(logopen).then((isSuccess) {
                                 setState(() => _isLoading = false);
                                 if (isSuccess) {
-                                  successDialog(context, "",
-                                      title:
-                                          "Permintaan open berhasil dilakukan !",
-                                      closeOnBackPress: false,
-                                      showNeutralButton: false,
-                                      positiveAction: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                Home()),
-                                        (Route<dynamic> route) => false);
-                                  }, positiveText: 'OK');
+                                  AwesomeDialog(
+                                      context: context,
+                                      animType: AnimType.LEFTSLIDE,
+                                      headerAnimationLoop: false,
+                                      dialogType: DialogType.SUCCES,
+                                      showCloseIcon: true,
+                                      title: 'Succes',
+                                      desc:
+                                          'Permintaan open berhasil dilakukan !',
+                                      btnOkOnPress: () {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        Home(
+                                                          initIndexHome: 0,
+                                                          callpage: HomePage(),
+                                                        )),
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      },
+                                      btnOkIcon: Icons.check_circle,
+                                      onDissmissCallback: (type) {
+                                        debugPrint(
+                                            'Dialog Dissmiss from callback $type');
+                                      })
+                                    ..show();
+                                  // successDialog(context, "",
+                                  //     title:
+                                  //         "Permintaan open berhasil dilakukan !",
+                                  //     closeOnBackPress: false,
+                                  //     showNeutralButton: false,
+                                  //     positiveAction: () {
+                                  // Navigator.of(context).pushAndRemoveUntil(
+                                  //     MaterialPageRoute(
+                                  //         builder: (BuildContext context) =>
+                                  //             Home(
+                                  //               initIndexHome: 0,
+                                  //               callpage: HomePage(),
+                                  //             )),
+                                  //     (Route<dynamic> route) => false);
+                                  // }, positiveText: 'OK');
                                 } else {
-                                  errorDialog(context,
-                                      "Open kontainer $kode_kontainer1 gagal dilakukan !");
+                                  AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.ERROR,
+                                      animType: AnimType.RIGHSLIDE,
+                                      headerAnimationLoop: true,
+                                      title: 'Error',
+                                      desc:
+                                          'Open kontainer $kode_kontainer1 gagal dilakukan !',
+                                      btnOkOnPress: () {},
+                                      btnOkIcon: Icons.cancel,
+                                      btnOkColor: Colors.red)
+                                    ..show();
+                                  // errorDialog(context,
+                                  //     "Open kontainer $kode_kontainer1 gagal dilakukan !");
                                 }
                               });
                             }
                           });
                         } else if (!isSuccess) {
                           print('Pin salah masku');
-                          return errorDialog(
-                              context, 'Pin yang anda masukkan salah');
+                          Fluttertoast.showToast(
+                              msg: "Pin yang anda masukkan salah",
+                              // msg: "Account has been ready !",
+                              backgroundColor: Colors.black,
+                              textColor: Colors.white);
+                          // return errorDialog(
+                          //     context, 'Pin yang anda masukkan salah');
                           // return showDialog(
                           //     context: context,
                           //     builder: (context) {
@@ -495,47 +567,143 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                       ),
                       color: Colors.lightBlue,
                       onPressed: () {
-                        warningDialog(context,
-                            "Apakah anda ingin menyelesaikan transaksi ini ?",
-                            showNeutralButton: false, positiveAction: () {
-                          setState(() {
-                            _isLoading = true;
-                            selesaiLog selesai = selesaiLog(
-                                idtransaksi: idtransaksii, token: access_token);
-                            if (widget.nama_kota != null ||
-                                widget.kode_kontainer != null) {
-                              _apiService.SelesaiLog(selesai).then((isSuccess) {
-                                setState(() => _isLoading = false);
-                                if (isSuccess) {
-                                  setState(() {
-                                    successDialog(
-                                      context, 
-                                      "Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.",
-                                      title: "Berhasil",
-                                        showNeutralButton: false,
-                                        positiveAction: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  StorageHandler(
-                                                    initialIndex: 2,
-                                                  )
-                                              // StorageActive()
-                                              ));
-                                    }, positiveText: "Ok");
+                        AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.WARNING,
+                            headerAnimationLoop: false,
+                            animType: AnimType.TOPSLIDE,
+                            showCloseIcon: true,
+                            closeIcon: Icon(Icons.close_fullscreen_outlined),
+                            title: 'Warning',
+                            desc:
+                                'Apakah anda ingin menyelesaikan transaksi ini ?',
+                            btnCancelOnPress: () {},
+                            btnOkOnPress: () {
+                              setState(() {
+                                _isLoading = true;
+                                selesaiLog selesai = selesaiLog(
+                                    idtransaksi: idtransaksii,
+                                    token: access_token);
+                                if (widget.nama_kota != null ||
+                                    widget.kode_kontainer != null) {
+                                  _apiService.SelesaiLog(selesai)
+                                      .then((isSuccess) {
+                                    setState(() => _isLoading = false);
+                                    if (isSuccess) {
+                                      setState(() {
+                                        AnimatedButton(
+                                            text: 'Succes Dialog',
+                                            color: Colors.green,
+                                            pressEvent: () {
+                                              AwesomeDialog(
+                                                context: context,
+                                                animType: AnimType.LEFTSLIDE,
+                                                headerAnimationLoop: false,
+                                                dialogType: DialogType.SUCCES,
+                                                showCloseIcon: true,
+                                                title: 'Success',
+                                                desc:
+                                                    'Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.',
+                                                btnOkOnPress: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              StorageHandler(
+                                                                initialIndexz:
+                                                                    2,
+                                                              )
+                                                          // StorageHandler()
+                                                          // StorageActive()
+                                                          ));
+                                                },
+                                                btnOkIcon: Icons.check_circle,
+                                              )..show();
+                                            });
+                                        //   successDialog(context,
+                                        //       "Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.",
+                                        //       title: "Berhasil",
+                                        //       showNeutralButton: false,
+                                        //       positiveAction: () {
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             StorageHandler(
+                                        //               initialIndexz: 2,
+                                        //             )
+                                        //         // StorageHandler()
+                                        //         // StorageActive()
+                                        //         ));
+                                        //   }, positiveText: "Ok");
+                                      });
+                                    } else {
+                                      AnimatedButton(
+                                          text: 'Error Dialog',
+                                          color: Colors.red,
+                                          pressEvent: () {
+                                            AwesomeDialog(
+                                                context: context,
+                                                dialogType: DialogType.ERROR,
+                                                animType: AnimType.RIGHSLIDE,
+                                                headerAnimationLoop: true,
+                                                title: 'Error',
+                                                desc:
+                                                    'Transaksi gagal dilakukan !',
+                                                btnOkOnPress: () {},
+                                                btnOkIcon: Icons.cancel,
+                                                btnOkColor: Colors.red)
+                                              ..show();
+                                          });
+                                      // errorDialog(context,
+                                      //     "Transaksi gagal dilakukan !");
+                                    }
                                   });
-                                } else {
-                                  errorDialog(
-                                      context, "Transaksi gagal dilakukan !");
                                 }
                               });
-                            }
-                          });
-                        },
-                            positiveText: "Ya",
-                            negativeText: "Tidak",
-                            negativeAction: () {});
+                            })
+                          ..show();
+                        // warningDialog(context,
+                        //     "Apakah anda ingin menyelesaikan transaksi ini ?",
+                        //     showNeutralButton: false, positiveAction: () {
+                        //   setState(() {
+                        //     _isLoading = true;
+                        //     selesaiLog selesai = selesaiLog(
+                        //         idtransaksi: idtransaksii, token: access_token);
+                        //     if (widget.nama_kota != null ||
+                        //         widget.kode_kontainer != null) {
+                        //       _apiService.SelesaiLog(selesai).then((isSuccess) {
+                        //         setState(() => _isLoading = false);
+                        //         if (isSuccess) {
+                        //           setState(() {
+                        //             successDialog(context,
+                        //                 "Pesanan dengan no. order $noOrder1 sudah selesai, silahkan cek tab selesai untuk mengetahui progress selanjutnya.",
+                        //                 title: "Berhasil",
+                        //                 showNeutralButton: false,
+                        //                 positiveAction: () {
+                        //               Navigator.push(
+                        //                   context,
+                        //                   MaterialPageRoute(
+                        //                       builder: (context) =>
+                        //                           StorageHandler(
+                        //                             initialIndexz: 2,
+                        //                           )
+                        //                       // StorageHandler()
+                        //                       // StorageActive()
+                        //                       ));
+                        //             }, positiveText: "Ok");
+                        //           });
+                        //         } else {
+                        //           errorDialog(
+                        //               context, "Transaksi gagal dilakukan !");
+                        //         }
+                        //       });
+                        //     }
+                        //   });
+                        // },
+                        //     positiveText: "Ya",
+                        //     negativeText: "Tidak",
+                        //     negativeAction: () {});
                       },
                     ),
                   ),
@@ -571,16 +739,18 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                             _apiService.Log_(log1).then((isSuccess) {
                               setState(() => _isLoading = false);
                               if (isSuccess) {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((timeStamp) {
-                                  Flushbar(
-                                    message: "Ok masuk",
-                                    flushbarPosition: FlushbarPosition.BOTTOM,
-                                    icon: Icon(Icons.ac_unit),
-                                    flushbarStyle: FlushbarStyle.GROUNDED,
-                                    duration: Duration(seconds: 5),
-                                  )..show(_scaffoldState.currentState.context);
-                                });
+                                _scaffoldState.currentState!.showSnackBar(
+                                    SnackBar(
+                                        content: Text("Submit data Success")));
+                                // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+                                //   Flushbar(
+                                //     message: "Ok masuk",
+                                //     flushbarPosition: FlushbarPosition.BOTTOM,
+                                //     icon: Icon(Icons.ac_unit),
+                                //     flushbarStyle: FlushbarStyle.GROUNDED,
+                                //     duration: Duration(seconds: 5),
+                                //   )..show(_scaffoldState.currentState!.context);
+                                // });
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return ListLog(
@@ -589,7 +759,7 @@ class _KonfirmasiLogState extends State<KonfirmasiLog> {
                                 }));
                               } else {
                                 print('cekmasuk4');
-                                _scaffoldState.currentState.showSnackBar(
+                                _scaffoldState.currentState!.showSnackBar(
                                     SnackBar(
                                         content: Text("Submit data failed")));
                               }

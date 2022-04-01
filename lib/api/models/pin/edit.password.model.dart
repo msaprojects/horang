@@ -5,9 +5,9 @@ class Password{
 
   Password({
     // this.pin,
-    this.token,
-    this.passwordlama,
-    this.passwordbaru
+    required this.token,
+    required this.passwordlama,
+    required     this.passwordbaru
   });
 
   factory Password.fromJson(Map<String, dynamic> map){

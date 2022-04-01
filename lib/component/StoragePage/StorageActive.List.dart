@@ -22,7 +22,7 @@ class StorageActive1 extends StatefulWidget {
 
 class _SearchListViewExampleState extends State<StorageActive1> {
   bool isLoading = false;
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false, _loading = true;
   var access_token,
@@ -41,9 +41,9 @@ class _SearchListViewExampleState extends State<StorageActive1> {
       jumlah_sewa,
       aktif;
 
-  List<MystorageModel> storage, storage1 = [];
+  List<MystorageModel>? storage, storage1 = [];
   String query = '', token = '';
-  Timer debouncer;
+  Timer? debouncer;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
@@ -100,7 +100,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
 
   @override
   void dispose() {
-    debouncer?.cancel();
+    // debouncer?.cancel();
     super.dispose();
   }
 
@@ -109,7 +109,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
     Duration duration = const Duration(milliseconds: 1000),
   }) {
     if (debouncer != null) {
-      debouncer.cancel();
+      debouncer!.cancel();
     }
     debouncer = Timer(duration, callback);
   }
@@ -132,9 +132,9 @@ class _SearchListViewExampleState extends State<StorageActive1> {
                   print("indexaktif $index");
                   if (storage.toString() != "[]") {
                     return ListView.builder(
-                      itemCount: storage.length,
+                      itemCount: storage!.length,
                       itemBuilder: (context, index) {
-                        final storages = storage[index];
+                        final storages = storage![index];
                         print("indexaktif2 $storages");
                         return buildmyStorage(storages);
                       },
@@ -179,7 +179,7 @@ class _SearchListViewExampleState extends State<StorageActive1> {
       Future searchmystorage1(String query) async => debounce(() async {
         print('mystorage1 token1 $access_token');
         final storagex =
-            storage1.where((storage1) {
+            storage1!.where((storage1) {
             final noOrderLower = storage1.noOrder.toLowerCase();
             final kodeKontainerLower = storage1.kode_kontainer.toLowerCase();
             final jenisKontainer = storage1.nama.toLowerCase();

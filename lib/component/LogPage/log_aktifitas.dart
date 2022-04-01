@@ -14,7 +14,7 @@ class LogAktifitasNotif extends StatefulWidget {
 }
 
 class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token, refresh_token, nama_customer, idcustomer, pin;
@@ -91,9 +91,9 @@ class _LogAktifitasNotifState extends State<LogAktifitasNotif> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List logaktifitas1 = snapshot.data;
+            List? logaktifitas1 = snapshot.data;
             print('ada data nggk ya ? ${snapshot.data}');
-            return _buildListView(logaktifitas1);
+            return _buildListView(logaktifitas1!);
           } else {
             return Center(
               child: CircularProgressIndicator(),

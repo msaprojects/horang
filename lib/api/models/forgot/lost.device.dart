@@ -5,11 +5,11 @@ class LostDevices{
   String email, uuid;
 
   LostDevices({
-    this.email,
-    this.uuid
+    required this.email,
+    required this.uuid
   });
 
-  factory LostDevices.fromJson(Map<String, dynamic> map){
+  factory LostDevices.fromJson(Map<dynamic, dynamic> map){
     return LostDevices(
       email: map['email'],
         uuid: map['uuid']
@@ -27,7 +27,6 @@ class LostDevices{
   }
 }
 
-// ignore: non_constant_identifier_names
 List<LostDevices> LostDeviceFromJson(String jsonData){
   final data = json.decode(jsonData);
   return List<LostDevices>.from(data.map((item) => LostDevices.fromJson(item)));

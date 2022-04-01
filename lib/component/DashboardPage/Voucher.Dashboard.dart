@@ -1,5 +1,5 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/voucher/voucher.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -19,7 +19,7 @@ class VoucherDashboard extends StatefulWidget {
 class _VoucherDashboard extends State<VoucherDashboard> {
   int _current = 0;
   Widget currentScreen = HomePage();
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var sk,
@@ -82,7 +82,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
     return FutureBuilder(
       future: _apiService.listVoucher(access_token),
       builder:
-          (BuildContext context, AsyncSnapshot<List<VoucherModel>> snapshot) {
+          (BuildContext context, AsyncSnapshot<List<VoucherModel>?> snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Center(
@@ -93,7 +93,7 @@ class _VoucherDashboard extends State<VoucherDashboard> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
-          List<VoucherModel> voucher = snapshot.data;
+          List<VoucherModel> voucher = snapshot.data!;
           if (voucher.isNotEmpty) {
             return _listPromo(voucher);
           } else {

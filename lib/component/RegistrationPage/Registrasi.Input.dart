@@ -1,6 +1,7 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/models/responsecode/responcode.model.dart';
@@ -10,6 +11,7 @@ import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
+import 'package:horang/utils/dialog.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -28,7 +30,7 @@ class _RegistrasiState extends State<RegistrasiPage> {
       _obsecureTextpassretype = true,
       _obsecureTextpassretype1 = true,
       boolsk = false;
-  int ssk;
+  late int ssk;
   var buttonVisible = false.obs;
   ApiService _apiService = ApiService();
   bool _fieldEmail = false,
@@ -65,9 +67,10 @@ class _RegistrasiState extends State<RegistrasiPage> {
   }
 
   Future<String> _ambildataSK() async {
-    http.Response response = await http.get(
-        // Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt'));
-    Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+    // final encoded = Uri.encodeFull('https://dev.horang.id/adminmaster/skregistrasi.txt');
+    final encoded = Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt');
+    http.Response response = await http.get(Uri.parse(encoded));
+    // Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 
@@ -127,9 +130,9 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                 children: [
                                   Checkbox(
                                     value: boolsk,
-                                    onChanged: (bool syaratketentuan) {
+                                    onChanged: (bool? syaratketentuan) {
                                       setState(() {
-                                        boolsk = syaratketentuan;
+                                        boolsk = syaratketentuan!;
                                         if (boolsk == true) {
                                           ssk = 1;
                                           buttonVisible.value = false;
@@ -194,14 +197,22 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 20, horizontal: 40),
                                   onPressed: () async {
-                                    if (_fieldEmail == null ||
-                                        _fieldNo_Hp == null ||
-                                        _fieldPassword == null ||
-                                        !_fieldEmail ||
+                                    // if (_fieldEmail == null ||
+                                    //     _fieldNo_Hp == null ||
+                                    //     _fieldPassword == null ||
+                                    //     !_fieldEmail ||
+                                    //     !_fieldNo_Hp ||
+                                    //     !_fieldPassword)
+                                    if (!_fieldEmail ||
                                         !_fieldNo_Hp ||
                                         !_fieldPassword) {
-                                      warningDialog(context,
-                                          "Pastikan Semua Kolom Terisi!");
+                                      Fluttertoast.showToast(
+                                          msg: "Pastikan Semua Kolom Terisi!",
+                                          // msg: "Account has been ready !",
+                                          backgroundColor: Colors.black,
+                                          textColor: Colors.white);
+                                      // warningDialog(context,
+                                      //     "Pastikan Semua Kolom Terisi!");
                                       return;
                                     } else {
                                       String email =
@@ -215,70 +226,191 @@ class _RegistrasiState extends State<RegistrasiPage> {
                                               .toString();
                                       //IF (TRUE) STATEMENT1 -> FALSE STATEMENT2
                                       if (password != retypepassword) {
-                                        warningDialog(context,
-                                            "Pastikan Password yang anda masukkan sama");
-                                      } else if (ssk == null) {
-                                        warningDialog(context,
-                                            'Pastikan Syarat dan ketentuan sudah dibaca dan disetujui !');
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Pastikan Password yang anda masukkan sama",
+                                            // msg: "Account has been ready !",
+                                            backgroundColor: Colors.black,
+                                            textColor: Colors.white);
+                                        // warningDialog(context,
+                                        //     "Pastikan Password yang anda masukkan sama");
+                                      } else if (ssk == 0) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Pastikan Syarat dan ketentuan sudah dibaca dan disetujui !",
+                                            // msg: "Account has been ready !",
+                                            backgroundColor: Colors.black,
+                                            textColor: Colors.white);
+                                        // warningDialog(context,
+                                        //     'Pastikan Syarat dan ketentuan sudah dibaca dan disetujui !');
                                       } else {
+                                        AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.WARNING,
+                                            headerAnimationLoop: false,
+                                            animType: AnimType.TOPSLIDE,
+                                            showCloseIcon: true,
+                                            closeIcon: Icon(Icons
+                                                .close_fullscreen_outlined),
+                                            title: 'Warning',
+                                            desc:
+                                                'Data yang anda masukkan sudah benar ?',
+                                            btnCancelOnPress: () {},
+                                            btnOkOnPress: () {
+                                              GetDeviceID()
+                                                  .getDeviceID(context)
+                                                  .then((ids) {
+                                                setState(() {
+                                                  iddevice = ids;
+                                                  PenggunaModel pengguna =
+                                                      PenggunaModel(
+                                                          uuid: iddevice,
+                                                          email: email,
+                                                          password: password,
+                                                          no_hp: nohp,
+                                                          status: 0,
+                                                          notification_token:
+                                                              "0",
+                                                          token_mail: "0",
+                                                          keterangan:
+                                                              "Uji Coba");
+                                                  print("Registrasi Value : " +
+                                                      pengguna.toString());
+                                                  _apiService
+                                                      .signup(pengguna)
+                                                      .then((isSuccess) {
+                                                    if (isSuccess) {
+                                                      _controllerEmail.clear();
+                                                      _controllerNohp.clear();
+                                                      _controllerPassword
+                                                          .clear();
+                                                      _controllerPasswordRetype
+                                                          .clear();
+                                                      AwesomeDialog(
+                                                        context: context,
+                                                        animType:
+                                                            AnimType.LEFTSLIDE,
+                                                        headerAnimationLoop:
+                                                            false,
+                                                        dialogType:
+                                                            DialogType.SUCCES,
+                                                        showCloseIcon: true,
+                                                        title: 'Success',
+                                                        desc:
+                                                            'Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.',
+                                                        btnOkOnPress: () {
+                                                          Navigator.of(context).pushAndRemoveUntil(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      // LoginPage()
+                                                                      WelcomePage()),
+                                                              (route) => false);
+                                                        },
+                                                        btnOkIcon:
+                                                            Icons.check_circle,
+                                                      )..show();
+                                                      // successDialog(context,
+                                                      //     "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                                      //     showNeutralButton: false,
+                                                      //     positiveText: "OK",
+                                                      //     positiveAction: () {
+                                                      // Navigator.of(context)
+                                                      //     .pushAndRemoveUntil(
+                                                      //         MaterialPageRoute(
+                                                      //             builder: (context) =>
+                                                      //                 // LoginPage()
+                                                      //                 WelcomePage()),
+                                                      //         (route) => false);
+                                                      // });
+                                                    } else {
+                                                      AwesomeDialog(
+                                                          context: context,
+                                                          dialogType:
+                                                              DialogType.ERROR,
+                                                          animType: AnimType
+                                                              .RIGHSLIDE,
+                                                          headerAnimationLoop:
+                                                              true,
+                                                          title: 'Error',
+                                                          desc:
+                                                              '${_apiService.responseCode.mMessage}',
+                                                          btnOkOnPress: () {},
+                                                          btnOkIcon:
+                                                              Icons.cancel,
+                                                          btnOkColor:
+                                                              Colors.red)
+                                                        ..show();
+                                                      // print('error');
+                                                      // errorDialog(context,
+                                                      //     "${_apiService.responseCode.mMessage}");
+                                                    }
+                                                  });
+                                                });
+                                              });
+                                              // print("IDDEVICE : " + iddevice.toString());
+                                              // });
+                                            })
+                                          ..show();
                                         // setState(() {
                                         //   _isLoading = true;
-                                        infoDialog(context,
-                                            "Data yang anda masukkan sudah benar ?",
-                                            showNeutralButton: false,
-                                            negativeText: "Batal",
-                                            negativeAction: () {},
-                                            positiveText: "Ya",
-                                            positiveAction: () {
-                                          GetDeviceID()
-                                              .getDeviceID(context)
-                                              .then((ids) {
-                                            setState(() {
-                                              iddevice = ids;
-                                              PenggunaModel pengguna =
-                                                  PenggunaModel(
-                                                      uuid: iddevice,
-                                                      email: email,
-                                                      password: password,
-                                                      no_hp: nohp,
-                                                      status: 0,
-                                                      notification_token: "0",
-                                                      token_mail: "0",
-                                                      keterangan: "Uji Coba");
-                                              print("Registrasi Value : " +
-                                                  pengguna.toString());
-                                              _apiService
-                                                  .signup(pengguna)
-                                                  .then((isSuccess) {
-                                                if (isSuccess) {
-                                                  _controllerEmail.clear();
-                                                  _controllerNohp.clear();
-                                                  _controllerPassword.clear();
-                                                  _controllerPasswordRetype
-                                                      .clear();
-                                                  successDialog(context,
-                                                      "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
-                                                      showNeutralButton: false,
-                                                      positiveText: "OK",
-                                                      positiveAction: () {
-                                                    Navigator.of(context)
-                                                        .pushAndRemoveUntil(
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    // LoginPage()
-                                                                    WelcomePage()),
-                                                            (route) => false);
-                                                  });
-                                                } else {
-                                                  errorDialog(context,
-                                                      "${_apiService.responseCode.mMessage}");
-                                                }
-                                              });
-                                            });
-                                          });
-                                          // print("IDDEVICE : " + iddevice.toString());
-                                          // });
-                                        });
+                                        // infoDialog(context,
+                                        //     "Data yang anda masukkan sudah benar ?",
+                                        //     showNeutralButton: false,
+                                        //     negativeText: "Batal",
+                                        //     negativeAction: () {},
+                                        //     positiveText: "Ya",
+                                        //     positiveAction: () {
+                                        //   GetDeviceID()
+                                        //       .getDeviceID(context)
+                                        //       .then((ids) {
+                                        //     setState(() {
+                                        //       iddevice = ids;
+                                        //       PenggunaModel pengguna =
+                                        //           PenggunaModel(
+                                        //               uuid: iddevice,
+                                        //               email: email,
+                                        //               password: password,
+                                        //               no_hp: nohp,
+                                        //               status: 0,
+                                        //               notification_token: "0",
+                                        //               token_mail: "0",
+                                        //               keterangan: "Uji Coba");
+                                        //       print("Registrasi Value : " +
+                                        //           pengguna.toString());
+                                        //       _apiService
+                                        //           .signup(pengguna)
+                                        //           .then((isSuccess) {
+                                        //         if (isSuccess) {
+                                        //           _controllerEmail.clear();
+                                        //           _controllerNohp.clear();
+                                        //           _controllerPassword.clear();
+                                        //           _controllerPasswordRetype
+                                        //               .clear();
+                                        //           print('sukses tambah ');
+                                        //           // successDialog(context,
+                                        //           //     "Harap konfirmasi Email anda terlebih dahulu sebelum melakukan login.",
+                                        //           //     showNeutralButton: false,
+                                        //           //     positiveText: "OK",
+                                        //           //     positiveAction: () {
+                                        //           //   Navigator.of(context)
+                                        //           //       .pushAndRemoveUntil(
+                                        //           //           MaterialPageRoute(
+                                        //           //               builder: (context) =>
+                                        //           //                   // LoginPage()
+                                        //           //                   WelcomePage()),
+                                        //           //           (route) => false);
+                                        //           // });
+                                        //         } else {
+                                        //           print('error');
+                                        //           // errorDialog(context,
+                                        //           //     "${_apiService.responseCode.mMessage}");
+                                        //         }
+                                        //       });
+                                        //     });
+                                        //   });
+                                        //   // print("IDDEVICE : " + iddevice.toString());
+                                        //   // });
+                                        // });
                                       }
                                       return;
                                     }
@@ -351,20 +483,22 @@ class _RegistrasiState extends State<RegistrasiPage> {
   Widget _buildTextFieldEmail() {
     return TextFieldContainer(
       child: Form(
-        autovalidate: true,
+        // autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         child: TextFormField(
-          validator: (mail) => mail.isEmpty || !mail.contains("@")
+          validator: (mail) => mail!.isEmpty || !mail.contains("@")
               ? "Masukkan email yang valid"
-              : null,
+              : '',
           controller: _controllerEmail,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             icon: Icon(Icons.mail),
             hintText: "Email",
             border: InputBorder.none,
-            errorText: _fieldEmail == null || _fieldEmail
-                ? null
-                : "Isi Email terlebih dahulu!",
+            errorText: _fieldEmail ? '' : "Isi Email terlebih dahulu!",
+            // errorText: _fieldEmail == null || _fieldEmail
+            //     ? null
+            //     : "Isi Email terlebih dahulu!",
           ),
           onChanged: (value) {
             bool isFieldValid = value.trim().isNotEmpty;
@@ -386,9 +520,10 @@ class _RegistrasiState extends State<RegistrasiPage> {
           icon: Icon(Icons.phone),
           hintText: "No. Handphone",
           border: InputBorder.none,
-          errorText: _fieldNo_Hp == null || _fieldNo_Hp
-              ? null
-              : "Nomor Handphone Harus Diisi!",
+          errorText: _fieldNo_Hp ? '' : "Nomor Handphone Harus Diisi!",
+          // errorText: _fieldNo_Hp == null || _fieldNo_Hp
+          //     ? null
+          //     : "Nomor Handphone Harus Diisi!",
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;
@@ -416,9 +551,10 @@ class _RegistrasiState extends State<RegistrasiPage> {
           ),
           hintText: "Password",
           border: InputBorder.none,
-          errorText: _fieldPassword == null || _fieldPassword
-              ? null
-              : "Password Harus Diisi!",
+          errorText: _fieldPassword ? '' : "Password Harus Diisi!",
+          // errorText: _fieldPassword == null || _fieldPassword
+          //     ? null
+          //     : "Password Harus Diisi!",
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;
@@ -446,9 +582,10 @@ class _RegistrasiState extends State<RegistrasiPage> {
           ),
           hintText: "Retype Password",
           border: InputBorder.none,
-          errorText: _fieldPasswordRetype == null || _fieldPasswordRetype
-              ? null
-              : "Retype Password Harus Diisi!",
+          errorText: _fieldPasswordRetype ? '' : "Retype Password Harus Diisi!",
+          // errorText: _fieldPasswordRetype == null || _fieldPasswordRetype
+          //     ? null
+          //     : "Retype Password Harus Diisi!",
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;

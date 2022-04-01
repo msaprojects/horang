@@ -1,13 +1,14 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:indonesia/indonesia.dart';
 import 'package:horang/component/DashboardPage/home_page.dart';
 
+import '../../utils/dialog.dart';
+import '../../utils/format_rupiah.dart';
 import '../../widget/bottom_nav.dart';
 import 'KonfirmasiOrder.Detail.dart';
 
@@ -40,8 +41,8 @@ class KonfirmasiPembayaran extends StatefulWidget {
 
   KonfirmasiPembayaran(
       {this.token,
-      this.flagasuransi,
-      this.flagvoucher,
+      required this.flagasuransi,
+      required this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
       this.idvoucher,
@@ -73,7 +74,7 @@ ApiService _apiService = ApiService();
 bool isSuccess = false;
 
 class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
-  bool dflagasuransi, dflagvoucher;
+  late bool dflagasuransi, dflagvoucher;
   var dtoken,
       didlokasi,
       didjenis_produk,
@@ -147,9 +148,12 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
     dpersentase_asuransi = widget.persentase_asuransi;
     dno_ovo = widget.no_ovo;
     dminimalsewahari = widget.minimalsewahari;
+    // total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
+    //     double.parse(dnominal_barang);
     total_asuransi = (double.parse(dpersentase_asuransi) / 100) *
         double.parse(dnominal_barang);
-    totaldeposit = (dminimalsewahari * dharga_sewa); //as nominal m
+    // totaldeposit = (int.parse(dminimalsewahari) * int.parse(dharga_sewa)); //as nominal m
+    totaldeposit = (int.parse(dminimalsewahari) * dharga_sewa);
     dharga_awal = widget.harga_awal;
     hitungsemuaFunction();
     OrderProduk orderProduk = OrderProduk(
@@ -194,21 +198,64 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                     asuransi: total_asuransi)));
       } else {
         if (idorder == -1) {
-          errorDialog(context,
-              "Item yang anda sewa tidak tersedia, harap ubah rincian transaksi anda, terima kasih.",
-              positiveText: "OK", showNeutralButton: false, positiveAction: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProdukList()));
-          });
+          AwesomeDialog(
+              context: context,
+              dialogType: DialogType.WARNING,
+              headerAnimationLoop: false,
+              animType: AnimType.TOPSLIDE,
+              showCloseIcon: true,
+              closeIcon: Icon(Icons.close_fullscreen_outlined),
+              title: 'Warning',
+              desc:
+                  'Item yang anda sewa tidak tersedia, harap ubah rincian transaksi anda, terima kasih.',
+              btnCancelOnPress: () {},
+              btnOkOnPress: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ProdukList()));
+              })
+            ..show();
+          // errorDialog(context,
+          //     "Item yang anda sewa tidak tersedia, harap ubah rincian transaksi anda, terima kasih.",
+          //     positiveText: "OK", showNeutralButton: false, positiveAction: () {
+          //   Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (BuildContext context) => ProdukList()));
+          // });
         } else {
-          errorDialog(context,
-              "Maaf, transaksi anda gagal, harap ulangi kembali, terima kasih.",
-              positiveText: "OK", showNeutralButton: false, positiveAction: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (BuildContext context) => Home()));
-          });
+          AwesomeDialog(
+              context: context,
+              dialogType: DialogType.ERROR,
+              animType: AnimType.RIGHSLIDE,
+              headerAnimationLoop: true,
+              title: 'Error',
+              desc:
+                  'Maaf, transaksi anda gagal, harap ulangi kembali, terima kasih.',
+              btnOkOnPress: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Home(
+                              initIndexHome: 0,
+                              callpage: HomePage(),
+                            )));
+              },
+              btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red)
+            ..show();
+          // errorDialog(context,
+          //     "Maaf, transaksi anda gagal, harap ulangi kembali, terima kasih.",
+          //     positiveText: "OK", showNeutralButton: false, positiveAction: () {
+          //   Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (BuildContext context) => Home(
+          //                 initIndexHome: 0,
+          //                 callpage: HomePage(),
+          //               )));
+          // });
         }
       }
     });
@@ -253,7 +300,10 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                           Text("Total Bayar",
                               style: GoogleFonts.inter(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          Text(rupiah(hitungsemua),
+                          Text(
+                            "$hitungsemua",
+                            // CurrencyFormat.convertToIdr(hitungsemua, 2),
+                              // rupiah(hitungsemua),
                               style: GoogleFonts.inter(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -278,7 +328,10 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                                 ),
                                 Text(
                                     "Menunggu pembayaran " +
-                                        rupiah(hitungsemua),
+                                    "$hitungsemua",
+                                        // rupiah(hitungsemua),
+                                        // CurrencyFormat.convertToIdr(
+                                        //     hitungsemua, 2),
                                     style: GoogleFonts.inter(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold)),
@@ -335,7 +388,10 @@ class _KonfirmasiPembayaran extends State<KonfirmasiPembayaran> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => Home()));
+                              builder: (BuildContext context) => Home(
+                                    callpage: HomePage(),
+                                    initIndexHome: 0,
+                                  )));
                       // Navigator.pushAndRemoveUntil(
                       //     context,
                       //     MaterialPageRoute(

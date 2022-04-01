@@ -1,9 +1,8 @@
-import 'package:commons/commons.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
 class GetDeviceID {
-  Future<String> getDeviceID(BuildContext context) async {
+  Future<String?> getDeviceID(BuildContext context) async {
     DeviceInfoPlugin deviceinfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       IosDeviceInfo iosDeviceInfo = await deviceinfo.iosInfo;

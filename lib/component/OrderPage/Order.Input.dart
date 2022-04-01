@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,15 +10,17 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/PaymentPage/Pembayaran.Input.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
+import '../../utils/dialog.dart';
+import '../../utils/format_rupiah.dart';
+
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputOrder extends StatefulWidget {
-  num idlokasi,
+  num? idlokasi,
       idjenis_produk,
       harga,
       avail,
@@ -26,9 +28,9 @@ class FormInputOrder extends StatefulWidget {
       harganett,
       min_sewa,
       min_deposit;
-  var tanggaljamawal,
+  String? tanggaljamawal,
       tanggaljamakhir,
-      kapasitas,
+      kapasitasz = "",
       keterangan,
       gambar,
       nama_kota,
@@ -36,19 +38,19 @@ class FormInputOrder extends StatefulWidget {
   FormInputOrder(
       {this.tanggaljamawal,
       this.tanggaljamakhir,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.harga,
-      this.avail,
-      this.diskon,
-      this.harganett,
-      this.min_sewa,
-      this.kapasitas,
+      required this.idlokasi,
+      required this.idjenis_produk,
+      required this.harga,
+      required this.avail,
+      required this.diskon,
+      required this.harganett,
+      required this.min_sewa,
+      this.kapasitasz,
       this.keterangan,
       this.gambar,
       this.nama_kota,
       this.nama_lokasi,
-      this.min_deposit});
+      required this.min_deposit});
 
   @override
   _FormDetailOrder createState() => _FormDetailOrder();
@@ -56,7 +58,7 @@ class FormInputOrder extends StatefulWidget {
 
 class _FormDetailOrder extends State<FormInputOrder> {
   //DEKLARASI VARIABEL
-  bool isLoading = false,
+  late bool isLoading = false,
       boolasuransi = true,
       boolsk = false,
       boolvoucher = false,
@@ -67,15 +69,15 @@ class _FormDetailOrder extends State<FormInputOrder> {
       fieldnominalbarang,
       fieldketeranganbarang = false,
       boolkontainer = true;
-  var kapasitas,
+  late var kapasitas = "",
       alamat,
       keterangan,
       produkimage,
       jamawal1,
       jamakhir1,
       tglawalforklift1,
-      valueawal,
-      valueakhir,
+      valueawal = "",
+      valueakhir = "",
       hasilperhitungan,
       email_asuransi,
       getVoucher = "Pilih Voucher",
@@ -103,12 +105,13 @@ class _FormDetailOrder extends State<FormInputOrder> {
       // jenisitem1
       ;
 
-  num vdurasi_sewa,
+  double? harga_sewa;
+
+  num? vdurasi_sewa,
       idjenis_produk,
       idasuransi,
       idlokasi,
       vminimumtransaksi = 0,
-      harga_sewa,
       vpersentasevoucher = 0,
       vmaksimalpotongan = 0,
       minimaldeposit = 0,
@@ -120,8 +123,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
       harga_awal,
       min_sewa = 0,
       min_deposit = 0;
-  DateTime dtAwal, dtAkhir;
-  int ssk;
+  late DateTime dtAwal, dtAkhir;
+  late int ssk;
 
   // var _controller = ScrollController();
   // var _isVisible = false;
@@ -138,7 +141,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
 
   //END DEKLARASI VARIABEL
   //CALLING REFFERENCE
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   TextStyle valueTglAwal = TextStyle(fontSize: 16.0);
   TextStyle valueTglAkhir = TextStyle(fontSize: 16.0);
@@ -165,8 +168,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
   //END DATE TIME PICKER FORMAT
   //ADDON
   getAsuransi() async {
-    final response = await http.get(ApiService().urlasuransi,
-        headers: {"Authorization": "BEARER ${access_token}"});
+    final url = Uri.parse(ApiService().urlasuransi);
+    final response = await http
+        .get(url, headers: {"Authorization": "BEARER ${access_token}"});
     nomasuransi = json.decode(response.body)[0]['nilai'];
     email_asuransi = json.decode(response.body)[0]['email_asuransi'];
     idasuransi = json.decode(response.body)[0]['idasuransi'];
@@ -174,10 +178,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   Future<String> _ambildataSK() async {
-    http.Response response = await http
-        // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        .get(
-            Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
+    // final encoded = Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt');
+    final encoded = Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt');
+    http.Response response = await http.get(Uri.parse(encoded));
+    // .get(
+    //     Uri.encodeFull('https://server.horang.id/adminmaster/skorder.txt'));
     return sk = response.body;
   }
 
@@ -211,7 +216,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            rupiah(harga_sewa.toString(), separator: '.') + " /" + vsatuan_sewa,
+            // rupiah(harga_sewa.toString(), separator: '.') + " /" + vsatuan_sewa,
+            CurrencyFormat.convertToIdr(harga_sewa, 2),
             style: TextStyle(
                 fontSize: 18,
                 color: Colors.red[600],
@@ -220,7 +226,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
           Row(
             children: [
               Text(
-                rupiah(harga_awal.toString(), separator: '.'),
+                "$harga_awal",
+                // CurrencyFormat.convertToIdr(harga_awal.toString(), 2),
+                // rupiah(harga_awal.toString(), separator: '.'),
                 // jenisProduk.harga.toString(),
                 style: GoogleFonts.inter(
                     fontSize: 15,
@@ -241,7 +249,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
       );
     } else {
       return Text(
-        rupiah(harga_sewa.toString(), separator: '.') + " /" + vsatuan_sewa,
+        // rupiah(harga_sewa.toString(), separator: '.') + " /" + vsatuan_sewa,
+        // CurrencyFormat.convertToIdr(harga_sewa.toString()+vsatuan_sewa, 2),
+        "$harga_sewa /$vsatuan_sewa",
         style: TextStyle(
             fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold),
       );
@@ -348,9 +358,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
   void initState() {
     cekToken();
     print("VALUE ORDER? : " +
-        widget.tanggaljamawal +
+        widget.tanggaljamawal.toString() +
         " ~ " +
-        widget.tanggaljamakhir +
+        widget.tanggaljamakhir.toString() +
         " ~ " +
         widget.idlokasi.toString() +
         " ~ " +
@@ -366,34 +376,34 @@ class _FormDetailOrder extends State<FormInputOrder> {
         " ~ " +
         widget.min_sewa.toString() +
         " ~ " +
-        widget.kapasitas.toString() +
+        widget.kapasitasz.toString() +
         " ~ " +
-        widget.keterangan +
+        widget.keterangan.toString() +
         " ~ " +
-        widget.gambar +
+        widget.gambar.toString() +
         " ~ " +
-        widget.nama_kota +
+        widget.nama_kota.toString() +
         " ~ " +
-        widget.nama_lokasi);
+        widget.nama_lokasi.toString());
     // getSetting(access_token, idlokasi);
     tekanvoucher = !tekanvoucher;
     if (_nominalbarang.text == "") _nominalbarang.text = "0";
     idjenis_produk = widget.idjenis_produk;
-    kapasitas = widget.kapasitas.toString();
+    kapasitas = widget.kapasitasz.toString();
     alamat = widget.nama_lokasi;
     keterangan = widget.keterangan;
     idlokasi = widget.idlokasi;
     produkimage = widget.gambar;
     diskon = widget.diskon;
     harga_awal = widget.harga;
-    valueawal = widget.tanggaljamawal;
-    valueakhir = widget.tanggaljamakhir;
+    valueawal = widget.tanggaljamawal.toString();
+    valueakhir = widget.tanggaljamakhir.toString();
     min_sewa = widget.min_sewa;
     minimaldeposit = widget.min_deposit;
     if (diskon != 0) {
-      harga_sewa = widget.harganett;
+      harga_sewa = double.parse(widget.harganett.toString());
     } else {
-      harga_sewa = widget.harga;
+      harga_sewa = double.parse(widget.harga.toString());
     }
 
     if (kapasitas.toLowerCase().contains('forklift')) {
@@ -402,19 +412,19 @@ class _FormDetailOrder extends State<FormInputOrder> {
       boolasuransi = false;
       boolsk = false;
       vsatuan_sewa = "jam ";
-      vdurasi_sewa =
-          diffInTime(DateTime.parse(valueawal), DateTime.parse(valueakhir));
+      vdurasi_sewa = diffInTime(DateTime.parse(valueawal.toString()),
+          DateTime.parse(valueakhir.toString()));
     } else {
       flagasuransi = true;
       boolkontainer = true;
       boolsk = false;
       vsatuan_sewa = "hari ";
-      vdurasi_sewa =
-          diffInDays(DateTime.parse(valueawal), DateTime.parse(valueakhir));
+      vdurasi_sewa = diffInDays(DateTime.parse(valueawal.toString()),
+          DateTime.parse(valueakhir.toString()));
     }
     print('flagasuransine? $flagasuransi');
-    totalhariharga = vdurasi_sewa * harga_sewa;
-    hargaxminimalsewadeposit = harga_awal * minimaldeposit;
+    totalhariharga = (vdurasi_sewa! * harga_sewa!);
+    hargaxminimalsewadeposit = (harga_awal! * minimaldeposit!);
     if (ceksaldo >= hargaxminimalsewadeposit) {
       totaldeposit = hargaxminimalsewadeposit;
     } else {
@@ -424,7 +434,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (flagasuransi == true) {
       _nominalbarang.addListener(() {
         setState(() {
-          total_asuransi = (nomasuransi / 100) *
+          total_asuransi = (nomasuransi! / 100) *
               double.parse(_nominalbarang.text.toString());
           hitungsemuaFunction();
         });
@@ -677,7 +687,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                           _apiService.listVoucher(access_token),
                                       // ignore: missing_return
                                       builder: (context,
-                                          AsyncSnapshot<List<VoucherModel>>
+                                          AsyncSnapshot<List<VoucherModel>?>
                                               snapshot) {
                                         if (snapshot.hasError) {
                                           return Center(
@@ -685,15 +695,14 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                                 "Something wrong with message: ${snapshot.error.toString()}"),
                                           );
                                         } else if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
+                                            ConnectionState.done) {
+                                          List<VoucherModel> vclist =
+                                              snapshot.data!;
+                                          return _buildListvoucher(vclist);
+                                        } else {
                                           return Center(
                                               child:
                                                   CircularProgressIndicator());
-                                        } else if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          List<VoucherModel> vclist =
-                                              snapshot.data;
-                                          return _buildListvoucher(vclist);
                                         }
                                       }))));
                     },
@@ -708,7 +717,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                           hintText: potonganvoucher.toString() == "0"
                               ? getVoucher
                               : "Potongan : " +
-                                  rupiah(potonganvoucher.toString()),
+                                  // rupiah(potonganvoucher.toString()),
+                                  // CurrencyFormat.convertToIdr(potonganvoucher, 2),
+                                  "$potonganvoucher",
                           border: const OutlineInputBorder(),
                         ),
                       ),
@@ -754,9 +765,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                         children: <Widget>[
                                           Checkbox(
                                             value: boolasuransi,
-                                            onChanged: (bool asuransii) {
+                                            onChanged: (bool? asuransii) {
                                               setState(() {
-                                                boolasuransi = asuransii;
+                                                boolasuransi = asuransii!;
                                                 if (boolasuransi == true) {
                                                   flagasuransi = true;
                                                   hitungsemuaFunction();
@@ -813,9 +824,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                             controller: _nominalbarang,
                                             inputFormatters: <
                                                 TextInputFormatter>[
-                                              // ignore: deprecated_member_use
-                                              WhitelistingTextInputFormatter
-                                                  .digitsOnly,
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
                                             ],
                                             onChanged: (value) {
                                               bool isFieldValid =
@@ -871,9 +881,9 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       children: <Widget>[
                                         Checkbox(
                                           value: boolsk,
-                                          onChanged: (bool syaratketentuan) {
+                                          onChanged: (bool? syaratketentuan) {
                                             setState(() {
-                                              boolsk = syaratketentuan;
+                                              boolsk = syaratketentuan!;
                                               if (boolsk == true) {
                                                 ssk = 1;
                                                 buttonVisible.value = false;
@@ -969,7 +979,10 @@ class _FormDetailOrder extends State<FormInputOrder> {
                       SizedBox(
                         height: 3,
                       ),
-                      Text(rupiah(hitungsemua),
+                      Text(
+                          // rupiah(hitungsemua),
+                          // CurrencyFormat.convertToIdr(hitungsemua, 2),
+                          "$hitungsemua",
                           style: GoogleFonts.lato(
                               fontSize: 20, fontWeight: FontWeight.bold))
                     ],
@@ -1008,90 +1021,184 @@ class _FormDetailOrder extends State<FormInputOrder> {
   }
 
   cekDeposit(BuildContext context) {
-    warningDialog(context,
-        "Hai, Maaf saldo poin anda sebesar ${ceksaldo} tidak mencukupi untuk biaya deposit, $kondisisaldo ",
-        title: "Saldo Poin Tidak Mencukupi",
-        showNeutralButton: false,
-        negativeText: "Batal",
-        negativeAction: () {},
-        positiveText: "OK", positiveAction: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return FormInputPembayaran(
-            flagasuransi: flagasuransi,
-            flagvoucher: flagvoucher,
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            idvoucher: idvoucher,
-            idasuransi: idasuransi,
-            harga_sewa: harga_sewa,
-            harga_awal: harga_awal,
-            diskonn: diskon,
-            durasi_sewa: vdurasi_sewa,
-            valuesewaawal: valueawal,
-            valuesewaakhir: valueakhir,
-            kapasitas: kapasitas,
-            alamat: alamat,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: potonganvoucher,
-            minimum_transaksi: vminimumtransaksi,
-            persentase_voucher: vpersentasevoucher,
-            totalharixharga: totalhariharga.toString(),
-            saldopoint: totaldeposit.toString(),
-            email_asuransi: email_asuransi.toString(),
-            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-            persentase_asuransi: nomasuransi.toString(),
-            minimalsewahari: minimaldeposit,
-            cekout: jamcheckout,
-            cekin: jamcheckin,
-            lastorder: jamlastorder,
-            gambarproduk: produkimage);
-      }));
-    });
+    AwesomeDialog(
+      context: context,
+      keyboardAware: true,
+      dismissOnBackKeyPress: false,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      btnCancelText: "Batal",
+      btnOkText: "Ok",
+      title: 'Saldo Poin Tidak Mencukupi',
+      // padding: const EdgeInsets.all(5.0),
+      desc:
+          'Hai, Maaf saldo poin anda sebesar ${ceksaldo} tidak mencukupi untuk biaya deposit, $kondisisaldo',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return FormInputPembayaran(
+              flagasuransi: flagasuransi,
+              flagvoucher: flagvoucher,
+              idlokasi: idlokasi,
+              idjenis_produk: idjenis_produk,
+              idvoucher: idvoucher,
+              idasuransi: idasuransi,
+              harga_sewa: harga_sewa,
+              harga_awal: harga_awal,
+              diskonn: diskon,
+              durasi_sewa: vdurasi_sewa,
+              valuesewaawal: valueawal,
+              valuesewaakhir: valueakhir,
+              kapasitas: kapasitas,
+              alamat: alamat,
+              keterangan_barang: _keteranganbarang.text.toString(),
+              nominal_barang: _nominalbarang.text.toString(),
+              nominal_voucher: potonganvoucher,
+              minimum_transaksi: vminimumtransaksi,
+              persentase_voucher: vpersentasevoucher,
+              totalharixharga: totalhariharga.toString(),
+              saldopoint: totaldeposit.toString(),
+              email_asuransi: email_asuransi.toString(),
+              tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+              persentase_asuransi: nomasuransi.toString(),
+              minimalsewahari: minimaldeposit,
+              cekout: jamcheckout,
+              cekin: jamcheckin,
+              lastorder: jamlastorder,
+              gambarproduk: produkimage);
+        }));
+      },
+    ).show();
+    // warningDialog(context,
+    //     "Hai, Maaf saldo poin anda sebesar ${ceksaldo} tidak mencukupi untuk biaya deposit, $kondisisaldo ",
+    //     title: "Saldo Poin Tidak Mencukupi",
+    //     showNeutralButton: false,
+    //     negativeText: "Batal",
+    //     negativeAction: () {},
+    //     positiveText: "OK", positiveAction: () {
+    // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+    //   return FormInputPembayaran(
+    //       flagasuransi: flagasuransi,
+    //       flagvoucher: flagvoucher,
+    //       idlokasi: idlokasi,
+    //       idjenis_produk: idjenis_produk,
+    //       idvoucher: idvoucher,
+    //       idasuransi: idasuransi,
+    //       harga_sewa: harga_sewa,
+    //       harga_awal: harga_awal,
+    //       diskonn: diskon,
+    //       durasi_sewa: vdurasi_sewa,
+    //       valuesewaawal: valueawal,
+    //       valuesewaakhir: valueakhir,
+    //       kapasitas: kapasitas,
+    //       alamat: alamat,
+    //       keterangan_barang: _keteranganbarang.text.toString(),
+    //       nominal_barang: _nominalbarang.text.toString(),
+    //       nominal_voucher: potonganvoucher,
+    //       minimum_transaksi: vminimumtransaksi,
+    //       persentase_voucher: vpersentasevoucher,
+    //       totalharixharga: totalhariharga.toString(),
+    //       saldopoint: totaldeposit.toString(),
+    //       email_asuransi: email_asuransi.toString(),
+    //       tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+    //       persentase_asuransi: nomasuransi.toString(),
+    //       minimalsewahari: minimaldeposit,
+    //       cekout: jamcheckout,
+    //       cekin: jamcheckin,
+    //       lastorder: jamlastorder,
+    //       gambarproduk: produkimage);
+    // }));
+    // });
   }
 
   orderConfirmation(BuildContext context) {
-    infoDialog(context,
-        "Harap periksa kembali pesanan anda, pastikan anda data yang anda masukkan sesuai",
-        title: "Konfirmasi Pesanan",
-        showNeutralButton: false,
-        negativeText: "Periksa Kembali",
-        negativeAction: () {},
-        positiveText: "Saya Setuju", positiveAction: () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return FormInputPembayaran(
-            flagasuransi: flagasuransi,
-            flagvoucher: flagvoucher,
-            idlokasi: idlokasi,
-            idjenis_produk: idjenis_produk,
-            idvoucher: idvoucher,
-            idasuransi: idasuransi,
-            harga_sewa: harga_sewa,
-            harga_awal: harga_awal,
-            diskonn: diskon,
-            durasi_sewa: vdurasi_sewa,
-            valuesewaawal: valueawal,
-            valuesewaakhir: valueakhir,
-            kapasitas: kapasitas,
-            alamat: alamat,
-            keterangan_barang: _keteranganbarang.text.toString(),
-            nominal_barang: _nominalbarang.text.toString(),
-            nominal_voucher: potonganvoucher,
-            minimum_transaksi: vminimumtransaksi,
-            persentase_voucher: vpersentasevoucher,
-            totalharixharga: totalhariharga.toString(),
-            saldopoint: totaldeposit.toString(),
-            email_asuransi: email_asuransi.toString(),
-            tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
-            persentase_asuransi: nomasuransi.toString(),
-            minimalsewahari: minimaldeposit,
-            cekout: jamcheckout,
-            cekin: jamcheckin,
-            lastorder: jamlastorder,
-            gambarproduk: produkimage);
-      }));
-    });
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.INFO,
+      animType: AnimType.SCALE,
+      title: 'Konfirmasi Pesanan',
+      desc:
+          'Harap periksa kembali pesanan anda, pastikan anda data yang anda masukkan sesuai',
+      btnOkText: "Saya Setuju",
+      btnCancelText: "Periksa Kembali",
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return FormInputPembayaran(
+              flagasuransi: flagasuransi,
+              flagvoucher: flagvoucher,
+              idlokasi: idlokasi.toString(),
+              idjenis_produk: idjenis_produk,
+              idvoucher: idvoucher.toString(),
+              idasuransi: idasuransi.toString(),
+              harga_sewa: harga_sewa,
+              harga_awal: harga_awal.toString(),
+              diskonn: diskon.toString(),
+              durasi_sewa: vdurasi_sewa,
+              valuesewaawal: valueawal,
+              valuesewaakhir: valueakhir,
+              kapasitas: kapasitas,
+              alamat: alamat,
+              keterangan_barang: _keteranganbarang.text.toString(),
+              nominal_barang: _nominalbarang.text.toString(),
+              nominal_voucher: potonganvoucher.toString(),
+              minimum_transaksi: vminimumtransaksi.toString(),
+              persentase_voucher: vpersentasevoucher.toString(),
+              totalharixharga: totalhariharga.toString(),
+              saldopoint: totaldeposit.toString(),
+              email_asuransi: email_asuransi.toString(),
+              tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+              persentase_asuransi: nomasuransi.toString(),
+              minimalsewahari: minimaldeposit.toString(),
+              cekout: jamcheckout,
+              cekin: jamcheckin,
+              lastorder: jamlastorder,
+              gambarproduk: produkimage);
+        }));
+      },
+    )..show();
+    // infoDialog(context,
+    //     "Harap periksa kembali pesanan anda, pastikan anda data yang anda masukkan sesuai",
+    //     title: "Konfirmasi Pesanan",
+    //     showNeutralButton: false,
+    //     negativeText: "Periksa Kembali",
+    //     negativeAction: () {},
+    //     positiveText: "Saya Setuju", positiveAction: () {
+    // Navigator.of(context)
+    //     .pushReplacement(MaterialPageRoute(builder: (context) {
+    //   return FormInputPembayaran(
+    //       flagasuransi: flagasuransi,
+    //       flagvoucher: flagvoucher,
+    //       idlokasi: idlokasi,
+    //       idjenis_produk: idjenis_produk,
+    //       idvoucher: idvoucher,
+    //       idasuransi: idasuransi,
+    //       harga_sewa: harga_sewa,
+    //       harga_awal: harga_awal,
+    //       diskonn: diskon,
+    //       durasi_sewa: vdurasi_sewa,
+    //       valuesewaawal: valueawal,
+    //       valuesewaakhir: valueakhir,
+    //       kapasitas: kapasitas,
+    //       alamat: alamat,
+    //       keterangan_barang: _keteranganbarang.text.toString(),
+    //       nominal_barang: _nominalbarang.text.toString(),
+    //       nominal_voucher: potonganvoucher,
+    //       minimum_transaksi: vminimumtransaksi,
+    //       persentase_voucher: vpersentasevoucher,
+    //       totalharixharga: totalhariharga.toString(),
+    //       saldopoint: totaldeposit.toString(),
+    //       email_asuransi: email_asuransi.toString(),
+    //       tambahsaldopoint: saldodepositkurangnominaldeposit.toString(),
+    //       persentase_asuransi: nomasuransi.toString(),
+    //       minimalsewahari: minimaldeposit,
+    //       cekout: jamcheckout,
+    //       cekin: jamcheckin,
+    //       lastorder: jamlastorder,
+    //       gambarproduk: produkimage);
+    // }));
+    // });
   }
 
   Widget _buildListvoucher(List<VoucherModel> dataIndex) {
@@ -1111,11 +1218,11 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     duration: Duration(seconds: 5),
                   ));
                 } else {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => FormInputOrder()),
-                      (route) => false);
+                  // Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (BuildContext context) => FormInputOrder()),
+                  //     (route) => false);
                 }
               },
               child: Container(
@@ -1127,7 +1234,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                   onTap: () {
                     setState(() {
                       if (tekanvoucher) {
-                        print("hitungsemua? $hitungsemua -- ${voucherlist.min_nominal}");
+                        print(
+                            "hitungsemua? $hitungsemua -- ${voucherlist.min_nominal}");
                         gambarvoucher = voucherlist.gambar;
                         idvoucher = voucherlist.idvoucher;
                         vminimumtransaksi = voucherlist.min_nominal;
@@ -1147,7 +1255,8 @@ class _FormDetailOrder extends State<FormInputOrder> {
                         if (num.parse(hitungsemua) < voucherlist.min_nominal) {
                           print('masukmas? ');
                           Fluttertoast.showToast(
-                              msg: "Maaf nominal transaksi anda tidak memenuhi nominal transaksi minimum",
+                              msg:
+                                  "Maaf nominal transaksi anda tidak memenuhi nominal transaksi minimum",
                               backgroundColor: Colors.black,
                               textColor: Colors.white);
                         }
@@ -1180,14 +1289,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
                                       voucherlist.kode_voucher.toString()),
                                   Text(
                                     "Min. Transaksi : " +
-                                        rupiah(
-                                            voucherlist.min_nominal.toString()),
+                                        // rupiah(voucherlist.min_nominal.toString()),
+                                        // CurrencyFormat.convertToIdr(voucherlist.min_nominal.toString(), 2),
+                                        "${voucherlist.min_nominal}",
                                     overflow: TextOverflow.clip,
                                     softWrap: false,
                                   ),
                                   Text("Potongan : " +
-                                      rupiah(voucherlist.nominal_persentase
-                                          .toString())),
+                                          "${voucherlist.nominal_persentase}"
+                                      // CurrencyFormat.convertToIdr(
+                                      //     voucherlist.nominal_persentase
+                                      //         .toString(),
+                                      //     2),
+                                      // rupiah(voucherlist.nominal_persentase
+                                      //     .toString())),
+                                      ),
                                   Text(
                                     "Potongan (%) : " +
                                         voucherlist.persentase.toString() +
@@ -1255,18 +1371,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
     getAsuransi();
     getSaldo();
     getSetting(access_token, idlokasi);
+    print('acctokennya $access_token $idlokasi');
     _ambildataSK();
   }
 
   getSaldo() async {
-    final response = await http.get(ApiService().urlceksaldo,
-        headers: {"Authorization": "BEARER ${access_token}"});
+    final url = Uri.parse(ApiService().urlceksaldo);
+    final response = await http
+        .get(url, headers: {"Authorization": "BEARER ${access_token}"});
     ceksaldo = json.decode(response.body)[0]['saldo'];
     return ceksaldo;
   }
 
   getSetting(token, idlokasi) async {
-    final response = await http.post(ApiService().urlsettingbylokasi,
+    final url = Uri.parse(ApiService().urlsettingbylokasi);
+    final response = await http.post(url,
         headers: {"content-type": "application/json"},
         body: json.encode({"token": token, "idlokasi": idlokasi}));
     jamcheckout = json.decode(response.body)[0]['nilai'];
@@ -1279,19 +1398,55 @@ class _FormDetailOrder extends State<FormInputOrder> {
     if (boolkontainer == true) {
       if (_nominalbarang.text.toString() == "0" ||
           _nominalbarang.text.toString() == "") {
-        errorDialog(context,
-            "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.");
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.ERROR,
+            animType: AnimType.RIGHSLIDE,
+            headerAnimationLoop: true,
+            title: 'Error',
+            desc:
+                'Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.',
+            btnOkOnPress: () {},
+            btnOkIcon: Icons.cancel,
+            btnOkColor: Colors.red)
+          ..show();
+        // errorDialog(context,
+        //     "Nominal Barang Tidak boleh 0 atau kurang, karena nominal barang menentukan nominal klaim garansi jika ada hal yang tidak kita inginkan bersama.");
       } else {
         if (_keteranganbarang.text.toString() == "" ||
             _keteranganbarang.text.toString() == "0" ||
             _keteranganbarang.text.toString() == "-") {
-          errorDialog(context,
-              "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
+          AwesomeDialog(
+              context: context,
+              dialogType: DialogType.ERROR,
+              animType: AnimType.RIGHSLIDE,
+              headerAnimationLoop: true,
+              title: 'Error',
+              desc:
+                  'Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -',
+              btnOkOnPress: () {},
+              btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red)
+            ..show();
+          // errorDialog(context,
+          //     "Keterangan barang tidak boleh kosong, atau di isi 0 ataupun -");
         } else {
           if (boolsk == false) {
-            warningDialog(context,
-                'Mohon untuk menyetujui syarat dan ketentuan yang berlaku terlebih dahulu.',
-                title: "Perhatian");
+            AwesomeDialog(
+                context: context,
+                dialogType: DialogType.ERROR,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: true,
+                title: 'Error',
+                desc:
+                    'Mohon untuk menyetujui syarat dan ketentuan yang berlaku terlebih dahulu.',
+                btnOkOnPress: () {},
+                btnOkIcon: Icons.cancel,
+                btnOkColor: Colors.red)
+              ..show();
+            // warningDialog(context,
+            //     'Mohon untuk menyetujui syarat dan ketentuan yang berlaku terlebih dahulu.',
+            //     title: "Perhatian");
           } else {
             setState(() {
               if (ceksaldo >= hargaxminimalsewadeposit) {
@@ -1304,7 +1459,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                     hargaxminimalsewadeposit - ceksaldo;
                 totaldeposit = ceksaldo;
                 kondisisaldo =
-                    "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)}?";
+                    "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${(harga_awal)} total ${(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${(saldodepositkurangnominaldeposit)}?";
                 cekDeposit(context);
               }
             });
@@ -1313,8 +1468,21 @@ class _FormDetailOrder extends State<FormInputOrder> {
       }
     } else {
       if (boolsk == false) {
-        warningDialog(context,
-            'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
+        AwesomeDialog(
+          context: context,
+          keyboardAware: true,
+          dismissOnBackKeyPress: false,
+          dialogType: DialogType.WARNING,
+          animType: AnimType.BOTTOMSLIDE,
+          btnOkText: "Ok",
+          title: 'Perhatian !',
+          // padding: const EdgeInsets.all(5.0),
+          desc:
+              'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !',
+          btnOkOnPress: () {},
+        ).show();
+        // warningDialog(context,
+        //     'Baca dan accept syarat dan ketentuan yang berlaku terlebih dahulu !');
       } else {
         setState(() {
           if (ceksaldo >= hargaxminimalsewadeposit) {
@@ -1327,7 +1495,7 @@ class _FormDetailOrder extends State<FormInputOrder> {
                 hargaxminimalsewadeposit - ceksaldo;
             totaldeposit = ceksaldo;
             kondisisaldo =
-                "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${rupiah(harga_awal)} total ${rupiah(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${rupiah(saldodepositkurangnominaldeposit)}?";
+                "untuk melanjutkan transaksi minimum saldo point ${minimaldeposit} ${vsatuan_sewa} dari harga normal sebesar ${(harga_awal)} total ${(hargaxminimalsewadeposit)}, setuju untuk menambah poin deposit sebesar ${(saldodepositkurangnominaldeposit)}?";
             cekDeposit(context);
           }
         });

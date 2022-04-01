@@ -11,18 +11,18 @@ class OrderSukses{
     this.idpembayaran = 0,
     this.idpayment_gateway = 0,
     this.idproduk = 0,
-    this.no_order,
+    required this.no_order,
     this.total_harga = 0,
-    this.keterangan,
+    required this.keterangan,
     this.jumlah_sewa = 0,
-    this.harga,    
-    this.kode_refrensi,
+    required this.harga,
+    required this.kode_refrensi,
     this.nominal = 0,
-    this.nama_provider,
-    this.kode_kontainer,
-    this.tanggal_akhir,
-    this.tanggal_mulai,
-    this.tanggal_order
+    required this.nama_provider,
+    required this.kode_kontainer,
+    required this.tanggal_akhir,
+    required this.tanggal_mulai,
+    required this.tanggal_order
   });
 
   factory OrderSukses.fromJson(Map<String, dynamic> map){

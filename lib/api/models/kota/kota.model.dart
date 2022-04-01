@@ -7,9 +7,9 @@ class KomboKota{
 
   KomboKota({
     this.idkota = 0,
-    this.provinsi,
-    this.keterangan,
-    this.nama_kota,
+    required this.provinsi,
+    required this.keterangan,
+    required this.nama_kota,
   });
 
   factory KomboKota.fromJson(Map<String, dynamic> map){

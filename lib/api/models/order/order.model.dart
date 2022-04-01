@@ -2,7 +2,8 @@ import 'dart:convert';
 
 class OrderProduk {
   bool flagasuransi, flagvoucher;
-  num idlokasi, idjenis_produk, idvoucher, idasuransi, idpayment_gateway;
+  // num idlokasi, idjenis_produk, idvoucher, idasuransi, idpayment_gateway;
+  var idlokasi, idjenis_produk, idvoucher, idasuransi, idpayment_gateway;
   var token,
       harga_sewa,
       durasi_sewa,
@@ -27,13 +28,13 @@ class OrderProduk {
 
   OrderProduk(
       {this.token,
-      this.flagasuransi,
-      this.flagvoucher,
-      this.idlokasi,
-      this.idjenis_produk,
-      this.idvoucher,
-      this.idasuransi,
-      this.idpayment_gateway,
+        required this.flagasuransi,
+        required this.flagvoucher,
+        required this.idlokasi,
+        required this.idjenis_produk,
+        required this.idvoucher,
+        required this.idasuransi,
+        required this.idpayment_gateway,
       this.harga_sewa,
       this.durasi_sewa,
       this.valuesewaawal,

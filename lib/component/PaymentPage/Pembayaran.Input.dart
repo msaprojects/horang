@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -11,16 +10,16 @@ import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/PaymentPage/KonfirmPayment.dart';
 import 'package:horang/component/ProdukPage/Produk.List.dart';
 import 'package:horang/screen/welcome_page.dart';
+import 'package:horang/utils/format_rupiah.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
-import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class FormInputPembayaran extends StatefulWidget {
-  bool warna, flagasuransi, flagvoucher;
-  var idlokasi,
+  late bool warna, flagasuransi, flagvoucher;
+  late var idlokasi,
       idjenis_produk,
       idvoucher,
       idasuransi,
@@ -49,8 +48,9 @@ class FormInputPembayaran extends StatefulWidget {
       gambarproduk;
 
   FormInputPembayaran(
-      {this.flagasuransi,
-      this.flagvoucher,
+      {
+        required this.flagasuransi,
+        required this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
       this.idvoucher,
@@ -84,11 +84,11 @@ class FormInputPembayaran extends StatefulWidget {
 }
 
 class _FormInputPembayaran extends State<FormInputPembayaran> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   int grup = 1, rgID = 1, _currentIndex = 1, rgIndex = 1, idorder = 0;
   bool _sel = false, isEnabled = true, asuransi = false, isSuccess = false;
-  String formatedate, formatedate2, rgValue = "", haurOrDay;
+  late String formatedate, formatedate2, rgValue = "", haurOrDay;
   var access_token,
       refresh_token,
       email,
@@ -228,8 +228,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
   }
 
-  Future<bool> _backPressed() {
-    return Navigator.of(context).pushAndRemoveUntil(
+  Future<bool>? _backPressed() {
+     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => Home(
           initIndexHome: 1, callpage: ProdukList(), //UNTUK ROUTING DARI SUATU HALAMAN KE PAGE TERTENTU MELALUI BOTTOMBAR(log trello [03-09-2021] (solved Upd.fadil 7/09/21))
         )),
@@ -309,7 +309,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     pgambarproduk = widget.gambarproduk;
     ptotal_asuransi = ((double.parse(ppersentase_asuransi) / 100) *
         double.parse(pnominal_barang));
-    totaldeposit = (pminimalsewahari * pharga_awal);
+    totaldeposit = (int.parse(pminimalsewahari) * int.parse(pharga_awal));
     // pjenisitem = widget.jenisitem;
     print("Flag Asuransi? " +
         pflagasuransi.toString() +
@@ -358,7 +358,13 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     }
     // var media = MediaQuery.of(context);
     return WillPopScope(
-      onWillPop: _backPressed,
+      onWillPop: () async {
+        bool? result = await _backPressed();
+        if(result == null){
+          result = false;
+        }
+        return result;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -460,8 +466,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                             children: [
                                               Text(pdiskon.toString() + "%"),
                                               Text(
-                                                  rupiah(
-                                                      pharga_awal.toString()),
+                                                  // rupiah(pharga_awal.toString()),
+                                                  // CurrencyFormat.convertToIdr(pharga_awal, 2),
+                                                  "$pharga_awal",
                                                   style: TextStyle(
                                                       decoration: TextDecoration
                                                           .lineThrough))
@@ -488,9 +495,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  rupiah(pharga_sewa,
-                                      separator: ',',
-                                      trailing: " /" + satuanHariatauJam()),
+                                  // rupiah(pharga_sewa,
+                                  //     separator: ',',
+                                  //     trailing: " /" + satuanHariatauJam()),
+                                  // CurrencyFormat.convertToIdr(pharga_sewa+satuanHariatauJam(), 2,),
+                                  "$pharga_sewa/${satuanHariatauJam()}",
                                   style: TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontWeight: FontWeight.bold),
@@ -575,7 +584,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  rupiah(ptotalharixharga, separator: ','),
+                                  // rupiah(ptotalharixharga, separator: ','),
+                                  // CurrencyFormat.convertToIdr(ptotalharixharga, 2)
+                                  "$ptotalharixharga"
                                 ),
                               ),
                             ],
@@ -593,7 +604,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  rupiah(totaldeposit, separator: ','),
+                                  // rupiah(totaldeposit, separator: ','),
+                                  // CurrencyFormat.convertToIdr(totaldeposit, 2)
+                                  "$totaldeposit"
                                 ),
                               ),
                             ],
@@ -613,7 +626,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  "-" + rupiah(psaldopoint, separator: ','),
+                                  "-" + "$psaldopoint"
+                                  // CurrencyFormat.convertToIdr(psaldopoint, 2)
+                                  // rupiah(psaldopoint, separator: ','),
                                 ),
                               ),
                             ],
@@ -631,7 +646,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  "-" + rupiah(pnominal_voucher),
+                                  "-" + "$pnominal_voucher"
+                                  // CurrencyFormat.convertToIdr(pnominal_voucher,2)
+                                  // rupiah(pnominal_voucher),
                                 ),
                               ),
                             ],
@@ -653,9 +670,11 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 60),
                                 child: Text(
-                                  rupiah(
-                                    ptotal_asuransi,
-                                  ),
+                                  // rupiah(
+                                  //   ptotal_asuransi,
+                                  // ),
+                                  // CurrencyFormat.convertToIdr(ptotal_asuransi, 2),
+                                  "$ptotal_asuransi",
                                   overflow: TextOverflow.clip,
                                   maxLines: 2,
                                 ),
@@ -668,7 +687,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               children: <Widget>[
                                 Text(
                                   "( Nominal Barang : " +
-                                      rupiah(pnominal_barang + " )"),
+                                  "$pnominal_barang",
+                                  // CurrencyFormat.convertToIdr(pnominal_barang, 2),
+                                      // rupiah(pnominal_barang + " )"),
                                   style: TextStyle(fontStyle: FontStyle.italic),
                                 )
                               ],
@@ -698,7 +719,9 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                               Container(
                                 padding: const EdgeInsets.only(right: 60),
                                 child: Text(
-                                  rupiah(hitungsemua),
+                                  "$hitungsemua",
+                                  // rupiah(hitungsemua),
+                                  // CurrencyFormat.convertToIdr(hitungsemua, 2),
                                   style: (TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
@@ -754,7 +777,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
                                                         AsyncSnapshot<
                                                                 List<
-                                                                    PaymentGateway>>
+                                                                    PaymentGateway>?>
                                                             snapshot) {
                                                       if (snapshot.hasError) {
                                                         print(snapshot.error
@@ -778,7 +801,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                         // List<PaymentGatewayVirtualAccount> payment =
                                                         List<PaymentGateway>
                                                             payment =
-                                                            snapshot.data;
+                                                            snapshot.data!;
                                                         return _listPaymentGateway(
                                                             payment);
                                                       } else {
@@ -823,7 +846,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                           // AsyncSnapshot<List<PaymentGatewayVirtualAccount>>
                                                           AsyncSnapshot<
                                                                   List<
-                                                                      PaymentGatewayVirtualAccount>>
+                                                                      PaymentGatewayVirtualAccount>?>
                                                               snapshot) {
                                                         if (snapshot.hasError) {
                                                           print(snapshot.error
@@ -846,7 +869,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                                                                 .done) {
                                                           List<PaymentGatewayVirtualAccount>
                                                               paymentz =
-                                                              snapshot.data;
+                                                              snapshot.data!;
                                                           print(
                                                               'aqua ${snapshot.data}');
                                                           return _listPaymentGatewayVA(
@@ -900,15 +923,16 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      _tripModalBottomSheet(context, pymentgtwyVA.code.toInt(),
-                          pymentgtwyVA.name);
+                      _tripModalBottomSheet(context, pymentgtwyVA.code, pymentgtwyVA.name);
+                      // _tripModalBottomSheet(context, int.parse(pymentgtwyVA.code),
+                      //     pymentgtwyVA.name);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         ListTile(
                           title: Center(
-                            child: Text(pymentgtwyVA.code,
+                            child: Text(pymentgtwyVA.code.toString(),
                                 style: GoogleFonts.inter(
                                     fontSize: 15, color: Colors.black87)),
                           ),
@@ -931,7 +955,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     );
   }
 
-  Widget _listPaymentGateway(List<PaymentGateway> dataIndex) {
+  Widget _listPaymentGateway(List<PaymentGateway>? dataIndex) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.55,
       child: Column(
@@ -946,7 +970,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 // PaymentGatewayVirtualAccount pymentgtwy = dataIndex[index];
-                PaymentGateway pymentgtwy = dataIndex[index];
+                PaymentGateway pymentgtwy = dataIndex![index];
                 // print("data index $dataIndex");
                 return Card(
                   child: InkWell(
@@ -981,7 +1005,7 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
                   ),
                 );
               },
-              itemCount: dataIndex.length,
+              itemCount: dataIndex?.length,
             ),
           )),
         ],
@@ -989,7 +1013,8 @@ class _FormInputPembayaran extends State<FormInputPembayaran> {
     );
   }
 
-  void _tripModalBottomSheet(context, int idpayment, String namaprovider) {
+  void _tripModalBottomSheet(context, var idpayment, String namaprovider) {
+    print('debugmasuksini');
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {

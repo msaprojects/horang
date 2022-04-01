@@ -5,15 +5,16 @@ class PostProdukModel {
   String token, tanggalawal, tanggalakhir, jenisitem;
 
   PostProdukModel(
-      {this.token, this.tanggalawal, this.tanggalakhir, this.idlokasi = 0, this.jenisitem});
+      {required this.token,
+        required  this.tanggalawal,required  this.tanggalakhir, this.idlokasi = 0,required  this.jenisitem});
 
   factory PostProdukModel.fromJson(Map<String, dynamic> map) {
     return PostProdukModel(
-        token: map["token"],
-        tanggalawal: map['tanggal_mulai'],
-        tanggalakhir: map['tanggal_akhir'],
+        token: map["token"].toString(),
+        tanggalawal: map['tanggal_mulai'].toString(),
+        tanggalakhir: map['tanggal_akhir'].toString(),
         idlokasi: map['idlokasi'],
-        jenisitem: map['jenisitem']
+        jenisitem: map['jenisitem'].toString()
         );
   }
 

@@ -3,17 +3,25 @@ import 'package:horang/component/StoragePage/StorageActive.List.dart';
 import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/component/StoragePage/StorageNonActive.List.dart';
 
-class StorageHandler extends StatelessWidget {
-  final int initialIndex;
-  StorageHandler({Key key, this.initialIndex}) : super(key: key);
+class StorageHandler extends StatefulWidget {
+  late int ? initialIndexz;
+  StorageHandler({Key? key,required this.initialIndexz}) : super(key: key);
+
+  @override
+  State<StorageHandler> createState() => _StorageHandlerState();
+}
+
+class _StorageHandlerState extends State<StorageHandler> with SingleTickerProviderStateMixin {
   
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 3,
-        initialIndex: initialIndex ?? 0,
+        // initialIndex: initialIndexz ?? 0,
+        initialIndex: widget.initialIndexz = 0,
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(

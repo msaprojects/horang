@@ -8,20 +8,20 @@ import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryDeposit extends StatefulWidget {
-  const HistoryDeposit({Key key}) : super(key: key);
+  const HistoryDeposit({Key? key}) : super(key: key);
 
   @override
   _HistoryDepositState createState() => _HistoryDepositState();
 }
 
 class _HistoryDepositState extends State<HistoryDeposit> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token, refresh_token, nama_customer, idcustomer, pin;
   List<HistoryDepositModel> depo = [];
   String query = '', token = '';
-  Timer debouncer;
+  late Timer debouncer;
 
   Text debitorkredit(int dk) {
     if (dk == 0) {
@@ -73,7 +73,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
             }
           }));
     }
-    depo = await _apiService.listHistoryDepo(access_token);
+    depo = (await _apiService.listHistoryDepo(access_token))!;
     setState(() => this.depo = depo);
   }
 
@@ -86,7 +86,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
   @override
   void dispose() {
     _apiService.client.close();
-    debouncer?.cancel();
+    debouncer.cancel();
     super.dispose();
   }
 
@@ -130,21 +130,31 @@ class _HistoryDepositState extends State<HistoryDeposit> {
                           return _buildListview(deposit);
                         });
                   } else {
-                    return Center(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Column(
+                    print('tes kosong');
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Card(
+                        child: Center(
+                            child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("assets/image/datanotfound.png"),
+                            Icon(
+                              Icons.error_outline_rounded,
+                              color: Colors.orange,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(
-                              "Oppss..Maaf Data deposit belum ada",
-                              style: GoogleFonts.inter(color: Colors.grey),
-                              textAlign: TextAlign.center,
-                            )
+                              "Anda Belum Ada Transaksi...",
+                              style: GoogleFonts.lato(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
                           ],
-                        ),
+                        )),
                       ),
                     );
                   }
@@ -177,7 +187,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(depositModel.created,
+                        Text(depositModel.created.toString(),
                             style: GoogleFonts.lato(fontSize: 12)),
                         SizedBox(
                           height: 10,
@@ -191,7 +201,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(depositModel.noOrder,
+                                  Text(depositModel.noOrder.toString(),
                                       style: GoogleFonts.lato(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold)),
@@ -211,7 +221,7 @@ class _HistoryDepositState extends State<HistoryDeposit> {
                               SizedBox(
                                 height: 2,
                               ),
-                              Text(depositModel.keterangan,
+                              Text(depositModel.keterangan.toString(),
                                   style: GoogleFonts.lato(
                                       fontSize: 12, color: Colors.black54)),
                               SizedBox(

@@ -9,7 +9,8 @@ import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:indonesia/indonesia.dart';
+
+import '../../utils/format_rupiah.dart';
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -17,15 +18,15 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token, refresh_token, nama_customer, idcustomer, pin;
-  List<HistoryModel> storage, storage1 = [];
+  List<HistoryModel>? storage, storage1 = [];
   String query = '', token = '';
-  Timer debouncer;
+  Timer? debouncer;
 
-  FlatButton getBayarBlm(int bayarbelum) {
+  FlatButton? getBayarBlm(int bayarbelum) {
     if (bayarbelum == 0) {
       return FlatButton(
         onPressed: () {},
@@ -108,7 +109,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void dispose() {
     _apiService.client.close();
-    debouncer?.cancel();
+    // debouncer?.cancel();
     super.dispose();
   }
 
@@ -117,7 +118,7 @@ class _HistoryPageState extends State<HistoryPage> {
     Duration duration = const Duration(milliseconds: 1000),
   }) {
     if (debouncer != null) {
-      debouncer.cancel();
+      debouncer!.cancel();
     }
     debouncer = Timer(duration, callback);
   }
@@ -130,7 +131,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future searchmystorage1(String query) async => debounce(() async {
         print('mystorage1 token1 $access_token');
-        final storagex = storage1.where((storage1) {
+        final storagex = storage1!.where((storage1) {
           final noOrderLower = storage1.no_order.toLowerCase();
           final noKontainerLower = storage1.kode_kontainer.toLowerCase();
           final noBayarLower = storage1.kode_refrensi.toLowerCase();
@@ -193,10 +194,10 @@ class _HistoryPageState extends State<HistoryPage> {
                   if (storage.toString() != "[]") {
                     print("true");
                     return ListView.builder(
-                      itemCount: storage.length,
+                      itemCount: storage?.length,
                       itemBuilder: (context, index) {
                         print('ada ?');
-                        final storages = storage[index];
+                        final storages = storage![index];
                         print('SOTO $storages $index');
                         return _buildListView(storages);
                       },
@@ -402,7 +403,9 @@ class _HistoryPageState extends State<HistoryPage> {
                           ),
                           Text(
                             "Nominal Bayar : " +
-                                rupiah(storage.total_harga.toString()),
+                            storage.total_harga.toString(),
+                                // rupiah(storage.total_harga.toString()),
+                                // CurrencyFormat.convertToIdr(storage.total_harga.toString(), 2),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black45,

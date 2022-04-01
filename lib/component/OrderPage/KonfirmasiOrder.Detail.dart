@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/order/order.sukses.model.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
-import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/format_rupiah.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KonfirmasiOrderDetail extends StatefulWidget {
   int idorder;
-  num nomVoucher, asuransi;
-  KonfirmasiOrderDetail({this.idorder, this.nomVoucher, this.asuransi});
+  var nomVoucher, asuransi;
+  KonfirmasiOrderDetail({required this.idorder,required  this.nomVoucher,required  this.asuransi});
   @override
   _KonfirmasiOrderDetail createState() => _KonfirmasiOrderDetail();
 }
 
 class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
   ApiService _apiService = ApiService();
-  SharedPreferences sp;
+  late SharedPreferences sp;
   bool isSuccess = false;
   var access_token,
       refresh_token,
@@ -96,7 +98,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
       body: FutureBuilder(
         future: _apiService.listOrderSukses(access_token, idorders),
         builder:
-            (BuildContext context, AsyncSnapshot<List<OrderSukses>> snapshot) {
+            (BuildContext context, AsyncSnapshot<List<OrderSukses>?> snapshot) {
           if (snapshot.hasError) {
             return Center(
               // child: CircularProgressIndicator(),
@@ -109,7 +111,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List<OrderSukses> orderstatuss = snapshot.data;
+            List<OrderSukses> orderstatuss = snapshot.data!;
             return _designForm(orderstatuss);
           } else {
             return Center(
@@ -279,7 +281,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                rupiah('${ktotal_asuransi}'),
+                                ('${ktotal_asuransi}'),
                               ),
                             ),
                           ],
@@ -315,8 +317,10 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 20),
                               child: Text(
-                                rupiah(os.harga.toString(),
-                                    separator: ',', trailing: ".00"),
+                                // rupiah(os.harga.toString(),
+                                //     separator: ',', trailing: ".00"),
+                                // CurrencyFormat.convertToIdr(os.harga.toString(), 2)
+                                "${os.harga}"
                               ),
                             ),
                           ],
@@ -399,8 +403,10 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                             Container(
                               padding: const EdgeInsets.only(right: 20),
                               child: Text(
-                                rupiah(os.total_harga.toString(),
-                                    separator: ',', trailing: ".00"),
+                                // rupiah(os.total_harga.toString(),
+                                //     separator: ',', trailing: ".00"),
+                                // CurrencyFormat.convertToIdr(os.total_harga.toString(),2)
+                                "${os.total_harga}"
                               ),
                             ),
                           ],
@@ -420,7 +426,7 @@ class _KonfirmasiOrderDetail extends State<KonfirmasiOrderDetail> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          Home()),
+                                          Home(callpage: HomePage(), initIndexHome: 0,)),
                                   (Route<dynamic> route) => false);
                             },
                             child: Text(

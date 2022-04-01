@@ -1,4 +1,3 @@
-import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +16,7 @@ class StorageActive extends StatefulWidget {
 }
 
 class _StorageActive extends State<StorageActive> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token,
@@ -37,7 +36,7 @@ class _StorageActive extends State<StorageActive> {
     nama_customer = sp.getString("nama_customer");
     pin = sp.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
-    if (access_token == null) {
+    if (access_token == '') {
       ReusableClasses().showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
@@ -78,22 +77,17 @@ class _StorageActive extends State<StorageActive> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _apiService.listMystorage(access_token),
+        future: _apiService.listMystorage(access_token.toString()),
         // ignore: missing_return
         builder: (BuildContext context,
-            AsyncSnapshot<List<MystorageModel>> snapshot) {
+            AsyncSnapshot<List<MystorageModel>?> snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(
                   "Something wrong with message: ${snapshot.error.toString()}"),
             );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List<MystorageModel> profiles = snapshot.data
-                .where((element) => element.status == "AKTIF")
+            List<MystorageModel> profiles = snapshot.data!.where((element) => element.status == "AKTIF")
                 .toList();
             if (profiles.isNotEmpty) {
               return _buildlistview(profiles);
@@ -125,6 +119,11 @@ class _StorageActive extends State<StorageActive> {
                 ),
               );
             }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+          );
+
           }
         });
   }

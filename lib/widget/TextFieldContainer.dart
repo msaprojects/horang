@@ -4,8 +4,8 @@ import 'package:horang/utils/constant_color.dart';
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
   const TextFieldContainer({
-    Key key,
-    this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   @override

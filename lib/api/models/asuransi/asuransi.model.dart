@@ -6,12 +6,13 @@ class AsuransiModel {
   String namaasuransi, perusahaan, alamat;
 
   AsuransiModel(
-      {this.idasuransi,
-      this.status,
-      this.nilai,
-      this.namaasuransi,
-      this.perusahaan,
-      this.alamat});
+      {
+        required this.idasuransi,
+      required this.status,
+      required this.nilai,
+      required this.namaasuransi,
+      required this.perusahaan,
+      required this.alamat});
 
   factory AsuransiModel.fromJson(Map<String, dynamic> map){
     return AsuransiModel(
@@ -19,7 +20,7 @@ class AsuransiModel {
       nilai: map['nilai'],
       namaasuransi: map['nama_asuransi'],
       perusahaan: map['perusahaan'],
-      alamat: map['alamat'],
+      alamat: map['alamat'], status: map['status'],
     );
   }
 

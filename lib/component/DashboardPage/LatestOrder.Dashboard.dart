@@ -1,5 +1,5 @@
-import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/history/history.model.dart';
 import 'package:horang/api/models/mystorage/mystorageModel.dart';
@@ -10,8 +10,9 @@ import 'package:horang/component/StoragePage/StorageExpired.List.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/reusable.class.dart';
-import 'package:indonesia/indonesia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/dialog.dart';
 
 class LatestOrderDashboard extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class LatestOrderDashboard extends StatefulWidget {
 }
 
 class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token,
@@ -95,7 +96,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
               // ignore: missing_return
               // (BuildContext context,AsyncSnapshot<List<HistoryModel>> snapshot) {
               (BuildContext context,
-                  AsyncSnapshot<List<MystorageModel>> snapshot) {
+                  AsyncSnapshot<List<MystorageModel>?> snapshot) {
             print("coba cek lagi : ${snapshot.connectionState}");
             if (snapshot.hasError) {
               print(snapshot.error.toString());
@@ -105,7 +106,7 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
               // List<HistoryModel> profiles = snapshot.data;
-              List<MystorageModel> profiles = snapshot.data;
+              List<MystorageModel> profiles = snapshot.data!;
               if (profiles.isNotEmpty) {
                 print("harmony $profiles");
                 return _buildlistview(profiles);
@@ -117,8 +118,13 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   child: Card(
                     child: GestureDetector(
                       onTap: () {
-                        infoDialog(context,
-                            "Data Kosong, Silahkan lakukan transaksi order terlebih dahulu !");
+                        Fluttertoast.showToast(
+                            msg: "Data Kosong, Silahkan lakukan transaksi order terlebih dahulu !",
+                            // msg: "Account has been ready !",
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white);
+                        // infoDialog(context,
+                        //     "Data Kosong, Silahkan lakukan transaksi order terlebih dahulu !");
                       },
                       child: Center(
                           child: Row(
@@ -143,6 +149,10 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                   ),
                 );
               }
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
           }),
     );
@@ -313,7 +323,9 @@ class _LatestOrderDashboardState extends State<LatestOrderDashboard> {
                             children: [
                               Text("Jumlah Sewa : " + jumlah_sewa.toString(),
                                   style: GoogleFonts.lato(fontSize: 14)),
-                              Text((nama.toLowerCase().contains('forklift')) ? " Jam" : " Hari")
+                              Text((nama.toLowerCase().contains('forklift'))
+                                  ? " Jam"
+                                  : " Hari")
                             ],
                           ),
                           SizedBox(

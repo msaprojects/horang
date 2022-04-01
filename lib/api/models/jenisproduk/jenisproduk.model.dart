@@ -1,23 +1,24 @@
 import 'dart:convert';
 
 class JenisProduk {
-  num idlokasi, idjenis_produk, harga, avail, diskon, harganett, min_sewa, min_deposit;
+  int avail, harganett, harga;
+  num idlokasi, idjenis_produk, diskon, min_sewa, min_deposit;
   String kapasitas, keterangan, gambar, nama_kota, nama_lokasi;
 
   JenisProduk(
       {this.idlokasi = 0,
       this.idjenis_produk = 0,
       this.harga = 0,
-      this.kapasitas,
-      this.keterangan,
-      this.nama_kota,
-      this.nama_lokasi,
-      this.gambar,
-      this.avail = 0,
-      this.diskon,
-      this.harganett,
-      this.min_sewa,
-      this.min_deposit
+        required  this.kapasitas,
+        required this.keterangan,
+        required this.nama_kota,
+        required this.nama_lokasi,
+        required this.gambar,
+        this.avail = 0,
+        required this.diskon,
+        required this.harganett,
+        required this.min_sewa,
+        required this.min_deposit
       });
 
   factory JenisProduk.fromJson(Map<String, dynamic> map) {
@@ -25,11 +26,11 @@ class JenisProduk {
         idlokasi: map["idlokasi"],
         idjenis_produk: map["idjenis_produk"],
         harga: map["harga"],
-        kapasitas: map["kapasitas"],
-        keterangan: map["keterangan"],
-        nama_kota: map["nama_kota"],
-        nama_lokasi: map["nama_lokasi"],
-        gambar: map["gambar"],
+        kapasitas: map["kapasitas"].toString(),
+        keterangan: map["keterangan"].toString(),
+        nama_kota: map["nama_kota"].toString(),
+        nama_lokasi: map["nama_lokasi"].toString(),
+        gambar: map["gambar"].toString(),
         avail: map["avail"],
         diskon: map['diskon'],
         harganett: map['harganett'],

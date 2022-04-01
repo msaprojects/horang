@@ -3,7 +3,7 @@ import 'dart:convert';
 class CekSaldoModel {
   num saldo;
 
-  CekSaldoModel({this.saldo});
+  CekSaldoModel({required this.saldo});
 
   factory CekSaldoModel.fromJson(Map<String, dynamic> map){
     return CekSaldoModel(

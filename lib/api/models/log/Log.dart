@@ -7,7 +7,7 @@ class Logs{
 
   Logs({
     this.idtransaksi_detail = 0,
-    this.token,
+    required this.token,
   });
 
   factory Logs.fromJson(Map<String, dynamic> map){

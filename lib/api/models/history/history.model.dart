@@ -16,20 +16,21 @@ class HistoryModel {
       nama;
 
   HistoryModel(
-      {this.flag_bayar,
-        this.no_order,
-      this.kode_refrensi,
-      this.kode_kontainer,
-      this.nama_provider,
-      this.total_harga,
-      this.jumlah_sewa,
-      this.harga,
-      this.tanggal_order,
-      this.tanggal_mulai,
-      this.tanggal_akhir,
-      this.waktu_bayar,
-      this.nama_lokasi,
-      this.nama
+      {
+        required this.flag_bayar,
+        required this.no_order,
+        required this.kode_refrensi,
+        required this.kode_kontainer,
+        required this.nama_provider,
+        required this.total_harga,
+        required this.jumlah_sewa,
+        required this.harga,
+        required this.tanggal_order,
+        required this.tanggal_mulai,
+        required this.tanggal_akhir,
+        required this.waktu_bayar,
+        required this.nama_lokasi,
+        required this.nama
       });
 
   factory HistoryModel.fromJson(Map<String, dynamic> map) {
@@ -46,7 +47,7 @@ class HistoryModel {
         tanggal_order: map['tanggal_order'],
         tanggal_mulai: map['tanggal_mulai'],
         tanggal_akhir: map['tanggal_akhir'],
-        waktu_bayar: map['waktu_bayar'],
+        waktu_bayar: map['waktu_bayar'].toString(),
         nama_lokasi: map['nama_lokasi'],
         nama: map['nama'],
         );

@@ -2,19 +2,24 @@ import 'dart:convert';
 
 class HistoryDepositModel {
   String keterangan;
-  num debit, nominal;
+  num nominal;
+  int debit;
   String created, noOrder;
 
   HistoryDepositModel(
-      {this.keterangan, this.debit, this.nominal, this.created, this.noOrder});
+      {required this.keterangan,
+        required this.debit,
+        required this.nominal,
+        required this.created,
+        required this.noOrder});
 
   factory HistoryDepositModel.fromJson(Map<String, dynamic> map) {
     return HistoryDepositModel(
-      keterangan: map['keterangan'],
+      keterangan: map['keterangan'].toString(),
       debit: map['debit'],
       nominal: map['nominal'],
-      created: map['created'],
-      noOrder: map['no_order']
+      created: map['created'].toString(),
+      noOrder: map['no_order'].toString()
     );
   }
   Map<String, dynamic> toJson() {

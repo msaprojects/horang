@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class Pin_Model{
-  String pin, token, pinlama, pinbaru;
+  late String pin, token, pinlama, pinbaru;
 
   Pin_Model({
     // this.pin,
-    this.token,
-    this.pinlama,
-    this.pinbaru
+    required this.token,
+    required this.pinlama,
+    required this.pinbaru
   });
 
   factory Pin_Model.fromJson(Map<String, dynamic> map){

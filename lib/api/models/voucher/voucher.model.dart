@@ -6,13 +6,13 @@ class VoucherModel {
 
   VoucherModel(
       {this.idvoucher = 0,
-      this.kode_voucher,
-      this.persentase,
-      this.nominal_persentase,
-      this.min_nominal,
-      this.keterangan,
+        required this.kode_voucher,
+        required this.persentase,
+        required this.nominal_persentase,
+        required this.min_nominal,
+        required this.keterangan,
       this.gambar = "",
-      this.expVoucher});
+        required this.expVoucher});
 
   factory VoucherModel.fromJson(Map<String, dynamic> map) {
     return VoucherModel(

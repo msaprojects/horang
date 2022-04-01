@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:commons/commons.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
+import 'package:horang/api/models/token/token.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/component/account_page/pinauth.dart';
@@ -12,9 +14,11 @@ import 'package:horang/component/RegistrationPage/Registrasi.Input.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:new_version/new_version.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'background_welcome_page.dart';
-import 'package:get_version/get_version.dart';
+// import 'package:get_version/get_version.dart';
 import 'package:http/http.dart' as http;
 
 class BodyWelcomePage extends StatefulWidget {
@@ -23,72 +27,245 @@ class BodyWelcomePage extends StatefulWidget {
 }
 
 class _BodyWelcomePageState extends State<BodyWelcomePage> {
-  var pin = '';
-  var access_token = '', ipPublic;
+  String? pin = "";
+  String? access_token = "", ipPublic;
   bool _showbutton = false;
-  String _projectVersion = '';
-  String _platformVersion = 'Unknown';
-  String _projectCode = '';
-  String _projectAppID = '';
-  String _projectName = '';
+  // String _projectVersion = '';
+  // String _platformVersion = 'Unknown';
+  // String _projectCode = '';
+  // String _projectAppID = '';
+  // String _projectName = '';
   String _uuid = '';
-  SharedPreferences sp;
+  String? devID;
+  late SharedPreferences sp;
   ApiService _apiService = new ApiService();
-  String email = "", nama = "";
+  late String email = "", nama = "", status;
   // var email = _apiService().emailuuid.email;
 
-  initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+  PackageInfo packageInfo =  PackageInfo(
+    appName: 'unknown', 
+    packageName: 'unknown', 
+    version: 'unknown', 
+    buildNumber: 'unknown');
+  
+  Future<void> _initpackageInfo() async{
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      packageInfo = info;
+    });
+  }
+
+  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+  Future<void> initPlatformState() async {
+    var deviceData = <String, dynamic>{};
     try {
-      platformVersion = await GetVersion.platformVersion;
+      if (kIsWeb) {
+        deviceData = _readWebBrowserInfo(await deviceInfoPlugin.webBrowserInfo);
+      } else {
+        if (Platform.isAndroid) {
+          deviceData =
+              _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+        } else if (Platform.isIOS) {
+          deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+        } else if (Platform.isLinux) {
+          deviceData = _readLinuxDeviceInfo(await deviceInfoPlugin.linuxInfo);
+        } else if (Platform.isMacOS) {
+          deviceData = _readMacOsDeviceInfo(await deviceInfoPlugin.macOsInfo);
+        } else if (Platform.isWindows) {
+          deviceData =
+              _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo);
+        }
+      }
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
 
-    String projectVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      projectVersion = await GetVersion.projectVersion;
-    } on PlatformException {
-      projectVersion = 'Failed to get project version.';
-    }
-
-    String projectCode;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      projectCode = await GetVersion.projectCode;
-    } on PlatformException {
-      projectCode = 'Failed to get build number.';
-    }
-
-    String projectAppID;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      projectAppID = await GetVersion.appID;
-    } on PlatformException {
-      projectAppID = 'Failed to get app ID.';
-    }
-
-    String projectName;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      projectName = await GetVersion.appName;
-    } on PlatformException {
-      projectName = 'Failed to get app name.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
-      _projectVersion = projectVersion;
-      _platformVersion = platformVersion;
-      _projectCode = projectCode;
-      _projectAppID = projectAppID;
-      _projectName = projectName;
+      _deviceData = deviceData;
+    });
+  }
+
+   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'androidId': build.androidId,
+      'systemFeatures': build.systemFeatures,
+    };
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
+  }
+
+  Map<String, dynamic> _readLinuxDeviceInfo(LinuxDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'version': data.version,
+      'id': data.id,
+      'idLike': data.idLike,
+      'versionCodename': data.versionCodename,
+      'versionId': data.versionId,
+      'prettyName': data.prettyName,
+      'buildId': data.buildId,
+      'variant': data.variant,
+      'variantId': data.variantId,
+      'machineId': data.machineId,
+    };
+  }
+
+  Map<String, dynamic> _readWebBrowserInfo(WebBrowserInfo data) {
+    return <String, dynamic>{
+      'browserName': describeEnum(data.browserName),
+      'appCodeName': data.appCodeName,
+      'appName': data.appName,
+      'appVersion': data.appVersion,
+      'deviceMemory': data.deviceMemory,
+      'language': data.language,
+      'languages': data.languages,
+      'platform': data.platform,
+      'product': data.product,
+      'productSub': data.productSub,
+      'userAgent': data.userAgent,
+      'vendor': data.vendor,
+      'vendorSub': data.vendorSub,
+      'hardwareConcurrency': data.hardwareConcurrency,
+      'maxTouchPoints': data.maxTouchPoints,
+    };
+  }
+
+  Map<String, dynamic> _readMacOsDeviceInfo(MacOsDeviceInfo data) {
+    return <String, dynamic>{
+      'computerName': data.computerName,
+      'hostName': data.hostName,
+      'arch': data.arch,
+      'model': data.model,
+      'kernelVersion': data.kernelVersion,
+      'osRelease': data.osRelease,
+      'activeCPUs': data.activeCPUs,
+      'memorySize': data.memorySize,
+      'cpuFrequency': data.cpuFrequency,
+      'systemGUID': data.systemGUID,
+    };
+  }
+
+  Map<String, dynamic> _readWindowsDeviceInfo(WindowsDeviceInfo data) {
+    return <String, dynamic>{
+      'numberOfCores': data.numberOfCores,
+      'computerName': data.computerName,
+      'systemMemoryInMegabytes': data.systemMemoryInMegabytes,
+    };
+  }
+
+
+  // initPlatformState() async {
+  //   String platformVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     platformVersion = await GetVersion.platformVersion;
+  //   } on PlatformException {
+  //     platformVersion = 'Failed to get platform version.';
+  //   }
+
+  //   String projectVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     projectVersion = await GetVersion.projectVersion;
+  //   } on PlatformException {
+  //     projectVersion = 'Failed to get project version.';
+  //   }
+
+  //   String projectCode;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     projectCode = await GetVersion.projectCode;
+  //   } on PlatformException {
+  //     projectCode = 'Failed to get build number.';
+  //   }
+
+  //   String projectAppID;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     projectAppID = await GetVersion.appID;
+  //   } on PlatformException {
+  //     projectAppID = 'Failed to get app ID.';
+  //   }
+
+  //   String projectName;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     projectName = await GetVersion.appName;
+  //   } on PlatformException {
+  //     projectName = 'Failed to get app name.';
+  //   }
+
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted) return;
+
+  //   setState(() {
+  //     _projectVersion = projectVersion;
+  //     _platformVersion = platformVersion;
+  //     _projectCode = projectCode;
+  //     _projectAppID = projectAppID;
+  //     _projectName = projectName;
+  //   });
+  // }
+
+  Future<void> initdeviceInfo() async{
+    String? depiceID;
+    try {
+      depiceID = await PlatformDeviceId.getDeviceId;
+    } on PlatformException {
+      depiceID = 'Failed to get deviceId.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      devID = depiceID;
+      print("deviceId->$depiceID");
     });
   }
 
@@ -99,10 +276,10 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
     print("pinnya adalah $pin + $access_token");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
-      checkingUUID();
+      return checkingUUID();
       // Navigator.pushReplacement(
       //     context, MaterialPageRoute(builder: (context) => WelcomePage()));
-      return false;
+      // return false;
       // } else if (pin == '0' && access_token != null) {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> UbahPin()));
     } else {
@@ -116,8 +293,8 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
         //     MaterialPageRoute(
         //       builder: (context) => LoginPage(),
         //     ));
-      } else if (Platform.isAndroid && access_token != null) {
-        if (access_token != null) {
+      } else if (Platform.isAndroid && access_token != "") {
+        if (access_token != "") {
           // loadingScreen(context,
           //     duration: Duration(seconds: 3), loadingType: LoadingType.SCALING);
           new Future.delayed(
@@ -132,12 +309,15 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
 
   @override
   void initState() {
+    _initpackageInfo();
+    initdeviceInfo();
     initPlatformState();
     NewVersion(
       androidId: 'com.cvdtc.horang',
       iOSId: 'com.cvdtc.horang',
-      context: context,
-    ).showAlertIfNecessary();
+      // context: context,
+    ).showAlertIfNecessary(context: context);
+    print('$access_token tokennyaadalah');
     cekToken();
   }
 
@@ -165,7 +345,9 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                   fit: BoxFit.fill,
                 ),
               ),
-              Text('Version $_projectVersion'),
+              
+              Text("Version" +packageInfo.version),
+              // Text('Version $_projectVersion'),
               // Text("IP PUBKUC $ipPublic"),
               SizedBox(
                 height: 10,
@@ -210,7 +392,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                 child: OutlineButton(
                     child: Text("Sudah memiliki akun ? Login sekarang",
                         style: GoogleFonts.lato(fontSize: 14)),
-                    borderSide: BorderSide(color: Colors.deepPurple[900]),
+                    borderSide: BorderSide(color: Colors.deepPurple[900]!),
                     shape: new RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
@@ -244,7 +426,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Reset(
-                                          tipe: "ResendEmail",
+                                          tipe: "ResendEmail", resendemail: '', resetpass: '', resetpin: '',
                                         )));
                           },
                           child: Text(
@@ -262,7 +444,7 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
               ),
-              access_token != null
+              access_token != ''
                   ? CircularProgressIndicator(
                       backgroundColor: Colors.blueAccent,
                       valueColor: AlwaysStoppedAnimation(Colors.red),
@@ -285,10 +467,10 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
   }
 
   checkingUUID() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       GetDeviceID().getDeviceID(context).then((cekuuids) {
-        _uuid = cekuuids;
-        CekLoginUUID uuid = CekLoginUUID(uuid: _uuid);
+        _uuid = cekuuids!;
+        CekLoginUUID uuid = CekLoginUUID(uuid: _uuid, status: '', email: '');
         _apiService.cekLoginUUID(uuid).then((value) => setState(() {
               print("HEM : " + value);
               if (value == "") {
@@ -296,11 +478,12 @@ class _BodyWelcomePageState extends State<BodyWelcomePage> {
               } else {
                 email = value.split(":")[0].toString();
                 nama = value.split(":")[1].toString();
+                status = value.split(":")[2].toString();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => LoginPage(
-                            cekUUID: _uuid, email: email, nama: nama)));
+                            cekUUID: _uuid, email: email, nama: nama, status1: status,)));
               }
             }));
       });

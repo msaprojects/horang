@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
@@ -10,6 +11,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/dialog.dart';
+
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class TambahProfile extends StatefulWidget {
@@ -18,25 +21,26 @@ class TambahProfile extends StatefulWidget {
 }
 
 class _TambahProfileState extends State<TambahProfile> {
-  SharedPreferences sp;
+  SharedPreferences? sp;
   ApiService _apiService = ApiService();
-  bool _isLoading = false,
+  late bool _isLoading = false,
       _isFieldNamaLengkap,
       _isFieldAlamat,
       _isFieldNoKtp,
       isSuccess = true;
   var token = "", newtoken = "", access_token, refresh_token, idcustomer = "";
-  String nama_customer, valKota, pin;
+  String? nama_customer = "", valKota, pin = "";
 
   TextEditingController _controllerNamaLengkap = TextEditingController();
   TextEditingController _controllerAlamat = TextEditingController();
   TextEditingController _controllerNoKtp = TextEditingController();
-  TextEditingController _controlleridkota;
+  late TextEditingController _controlleridkota;
 
-  List<dynamic> _dataKota = List();
-  void getcomboKota() async {
-    final response = await http.get(_apiService.urlkota,
-        headers: {"Authorization": "BEARER ${access_token}"});
+  List? _dataKota;
+  Future<String?> getcomboKota() async {
+    var url = Uri.parse(_apiService.baseUrl + "kota");
+    final response = await http
+        .get(url, headers: {"Authorization": "BEARER ${access_token}"});
     var listdata = json.decode(response.body);
     setState(() {
       _dataKota = listdata;
@@ -45,11 +49,11 @@ class _TambahProfileState extends State<TambahProfile> {
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
-    refresh_token = sp.getString("refresh_token");
-    idcustomer = sp.getString("idcustomer");
-    nama_customer = sp.getString("nama_customer");
-    pin = sp.getString("pin");
+    access_token = sp!.getString("access_token");
+    refresh_token = sp!.getString("refresh_token");
+    idcustomer = sp!.getString("idcustomer")!;
+    nama_customer = sp!.getString("nama_customer")!;
+    pin = sp!.getString("pin")!;
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -67,7 +71,7 @@ class _TambahProfileState extends State<TambahProfile> {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
+                          sp!.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
                           ReusableClasses().showAlertDialog(context);
@@ -162,23 +166,36 @@ class _TambahProfileState extends State<TambahProfile> {
                           ),
                           onPressed: () {
                             setState(() {
-                              if (_isFieldNamaLengkap == null ||
-                                  _isFieldAlamat == null ||
-                                  _isFieldNoKtp == null ||
-                                  valKota == null ||
+                              if (_isFieldNamaLengkap == "" ||
+                                  _isFieldAlamat == "" ||
+                                  _isFieldNoKtp == "" ||
+                                  valKota == "" ||
                                   !_isFieldNamaLengkap ||
                                   !_isFieldAlamat ||
                                   !_isFieldNoKtp) {
-                                warningDialog(
-                                    context, "Pastikan Semua Kolom Terisi");
+                                Fluttertoast.showToast(
+                                    msg: "Pastikan Semua Kolom Terisi!",
+                                    // msg: "Account has been ready !",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white);
+                                // warningDialog(
+                                //     context, "Pastikan Semua Kolom Terisi");
                               } else {
-                                warningDialog(context,
-                                    "Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah",
-                                    showNeutralButton: false,
-                                    negativeText: "Periksa Kembali",
-                                    negativeAction: () {},
-                                    positiveText: "OK", positiveAction: () {
-                                  setState(() => _isLoading = true);
+                                AwesomeDialog(
+                                  context: context,
+                                  keyboardAware: true,
+                                  dismissOnBackKeyPress: false,
+                                  dialogType: DialogType.WARNING,
+                                  animType: AnimType.BOTTOMSLIDE,
+                                  btnCancelText: "Periksa Kembali",
+                                  btnOkText: "Yes, Lanjutkan",
+                                  title: 'Continue ?',
+                                  // padding: const EdgeInsets.all(5.0),
+                                  desc:
+                                      'Pastikan data yang anda masukkan sesuai dengan data asli, data anda tidak dapat di ubah.',
+                                  btnCancelOnPress: () {},
+                                  btnOkOnPress: () {
+                                    setState(() => _isLoading = true);
                                   Customers data = Customers(
                                     namacustomer:
                                         _controllerNamaLengkap.text.toString(),
@@ -186,7 +203,11 @@ class _TambahProfileState extends State<TambahProfile> {
                                     alamat: _controllerAlamat.text.toString(),
                                     token: access_token,
                                     blacklist: "0",
-                                    idkota: int.parse(valKota),
+                                    idkota: int.parse(valKota!),
+                                    email: '',
+                                    nohp: '',
+                                    namakota: '',
+                                    idcustomer: idcustomer,
                                   );
                                   print("Tambah Customer : " + data.toString());
                                   _apiService.TambahCustomer(data)
@@ -196,20 +217,30 @@ class _TambahProfileState extends State<TambahProfile> {
                                       _controllerNamaLengkap.clear();
                                       _controllerNoKtp.clear();
                                       _controllerAlamat.clear();
-                                      successDialog(context,
-                                          "Profil anda berhasil disimpan, tekan 'Ok' untuk login ulang aplikasi",
-                                          showNeutralButton: false,
-                                          positiveText: "OK",
-                                          positiveAction: () {
-                                        Keluarr();
-                                      });
-                                      // Keluarr();
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.LEFTSLIDE,
+                                        headerAnimationLoop: false,
+                                        dialogType: DialogType.SUCCES,
+                                        showCloseIcon: true,
+                                        title: 'Success',
+                                        desc:
+                                            'Profil anda berhasil disimpan, tekan "Ok" untuk login ulang aplikasi',
+                                        btnOkOnPress: () {
+                                          Keluarr();
+                                        },
+                                        btnOkIcon: Icons.check_circle,
+                                      )..show();
                                     } else {
-                                      errorDialog(context,
-                                          "${_apiService.responseCode.mMessage}");
+                                      Fluttertoast.showToast(
+                                          msg: "${_apiService.responseCode.mMessage}",
+                                          // msg: "Account has been ready !",
+                                          backgroundColor: Colors.black,
+                                          textColor: Colors.white);
                                     }
                                   });
-                                });
+                                  },
+                                ).show();
                               }
                             });
                           },
@@ -250,8 +281,10 @@ class _TambahProfileState extends State<TambahProfile> {
       maxLength: 16,
       controller: _controllerNoKtp,
       keyboardType: TextInputType.number,
-      // ignore: deprecated_member_use
-      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly
+      ],
+      // inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: "No. Ktp",
@@ -295,7 +328,7 @@ class _TambahProfileState extends State<TambahProfile> {
       dropdownColor: Colors.white,
       hint: Text("Pilih Kota"),
       value: valKota,
-      items: _dataKota.map((item) {
+      items: _dataKota?.map((item) {
         return DropdownMenuItem(
           child: Text("${item['nama_kota']}"),
           value: item['idkota'].toString(),

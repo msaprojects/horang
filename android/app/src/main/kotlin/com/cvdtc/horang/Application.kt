@@ -2,15 +2,18 @@ package com.cvdtc.horang
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin
-import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService
+import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
+import io.flutter.view.FlutterMain
+import io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService;
 
-class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback{
-    override fun onCreate(){
+class Application : FlutterApplication(), PluginRegistrantCallback {
+
+    override fun onCreate() {
         super.onCreate()
-        FlutterFirebaseMessagingService.setPluginRegistrant(this)
+        FlutterMain.startInitialization(this)
     }
-    override fun registerWith(registry: PluginRegistry){
-        FirebaseMessagingPlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin"))
+
+    override fun registerWith(registry: PluginRegistry?) {
     }
 }
+

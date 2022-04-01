@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 class MystorageModel {
-  num hari, idtransaksi_detail, idtransaksi, jumlah_sewa;
+  int idtransaksi, idtransaksi_detail;
+  var hari, jumlah_sewa;
   int flag_selesai = 0, selesai=0;
   String tanggal_mulai,
       tanggal_akhir,
@@ -16,23 +17,24 @@ class MystorageModel {
       gambar;
 
   MystorageModel(
-      {this.hari,
-      this.idtransaksi_detail,
-      this.idtransaksi,
-      this.tanggal_mulai,
-      this.tanggal_akhir,
-      this.noOrder,
-      this.tanggal_order,
-      this.kode_kontainer,
-      this.nama,
-      this.nama_kota,
-      this.nama_lokasi,
-      this.keterangan,
-      this.jumlah_sewa,
-      this.status,
-      this.flag_selesai,
-      this.selesai,
-      this.gambar
+      {
+        required this.hari,
+        required this.idtransaksi_detail,
+        required this.idtransaksi,
+        required this.tanggal_mulai,
+        required this.tanggal_akhir,
+        required this.noOrder,
+        required this.tanggal_order,
+        required this.kode_kontainer,
+        required this.nama,
+        required this.nama_kota,
+        required this.nama_lokasi,
+        required this.keterangan,
+        required this.jumlah_sewa,
+        required this.status,
+        required this.flag_selesai,
+        required this.selesai,
+        required this.gambar
       });
 
   factory MystorageModel.fromJson(Map<String, dynamic> map){

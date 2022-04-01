@@ -5,9 +5,9 @@ class AccountChecker extends StatelessWidget {
   final bool login;
   final Function press;
   const AccountChecker({
-    Key key,
+    Key? key,
     this.login = true,
-    this.press,
+    required this.press,
   }) : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class AccountChecker extends StatelessWidget {
           style: TextStyle(color: primaryColor, fontSize: 14),
         ),
         GestureDetector(
-          onTap: press,
+          onTap: press(),
           child: Text(
             login ? " Registrasi" : " Login",
             style: TextStyle(

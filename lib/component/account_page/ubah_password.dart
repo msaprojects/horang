@@ -1,39 +1,43 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:horang/api/models/pin/edit.password.model.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/LoginPage/Login.Validation.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:horang/widget/bottom_nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/dialog.dart';
+
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 RegExp regx = RegExp(r"^[a-z0-9_]*$", caseSensitive: false);
 
 class UbahPass extends StatefulWidget {
-  Password password;
-  UbahPass({this.password});
+  // Password password;
+  // UbahPass({required this.password});
 
   @override
   _UbahPassState createState() => _UbahPassState();
 }
 
 class _UbahPassState extends State<UbahPass> {
-  SharedPreferences sp;
+  SharedPreferences? sp;
   ApiService _apiService = ApiService();
-  bool _isLoading = false,
+  late bool _isLoading = false,
       _obsecureTextpasslama = true,
       _obsecureTextpaslama = true,
       _obsecureTextpassbaru = true,
       _obsecureTextpasbaru = true,
       _obsecureTextpassretype = true,
       _obsecureTextpasretype = true,
-      _isFieldpassLama,
-      _isFieldpassBaru,
-      _isFieldpassRetype,
+      _isFieldpassLama = false,
+      _isFieldpassBaru = false,
+      _isFieldpassRetype = false,
       isSuccess = true;
-  var token = "",
+  late var token = "",
       newtoken = "",
       access_token,
       refresh_token,
@@ -41,7 +45,7 @@ class _UbahPassState extends State<UbahPass> {
       nama_customer,
       pin;
   var tekan1x = true;
-  String passlama, passbaru, retypepass;
+  late String passlama, passbaru, retypepass;
 
   TextEditingController _controllerPasslama = TextEditingController();
   TextEditingController _controllerPassbaru = TextEditingController();
@@ -49,11 +53,11 @@ class _UbahPassState extends State<UbahPass> {
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
-    refresh_token = sp.getString("refresh_token");
-    idcustomer = sp.getString("idcustomer");
-    nama_customer = sp.getString("nama_customer");
-    pin = sp.getString("pin");
+    access_token = sp!.getString("access_token");
+    refresh_token = sp!.getString("refresh_token");
+    // idcustomer = sp!.getString("idcustomer");
+    nama_customer = sp!.getString("nama_customer");
+    pin = sp!.getString("pin");
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -71,7 +75,7 @@ class _UbahPassState extends State<UbahPass> {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
+                          sp!.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
                           ReusableClasses().showAlertDialog(context);
@@ -89,13 +93,13 @@ class _UbahPassState extends State<UbahPass> {
 
   @override
   void initState() {
-    if (widget.password != null) {
-      _isFieldpassLama = true;
-      _controllerPasslama.text = widget.password.passwordlama;
-
-      _isFieldpassBaru = true;
-      _controllerPassbaru.text = widget.password.passwordbaru;
-    }
+    // if (widget.password != null) {
+    //   _isFieldpassLama = true;
+    //   _controllerPasslama.text = widget.password.passwordlama;
+    //
+    //   _isFieldpassBaru = true;
+    //   _controllerPassbaru.text = widget.password.passwordbaru;
+    // }
     super.initState();
     cekToken();
   }
@@ -171,8 +175,13 @@ class _UbahPassState extends State<UbahPass> {
                             _isFieldpassBaru == null ||
                             !_isFieldpassLama ||
                             !_isFieldpassBaru) {
-                          warningDialog(
-                              context, "Pastikan semua kolom terisi !");
+                          Fluttertoast.showToast(
+                              msg: "Pastikan semua kolom terisi !",
+                              // msg: "Account has been ready !",
+                              backgroundColor: Colors.black,
+                              textColor: Colors.white);
+                          // warningDialog(
+                          //     context, "Pastikan semua kolom terisi !");
                           // return;
                         } else {
                           setState(() => _isLoading = true);
@@ -180,41 +189,87 @@ class _UbahPassState extends State<UbahPass> {
                               passwordlama: _controllerPasslama.text.toString(),
                               passwordbaru: _controllerPassbaru.text.toString(),
                               token: access_token);
-                          print("MUI $password");
+                          print("MUI $password ${_apiService.responseCode.sStatusCode}");
                           if (_controllerPassbaru.text !=
                               _controllerPassretype.text) {
-                            warningDialog(context,
-                                "Password baru tidak sama dengan retype password",
-                                showNeutralButton: false,
-                                positiveText: 'Ok',
-                                positiveAction: () {});
+                            AwesomeDialog(
+                              context: context,
+                              animType: AnimType.LEFTSLIDE,
+                              headerAnimationLoop: false,
+                              dialogType: DialogType.WARNING,
+                              showCloseIcon: true,
+                              title: 'Warning',
+                              desc:
+                                  'Password baru tidak sama dengan retype password',
+                              btnOkOnPress: () {},
+                              btnOkIcon: Icons.check_circle,
+                            )..show();
+                            // warningDialog(context,
+                            //     "Password baru tidak sama dengan retype password",
+                            //     showNeutralButton: false,
+                            //     positiveText: 'Ok',
+                            //     positiveAction: () {});
                           } else {
                             _apiService.UbahPassword(password)
                                 .then((isSuccess) {
                               setState(() => _isLoading = false);
-                              print("dede ${_apiService.responseCode}");
+                              // print("dede ${_apiService.responseCode}");
                               if (isSuccess) {
                                 print("sukses");
-                                successDialog(
-                                    context, "Ubah password berhasil disimpan",
-                                    showNeutralButton: false,
-                                    positiveText: "Okeh", positiveAction: () {
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              Home(
-                                                initIndexHome: 0,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                });
+                                AwesomeDialog(
+                                  context: context,
+                                  animType: AnimType.LEFTSLIDE,
+                                  headerAnimationLoop: false,
+                                  dialogType: DialogType.SUCCES,
+                                  showCloseIcon: true,
+                                  title: 'Success',
+                                  desc: 'Ubah password berhasil disimpan',
+                                  btnOkOnPress: () {
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                Home(
+                                                  initIndexHome: 0,
+                                                  callpage: HomePage(),
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                  },
+                                  btnOkIcon: Icons.check_circle,
+                                )..show();
+                                // successDialog(
+                                //     context, "Ubah password berhasil disimpan",
+                                //     showNeutralButton: false,
+                                //     positiveText: "Okeh", positiveAction: () {
+                                // Navigator.pushAndRemoveUntil(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (BuildContext context) =>
+                                //             Home(
+                                //               initIndexHome: 0,
+                                //               callpage: HomePage(),
+                                //             )),
+                                //     (Route<dynamic> route) => false);
+                                // });
                               } else {
                                 if (_apiService.responseCode == "401") {
-                                  errorDialog(context,
-                                      "Password lama yang anda masukkan salah.");
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Password lama yang anda masukkan salah.",
+                                      // msg: "Account has been ready !",
+                                      backgroundColor: Colors.black,
+                                      textColor: Colors.white);
+                                  // errorDialog(context,
+                                  //     "Password lama yang anda masukkan salah.");
                                 }
-                                errorDialog(context,
-                                    "Ubah Password gagal disimpan, silahkan dicek ulang");
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Ubah Password gagal disimpan, silahkan dicek ulang.",
+                                    // msg: "Account has been ready !",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white);
+                                // errorDialog(context,
+                                //     "Ubah Password gagal disimpan, silahkan dicek ulang");
                               }
                             });
                           }
@@ -270,7 +325,7 @@ class _UbahPassState extends State<UbahPass> {
                 : Icons.visibility_off),
           ),
           labelText: "Password baru",
-          errorText: _isFieldpassBaru == null || _isFieldpassBaru
+          errorText: _isFieldpassBaru == true || _isFieldpassBaru
               ? null
               : "Password is required"),
       onChanged: (value) {
@@ -303,7 +358,7 @@ class _UbahPassState extends State<UbahPass> {
         // bool isFieldValid = value.trim().isNotEmpty;
         if (value != _controllerPassbaru.text) {
           print("Password tidak sama1");
-          _scaffoldState.currentState
+          _scaffoldState.currentState!
               .showSnackBar(SnackBar(content: Text("Password tidak sama")));
         }
       },

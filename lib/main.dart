@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:commons/commons.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +11,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MyHttpOverride extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -53,12 +51,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
   String token = '';
-  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  late FirebaseMessaging firebaseMessaging;
   @override
   void initState() {
     firebaseMessaging
         .getToken()
-        .then((value) => print("Ini Tokennya2 : " + value));
+        .then((value) => print("Ini Tokennya2 : " + value!));
     NotificationHandler().FirebaseHandler();
     super.initState();
   }

@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # version: 2.1.0+1
-version: 2.0.5+10
+version: 2.0.7+12
 
 environment:
-  sdk: ">=2.7.0+1 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -28,28 +28,36 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: any
-  cupertino_icons: 1.0.2 #untuk mengambil beberapa style icon
-  flushbar: 1.10.4 #untuk desain flushbar dipakai di log
+  cupertino_icons: ^1.0.4 #untuk mengambil beberapa style icon
+  # flushbar: ^1.10.4 #untuk desain flushbar dipakai di log
+  intl: ^0.17.0
   http: any #untuk koneksi http
-  minimize_app: ^0.1.1 #untuk fungsi minimaze app 
-  shared_preferences: ^0.5.12+4 #untuk fungsi sharepreference
-  indonesia: 1.0.1 #untuk fungsi format rupiah 
-  flutter_launcher_icons: 0.9.0 #untuk fungsi icon louncher
-  local_auth: ^0.6.3+4 #untuk fungsi fingerprint
-  google_fonts: ^1.1.2 #untuk ambil font dari googlefont
-  flutter_swiper: 1.1.6 #untuk fungsi swiper di desain voucher
-  email_validator: 2.0.1 #untuk fungsi format penulisan email
+  # minimize_app: ^0.1.1 #untuk fungsi minimaze app 
+  shared_preferences: ^2.0.13 #untuk fungsi sharepreference
+  # indonesia: ^1.0.1 #untuk fungsi format rupiah 
+  flutter_launcher_icons: ^0.9.2 #untuk fungsi icon louncher
+  local_auth: ^1.1.11 #untuk fungsi fingerprint
+  google_fonts: ^2.3.1 #untuk ambil font dari googlefont
+  # flutter_swiper: ^1.1.6 #untuk fungsi swiper di desain voucher
+  email_validator: ^2.0.1 #untuk fungsi format penulisan email
   timeline_tile: ^2.0.0 #untuk fungsi desain timeline eg : dipakai di file log
-  connectivity: 3.0.3 #untuk fungsi pengecekan koneksi
-  commons: ^0.7.8+3 #untuk alert notif 
+  connectivity: ^3.0.6 #untuk fungsi pengecekan koneksi
+  # commons: any #untuk alert notif 
   syncfusion_flutter_datepicker: ^19.2.46 #fungsi syncfusion tanggal di order list
-  fluttertoast: 7.1.6 #untuk fungsi toast
-  firebase_messaging: ^7.0.3 #untuk fungsi notifikasi yang diambil dari firebase
+  fluttertoast: ^8.0.9 #untuk fungsi toast
+  firebase_messaging: ^11.2.8 #untuk fungsi notifikasi yang diambil dari firebase
   time_picker_widget: ^1.0.0+9 #untuk fungsi mengambil timepicker
   intl_phone_number_input: any #untuk fungsi textfield dengan kode phone di berbagai negara e.g : dipakai di konfirmpayment
-  grouped_list: 4.1.0 #untuk fungsi grouping berdasarkan suatu parameter e.g : dipakai di logaktivitas
+  grouped_list: ^4.2.0 #untuk fungsi grouping berdasarkan suatu parameter e.g : dipakai di logaktivitas
   new_version: any #untuk pengecekan latest version di playstore / di appstore
   get: ^4.1.4 #untuk fungsi obx pada saat scrolling sk
+  device_info_plus: ^3.2.2
+  card_swiper: ^2.0.1
+  flutter_local_notifications: ^9.4.0
+  firebase_core: ^1.13.1
+  platform_device_id: ^1.0.1
+  package_info_plus: ^1.0.2
+  awesome_dialog: ^2.1.2
 
   # pin_code_text_field: 1.8.0
   # http: ^0.12.1
@@ -86,6 +94,7 @@ flutter:
   assets:
   - assets/image/
   - assets/res/syaratketentuan.txt
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

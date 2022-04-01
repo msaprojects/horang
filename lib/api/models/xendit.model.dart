@@ -16,7 +16,7 @@ class Xenditmodel{
   }
 
   Xenditmodel({
-    this.balance
+    required this.balance
   });
 
   @override

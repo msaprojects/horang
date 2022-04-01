@@ -1,4 +1,4 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +9,8 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/dialog.dart';
 
 class KonfirmPayment extends StatefulWidget {
   bool flagasuransi, flagvoucher;
@@ -38,8 +40,8 @@ class KonfirmPayment extends StatefulWidget {
       namaprovider;
 
   KonfirmPayment(
-      {this.flagasuransi,
-      this.flagvoucher,
+      {required this.flagasuransi,
+      required this.flagvoucher,
       this.idlokasi,
       this.idjenis_produk,
       this.idvoucher,
@@ -73,7 +75,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   ApiService _apiService = ApiService();
-  SharedPreferences sp;
+  late SharedPreferences sp;
   var access_token, refresh_token, email, nama_customer, idcustomer, pin;
 
   var kflagasuransi,
@@ -207,7 +209,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
     kidpayment_gateway = widget.idpayment_gateway;
     kminimalsewahari = widget.minimalsewahari;
     total_asuransi = (double.parse(kpersentase_asuransi) * kharga_sewa);
-    totaldeposit = (kminimalsewahari * kharga_sewa);
+    totaldeposit = (int.parse(kminimalsewahari) * kharga_sewa);
     kharga_awal = widget.harga_awal;
     knamaprovider = widget.namaprovider;
     cekToken();
@@ -260,7 +262,7 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     },
                     selectorConfig: SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                      backgroundColor: Colors.white,
+                      // backgroundColor: Colors.white,
                     ),
                     ignoreBlank: false,
                     autoValidateMode: AutovalidateMode.disabled,
@@ -269,7 +271,8 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
                     formatInput: false,
                     maxLength: 13,
                     hintText: 'e.g 0810-0011-1222',
-                    textStyle: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                    textStyle:
+                        TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
                     textFieldController: _noOvo,
                     inputBorder: OutlineInputBorder(),
                   ),
@@ -327,48 +330,111 @@ class _KonfirmPaymentState extends State<KonfirmPayment> {
 
   OrderConfirmation(BuildContext context, String notelp) {
     if (notelp == "") {
-      return infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
+      return AwesomeDialog(
+          context: context,
+          dialogType: DialogType.ERROR,
+          animType: AnimType.RIGHSLIDE,
+          headerAnimationLoop: true,
+          desc: 'Masukkan Nomer HP anda terlebih dahulu !',
+          btnOkOnPress: () {},
+          btnOkIcon: Icons.cancel,
+          btnOkColor: Colors.red)
+        ..show();
+      // infoDialog(context, "Masukkan Nomer HP anda terlebih dahulu !");
     } else {
       print('notelp : $notelp');
       if (regex.hasMatch(notelp) == false) {
-        return infoDialog(context, 'Mohon maaf, format telepon yang anda masukkan tidak sesuai');
+        return AwesomeDialog(
+            context: context,
+            dialogType: DialogType.ERROR,
+            animType: AnimType.RIGHSLIDE,
+            headerAnimationLoop: true,
+            desc: 'format telepon yang anda masukkan tidak sesuai',
+            btnOkOnPress: () {},
+            btnOkIcon: Icons.cancel,
+            btnOkColor: Colors.red)
+          ..show();
+        // return infoDialog(context,
+        //     'Mohon maaf, format telepon yang anda masukkan tidak sesuai');
       } else {
-        return infoDialog(
-            context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
-            showNeutralButton: false,
-            negativeAction: () {},
-            negativeText: "Batal",
-            positiveText: "Ok", positiveAction: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => KonfirmasiPembayaran(
-                        token: access_token,
-                        flagasuransi: kflagasuransi,
-                        flagvoucher: kflagvoucher,
-                        idlokasi: kidlokasi,
-                        idjenis_produk: kidjenis_produk,
-                        idvoucher: kidvoucher,
-                        idasuransi: kidasuransi,
-                        harga_sewa: kharga_sewa,
-                        durasi_sewa: kdurasi_sewa,
-                        valuesewaawal: kvaluesewaawal,
-                        valuesewaakhir: kvaluesewaakhir,
-                        keterangan_barang: kketerangan_barang,
-                        nominal_barang: knominal_barang,
-                        nominal_voucher: knominal_voucher,
-                        minimum_transaksi: kminimum_transaksi,
-                        persentase_voucher: kpersentase_voucher,
-                        saldopoint: ksaldopoint,
-                        email_asuransi: kemail_asuransi,
-                        tambahsaldopoint: ktambahsaldopoint,
-                        persentase_asuransi: kpersentase_asuransi,
-                        idpayment_gateway: kidpayment_gateway,
-                        no_ovo: _noOvo.text.toString(),
-                        minimalsewahari: kminimalsewahari,
-                        harga_awal: kharga_awal,
-                      )));
-        });
+        return AwesomeDialog(
+            context: context,
+            dialogType: DialogType.WARNING,
+            headerAnimationLoop: false,
+            animType: AnimType.TOPSLIDE,
+            showCloseIcon: true,
+            closeIcon: Icon(Icons.close_fullscreen_outlined),
+            title: 'Warning',
+            desc: 'pastikan nomor $notelp ini sudah terdaftar di ewallet !',
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => KonfirmasiPembayaran(
+                            token: access_token,
+                            flagasuransi: kflagasuransi,
+                            flagvoucher: kflagvoucher,
+                            idlokasi: kidlokasi,
+                            idjenis_produk: kidjenis_produk,
+                            idvoucher: kidvoucher,
+                            idasuransi: kidasuransi,
+                            harga_sewa: kharga_sewa,
+                            durasi_sewa: kdurasi_sewa,
+                            valuesewaawal: kvaluesewaawal,
+                            valuesewaakhir: kvaluesewaakhir,
+                            keterangan_barang: kketerangan_barang,
+                            nominal_barang: knominal_barang,
+                            nominal_voucher: knominal_voucher,
+                            minimum_transaksi: kminimum_transaksi,
+                            persentase_voucher: kpersentase_voucher,
+                            saldopoint: ksaldopoint,
+                            email_asuransi: kemail_asuransi,
+                            tambahsaldopoint: ktambahsaldopoint,
+                            persentase_asuransi: kpersentase_asuransi,
+                            idpayment_gateway: kidpayment_gateway,
+                            no_ovo: _noOvo.text.toString(),
+                            minimalsewahari: kminimalsewahari,
+                            harga_awal: kharga_awal,
+                          )));
+            })
+          ..show();
+        // infoDialog(
+        //     context, "pastikan nomor $notelp ini sudah terdaftar di ewallet !",
+        //     showNeutralButton: false,
+        //     negativeAction: () {},
+        //     negativeText: "Batal",
+        //     positiveText: "Ok", positiveAction: () {
+        // Navigator.pushReplacement(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (BuildContext context) => KonfirmasiPembayaran(
+        //               token: access_token,
+        //               flagasuransi: kflagasuransi,
+        //               flagvoucher: kflagvoucher,
+        //               idlokasi: kidlokasi,
+        //               idjenis_produk: kidjenis_produk,
+        //               idvoucher: kidvoucher,
+        //               idasuransi: kidasuransi,
+        //               harga_sewa: kharga_sewa,
+        //               durasi_sewa: kdurasi_sewa,
+        //               valuesewaawal: kvaluesewaawal,
+        //               valuesewaakhir: kvaluesewaakhir,
+        //               keterangan_barang: kketerangan_barang,
+        //               nominal_barang: knominal_barang,
+        //               nominal_voucher: knominal_voucher,
+        //               minimum_transaksi: kminimum_transaksi,
+        //               persentase_voucher: kpersentase_voucher,
+        //               saldopoint: ksaldopoint,
+        //               email_asuransi: kemail_asuransi,
+        //               tambahsaldopoint: ktambahsaldopoint,
+        //               persentase_asuransi: kpersentase_asuransi,
+        //               idpayment_gateway: kidpayment_gateway,
+        //               no_ovo: _noOvo.text.toString(),
+        //               minimalsewahari: kminimalsewahari,
+        //               harga_awal: kharga_awal,
+        //             )));
+        // });
       }
     }
   }

@@ -105,11 +105,11 @@ class ReusableClasses {
 
   cekToken(String access_token, refresh_token, idcustomer, email, nama_customer,
       BuildContext context) async {
-    ApiService _apiService;
+    ApiService? _apiService;
     var newtoken = "";
     bool isSuccess = false;
     SharedPreferences sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
+    access_token = sp.getString("access_token")!;
     refresh_token = sp.getString("refresh_token");
     idcustomer = sp.getString("idcustomer");
     email = sp.getString("email");
@@ -159,9 +159,7 @@ class ReusableClasses {
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
           (Route<dynamic> route) => false);
     } else {
-      _apiService
-          .checkingToken(access_token)
-          .then((value) => isSuccess = value);
+      _apiService!.checkingToken(access_token).then((value) => isSuccess = value);
       //checking jika token expired/tidak berlaku maka akan di ambilkan dari refresh token
       if (!isSuccess) {
         _apiService
@@ -181,10 +179,15 @@ class ReusableClasses {
   }
 
   getSaldo(String access_token) async {
-    final response = await http.get(ApiService().urlceksaldo,
-        headers: {"Authorization": "BEARER ${access_token}"});
-    var saldo = json.decode(response.body);
-    return saldo;
+    var url = Uri.parse(ApiService().urlceksaldo);
+    final response = await http.get(url,
+        headers: {"Authorization": "BEARER ${access_token.toString()}"});
+    // var saldo = json.decode(response.body);
+    // final String saldo = json.decode(response.body);
+    // Map<String, dynamic> saldo = json.decode(response.body) as Map<String, dynamic>;
+    List<dynamic> saldo = jsonDecode(response.body);
+    print('saldo from getsaldo ${saldo[0]['saldo']}');
+    return saldo[0]['saldo'].toString();
     // return saldo;
   }
 

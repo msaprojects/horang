@@ -7,7 +7,7 @@ class LogOpen{
 
   LogOpen({
     this.idtransaksi_detail = 0,
-    this.token,
+    required this.token,
   });
 
   factory LogOpen.fromJson(Map<String, dynamic> map){

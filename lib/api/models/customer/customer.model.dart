@@ -1,32 +1,35 @@
 import 'dart:convert';
 
 class Customers{
-  num idkota, idcustomer;
+  int idkota;
+  String idcustomer;
   String token, namacustomer, alamat, noktp, blacklist, email, nohp, namakota;
 
   Customers({
-    this.namacustomer,
-    this.alamat,
-    this.noktp,
-    this.blacklist,
-    this.idkota,
-    this.token,
-    this.email,
-    this.nohp,
-    this.namakota
+    required this.idcustomer,
+    required this.namacustomer,
+    required this.alamat,
+    required this.noktp,
+    required this.blacklist,
+    required this.idkota,
+    required this.token,
+    required this.email,
+    required this.nohp,
+    required this.namakota
   });
 
   factory Customers.fromJson(Map<String, dynamic> map){
     return Customers(
-      namacustomer: map['nama_customer'],
-      alamat: map['alamat'],
-      noktp: map['noktp'],
+      idcustomer: map['idcustomer'].toString(),
+      namacustomer: map['nama_customer'].toString(),
+      alamat: map['alamat'].toString(),
+      noktp: map['noktp'].toString(),
       blacklist: map['blacklist'].toString(),
       idkota: map['idkota'],
-      namakota: map['nama_kota'],
-      token: map['token'],
-      email: map['email'],
-      nohp: map['no_hp'],
+      namakota: map['nama_kota'].toString(),
+      token: map['token'].toString(),
+      email: map['email'].toString(),
+      nohp: map['no_hp'].toString(),
     );
   }
   Map<String, dynamic> toJson(){

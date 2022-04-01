@@ -8,12 +8,12 @@ class TanggalSet extends StatelessWidget{
   final Widget child;
 
   const TanggalSet({
-    Key key,
-    this.labelText,
-    this.valueText,
-    this.valueStyle,
-    this.onPressed,
-    this.child
+    Key? key,
+    required this.labelText,
+    required this.valueText,
+    required this.valueStyle,
+    required this.onPressed,
+    required this.child
   }):super(key:key);
 
   @override

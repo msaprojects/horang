@@ -1,17 +1,17 @@
-import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/component/LogPage/log_aktifitas.dart';
 
 class LogHandler extends StatelessWidget {
   final int initialIndex;
-  LogHandler({Key key, this.initialIndex}) : super(key: key);
+  LogHandler({Key? key, required this.initialIndex}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 2,
-        initialIndex: initialIndex ?? 0,
+        // initialIndex: initialIndex ?? 0,
+        initialIndex: initialIndex,
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(

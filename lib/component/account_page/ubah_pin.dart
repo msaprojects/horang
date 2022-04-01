@@ -1,6 +1,7 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/models/pin/tambah.pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
@@ -9,25 +10,27 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/dialog.dart';
+
 // final globalKey = GlobalKey<ScaffoldState>();
 var passKey = GlobalKey<FormFieldState>();
 
 class UbahPin extends StatefulWidget {
-  Pin_Model ubahPin;
-  UbahPin({this.ubahPin});
+  // late Pin_Model ubahPin;
+  // UbahPin({required this.ubahPin});
 
   @override
   _UbahPinState createState() => _UbahPinState();
 }
 
 class _UbahPinState extends State<UbahPin> {
-  SharedPreferences sp;
+  SharedPreferences? sp;
   ApiService _apiService = ApiService();
   bool _isLoading = false,
       isSuccess = true,
-      _isFieldPinLama,
-      _isFieldPinBaru,
-      _isFieldPinBaruRetype;
+      _isFieldPinLama = false,
+      _isFieldPinBaru = false,
+      _isFieldPinBaruRetype = false;
   var token = "",
       newtoken = "",
       access_token,
@@ -42,11 +45,11 @@ class _UbahPinState extends State<UbahPin> {
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
-    access_token = sp.getString("access_token");
-    refresh_token = sp.getString("refresh_token");
-    idcustomer = sp.getString("idcustomer");
-    nama_customer = sp.getString("nama_customer");
-    pin = sp.getString("pin");
+    access_token = sp!.getString("access_token");
+    refresh_token = sp!.getString("refresh_token");
+    idcustomer = sp!.getString("idcustomer")!;
+    nama_customer = sp!.getString("nama_customer");
+    pin = sp!.getString("pin")!;
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (access_token == null) {
       ReusableClasses().showAlertDialog(context);
@@ -64,7 +67,7 @@ class _UbahPinState extends State<UbahPin> {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
+                          sp!.setString("access_token", newtoken);
                           access_token = newtoken;
                         } else {
                           ReusableClasses().showAlertDialog(context);
@@ -138,78 +141,177 @@ class _UbahPinState extends State<UbahPin> {
                             TambahPin_model pintambah = TambahPin_model(
                                 pin: _controllerPassBaru.text.toString(),
                                 token: access_token);
-                            if (widget.ubahPin == null) {
+                            // if (widget.ubahPin == null) {
+                            if (pin == null) {
                               print("cek masuk nggk");
                               if (_controllerPassBaru.text !=
                                   _controllerPassBaruRetype.text) {
                                 print("cek masuk nggk1");
-                                return warningDialog(context,
-                                    "PIN baru dan Retype PIN tidak sama");
+                                Fluttertoast.showToast(
+                                    msg: "PIN baru dan Retype PIN tidak sama",
+                                    // msg: "Account has been ready !",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white);
+                                // return warningDialog(context,
+                                //     "PIN baru dan Retype PIN tidak sama");
                               } else {
-                                warningDialog(context,
-                                    'Pastikan Pin yang anda masukkan sudah benar !',
-                                    showNeutralButton: false,
-                                    negativeText: 'Belum',
-                                    negativeAction: () {},
-                                    positiveText: 'Sudah', positiveAction: () {
-                                  print("cek masuk nggk2");
-                                  _apiService.TambahPin(pintambah)
-                                      .then((isSuccess) {
-                                    setState(() => _isLoading = false);
-                                    if (!isSuccess) {
-                                      print("cek pin ubah3" + pin);
-                                      successDialog(context,
-                                          "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                          showNeutralButton: false,
-                                          positiveText: "Oke",
-                                          positiveAction: () {
-                                        Keluarr();
+                                AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.WARNING,
+                                    headerAnimationLoop: false,
+                                    animType: AnimType.TOPSLIDE,
+                                    showCloseIcon: true,
+                                    closeIcon:
+                                        Icon(Icons.close_fullscreen_outlined),
+                                    title: 'Warning',
+                                    desc:
+                                        'Pastikan Pin yang anda masukkan sudah benar !',
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () {
+                                      _apiService.TambahPin(pintambah)
+                                          .then((isSuccess) {
+                                        setState(() => _isLoading = false);
+                                        if (!isSuccess) {
+                                          print("cek pin ubah3" + pin);
+                                          AwesomeDialog(
+                                            context: context,
+                                            animType: AnimType.LEFTSLIDE,
+                                            headerAnimationLoop: false,
+                                            dialogType: DialogType.SUCCES,
+                                            showCloseIcon: true,
+                                            title: 'Succes',
+                                            desc:
+                                                'Tambah pin berhasil disimpan, silahkan tekan "oke" untuk login ulang aplikasi',
+                                            btnOkOnPress: () {
+                                              Keluarr();
+                                            },
+                                            btnOkIcon: Icons.check_circle,
+                                          )..show();
+                                          // successDialog(context,
+                                          //     "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                          //     showNeutralButton: false,
+                                          //     positiveText: "Oke",
+                                          //     positiveAction: () {
+                                          //   Keluarr();
+                                          // });
+                                        } else {
+                                          print("cek pin ubah4" + pin);
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Data pin gagal ditambah, silahkan dicek ulang",
+                                              // msg: "Account has been ready !",
+                                              backgroundColor: Colors.black,
+                                              textColor: Colors.white);
+                                          // errorDialog(context,
+                                          //     "Data pin gagal ditambah, silahkan dicek ulang");
+                                        }
                                       });
-                                    } else {
-                                      print("cek pin ubah4" + pin);
-                                      errorDialog(context,
-                                          "Data pin gagal ditambah, silahkan dicek ulang");
-                                    }
-                                  });
-                                });
+                                    })
+                                  ..show();
+                                // warningDialog(context,
+                                //     'Pastikan Pin yang anda masukkan sudah benar !',
+                                //     showNeutralButton: false,
+                                //     negativeText: 'Belum',
+                                //     negativeAction: () {},
+                                //     positiveText: 'Sudah', positiveAction: () {
+                                // print("cek masuk nggk2");
+                                // _apiService.TambahPin(pintambah)
+                                //     .then((isSuccess) {
+                                //   setState(() => _isLoading = false);
+                                //   if (!isSuccess) {
+                                //     print("cek pin ubah3" + pin);
+                                //     successDialog(context,
+                                //         "Tambah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                //         showNeutralButton: false,
+                                //         positiveText: "Oke",
+                                //         positiveAction: () {
+                                //       Keluarr();
+                                //     });
+                                //   } else {
+                                //     print("cek pin ubah4" + pin);
+                                //     errorDialog(context,
+                                //         "Data pin gagal ditambah, silahkan dicek ulang");
+                                //   }
+                                // });
+                                // });
                               }
                             }
                           } else {
+                            print('masuksini0');
                             Pin_Model pinubah = Pin_Model(
                                 pinlama: _controllerPassLama.text.toString(),
                                 pinbaru: _controllerPassBaru.text.toString(),
                                 token: access_token);
-                            if (widget.ubahPin == null) {
+                            print(
+                                'pinubah $pinubah <<>> $pin <> ${_controllerPassLama.text} <> ${_controllerPassBaru.text} <> ${_controllerPassBaruRetype.text}');
+
+                            // if (widget.ubahPin == null) {
+                            if (pinubah != null) {
                               if (_controllerPassLama.text != pin) {
-                                return warningDialog(context,
-                                    "PIN lama yang anda masukkan tidak sama. ");
+                                print('masuksini1');
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "PIN lama yang anda masukkan tidak sama.",
+                                    // msg: "Account has been ready !",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white);
                               } else {
+                                print('masuksini2');
                                 if (_controllerPassBaru.text !=
                                     _controllerPassBaruRetype.text) {
-                                  return warningDialog(context,
-                                      "PIN baru dan Retype PIN tidak sama");
+                                  print('masuksini2.0');
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "PIN baru dan Retype PIN tidak sama.",
+                                      // msg: "Account has been ready !",
+                                      backgroundColor: Colors.black,
+                                      textColor: Colors.white);
+                                  // return warningDialog(context,
+                                  //     "PIN baru dan Retype PIN tidak sama");
                                 } else {
+                                  print('masuksini3');
                                   _apiService.UbahPin(pinubah)
                                       .then((isSuccess) {
                                     setState(() => _isLoading = false);
                                     if (isSuccess) {
                                       print("cek pin ubah3" + pin);
-                                      successDialog(context,
-                                          "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
-                                          showNeutralButton: false,
-                                          positiveText: "Oke",
-                                          positiveAction: () {
-                                        Keluarr();
-                                      });
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.LEFTSLIDE,
+                                        headerAnimationLoop: false,
+                                        dialogType: DialogType.SUCCES,
+                                        showCloseIcon: true,
+                                        title: 'Succes',
+                                        desc:
+                                            'Ubah pin berhasil disimpan, silahkan tekan "oke" untuk login ulang aplikasi',
+                                        btnOkOnPress: () {
+                                          Keluarr();
+                                        },
+                                        btnOkIcon: Icons.check_circle,
+                                      )..show();
+                                      // successDialog(context,
+                                      //     "Ubah pin berhasil disimpan, silahkan tekan 'oke' untuk login ulang aplikasi",
+                                      //     showNeutralButton: false,
+                                      //     positiveText: "Oke",
+                                      //     positiveAction: () {
+                                      //   Keluarr();
+                                      // });
                                     } else {
+                                      print('masuksini4');
                                       print("cek pin ubah4" + pin);
-                                      errorDialog(context,
-                                          "Data pin gagal diubah, silahkan dicek ulang");
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Data pin gagal diubah, silahkan dicek ulang.",
+                                          // msg: "Account has been ready !",
+                                          backgroundColor: Colors.black,
+                                          textColor: Colors.white);
+                                      // errorDialog(context,
+                                      //     "Data pin gagal diubah, silahkan dicek ulang");
                                     }
                                   });
                                 }
-                              }
-                            }
+                              } 
+                            } 
                           }
                         });
                       }),
@@ -297,7 +399,7 @@ class _UbahPinState extends State<UbahPin> {
       ),
       // obscureText: true,
       validator: (confirmation) {
-        return confirmation.isEmpty
+        return confirmation!.isEmpty
             ? 'Konfirmasi password harus di isi'
             : validasiEquals(confirmation, _controllerPassBaru.text)
                 ? null
@@ -322,9 +424,10 @@ class _UbahPinState extends State<UbahPin> {
         bool isFieldValid = value.trim().isNotEmpty;
         if (isFieldValid != _isFieldPinBaru) {
           setState(() => _isFieldPinBaru = isFieldValid);
-        } else if (value.length < 4) {
-          return 'Password kurang dari 4';
         }
+        // else if (value.length < 4) {
+        //   return Fluttertoast() ;
+        // }
       },
     );
   }

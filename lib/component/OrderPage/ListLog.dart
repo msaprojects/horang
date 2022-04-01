@@ -17,7 +17,7 @@ class ListLog extends StatefulWidget {
 }
 
 class _ListLogState extends State<ListLog> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token,
@@ -93,7 +93,7 @@ class _ListLogState extends State<ListLog> {
                     "6Something wrong with message ${snapshot.error.toString()}"),
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List<LogList> logs1 = snapshot.data;
+              List<LogList> logs1 = snapshot.data!;
               print(snapshot.data);
               // print("iamcannor ${snapshot.data}");
               return _buildListview(logs1);
@@ -187,7 +187,7 @@ class _ListLogState extends State<ListLog> {
 }
 
 class _IndicatorExample extends StatelessWidget {
-  const _IndicatorExample({Key key, this.number}) : super(key: key);
+  const _IndicatorExample({Key? key,required  this.number}) : super(key: key);
 
   final String number;
 

@@ -21,7 +21,7 @@ class VoucherDetail extends StatefulWidget {
 }
 
 class _VoucherDetailState extends State<VoucherDetail> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   bool _isLoading = false, isSuccess = true;
   var access_token,
       refresh_token,

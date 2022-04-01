@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/models/log/generateKode.model.dart';
 import 'package:horang/api/models/log/listlog.model.dart';
@@ -20,7 +18,7 @@ class DummyCode extends StatefulWidget {
 }
 
 class _DummyCodeState extends State<DummyCode> {
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token,
@@ -79,32 +77,6 @@ class _DummyCodeState extends State<DummyCode> {
 
   @override
   Widget build(BuildContext context) {
-    // return SafeArea(
-    //   child: FutureBuilder(
-    //     future: _apiService.generateCode(access_token, idtransaksi_detail1),
-    //     builder:
-    //         (BuildContext context, AsyncSnapshot<List<GenerateCode>> snapshot) {
-    //       if (snapshot.hasError) {
-    //         return Center(
-    //           child: Text(
-    //               "zzzSomething wrong with message ${snapshot.error.toString()}"),
-    //         );
-    //       } else if (snapshot.connectionState == ConnectionState.done) {
-    //         List<GenerateCode> logs1 = snapshot.data;
-    //         print(snapshot.data);
-    //         // print("iamcannor ${snapshot.data}");
-    //         return _buildListview(logs1);
-    //       } else {
-    //         return Center(
-    //           child: CircularProgressIndicator(),
-    //         );
-    //       }
-    //     },
-    //   ),
-    // );
-  }
-
-  Widget _buildListview(List<GenerateCode> dataIndex) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -122,7 +94,12 @@ class _DummyCodeState extends State<DummyCode> {
               Navigator.pop(context);
             }),
       ),
-      body: Column(
+      body: _buildListview(idtransaksi_detail1),
+    );
+  }
+
+  Widget _buildListview(List<GenerateCode> dataIndex) {
+    return Column(
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(left: 16, right: 16),
@@ -182,19 +159,18 @@ class _DummyCodeState extends State<DummyCode> {
                   //           builder: (BuildContext context) => Home()),
                   //       (Route<dynamic> route) => false);
                   // });
-                  
+
                 },
               )),
             ),
           ))
         ],
-      ),
-    );
+      );
   }
 }
 
 class _IndicatorExample extends StatelessWidget {
-  const _IndicatorExample({Key key, this.number}) : super(key: key);
+  const _IndicatorExample({Key? key,required this.number}) : super(key: key);
 
   final String number;
 

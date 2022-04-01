@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:horang/api/models/deposit/ceksaldo.model.dart';
+import 'package:horang/api/models/pin/pin.model.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/DashboardPage/LatestOrder.Dashboard.dart';
 import 'package:horang/component/DashboardPage/Storage.Active.dart';
@@ -17,13 +19,14 @@ import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_style.dart';
 import 'package:horang/utils/reusable.class.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:indonesia/indonesia.dart';
+import '../../utils/dialog.dart';
+import '../../utils/format_rupiah.dart';
 import '../StoragePage/StorageHandler.dart';
 
 class HomePage extends StatefulWidget {
   int _current = 0;
   final initialindex;
-  HomePage({Key key, this.initialindex}) : super(key: key);
+  HomePage({Key? key, this.initialindex}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -32,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   int _current = 0;
   Widget currentScreen = HomePage();
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false;
   var access_token,
@@ -68,18 +71,35 @@ class _HomePageState extends State<HomePage> {
     print("cek tokennya gais $access_token" + "--------*****----------" + pin);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (pin == '0') {
-      // print("your eyes broke");
-      infoDialog(context,
-          "Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.",
-          showNeutralButton: false,
-          negativeAction: () {},
-          negativeText: "Nanti saja",
-          positiveText: "Setting sekarang", positiveAction: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => UbahPin()));
-      });
+      AwesomeDialog(
+          context: context,
+          dialogType: DialogType.WARNING,
+          headerAnimationLoop: false,
+          animType: AnimType.TOPSLIDE,
+          showCloseIcon: true,
+          closeIcon: Icon(Icons.close_fullscreen_outlined),
+          title: 'Warning',
+          desc:
+              'Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.',
+          btnCancelText: "Nanti saja",
+          btnOkText: "Setting Sekarang",
+          btnCancelOnPress: () {},
+          btnOkOnPress: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => UbahPin()));
+          })
+        ..show();
+      // infoDialog(context,
+      //     "Pin anda belum disetting, setting sekarang untuk menambah proteksi akun anda.",
+      //     showNeutralButton: false,
+      //     negativeAction: () {},
+      //     negativeText: "Nanti saja",
+      //     positiveText: "Setting sekarang", positiveAction: () {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => UbahPin()));
+      // });
     }
-    if (access_token == null) {
+    if (access_token == '') {
       showAlertDialog(context);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => WelcomePage()),
@@ -114,21 +134,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     cekToken();
-    ReusableClasses().getSaldo(access_token);
+    ReusableClasses().getSaldo(access_token.toString());
     super.initState();
   }
 
   @override
   void dispose() {
     _apiService.client.close();
-    ReusableClasses().getSaldo(access_token);
+    ReusableClasses().getSaldo(access_token.toString());
     super.dispose();
   }
 
   Future refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
-      ReusableClasses().getSaldo(access_token);
+      ReusableClasses().getSaldo(access_token.toString());
     });
   }
 
@@ -178,7 +198,9 @@ class _HomePageState extends State<HomePage> {
                                             MaterialPageRoute(
                                                 builder:
                                                     (BuildContext context) =>
-                                                        LogHandler()));
+                                                        LogHandler(
+                                                          initialIndex: 0,
+                                                        )));
                                       },
                                       icon: (Icon(Icons.notifications)),
                                     )
@@ -201,16 +223,19 @@ class _HomePageState extends State<HomePage> {
                                             .getSaldo(access_token),
                                         builder: (context, snapshot) {
                                           if (snapshot.hasData) {
-                                            var saldoadatidak =
-                                                snapshot.data[0]['saldo'];
+                                            print('snapshote $snapshot');
+                                            // var saldoadatidak = snapshot.data![0]['saldo'];
+                                            var saldoadatidak = snapshot.data;
                                             return Text(
-                                              rupiah(saldoadatidak.toString()),
+                                              "Rp. $saldoadatidak",
+                                              // rupiah(saldoadatidak.toString()),
+                                              // CurrencyFormat.convertToIdr(saldoadatidak, 2),
                                               style: GoogleFonts.inter(
                                                   color: Colors.white,
                                                   fontSize: 35,
                                                   fontWeight: FontWeight.bold),
                                             );
-                                          } else if (snapshot == null) {
+                                          } else if (snapshot.hasData == '') {
                                             print("tidak ada data");
                                             return Container(
                                                 child: Text(
@@ -281,7 +306,11 @@ class _HomePageState extends State<HomePage> {
                                       IconButton(
                                           icon: Icon(Icons.history, size: 30),
                                           onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> HistoryDeposit()));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        HistoryDeposit()));
                                             // Scaffold.of(context)
                                             //     .showSnackBar(SnackBar(
                                             //   content: Text(
@@ -328,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'KONTAINER');
+                              return ProdukList(jenisproduk1: 'KONTAINER');
                             }));
                           },
                           child: Container(
@@ -338,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey[300]),
+                                border: Border.all(color: Colors.grey[300]!),
                                 image: DecorationImage(
                                     scale: 6.0,
                                     image: AssetImage(
@@ -360,7 +389,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ProdukList(jenisproduk: 'FORKLIFT');
+                              return ProdukList(jenisproduk1: 'FORKLIFT');
                             }));
                           },
                           child: Container(
@@ -370,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey[300]),
+                                border: Border.all(color: Colors.grey[300]!),
                                 image: DecorationImage(
                                   scale: 6.0,
                                   fit: BoxFit.scaleDown,
@@ -418,8 +447,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => StorageHandler(
-                                      initialIndex: 1,
+                                      initialIndexz: 1,
                                     )
+                                // StorageHandler()
                                 // StorageActive()
                                 ));
                       },
@@ -462,8 +492,9 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => StorageHandler(
-                                      initialIndex: 2,
+                                      initialIndexz: 2,
                                     )
+                                // StorageHandler()
                                 // HistoryPage()
                                 ));
                       },

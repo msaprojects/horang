@@ -11,17 +11,17 @@ class PenggunaModel {
       keterangan;
 
   PenggunaModel(
-      {this.uuid,
+      {required this.uuid,
       this.idpengguna = 0,
       this.status = 0,
-      this.email,
-      this.no_hp,
-      this.password,
-      this.notification_token,
-      this.token_mail,
-      this.keterangan});
+        required this.email,
+        required this.no_hp,
+        required this.password,
+        required this.notification_token,
+        required this.token_mail,
+        required this.keterangan});
 
-  factory PenggunaModel.fromJson(Map<String, dynamic> map) {
+  factory PenggunaModel.fromJson(Map<dynamic, dynamic> map) {
     return PenggunaModel(
         idpengguna: map["idpengguna"],
         uuid: map["uuid"],

@@ -4,8 +4,8 @@ class PaymentGatewayVirtualAccount{
   String name, code;
 
   PaymentGatewayVirtualAccount({
-    this.name,
-    this.code
+    required this.name,
+    required this.code
   });
 
   factory PaymentGatewayVirtualAccount.fromJson(Map<String, dynamic> map){

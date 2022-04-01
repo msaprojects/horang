@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +9,7 @@ import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/component/StoragePage/SearchWidget.dart';
 import 'package:horang/screen/welcome_page.dart';
 import 'package:horang/utils/constant_color.dart';
+import 'package:horang/utils/dialog.dart';
 import 'package:horang/utils/reusable.class.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +23,7 @@ class _SearchListViewExampleState extends State<StorageExpired1>
 //  with AutomaticKeepAliveClientMixin<StorageExpired1>
 {
   bool isLoading = false;
-  SharedPreferences sp;
+  late SharedPreferences sp;
   ApiService _apiService = ApiService();
   bool isSuccess = false, _loading = true;
   var access_token,
@@ -44,9 +44,9 @@ class _SearchListViewExampleState extends State<StorageExpired1>
       flag_noted,
       noted;
 
-  List<MystorageModel> storage, storage1 = []; //jian tambah ini
+  List<MystorageModel>? storage, storage1 = []; //jian tambah ini
   String query = '', token = '';
-  Timer debouncer;
+  late Timer debouncer;
 
   Widget accbayar(BuildContext context, int accbyr, idtr, idtrd,
       String nam_kotaa, kod_kontanr) {
@@ -55,13 +55,28 @@ class _SearchListViewExampleState extends State<StorageExpired1>
         child: FlatButton(
             color: Colors.green,
             onPressed: () {
-              infoDialog(context,
-                  "Apakah anda yakin ingin menyelesaikan transaksi ini ?",
-                  showNeutralButton: false,
-                  positiveAction: () {},
-                  positiveText: "Lanjutkan",
-                  negativeAction: () {},
-                  negativeText: "Batal");
+              AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.WARNING,
+                  headerAnimationLoop: false,
+                  animType: AnimType.TOPSLIDE,
+                  showCloseIcon: true,
+                  closeIcon: Icon(Icons.close_fullscreen_outlined),
+                  title: 'Warning',
+                  desc: 'Apakah anda yakin ingin menyelesaikan transaksi ini ?',
+                  btnCancelOnPress: () {},
+                  // onDissmissCallback: (type) {
+                  //   debugPrint('Dialog Dissmiss from callback $type');
+                  // },
+                  btnOkOnPress: () {})
+                ..show();
+              // infoDialog(context,
+              //     "Apakah anda yakin ingin menyelesaikan transaksi ini ?",
+              //     showNeutralButton: false,
+              //     positiveAction: () {},
+              //     positiveText: "Lanjutkan",
+              //     negativeAction: () {},
+              //     negativeText: "Batal");
             },
             child: Text(
               'Selesai',
@@ -76,10 +91,19 @@ class _SearchListViewExampleState extends State<StorageExpired1>
       return ElevatedButton(
           style: ElevatedButton.styleFrom(primary: Colors.green),
           onPressed: () {
-            infoDialog(context,
-                "Apakah anda yakin ingin menyelesaikan transaksi ini ? $nam_kotaa, $kod_kontanr",
-                showNeutralButton: false, positiveAction: () {
-              setState(() {
+            AwesomeDialog(
+                context: context,
+                dialogType: DialogType.WARNING,
+                headerAnimationLoop: false,
+                animType: AnimType.TOPSLIDE,
+                showCloseIcon: true,
+                closeIcon: Icon(Icons.close_fullscreen_outlined),
+                title: 'Warning',
+                desc:
+                    'Apakah anda yakin ingin menyelesaikan transaksi ini ? $nam_kotaa, $kod_kontanr',
+                btnCancelOnPress: () {},
+                btnOkOnPress: () {
+                  setState(() {
                 isLoading = true;
                 selesaiLog selesai =
                     selesaiLog(idtransaksi: idtr, token: access_token);
@@ -95,20 +119,78 @@ class _SearchListViewExampleState extends State<StorageExpired1>
                           this.storage = value;
                         });
                       });
-                      successDialog(context, "Berhasil",
-                          showNeutralButton: false, positiveAction: () {
-                        Navigator.pop(context, true);
-                      }, positiveText: "Ok");
+                      AwesomeDialog(
+                        context: context,
+                        animType: AnimType.LEFTSLIDE,
+                        headerAnimationLoop: false,
+                        dialogType: DialogType.SUCCES,
+                        showCloseIcon: true,
+                        title: 'Berhasil',
+                        btnOkOnPress: () {
+                          Navigator.pop(context, true);
+                        },
+                        btnOkIcon: Icons.check_circle,
+                        onDissmissCallback: (type) {
+                          debugPrint('Dialog Dissmiss from callback $type');
+                        })
+                      ..show();
+                      // successDialog(context, "Berhasil",
+                      //     showNeutralButton: false, positiveAction: () {
+                      //   Navigator.pop(context, true);
+                      // }, positiveText: "Ok");
                     } else {
-                      errorDialog(context, "Transaksi gagal dilakukan !");
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        animType: AnimType.RIGHSLIDE,
+                        headerAnimationLoop: true,
+                        title: 'Error',
+                        desc:
+                            'Transaksi gagal dilakukan !',
+                        btnOkOnPress: () {},
+                        btnOkIcon: Icons.cancel,
+                        btnOkColor: Colors.red)
+                      ..show();
+                      // errorDialog(context, "Transaksi gagal dilakukan !");
                     }
                   });
                 }
               });
-            },
-                positiveText: "Lanjutkan",
-                negativeAction: () {},
-                negativeText: "Batal");
+                })
+              ..show();
+          //   infoDialog(context,
+          //       "Apakah anda yakin ingin menyelesaikan transaksi ini ? $nam_kotaa, $kod_kontanr",
+          //       showNeutralButton: false, positiveAction: () {
+          //     setState(() {
+          //       isLoading = true;
+          //       selesaiLog selesai =
+          //           selesaiLog(idtransaksi: idtr, token: access_token);
+          //       if (nam_kotaa != null || kod_kontanr != null) {
+          //         _apiService.SelesaiLog(selesai).then((isSuccess) {
+          //           setState(() => isLoading = false);
+          //           if (isSuccess) {
+          //             //  final storage2 = await _apiService.listMystorageExpired(access_token, query);
+          //             _apiService
+          //                 .listMystorageExpired(access_token, query)
+          //                 .then((value) {
+          //               setState(() {
+          //                 this.storage = value;
+          //               });
+          //             });
+          //             successDialog(context, "Berhasil",
+          //                 showNeutralButton: false, positiveAction: () {
+          //               Navigator.pop(context, true);
+          //             }, positiveText: "Ok");
+          //           } else {
+          //             errorDialog(context, "Transaksi gagal dilakukan !");
+          //           }
+          //         });
+          //       }
+          //     });
+          //   },
+          //       positiveText: "Lanjutkan",
+          //       negativeAction: () {},
+          //       negativeText: "Batal");
           },
           child: Text(
             'Selesai',
@@ -122,13 +204,16 @@ class _SearchListViewExampleState extends State<StorageExpired1>
     if (fselesai == 0 && selesai == 0) {
       noted = "Harap Konfirmasi Selesai";
       flag_noted = Colors.red[600];
-    } else if (fselesai == 0 && selesai == 1) { // untuk perintah selesai mobile jika dibagian web sudah diselesaikan
+    } else if (fselesai == 0 && selesai == 1) {
+      // untuk perintah selesai mobile jika dibagian web sudah diselesaikan
       noted = "Harap Konfirmasi Selesai";
       flag_noted = Colors.indigo;
-    } else if (fselesai == 1 && selesai == 0) { // untuk perintah selesai bagian web jika dibagian mobile sudah diselesaikan
+    } else if (fselesai == 1 && selesai == 0) {
+      // untuk perintah selesai bagian web jika dibagian mobile sudah diselesaikan
       noted = "Menunggu Konfirmasi";
       flag_noted = Colors.indigo;
-    } else if (fselesai == 1 && selesai == 1) { // untuk mengetahui jika bagian web dan bagian mobile sudah dislesaikan 2-2nya
+    } else if (fselesai == 1 && selesai == 1) {
+      // untuk mengetahui jika bagian web dan bagian mobile sudah dislesaikan 2-2nya
       noted = "Berhasil Dikonfirmasi";
       flag_noted = Colors.green;
     } else {
@@ -209,7 +294,7 @@ class _SearchListViewExampleState extends State<StorageExpired1>
 
   @override
   void dispose() {
-    debouncer?.cancel();
+    // debouncer?.cancel();
     super.dispose();
   }
 
@@ -243,10 +328,10 @@ class _SearchListViewExampleState extends State<StorageExpired1>
                   if (storage.toString() != "[]") {
                     print("true");
                     return ListView.builder(
-                      itemCount: storage.length,
+                      itemCount: storage!.length,
                       itemBuilder: (context, index) {
                         print('ada yang?');
-                        final storages = storage[index];
+                        final storages = storage![index];
                         print('soto expired $storage');
                         // print('SOTO $storages $index');
                         return buildmyStorage(storages);
@@ -295,7 +380,7 @@ class _SearchListViewExampleState extends State<StorageExpired1>
   //jian tambah ini
   Future searchmystorage1(String query) async => debounce(() async {
         print('mystorage1 token1 $access_token');
-        final storagex = storage1
+        final storagex = storage1!
             .where((storage1) {
               final noOrderLower = storage1.noOrder.toLowerCase();
               final kodeKontainerLower = storage1.kode_kontainer.toLowerCase();

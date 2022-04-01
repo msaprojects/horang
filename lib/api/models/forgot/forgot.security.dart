@@ -4,7 +4,8 @@ import 'dart:convert';
 class Forgot_Security {
   String email;
 
-  Forgot_Security({this.email});
+  Forgot_Security({required
+  this.email});
 
   factory Forgot_Security.fromJson(Map<String, dynamic> map) {
     return Forgot_Security(email: map['email']);

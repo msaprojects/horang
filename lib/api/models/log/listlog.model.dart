@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 class LogList{
-  String token, timestamp, status, idtransaksi_detail;
+  late String token, timestamp, status, idtransaksi_detail;
 
   LogList({
-    this.timestamp,
-    this.status,
+    required this.timestamp,
+    required this.status,
     // this.token,
     // this.idtransaksi_detail
   });

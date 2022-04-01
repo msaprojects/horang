@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:commons/commons.dart';
-import 'package:flutter/foundation.dart';
 import 'package:horang/api/models/asuransi/asuransi.model.dart';
 import 'package:horang/api/models/customer/customer.model.dart';
 import 'package:horang/api/models/forgot/forgot.security.dart';
@@ -41,21 +39,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final String baseUrl = "http://192.168.1.213:9992/api/"; //LOCAL
-  // final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
+  //  final String baseUrl = "http://dev.horang.id:9992/api/"; //DEVELOPMENT
   final String baseUrl = "https://server.horang.id:9993/api/"; //SERVER
-  final String baseUrlVA =
-      "https://api.xendit.co/available_virtual_account_banks/";
+  var baseUrlVA = Uri.parse("https://api.xendit.co/available_virtual_account_banks/");
+      // ;
   // final String UrlFTP = "https://dev.horang.id/adminmaster/sk.txt";
   Client client = Client();
   // ResponseCode responseCode;
-  ResponseCodeCustom responseCode;
-  CekLoginUUID emailuuid;
-  OrderSukses orderSukses = OrderSukses();
+  ResponseCodeCustom responseCode = ResponseCodeCustom();
+  late CekLoginUUID emailuuid;
+  // OrderSukses orderSukses = OrderSukses();
+  late OrderSukses orderSukses;
   List<Customers> _data = [];
   List<Customers> get datacus => _data;
 
   //URL MAKER
-  String urlasuransi,
+  late var urlasuransi,
       urlceksaldo,
       urllokasi,
       urlgetcustomer,
@@ -64,7 +63,8 @@ class ApiService {
   ApiService() {
     urlasuransi = baseUrl + "asuransiaktif";
     urlceksaldo = baseUrl + "ceksaldo";
-    urllokasi = baseUrl + "lokasi";
+    // urllokasi = baseUrl + "lokasi";
+    urllokasi = Uri.parse(baseUrl+"lokasi");
     urlgetcustomer = baseUrl + "customer";
     urlsettingbylokasi = baseUrl + "lokasisetting";
     urlkota = baseUrl + "kota";
@@ -72,13 +72,14 @@ class ApiService {
 
   /////////////////////// LIST /////////////////////////
 
-  Future<List<Xenditmodel>> xenditUrl() async {
+  Future<List<Xenditmodel>?> xenditUrl() async {
     String username =
         'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
     String password = '';
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await client.get("https://api.xendit.co/balance",
+        var url = Uri.parse("https://api.xendit.co/balance");
+     var response = await client.get(url,
         headers: {
           "content-type": "application/json",
           "Authorization": basicAuth
@@ -86,8 +87,9 @@ class ApiService {
   }
 
   //LOAD JENIS PRODUK
-  Future<List<JenisProduk>> listJenisProduk(String token) async {
-    final response = await client.get("$baseUrl/jenisprodukdanproduk",
+  Future<List<JenisProduk>?> listJenisProduk(String token) async {
+    var url = Uri.parse(baseUrl+"/jenisprodukdanproduk");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
@@ -97,23 +99,24 @@ class ApiService {
   }
 
   //LIST PRODUK
-  Future<List<JenisProduk>> listProduk(PostProdukModel data) async {
-    final response = await client.post(
-      "$baseUrl/jenisprodukavailable",
+  Future<List<JenisProduk>?> listProduk(PostProdukModel data) async {
+    var url = Uri.parse(baseUrl+"/jenisprodukavailable");
+    final response = await client.post(url,
       headers: {"content-type": "application/json"},
       body: PostProdukModelToJson(data),
     );
     print('respondotbody ${response.body}');
     if (response.statusCode == 200) {
       return jenisprodukFromJson(response.body);
-    } else {
+    } else if (response.statusCode == 204) {
       return null;
     }
   }
 
   //LOAD DETAIL ORDER
-  Future<List<OrderSukses>> listOrderSukses(String token, int idorder) async {
-    final response = await client.get("$baseUrl/orderdet/$idorder",
+  Future<List<OrderSukses>?> listOrderSukses(String token, int idorder) async {
+    var url = Uri.parse(baseUrl+"/orderdet/$idorder");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return ordersuksesFromJson(response.body);
@@ -123,9 +126,10 @@ class ApiService {
   }
 
   //LOAD VOUCHER
-  Future<List<VoucherModel>> listVoucher(String token) async {
+  Future<List<VoucherModel>?> listVoucher(String token) async {
+    var url = Uri.parse(baseUrl+"/voucher");
     final response = await client
-        .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
+        .get(url, headers: {"Authorization": "BEARER ${token}"});
     // .get("$baseUrl/voucher", headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return voucherFromJson(response.body);
@@ -138,7 +142,8 @@ class ApiService {
 
   Future<List<MystorageModel>> listMystorageNonActive(
       String token, var query) async {
-    final response = await client.get("$baseUrl/mystorage",
+        var url = Uri.parse(baseUrl+"/mystorage");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     print("token dari apiservice non aktif" + response.body + "$token");
     if (response.statusCode == 200) {
@@ -167,7 +172,8 @@ class ApiService {
 
   Future<List<MystorageModel>> listMystorageActive(
       String token, var query) async {
-    final response = await client.get("$baseUrl/mystorage",
+        var url = Uri.parse(baseUrl+"/mystorage");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     print("token dari apiservice active" + response.body + "$token");
     if (response.statusCode == 200) {
@@ -221,7 +227,8 @@ class ApiService {
 
   Future<List<MystorageModel>> listMystorageExpired(
       String token, var query) async {
-    final response = await client.get("$baseUrl/mystorage",
+        var url = Uri.parse(baseUrl+"/mystorage");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     print("masuklist??");
     if (response.statusCode == 200) {
@@ -247,9 +254,11 @@ class ApiService {
     }
   }
 
-  Future<List<MystorageModel>> listMystorage(String token) async {
-    final response = await client.get("$baseUrl/mystorage",
+  Future<List<MystorageModel>?> listMystorage(String token) async {
+    var url = Uri.parse(baseUrl+"/mystorage");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
+        print('rescodemystorage ${response.statusCode}');
     if (response.statusCode == 200) {
       return mystorageFromJson(response.body);
       // return compute(response.body);
@@ -259,9 +268,11 @@ class ApiService {
   }
 
   //LOAD PAYMENT GATEWAY
-  Future<List<PaymentGateway>> listPaymentGateway(String token) async {
-    final response = await client.get("$baseUrl/paymentgateway",
+  Future<List<PaymentGateway>?> listPaymentGateway(String token) async {
+    var url = Uri.parse(baseUrl+"/paymentgateway");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
+        print('respon dari paymentgatwway ${response.statusCode} -- ${response.body}');
     if (response.statusCode == 200) {
       return paymentgatewayFromJson(response.body);
     } else {
@@ -269,13 +280,13 @@ class ApiService {
     }
   }
 
-  Future<List<PaymentGatewayVirtualAccount>> listPaymentGatewayVA() async {
+  Future<List<PaymentGatewayVirtualAccount>?> listPaymentGatewayVA() async {
     String username =
         'xnd_development_ZWfcdXVZYxzEwOyg3wdZV7IH1sKkJV0aQYL36aNROitLlLcGoXVUGXBqhFbKF';
     String password = '';
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
-    final response = await client.get("$baseUrlVA", headers: {
+    final response = await client.get(baseUrlVA, headers: {
       "content-type": "application/json",
       "Authorization": basicAuth
     });
@@ -288,8 +299,9 @@ class ApiService {
   }
 
   //LOAD DETAIL CUSTOMER
-  Future<List<Customers>> getCustomer(access_token) async {
-    final response = await client.get("$baseUrl/customer",
+  Future<List<Customers>?> getCustomer(access_token) async {
+    var url = Uri.parse(baseUrl+"/customer");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${access_token}"});
     if (response.statusCode == 200) {
       return customerFromJson(response.body);
@@ -300,8 +312,9 @@ class ApiService {
 
   //LOAD HISTORY LIST
   // Future<List<HistoryModel>> listHistoryDashboard(String token) async {
-  Future<List<MystorageModel>> listHistoryDashboard(String token) async {
-    final response = await client.get("$baseUrl/mystorage",
+  Future<List<MystorageModel>?> listHistoryDashboard(String token) async {
+    var url = Uri.parse(baseUrl+"/mystorage");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     // print(response.statusCode.toString()+" - TOKEN HISTORY : "+token);
     if (response.statusCode == 200) {
@@ -312,8 +325,9 @@ class ApiService {
   }
 
   Future<List<HistoryModel>> listHistory(String token, var query) async {
+    var url = Uri.parse(baseUrl+"/histori");
     final response = await client
-        .get("$baseUrl/histori", headers: {"Authorization": "BEARER ${token}"});
+        .get(url, headers: {"Authorization": "BEARER ${token}"});
     print("token dari apiservice" + response.body + "$token");
     if (response.statusCode == 200) {
       List storage = json.decode(response.body);
@@ -335,8 +349,9 @@ class ApiService {
   }
 
   //LOAD LIST HISTORY DEPOSIT
-  Future<List<HistoryDepositModel>> listHistoryDepo(String access_token) async {
-    final response = await client.get("$baseUrl/historideposit",
+  Future<List<HistoryDepositModel>?> listHistoryDepo(String access_token) async {
+    var url = Uri.parse(baseUrl+"/historideposit");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${access_token}"});
     if (response.statusCode == 200) {
       return historyFromJson(response.body);
@@ -346,8 +361,9 @@ class ApiService {
   }
 
   //LOAD ASURANSI LIST
-  Future<List<AsuransiModel>> listAsuransi(String token) async {
-    final response = await client.get("$baseUrl/asuransi",
+  Future<List<AsuransiModel>?> listAsuransi(String token) async {
+    var url = Uri.parse(baseUrl+"/asuransi");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     print('INI LIST ASURANSI' + response.body);
     if (response.statusCode == 200) {
@@ -363,8 +379,9 @@ class ApiService {
 
   //REGISTRASI
   Future<bool> signup(PenggunaModel data) async {
+    var url = Uri.parse(baseUrl+"/registrasi");
     final response = await client.post(
-      "$baseUrl/registrasi",
+      url,
       headers: {"content-type": "application/json"},
       body: penggunaToJson(data),
     );
@@ -379,13 +396,15 @@ class ApiService {
 
 //  LOGIN
   Future<bool> loginIn(PenggunaModel data) async {
+    var url = Uri.parse(baseUrl+"/login");
     var response = await client.post(
-      "$baseUrl/login",
+      url,
       headers: {"content-type": "application/json"},
       body: penggunaToJson(data),
     );
     Map test = jsonDecode(response.body);
-    var token = Token.fromJson(test);
+    // var token = Token.fromJson(test);
+    late var token = Token.fromJson(test);
     Map message = jsonDecode(response.body);
     responseCode = ResponseCodeCustom.fromJson(message);
     print('Value Login ' + test.toString());
@@ -407,8 +426,9 @@ class ApiService {
 
   // Future<List<CekLoginUUID>> cekLoginUUID(CekLoginUUID uuid) async {
   Future<String> cekLoginUUID(CekLoginUUID uuid) async {
+    var url = Uri.parse(baseUrl+"/cekuuid");
     final response = await client.post(
-      "$baseUrl/cekuuid",
+      url,
       headers: {"content-type": "application/json"},
       body: cekLoginUUIDCodeToJson(uuid),
     );
@@ -423,8 +443,9 @@ class ApiService {
 
 //  ORDER PRODUK
   Future<int> tambahOrderProduk(OrderProduk data) async {
+    var url = Uri.parse(baseUrl+"/order");
     final response = await client.post(
-      "$baseUrl/order",
+      url,
       headers: {"content-type": "application/json"},
       body: orderprodukToJson(data),
     );
@@ -443,8 +464,9 @@ class ApiService {
 
   //Tambah Customer
   Future<bool> TambahCustomer(Customers data) async {
+    var url = Uri.parse(baseUrl+"/customer");
     final response = await client.post(
-      "$baseUrl/customer",
+      url,
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
@@ -461,8 +483,9 @@ class ApiService {
 
 //  UBAH CUSTOMER
   Future<bool> UpdateCustomer(Customers data) async {
+    var url = Uri.parse(baseUrl+"/ucustomer");
     final response = await client.post(
-      "$baseUrl/ucustomer",
+      url,
       headers: {"Content-type": "application/json"},
       body: customerToJson(data),
     );
@@ -476,8 +499,9 @@ class ApiService {
   ////////////////////// PIN ///////////////////////
 
   Future<bool> TambahPin(TambahPin_model data) async {
+    var url = Uri.parse(baseUrl+"/ipin");
     final response = await client.post(
-      "$baseUrl/ipin",
+      url,
       headers: {"Content-type": "application/json"},
       body: TambahPinToJson(data),
     );
@@ -489,8 +513,9 @@ class ApiService {
   }
 
   Future<bool> UbahPin(Pin_Model data) async {
+    var url = Uri.parse(baseUrl+"/upin");
     final response = await client.post(
-      "$baseUrl/upin",
+      url,
       headers: {"Content-type": "application/json"},
       body: PinToJson(data),
     );
@@ -502,8 +527,9 @@ class ApiService {
   }
 
   Future<bool> CekPin(Pin_Model_Cek data) async {
+    var url = Uri.parse(baseUrl+"/pin");
     final response = await client.post(
-      "$baseUrl/pin",
+      url,
       headers: {"Content-type": "application/json"},
       body: PinCekToJson(data),
     );
@@ -516,8 +542,9 @@ class ApiService {
   }
 
   Future<bool> UbahPassword(Password data) async {
+    var url = Uri.parse(baseUrl+"/upassword");
     final response = await client.post(
-      "$baseUrl/upassword",
+      url,
       headers: {"Content-type": "application/json"},
       body: PasswordToJson(data),
     );
@@ -532,8 +559,9 @@ class ApiService {
   }
 
   Future<bool> OpenLog(LogOpen data) async {
+    var url = Uri.parse(baseUrl+"/open");
     final response = await client.post(
-      "$baseUrl/open",
+      url,
       headers: {"Content-type": "application/json"},
       body: LogOpenToJson(data),
     );
@@ -545,8 +573,9 @@ class ApiService {
   }
 
   Future<String> generateCode(String access_token, idtransaksi_det) async {
+    var url = Uri.parse(baseUrl+"/generateforklift");
     final response = await client.post(
-      "$baseUrl/generateforklift",
+      url,
       headers: {"content-type": "application/json"},
       body: jsonEncode({
         "token": "${access_token}",
@@ -562,13 +591,14 @@ class ApiService {
       // return generateCodeFromJson(gcode.kode_aktivasi.toString());
       return gcode.kode_aktivasi;
     } else {
-      return null;
+      return null!;
     }
   }
 
   Future<bool> SelesaiLog(selesaiLog data) async {
+    var url = Uri.parse(baseUrl+"/selesai");
     final response = await client.post(
-      "$baseUrl/selesai",
+      url,
       headers: {"Content-type": "application/json"},
       body: selesaiLogToJson(data),
     );
@@ -580,8 +610,9 @@ class ApiService {
   }
 
   Future<bool> Log_(Logs data) async {
+    var url = Uri.parse(baseUrl+"/log");
     final response = await client.post(
-      "$baseUrl/log",
+      url,
       headers: {"Content-type": "application/json"},
       body: LogsToJson(data),
     );
@@ -594,8 +625,9 @@ class ApiService {
 
   // Future<List<logAktifitasNotif>> logAktifitasNotif_(String token) async {
   Future<List> logAktifitasNotif_(String token) async {
+    var url = Uri.parse(baseUrl+"/logaktifitas");
     final response = await client.post(
-      "$baseUrl/logaktifitas",
+      url,
       headers: {"Content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
@@ -603,13 +635,14 @@ class ApiService {
     if (response.statusCode == 200) {
       return logaktifitasnotifToList(response.body);
     } else {
-      return null;
+      return null!;
     }
   }
 
   Future<List<LogList>> listloggs(String token, idtransaksi_detail) async {
+    var url = Uri.parse(baseUrl+"/log");
     final response = await client.post(
-      "$baseUrl/log",
+      url,
       headers: {"content-type": "application/json"},
       body: jsonEncode(
           {"token": "${token}", "idtransaksi_detail": "${idtransaksi_detail}"}),
@@ -617,14 +650,15 @@ class ApiService {
     if (response.statusCode == 200) {
       return LoglistFromJson(response.body);
     } else {
-      return null;
+      return null!;
     }
   }
 
   ///////////////////// FORGET ///////////////////////
   Future<bool> ForgetPass(Forgot_Security data) async {
+    var url = Uri.parse(baseUrl+"/forgotpassword");
     final response = await client.post(
-      "$baseUrl/forgotpassword",
+      url,
       headers: {"Content-type": "application/json"},
       body: Forgot_SecurityToJson(data),
     );
@@ -640,8 +674,9 @@ class ApiService {
   }
 
   Future<bool> ForgetPin(Forgot_Security data) async {
+    var url = Uri.parse(baseUrl+"/forgotpin");
     final response = await client.post(
-      "$baseUrl/forgotpin",
+      url,
       headers: {"Content-type": "application/json"},
       body: Forgot_SecurityToJson(data),
     );
@@ -657,8 +692,9 @@ class ApiService {
   }
 
   Future<bool> ResendEmail(Forgot_Security data) async {
+    var url = Uri.parse(baseUrl+"/resendemailaktivasi");
     final response = await client.post(
-      "$baseUrl/resendemailaktivasi",
+      url,
       headers: {"Content-type": "application/json"},
       body: Forgot_SecurityToJson(data),
     );
@@ -673,8 +709,9 @@ class ApiService {
   }
 
   Future<bool> LostDevice(LostDevices data) async {
-    final response = await client.post(
-      "$baseUrl/lostdevice",
+    // var response = await client.post("$baseUrl/lostdevice",
+    var url = Uri.parse(baseUrl + '/lostdevice');
+    var response = await client.post(url,
       headers: {"Content-type": "application/json"},
       body: LostDeviceToJson(data),
     );
@@ -696,7 +733,8 @@ class ApiService {
 
 //  CHECKING TOKEN
   Future<bool> checkingToken(String token) async {
-    final response = await client.get("$baseUrl/ceklogin",
+    var url = Uri.parse(baseUrl+"/ceklogin");
+    final response = await client.get(url,
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return true;
@@ -707,8 +745,9 @@ class ApiService {
 
 //  GET AND CHECKING REFRESH TOKEN
   Future<String> refreshToken(String token) async {
+    var url = Uri.parse(baseUrl+"/newtoken");
     final response = await client.post(
-      "$baseUrl/newtoken",
+      url,
       headers: {"content-type": "application/json"},
       body: jsonEncode({"token": "${token}"}),
     );
@@ -720,9 +759,11 @@ class ApiService {
   }
 
   Future<String> ambildataSyaratKetentuan(sk) async {
-    http.Response response = await http
-        // .get(Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt'));
-        .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
+    // var urlencode = Uri.encodeFull('https://dev.horang.id/adminmaster/sk.txt');
+    var urlencode = Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt');
+    // var url = Uri.parse(baseUrl+"/");
+    http.Response response = await http.get(Uri.parse(urlencode));
+        // .get(Uri.encodeFull('http://server.horang.id/adminmaster/sk.txt'));
     // var response = await client.get('https://dev.horang.id/adminmaster/sk.txt');
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
@@ -734,10 +775,11 @@ class ApiService {
   }
 
   Future<String> ambildataSyaratKetentuanAplikasi(sk) async {
-    http.Response response = await http.get(
+    var urlencode = Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt');
+    http.Response response = await http.get(Uri.parse(urlencode));
         // Uri.encodeFull('https://dev.horang.id/adminmaster/skaplikasi.txt'));
         // .get(
-        Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
+        // Uri.encodeFull('http://server.horang.id/adminmaster/skaplikasi.txt'));
     print("mmzzzrr" + response.statusCode.toString() + "+++" + response.body);
     sk = response.body;
     if (response.statusCode == 200) {
@@ -748,7 +790,8 @@ class ApiService {
   }
 
   Future<bool> logout(String token) async {
-    final response = await client.delete("$baseUrl/logout",
+    var url = Uri.parse(baseUrl+"/logout");
+    final response = await client.delete(url,
         headers: {"Authorization": "BEARER ${token}"});
     if (response.statusCode == 200) {
       return true;

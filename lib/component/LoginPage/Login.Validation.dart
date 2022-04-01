@@ -1,36 +1,40 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horang/api/models/pengguna/cek.loginuuid.model.dart';
 import 'package:horang/api/models/pengguna/pengguna.model.dart';
 import 'package:horang/api/utils/apiService.dart';
+import 'package:horang/component/DashboardPage/home_page.dart';
 import 'package:horang/component/OrderPage/KonfirmasiPembayaran.dart';
 import 'package:horang/component/account_page/reset.dart';
 import 'package:horang/utils/constant_color.dart';
 import 'package:horang/utils/deviceinfo.dart';
 import 'package:horang/widget/TextFieldContainer.dart';
 import 'package:horang/widget/bottom_nav.dart';
-import 'package:minimize_app/minimize_app.dart';
+// import 'package:minimize_app/minimize_app.dart';
+
+import '../../utils/dialog.dart';
 
 class LoginPage extends StatefulWidget {
-  var cekUUID, email, nama;
-  LoginPage({this.cekUUID, this.email, this.nama});
+  var cekUUID, email, nama, status1;
+  LoginPage({this.cekUUID, this.email, this.nama, this.status1});
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Future futures;
+  late Future futures;
   ApiService _apiService = ApiService();
-  final firebaseMessaging = FirebaseMessaging();
-  bool _fieldEmail,
-      _fieldPassword,
+  // late FirebaseMessaging firebaseMessaging1;
+  bool _fieldEmail = false,
+      _fieldPassword = false,
       _isLoading = false,
       _obsecureText = true,
       _checkbio = false;
@@ -39,9 +43,10 @@ class _LoginPageState extends State<LoginPage> {
       uuidAnyar = "",
       email = "",
       emailaccountselection = "",
+      stats,
       // emaile,
       namae = "";
-  Timer timer;
+  late Timer timer;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
 
@@ -60,8 +65,8 @@ class _LoginPageState extends State<LoginPage> {
         print('masuk3');
         GetDeviceID().getDeviceID(context).then((cekuuids) {
           print('masuk4');
-          uuidAnyar = cekuuids;
-          CekLoginUUID uuid = CekLoginUUID(uuid: uuidAnyar);
+          uuidAnyar = cekuuids!;
+          CekLoginUUID uuid = CekLoginUUID(uuid: uuidAnyar, email: '', status: '');
           _apiService.cekLoginUUID(uuid).then((value) => setState(() {
                 print("HEM : " + value);
                 if (value == "") {
@@ -71,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   print('masuk5');
                   email = value.split(":")[0].toString();
                   namae = value.split(":")[1].toString();
+                  stats = value.split(":")[2].toString();
                   // return value;
                   // return email.toString();
                 }
@@ -86,48 +92,84 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     namae = widget.nama;
     uuidAnyar = widget.cekUUID;
+    stats = widget.status1;
+    print("do you understand ? $stats");
+    if (stats == "1") {
+      Fluttertoast.showToast(
+          msg: "Pengguna sudah aktif !",
+          // msg: "Account has been ready !",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    } else {
+      Fluttertoast.showToast(
+          msg:
+              "Maaf, pengguna belum aktif, silahkan lakukan resend email untuk mengaktifkan !",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    }
     // emaile = widget.email;
     email = widget.email;
-    print("flo $email");
+    print("flo $email ~ $uuidAnyar");
     timer = Timer.periodic(Duration(seconds: 15), (Timer t) => refreshLogin());
-    // if (emaile == "") {
+    
+    getToken() async {
+      token = (await FirebaseMessaging.instance.getToken())!;
+      setState((){
+        token = token;
+      });
+      print(token+"tokensnya");
+    }
+    
+    // CLOSE CZ LATEST UPDATE CANT BE SUPPORT
+    // firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     debugPrint('onMessage: $message');
+    //     if (Platform.isIOS) {
+    //       successDialog(context, message['alert']['body'],
+    //           title: message['alert']['title']);
+    //     } else if (Platform.isAndroid) {
+    //       successDialog(context, message['notification']['body'],
+    //           title: message['notification']['title']);
+    //     }
+    //   },
 
-    // } else {
-    // if(emaile != ""){
-
-    // }
-    // }
-    firebaseMessaging.getToken().then((token) => setState(() {
-          this.token = token;
-        }));
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        debugPrint('onMessage: $message');
-        if (Platform.isIOS) {
-          successDialog(context, message['alert']['body'],
-              title: message['alert']['title']);
-        } else if (Platform.isAndroid) {
-          successDialog(context, message['notification']['body'],
-              title: message['notification']['title']);
-        }
-      },
+//   onResume: (Map<String, dynamic> message) async {
+    //     debugPrint('onResume: $message');
+    //     getDataFcm(message);
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     debugPrint('onLaunch: $message');
+    //     getDataFcm(message);
+    //   },
+    // );
       // onBackgroundMessage: onBackgroundMessage,
-      onResume: (Map<String, dynamic> message) async {
-        debugPrint('onResume: $message');
-        getDataFcm(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        debugPrint('onLaunch: $message');
-        getDataFcm(message);
-      },
-    );
-    firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: false));
-    firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
+        RemoteNotification? notif = message.notification;
+        AndroidNotification? android = message.notification?.android;
+      });
+
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.toString());
+      Fluttertoast.showToast(
+          msg: " Notifikasi ${message}",
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home(callpage: HomePage(), initIndexHome: 0,
+                    
+                  )));
     });
+    
+    // firebaseMessaging.requestNotificationPermissions(
+    //     const IosNotificationSettings(
+    //         sound: true, badge: true, alert: true, provisional: false));
+    // firebaseMessaging.onIosSettingsRegistered
+    //     .listen((IosNotificationSettings settings) {
+    //   print("Settings registered: $settings");
+    // });
     super.initState();
     setState(() {
       // if (emaile == "") {
@@ -149,8 +191,8 @@ class _LoginPageState extends State<LoginPage> {
   void closeApp() {
     if (Platform.isAndroid) {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-    } else {
-      MinimizeApp.minimizeApp();
+    // } else {
+    //   MinimizeApp.minimizeApp();
     }
   }
 
@@ -311,7 +353,7 @@ class _LoginPageState extends State<LoginPage> {
           fillColor: primaryColor,
           border: InputBorder.none,
           errorText:
-              _fieldEmail == null || _fieldEmail ? null : "Email Harus Diisi!",
+              _fieldEmail == '' || _fieldEmail ? '' : "Email Harus Diisi!",
         ),
         onChanged: (value) {
           bool isFieldValid = value.trim().isNotEmpty;
@@ -342,8 +384,8 @@ class _LoginPageState extends State<LoginPage> {
           hintText: "Password",
           fillColor: primaryColor,
           border: InputBorder.none,
-          errorText: _fieldPassword == null || _fieldPassword
-              ? null
+          errorText: _fieldPassword == '' || _fieldPassword
+              ? ''
               : "Password Harus Diisi!",
         ),
         onChanged: (value) {
@@ -365,11 +407,11 @@ class _LoginPageState extends State<LoginPage> {
     GetDeviceID().getDeviceID(context).then((ids) {
       setState(() {
         // set variable
-        iddevice = ids;
+        iddevice = ids!;
         _isLoading = true;
         String email1 = _controllerEmail.text.toString();
         String password1 = _controllerPassword.text.toString();
-        print('tescek1 $email ~ $email1 ~ $emailaccountselection');
+        print('tescek1 $email ~ $email1 ~ $emailaccountselection @');
         // set model value for json
         PenggunaModel pengguna = PenggunaModel(
             uuid: iddevice,
@@ -378,7 +420,7 @@ class _LoginPageState extends State<LoginPage> {
             status: 0,
             notification_token: token,
             token_mail: "0",
-            keterangan: "Login");
+            keterangan: "Login", no_hp: '');
 
         //execute sending json to api url
         print("LOGIN? : " + pengguna.toString());
@@ -387,22 +429,46 @@ class _LoginPageState extends State<LoginPage> {
           // if login success page will be route to home page
           if (isSuccess) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => Home(initIndexHome: 0,callpage: HomePage(),)));
           } else {
             // if login failed will be show message json from api url
             print('${_apiService.responseCode.mMessage}');
             if (_apiService.responseCode.mMessage ==
                 "Email atau Password anda Salah!") {
-              warningDialog(context, "${_apiService.responseCode.mMessage}",
-                  title: "Warning!");
+                  AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.WARNING,
+                        animType: AnimType.RIGHSLIDE,
+                        headerAnimationLoop: true,
+                        title: 'Warning!',
+                        desc:
+                            '${_apiService.responseCode.mMessage}',
+                        btnOkOnPress: () {},
+                        btnOkIcon: Icons.cancel,
+                        btnOkColor: Colors.red)
+                      ..show();
+              // warningDialog(context, "${_apiService.responseCode.mMessage}",
+              //     title: "Warning!");
             } else if (_apiService.responseCode.mMessage ==
                 "Akun masih aktif di device lain!") {
-              warningDialog(context,
-                  "${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.",
-                  showNeutralButton: false,
-                  positiveText: "Oke",
-                  positiveAction: () {},
-                  title: "Pemberitahuan!");
+                  AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.WARNING,
+                        animType: AnimType.RIGHSLIDE,
+                        headerAnimationLoop: true,
+                        title: 'Warning!',
+                        desc:
+                            '${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.',
+                        btnOkOnPress: () {},
+                        btnOkIcon: Icons.cancel,
+                        btnOkColor: Colors.red)
+                      ..show();
+              // warningDialog(context,
+              //     "${_apiService.responseCode.mMessage}, Anda harus melakukan aksi ganti perangkat terlebih dahulu.",
+              //     showNeutralButton: false,
+              //     positiveText: "Oke",
+              //     positiveAction: () {},
+              //     title: "Pemberitahuan!");
             }
           }
         });
@@ -471,7 +537,7 @@ void _popUpTroble(BuildContext context) {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Reset(
-                                              tipe: "ResetDevice",
+                                              tipe: "ResetDevice", resetpin: null, resetpass: null, resendemail: null,
                                             )));
                               },
                               child: Text(
@@ -503,7 +569,7 @@ void _popUpTroble(BuildContext context) {
                                     MaterialPageRoute(
                                         builder: (context) => Reset(
                                               // resetpass: Forgot_Password,
-                                              tipe: "ResetPassword",
+                                              tipe: "ResetPassword", resendemail: '' ,resetpass: '',resetpin: '',
                                             )));
                               },
                               child: Text(

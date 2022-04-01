@@ -5,7 +5,7 @@ class SearchWidget extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final String hintText;
 
-  const SearchWidget({Key key, this.hintText, this.onChanged, this.text})
+  const SearchWidget({Key? key,required this.hintText,required this.onChanged,required this.text})
       : super(key: key);
 
   @override

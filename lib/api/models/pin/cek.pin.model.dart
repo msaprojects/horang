@@ -5,9 +5,9 @@ class Pin_Model_Cek{
 
   Pin_Model_Cek({
     // this.pin,
-    this.notifikasi_token,
-    this.token_cek,
-    this.pin_cek
+    required this.notifikasi_token,
+    required this.token_cek,
+    required this.pin_cek
   });
 
   factory Pin_Model_Cek.fromJson(Map<String, dynamic> map){

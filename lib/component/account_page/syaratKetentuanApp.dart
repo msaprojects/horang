@@ -1,4 +1,3 @@
-import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:horang/api/utils/apiService.dart';
 import 'package:horang/screen/welcome_page.dart';
@@ -15,18 +14,18 @@ class SyaratKetentuan extends StatefulWidget {
 }
 
 class _SyaratKetentuanState extends State<SyaratKetentuan> {
-  SharedPreferences sp;
+  SharedPreferences? sp;
   ApiService _apiService = ApiService();
   var accesstoken, refreshtoken, idcustomer, namacustomer, pin, sk;
   bool isSuccess = false;
 
   cekToken() async {
     sp = await SharedPreferences.getInstance();
-    accesstoken = sp.getString("access_token");
-    refreshtoken = sp.getString("refresh_token");
-    idcustomer = sp.getString("idcustomer");
-    namacustomer = sp.getString("nama_customer");
-    pin = sp.getString("pin");
+    accesstoken = sp!.getString("access_token");
+    refreshtoken = sp!.getString("refresh_token");
+    idcustomer = sp!.getString("idcustomer");
+    namacustomer = sp!.getString("nama_customer");
+    pin = sp!.getString("pin");
     print("Order: " + accesstoken);
     //checking jika token kosong maka di arahkan ke menu login jika tidak akan meng-hold token dan refresh token
     if (accesstoken == null) {
@@ -45,7 +44,7 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                         var newtoken = value;
                         //setting access_token dari refresh_token
                         if (newtoken != "") {
-                          sp.setString("access_token", newtoken);
+                          sp!.setString("access_token", newtoken);
                           accesstoken = newtoken;
                         } else {
                           ReusableClasses().showAlertDialog(context);
